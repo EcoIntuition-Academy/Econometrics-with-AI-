@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.9: Dummy Variables & Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Derive exact dummy variable effects in log models 100(exp(β)-1)%, explore the interactive calculator, review the complete Module 1 knowledge map, and practice comprehensive exam questions.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="9">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 9 of 9 &middot; Dummy Variables &amp; Module Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.9</span>
+        <span class="badge">Advanced Interpretation & Capstone Synthesis</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Dummy Variables & Module Review
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Derive the exact percentage effect of discrete indicator variables in semi-log regressions, explore the interactive calculator, synthesize the entire Module 1 framework, and test your mastery.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the mathematical proof of the exact dummy variable percentage effect: \(100(e^{\beta_1} - 1)\%\).</li>
+        <li>Contrast the common approximation \(100\beta_1\%\) with the exact formula across parameter magnitudes.</li>
+        <li>Review the complete econometric inquiry pipeline from research question to empirical conclusion.</li>
+        <li>Consolidate core principles with 12 rapid-review knowledge cards.</li>
+        <li>Complete multi-category practice questions with step-by-step solutions.</li>    <!-- Section 1: Dummy Variables in Semi-Log Models -->
+    <section class="lesson-section">
+      <h2>1. Dummy Variables with Log Dependent Variables</h2>
+      <p>
+        Consider a semi-log model where one of the regressors is a binary indicator (dummy variable) \(D \in \{0, 1\}\) (e.g. \(D = 1\) if holding a college degree, \(0\) otherwise):
+      </p>
+
+      <div class="math-scroll-box">
+        $$\ln(y) = \beta_0 + \beta_1 D + \beta_2 x + \varepsilon$$
+      </div>
+
+      <p>
+        Because \(D\) jumps discretely from 0 to 1, we cannot take a calculus derivative \(\partial \ln(y) / \partial D\). Instead, holding \(x\) and \(\varepsilon\) fixed for the algebraic comparison:
+      </p>
+
+      <h3>Step-by-Step Algebraic Comparison</h3>
+      <p>
+        <strong>For the baseline group (\(D = 0\)):</strong>
+      </p>
+      <div class="math-scroll-box">
+        $$\ln(y_0) = \beta_0 + \beta_2 x + \varepsilon \implies y_0 = \exp(\beta_0 + \beta_2 x + \varepsilon)$$
+      </div>
+
+      <p>
+        <strong>For the treatment group (\(D = 1\)):</strong>
+      </p>
+      <div class="math-scroll-box">
+        $$\ln(y_1) = \beta_0 + \beta_1 + \beta_2 x + \varepsilon \implies y_1 = \exp(\beta_0 + \beta_1 + \beta_2 x + \varepsilon)$$
+      </div>
+
+      <p>
+        Taking the ratio of the two outcomes:
+      </p>
+      <div class="math-scroll-box">
+        $$\frac{y_1}{y_0} = \frac{\exp(\beta_0 + \beta_1 + \beta_2 x + \varepsilon)}{\exp(\beta_0 + \beta_2 x + \varepsilon)} = e^{\beta_1}$$
+      </div>
+
+      <p>
+        Therefore, the <strong>relative change</strong> is:
+      </p>
+      <div class="math-scroll-box">
+        $$\frac{y_1 - y_0}{y_0} = \frac{y_1}{y_0} - 1 = e^{\beta_1} - 1$$
+      </div>
+
+      <p>
+        Multiplying by 100 yields the <strong>exact percentage change</strong>:
+      </p>
+
+      <!-- Reusable Equation Box: Dummy Variable Percentage Effect -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">SEMI-LOG SPECIFICATION</span>
+          <span class="equation-title">Dummy Variable Percentage Change: Exact vs. Linear Approximation</span>
+        </div>
+        <div class="equation-main">
+          $$\text{Exact: } 100(e^{\beta_1} - 1)\% \qquad \text{Approximation: } 100\beta_1\%$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(e^{\beta_1} - 1\)</span>
+                <span class="symbol-desc"><strong>Relative change:</strong> Proportional outcome difference \(\frac{y_1 - y_0}{y_0}\) holding \(x\) and \(\varepsilon\) fixed</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(100(e^{\beta_1} - 1)\%\)</span>
+                <span class="symbol-desc"><strong>Exact percentage change:</strong> True percentage effect on \(y\) associated with switching indicator \(D\) from 0 to 1</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(100\beta_1\%\)</span>
+                <span class="symbol-desc"><strong>Linear approximation:</strong> First-order Taylor approximation; accurate when \(|\beta_1|\) is close to zero</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\beta_1\)</span>
+                <span class="symbol-desc"><strong>Dummy coefficient:</strong> Population parameter multiplying binary regressor \(D \in \{0, 1\}\)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Approximation Precision & Mathematical Properties</h3>
+      <p>
+        In empirical studies, researchers often quote the linear shortcut \(100\beta_1\%\). Understanding when and how it diverges from the exact formula is critical:
+      </p>
+      <ul>
+        <li><strong>For positive \(\beta_1\):</strong> Because \(e^{\beta_1} - 1 > \beta_1\) for all \(\beta_1 > 0\), the linear approximation \(100\beta_1\%\) understates the positive percentage change.</li>
+        <li><strong>For negative \(\beta_1\):</strong> Because \(e^{\beta_1} - 1 < \beta_1\) for negative values, the approximation becomes more negative than the exact percentage change in magnitude.</li>
+        <li><strong>Accuracy for small \(|\beta_1|\):</strong> The approximation is most accurate when \(|\beta_1|\) is small (e.g. \(|\beta_1| \le 0.05\)). For larger magnitudes, the exponential formula should always be reported.</li>
+      </ul>
+
+      <div class="callout callout-note" style="margin: var(--space-md) 0;">
+        <div class="callout-header">
+          <span class="callout-icon">💡</span>
+          <span class="callout-title">Numerical Example (\(\beta_1 = 0.20\))</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            Suppose an estimated wage equation yields \(\hat{\beta}_1 = 0.20\) for a college degree dummy:<br>
+            • <strong>Linear approximation:</strong> \(100 \cdot (0.20)\% = \mathbf{20.00\%}\)<br>
+            • <strong>Exact percentage change:</strong> \(100(e^{0.20} - 1)\% \approx 100(1.2214 - 1)\% = \mathbf{22.14\%}\)<br>
+            The linear approximation understates the true estimated percentage change by more than 2.1 percentage points.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Dummy Calculator Widget -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Calculator</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Exact vs. Approximate Dummy Variable Effect Calculator</h3>
+          </div>
+          <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Enter any dummy coefficient \(\beta_1\)</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); align-items: center; margin: var(--space-md) 0;">
+          <div>
+            <label for="inputDummyBeta" style="font-size: var(--text-sm); font-weight: 600; display: block; margin-bottom: 6px;">
+              Estimated Dummy Coefficient (\(\hat{\beta}_1\)):
+            </label>
+            <div style="display: flex; gap: var(--space-xs);">
+              <input type="number" id="inputDummyBeta" step="0.05" value="0.20" style="padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-bg); font-family: var(--font-mono); font-size: var(--text-base); width: 140px;">
+              <button id="btnCalculateDummy" class="btn btn-primary btn-sm">Calculate</button>
+            </div>
+            <div style="font-size: var(--text-xs); color: var(--color-text-secondary); margin-top: 6px;">
+              Try values like <code>0.10</code>, <code>0.20</code>, <code>0.45</code>, or <code>-0.30</code>.
+            </div>
+          </div>
+
+          <div style="background: var(--color-bg); padding: var(--space-md); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: var(--text-sm);">
+              <span>Naive Approximation (\(100\beta_1\%\)):</span>
+              <strong id="dummyApproxOutput" style="font-family: var(--font-mono); color: #64748b;">20.00%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: var(--text-sm);">
+              <span>Exact Effect (\(100(e^{\beta_1}-1)\%\)):</span>
+              <strong id="dummyExactOutput" style="font-family: var(--font-mono); color: #2563eb; font-size: var(--text-base);">22.14%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); padding-top: 6px; border-top: 1px dashed var(--color-border); color: #ef4444;">
+              <span>Discrepancy (Underestimate):</span>
+              <strong id="dummyDiscrepancyOutput">2.14 percentage points</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="graph-explanation-block">
+          <div class="explanation-col">
+            <h4>WHAT YOU ARE SEEING</h4>
+            <p>Direct comparison of linear Taylor approximation vs. exact exponential growth for binary regressors.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHAT TO NOTICE</h4>
+            <p>At \(\beta = 0.20\), the exact effect is 22.14% (+2.14 pp higher). At \(\beta = 0.50\), the naive is 50% while exact is 64.87% (+14.87 pp)!</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHY IT MATTERS</h4>
+            <p>Reporting the naive approximation in policy or academic papers for substantial coefficients significantly misstates economic impact.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>ECONOMETRIC INTERPRETATION</h4>
+            <p>Because \(e^x = 1 + x + x^2/2! + \dots\), the approximation ignores all higher-order terms in the Taylor series expansion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Complete Module 1 Knowledge Map -->
+    <section class="lesson-section">
+      <h2>2. Module 1 Synthesis: The Econometric Inquiry Pipeline</h2>
+      <p>
+        You have covered the foundational pillars of linear econometric modeling. Every applied empirical research project follows this systematic roadmap:
+      </p>
+
+      <div class="study-card" style="padding: var(--space-lg); margin: var(--space-md) 0;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: var(--text-sm); font-weight: 600;">
+          
+          <div style="background: var(--color-bg); padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); width: 100%; max-width: 440px; text-align: center;">
+            1. ECONOMIC RESEARCH QUESTION
+            <div style="font-size: var(--text-xs); font-weight: 400; color: var(--color-text-secondary); margin-top: 2px;">What is the theoretical hypothesis? Does policy require a causal effect?</div>
+          </div>
+          <div style="color: var(--color-text-secondary);">↓</div>
+
+          <div style="background: var(--color-bg); padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); width: 100%; max-width: 440px; text-align: center;">
+            2. CAUSATION OR PREDICTION?
+            <div style="font-size: var(--text-xs); font-weight: 400; color: var(--color-text-secondary); margin-top: 2px;">Causal inquiry requires ceteris paribus; prediction seeks optimal forecast \(\hat{y}\).</div>
+          </div>
+          <div style="color: var(--color-text-secondary);">↓</div>
+
+          <div style="background: var(--color-bg); padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); width: 100%; max-width: 440px; text-align: center;">
+            3. SPECIFY ECONOMETRIC MODEL
+            <div style="font-size: var(--text-xs); font-weight: 400; color: var(--color-text-secondary); margin-top: 2px;">Choose functional form (linear, logs, quadratics) to ensure linearity in parameters.</div>
+          </div>
+          <div style="color: var(--color-text-secondary);">↓</div>
+
+          <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 10px 20px; border-radius: var(--radius-md); width: 100%; max-width: 440px; text-align: center; border: 1px solid var(--color-primary);">
+            4. ESTIMATE VIA OLS: \(\mathbf{\hat{\beta} = (X'X)^{-1}X'y}\)
+            <div style="font-size: var(--text-xs); font-weight: 400; margin-top: 2px;">Minimizes sum of squared residuals; projects \(y\) orthogonally onto \(\text{Col}(X)\).</div>
+          </div>
+          <div style="color: var(--color-text-secondary);">↓</div>
+
+          <div style="background: var(--color-bg); padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); width: 100%; max-width: 440px; text-align: center;">
+            5. VALIDATE CLRM ASSUMPTIONS
+            <div style="font-size: var(--text-xs); font-weight: 400; color: var(--color-text-secondary); margin-top: 2px;">Full rank (\(n \ge k\)), Exogeneity (\(\mathbb{E}[\varepsilon|X]=0\)), Spherical errors (\(\sigma^2 I\)).</div>
+          </div>
+          <div style="color: var(--color-text-secondary);">↓</div>
+
+          <div style="background: var(--color-bg); padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); width: 100%; max-width: 440px; text-align: center;">
+            6. INTERPRET COEFFICIENTS & DRAW POLICY CONCLUSIONS
+            <div style="font-size: var(--text-xs); font-weight: 400; color: var(--color-text-secondary); margin-top: 2px;">Marginal effects, elasticities, exact dummy impact, and economic significance.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: 12 Master Review Cards -->
+    <section class="lesson-section">
+      <h2>3. The 12 Fundamental Review Cards</h2>
+      
+      <div class="review-cards-grid">
+        
+        <!-- Card 1 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">01</span>
+            <span class="review-card-title">Regression Model</span>
+          </div>
+          <div class="review-formula-strip">\(y = X\beta + \varepsilon\)</div>
+          <p class="review-card-body">
+            Observed outcomes are decomposed into a systematic component \(X\beta\) and an unobserved disturbance \(\varepsilon\).
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">02</span>
+            <span class="review-card-title">OLS Estimation</span>
+          </div>
+          <div class="review-formula-strip">\(\hat{\beta} = (X'X)^{-1}X'y\)</div>
+          <p class="review-card-body">
+            When \(X\) has full column rank, OLS chooses coefficients that minimize the sum of squared residuals.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">03</span>
+            <span class="review-card-title">Error vs. Residual</span>
+          </div>
+          <div class="review-formula-strip">\(\varepsilon_i \neq e_i\)</div>
+          <p class="review-card-body">
+            \(\varepsilon_i\) is the unobserved population disturbance. \(e_i = y_i - \hat{y}_i\) is the sample residual calculated after estimation.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">04</span>
+            <span class="review-card-title">Linearity in Parameters</span>
+          </div>
+          <div class="review-formula-strip">\(y = X\beta + \varepsilon\)</div>
+          <p class="review-card-body">
+            The regression must be linear in the unknown coefficients, not necessarily in the regressors themselves.
+          </p>
+          <div class="review-card-consequence">
+            \(x\), \(x^2\), and \(\ln(x)\) may all appear in a model that is still linear in parameters.
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">05</span>
+            <span class="review-card-title">Full Rank</span>
+          </div>
+          <div class="review-formula-strip">\(\operatorname{rank}(X) = k\)</div>
+          <p class="review-card-body">
+            No regressor column is an exact linear combination of the others.
+          </p>
+          <div class="review-card-consequence">
+            Consequence: \(X'X\) is invertible.
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">06</span>
+            <span class="review-card-title">Zero Conditional Mean / Exogeneity</span>
+          </div>
+          <div class="review-formula-strip">\(\mathbb{E}[\varepsilon \mid X] = 0\)</div>
+          <p class="review-card-body">
+            Once \(X\) is conditioned on, the disturbance contains no systematic mean component related to the regressors.
+          </p>
+          <div class="review-card-consequence">
+            Key condition supporting OLS unbiasedness in the classical model.
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">07</span>
+            <span class="review-card-title">Homoskedasticity</span>
+          </div>
+          <div class="review-formula-strip">\(\operatorname{Var}(\varepsilon_i \mid X) = \sigma^2\)</div>
+          <p class="review-card-body">
+            Every observation has the same conditional disturbance variance.
+          </p>
+          <div class="review-card-consequence">
+            If violated: OLS can remain unbiased under exogeneity, but conventional variance formulas are not valid.
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">08</span>
+            <span class="review-card-title">No Autocorrelation</span>
+          </div>
+          <div class="review-formula-strip">\(\operatorname{Cov}(\varepsilon_i, \varepsilon_j \mid X) = 0, \; i \neq j\)</div>
+          <p class="review-card-body">
+            Conditional on \(X\), disturbances from different observations are uncorrelated.
+          </p>
+          <div class="review-card-consequence">
+            If violated: Conventional standard errors and classical efficiency results are affected.
+          </div>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">09</span>
+            <span class="review-card-title">Normality</span>
+          </div>
+          <div class="review-formula-strip">\(\varepsilon \mid X \sim \mathcal{N}(0, \sigma^2 I)\)</div>
+          <p class="review-card-body">
+            Normality is used for exact finite-sample distributional results.
+          </p>
+          <div class="review-card-consequence">
+            Not required for OLS unbiasedness or consistency.
+          </div>
+        </div>
+
+        <!-- Card 10 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">10</span>
+            <span class="review-card-title">Linear Marginal Association</span>
+          </div>
+          <div class="review-formula-strip">\(\partial \mathbb{E}[y \mid x]/\partial x = \beta\)</div>
+          <p class="review-card-body">
+            In a linear conditional-mean model, \(\beta\) is the change in expected \(y\) associated with a one-unit change in \(x\).
+          </p>
+          <div class="review-card-consequence">
+            Causal only with appropriate identification assumptions.
+          </div>
+        </div>
+
+        <!-- Card 11 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">11</span>
+            <span class="review-card-title">Log-Log Elasticity</span>
+          </div>
+          <div class="review-formula-strip">\(\ln(y) = \beta_0 + \beta_1 \ln(x) + \varepsilon\)</div>
+          <p class="review-card-body">
+            \(\beta_1\) is an elasticity: a 1% change in \(x\) is associated with approximately a \(\beta_1\%\) change in \(y\).
+          </p>
+        </div>
+
+        <!-- Card 12 -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <span class="review-card-num">12</span>
+            <span class="review-card-title">Dummy Variable in a Log Model</span>
+          </div>
+          <div class="review-formula-strip">\(\text{Exact: } 100(e^{\beta_1} - 1)\% \quad \text{Approx: } 100\beta_1\%\)</div>
+          <p class="review-card-body">
+            Use the exponential transformation for the exact percentage difference associated with switching the dummy from 0 to 1.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Comprehensive Module 1 Practice Exam -->
+    <section class="lesson-section">
+      <h2>4. Comprehensive Practice Exam</h2>
+      <p>
+        Test your mastery across conceptual foundations, interpretations, assumption diagnostics, and calculations:
+      </p>
+
+      <!-- Practice Question 1: Conceptual -->
+      <div class="practice-item">
+        <div class="practice-question">
+          <span class="badge" style="margin-right: 6px;">CONCEPTUAL</span>
+          <strong>Question 1:</strong> Why does an observed negative correlation between class sizes and student test scores across public school districts not automatically prove that shrinking class sizes will raise exam performance?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="pHint1">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="pSol1">Show Solution</button>
+        </div>
+        <div id="pHint1" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Think about omitted confounding variables that correlate with both district wealth and student educational resources.
+          </p>
+        </div>
+        <div id="pSol1" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            Observational correlation does not imply causation because of <strong>omitted confounding variables</strong>. Wealthier school districts can afford smaller class sizes, but they also attract more experienced teachers, provide state-of-the-art facilities, and have parents with higher educational attainment who invest in private tutoring. If these confounding factors are omitted, OLS attributes their positive impact on test scores to class size, biasing the slope estimate (violating Strict Exogeneity \(\mathbb{E}[\varepsilon \mid X] = 0\)).
+          </p>
+        </div>
+      </div>
+
+      <!-- Practice Question 2: Interpretation -->
+      <div class="practice-item">
+        <div class="practice-question">
+          <span class="badge" style="margin-right: 6px;">INTERPRETATION</span>
+          <strong>Question 2:</strong> An analyst runs the multiple regression:
+          $$\widehat{\text{TestScore}} = 740 - 2.5 \cdot \text{ClassSize} + 1.8 \cdot \text{TeacherExp} + 0.4 \cdot \text{Income}$$
+          Provide the precise economic interpretation of the slope coefficient \(-2.5\).
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="pHint2">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="pSol2">Show Solution</button>
+        </div>
+        <div id="pHint2" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Always explicitly state the ceteris paribus condition (what is being held constant).
+          </p>
+        </div>
+        <div id="pSol2" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            <em>"Holding teacher experience and district average income constant (ceteris paribus), an increase of one student per classroom is associated with an expected 2.5-point decrease in average district test scores."</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Practice Question 3: Assumption Identification -->
+      <div class="practice-item">
+        <div class="practice-question">
+          <span class="badge" style="margin-right: 6px;">ASSUMPTION DIAGNOSTIC</span>
+          <strong>Question 3:</strong> In a firm-level dataset, a student regresses profit on: Total Revenue (\(x_2\)), Total Costs (\(x_3\)), and Operating Margin (\(x_4 = x_2 - x_3\)). Which CLRM assumption is violated, and what will happen when the student attempts to run OLS?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="pHint3">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="pSol3">Show Solution</button>
+        </div>
+        <div id="pHint3" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Examine whether \(x_4\) is an exact linear combination of \(x_2\) and \(x_3\).
+          </p>
+        </div>
+        <div id="pSol3" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            - <strong>Assumption A2 (Full Column Rank) is violated completely.</strong><br>
+            - Because \(x_4 = x_2 - x_3\) holds identically for every firm, column 4 is an exact linear combination of columns 2 and 3 (perfect multicollinearity).<br>
+            - The matrix \(X'X\) is singular (\(\text{det}(X'X) = 0\)), its inverse \((X'X)^{-1}\) does not exist, and statistical software will report an error or drop one of the three variables.
+          </p>
+        </div>
+      </div>
+
+      <!-- Practice Question 4: Functional Form -->
+      <div class="practice-item">
+        <div class="practice-question">
+          <span class="badge" style="margin-right: 6px;">FUNCTIONAL FORM</span>
+          <strong>Question 4:</strong> An econometrician estimates:
+          $$\widehat{\ln(\text{Wage})} = 2.1 + 0.08 \cdot \text{Education} + 0.04 \cdot \text{Experience}$$
+          Approximately how much does an additional year of education change wage? If an employee receives 3 more years of education, what is the approximate percentage increase?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="pHint4">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="pSol4">Show Solution</button>
+        </div>
+        <div id="pHint4" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Use the semi-log rule: \(\% \Delta y \approx 100 \cdot \beta \cdot \Delta x\).
+          </p>
+        </div>
+        <div id="pSol4" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            - For a 1-year increase in education: \(\% \Delta \text{Wage} \approx 100 \cdot (0.08) = \mathbf{\approx 8\%}\).<br>
+            - For 3 additional years of education: \(\% \Delta \text{Wage} \approx 100 \cdot (0.08 \times 3) = \mathbf{\approx 24\%}\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Practice Question 5: Dummy Variable Exact Calculation -->
+      <div class="practice-item">
+        <div class="practice-question">
+          <span class="badge" style="margin-right: 6px;">DUMMY VARIABLE</span>
+          <strong>Question 5:</strong> In the wage model \(\ln(\text{Wage}) = \beta_0 + \beta_1 \text{Union} + \beta_2 \text{Exper} + \varepsilon\), the estimated union coefficient is \(\hat{\beta}_1 = 0.15\).<br>
+          (a) Calculate the naive approximate percentage effect.<br>
+          (b) Calculate the exact percentage effect using \(100(e^{\beta_1} - 1)\%\).<br>
+          (c) What is the discrepancy?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="pHint5">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="pSol5">Show Solution</button>
+        </div>
+        <div id="pHint5" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Use \(e^{0.15} \approx 1.16183\).
+          </p>
+        </div>
+        <div id="pSol5" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            (a) Naive approximation: \(100 \cdot 0.15 = \mathbf{15.00\%}\).<br>
+            (b) Exact effect: \(100 \cdot (e^{0.15} - 1) = 100 \cdot (1.161834 - 1) = \mathbf{16.18\%}\).<br>
+            (c) Discrepancy: \(16.18\% - 15.00\% = \mathbf{1.18 \text{ percentage points}}\). The naive calculation underestimates the union premium by more than 1.1 percentage points.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Module Completion Card -->
+    <div style="background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(16,185,129,0.08)); border: 2px solid var(--color-primary); border-radius: var(--radius-lg); padding: var(--space-xl); margin-top: var(--space-2xl); text-align: center;">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">🎓</div>
+      <h2 style="margin-top: 0; font-size: var(--text-2xl); font-weight: 700; color: var(--color-text);">
+        Congratulations! You have completed Module 1!
+      </h2>
+      <p style="font-size: var(--text-base); color: var(--color-text-secondary); max-width: 680px; margin: 0 auto var(--space-lg) auto; line-height: 1.6;">
+        You have mastered the foundations of econometric inquiry: from causal identification and OLS projection geometry to the 6 CLRM assumptions and functional form interpretations.
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+        <button class="btn btn-primary btn-lg mark-lesson-complete-btn" data-module="module-01" data-lesson="9">
+          ✓ Mark Lesson 9 & Module 1 Complete!
+        </button>
+        <a href="index.html" class="btn btn-outline btn-lg">
+          Back to Module 1 Syllabus
+        </a>
+        <a href="../../index.html#modules" class="btn btn-outline btn-lg">
+          Return to Course Homepage
+        </a>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="lesson-pagination">
+      <a href="lesson-08.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">← Previous Lesson</span>
+        <span class="nav-btn-title">Coefficients &amp; Functional Forms</span>
+      </a>
+      <a href="index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Module 01 Complete →</span>
+        <span class="nav-btn-title">Module 1 Overview</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.1: OLS as Orthogonal Projection — EcoIntuition Academy</title>
+  <meta name="description" content="Understand OLS geometrically as the closest possible shadow of outcome vector y onto the column space of X in n-dimensional observation space.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 8 &middot; OLS as Orthogonal Projection</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">12.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 12.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.1</span>
+        <span class="badge">Geometric Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        OLS as Orthogonal Projection
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        See OLS through the fundamental geometric intuition of the "closest possible shadow": projecting the observed outcome vector \(y\) perpendicularly onto the regressor column space \(\text{Col}(X)\).
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Conceptualize the \(n\)-dimensional observation space \(\mathbb{R}^n\) and the lower-dimensional regressor subspace \(\text{Col}(X)\).</li>
+        <li>Explain OLS as finding the unique point on \(\text{Col}(X)\) that lies closest in Euclidean squared distance to \(y\).</li>
+        <li>Identify the fitted vector \(\hat{y} = X\hat{\beta}\) as the orthogonal shadow of \(y\).</li>
+        <li>Recognize why the residual vector \(e = y - \hat{y}\) points straight out of the surface at a right angle (\(e \perp \text{Col}(X)\)).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Intuition of the "Closest Possible Shadow" -->
+    <section class="lesson-section">
+      <h2>1. Seeing OLS as the "Closest Possible Shadow"</h2>
+      <p>
+        Imagine each observation in your sample as one coordinate axis in a giant room: if there are \(n\) observations, the room has \(n\) dimensions (\(\mathbb{R}^n\)).
+      </p>
+      <p>
+        The outcome vector \(y\) is a single point (or vector from the origin) in this \(n\)-dimensional room: one coordinate per observed unit:
+      </p>
+      <div class="math-scroll-box">
+        $$y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix} \in \mathbb{R}^n$$
+      </div>
+      <p>
+        The explanatory variables in the \(n \times k\) design matrix \(X\) define a lower-dimensional flat surface—a linear <strong>subspace</strong> inside this large room—spanned by the \(k\) column vectors of \(X\). We call this subspace the <strong>column space</strong> of \(X\), denoted \(\text{Col}(X)\):
+      </p>
+      <div class="math-scroll-box">
+        $$\text{Col}(X) = \left\{ z \in \mathbb{R}^n : z = Xb \text{ for some } b \in \mathbb{R}^k \right\}$$
+      </div>
+      <p>
+        Because real-world economic outcomes are not deterministically explained by \(X\), the observed vector \(y\) almost never lies directly inside \(\text{Col}(X)\). It floats somewhere outside, above the subspace.
+      </p>
+      
+      <div class="study-card" style="border-left: 4px solid var(--accent-primary); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: var(--color-primary); font-size: 0.95rem; font-weight: 700;">The Core Geometric Intuition</h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          What OLS does is simple: it finds the point on this flat surface that lies <strong>as close as possible</strong> to the point \(y\). In other words, you shine a light orthogonally down onto the subspace spanned by \(X\) and look at where the <strong>"shadow"</strong> of \(y\) lands.
+        </p>
+      </div>
+
+      <p>
+        That shadow is the <strong>fitted vector</strong> \(\hat{y} = X\hat{\beta}\). The <strong>residual vector</strong> \(e = y - \hat{y}\) is the difference between \(y\) and its shadow; it points straight out of the surface, at a strict <strong>right angle</strong> (\(90^\circ\)).
+      </p>
+
+      <!-- Reusable Equation Box: Geometric Orthogonal Projection -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">GEOMETRIC SPECIFICATION</span>
+          <span class="equation-title">Orthogonal Projection & Residual Decomposition</span>
+        </div>
+        <div class="equation-main">
+          $$y = \hat{y} + e = X\hat{\beta} + e \quad \text{where } e \perp \text{Col}(X)$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(y \in \mathbb{R}^n\)</span>
+                <span class="symbol-desc"><strong>Observed outcome vector:</strong> Point in \(n\)-dimensional observation space</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\hat{y} = X\hat{\beta}\)</span>
+                <span class="symbol-desc"><strong>Fitted vector:</strong> Orthogonal projection of \(y\) onto the subspace \(\text{Col}(X)\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(e = y - \hat{y}\)</span>
+                <span class="symbol-desc"><strong>Residual vector:</strong> Shortest distance vector from \(\text{Col}(X)\) to \(y\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(e \perp \text{Col}(X)\)</span>
+                <span class="symbol-desc"><strong>Orthogonality:</strong> The residual forms a right angle with every vector in the regressor subspace</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Projection Lab Widget -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <div>
+            <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">Interactive Lab</span>
+            <span class="visualization-title" style="margin-left: 8px;">2.5D Orthogonal Projection & "Shadow" Simulator</span>
+          </div>
+          <span style="font-size: var(--text-xs); color: var(--text-muted);">Euclidean squared distance minimization</span>
+        </div>
+
+        <!-- Sliders panel -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="font-size: var(--text-xs); font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+            Adjust Coordinates of Observed Vector \(y = [y_1, y_2, y_3]^\top\)
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md);">
+            <div>
+              <label for="projSliderY1" style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">
+                Component along \(x_1\) (horizontal):
+              </label>
+              <input type="range" id="projSliderY1" min="0.5" max="4.0" step="0.1" value="2.5" style="width: 100%;">
+            </div>
+            <div>
+              <label for="projSliderY2" style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">
+                Component along \(x_2\) (depth):
+              </label>
+              <input type="range" id="projSliderY2" min="0.5" max="4.0" step="0.1" value="2.0" style="width: 100%;">
+            </div>
+            <div>
+              <label for="projSliderY3" style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">
+                Orthogonal Elevation \(e\) (residual height):
+              </label>
+              <input type="range" id="projSliderY3" min="1.0" max="4.5" step="0.1" value="3.5" style="width: 100%;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Readout indicators outside plot -->
+        <div style="display: flex; gap: var(--space-md); justify-content: space-around; flex-wrap: wrap; margin-bottom: var(--space-md); background: #ffffff; padding: 10px 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Observed Vector \(y\):</span>
+            <strong id="projReadoutY" style="font-family: var(--font-mono); font-size: var(--text-sm); color: #0f172a;">[2.5, 2.0, 3.5]ᵀ</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Fitted Shadow \(\hat{y} = X\hat{\beta}\):</span>
+            <strong id="projReadoutYHat" style="font-family: var(--font-mono); font-size: var(--text-sm); color: #1d4ed8;">[2.5, 2.0, 0.0]ᵀ</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Squared Distance \(\|e\|^2 = \sum e_i^2\):</span>
+            <strong id="projReadoutDist" style="font-family: var(--font-mono); font-size: var(--text-sm); color: #b91c1c;">12.25 (minimized)</strong>
+          </div>
+        </div>
+
+        <!-- Plot stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="projectionLabSvg" viewBox="0 0 500 320" width="100%" height="320" style="max-width: 500px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The shaded surface represents the subspace \(\text{Col}(X)\) formed by all linear combinations of regressors. Point \(y\) floats above it. The blue vector \(\hat{y}\) is the orthogonal projection, connected to \(y\) by the vertical red dashed line \(e\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Notice the right-angle marker at the base of the residual line. If you picked any point other than \(\hat{y}\) on the plane, the line connecting it to \(y\) would form a hypotenuse of a right triangle, making the distance strictly longer (Pythagorean Theorem).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>OLS does not pick an arbitrary point in \(\text{Col}(X)\). It picks the unique point that minimizes Euclidean squared distance. All algebraic formulas in econometrics are simply coordinate calculations of this single geometric fact.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The fitted vector \(\hat{y}\) captures all information in \(y\) that can be linearly accounted for by the included regressors. The residual vector \(e = y - \hat{y}\) contains the idiosyncratic, unmodeled variation orthogonal to every regressor.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Slide the "Orthogonal Elevation" slider down toward 1.0. Observe how the shadow \(\hat{y}\) stays fixed in place while the residual vector shrinks, illustrating a higher \(R^2\) model where observations lie closer to the regression subspace!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Conceptual Mistake Alert -->
+    <section class="lesson-section" style="margin-top: var(--space-xl);">
+      <h2>2. Common Conceptual Pitfalls</h2>
+      
+      <div class="study-card" style="border-left: 5px solid #dc2626; margin: var(--space-md) 0;">
+        <div style="color: #dc2626; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ⚠️ COMMON MISTAKE: "OLS projects the coefficient vector \(\beta\) onto \(X\)"
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          <strong>Correction:</strong> \(\beta\) is a \(k \times 1\) vector of numbers residing in parameter space \(\mathbb{R}^k\). It is never projected! 
+          OLS projects the \(n \times 1\) <strong>outcome vector \(y\)</strong> in observation space \(\mathbb{R}^n\) onto the subspace spanned by the columns of \(X\). 
+          The coefficients \(\hat{\beta}\) are simply the <em>weights</em> assigned to each column of \(X\) to construct the fitted projection: \(\hat{y} = \hat{\beta}_1 x_1 + \dots + \hat{\beta}_k x_k\).
+        </p>
+      </div>
+
+      <div class="study-card" style="border-left: 5px solid #10b981; margin: var(--space-md) 0;">
+        <div style="color: #059669; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ✓ KEY GEOMETRIC TAKEAWAY
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          Once you understand that OLS is perpendicular projection onto a subspace, the algebraic derivation of the Normal Equations in Lesson 2.2 becomes completely intuitive: setting the derivative of distance to zero is simply finding the point where the residual forms a \(90^\circ\) angle with the subspace!
+        </p>
+      </div>
+    </section>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="index.html" class="btn btn-outline">← Module 2 Overview</a>
+      <a href="lesson-02.html" class="btn btn-primary">Next: Lesson 2.2 Deriving Normal Equations →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Econometrics with AI — EcoIntuition Academy</title>
+  <meta name="description" content="Understand economic relationships through data, models, and causal reasoning. Academic, interactive, and first-principles econometrics course by EcoIntuition Academy.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/course.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. NAVIGATION BAR
+       ========================================================================= -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand" aria-label="EcoIntuition Academy Homepage">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-item-link active" aria-current="page">Home</a></li>
+          <li><a href="#what-is-econometrics" class="nav-item-link">Overview</a></li>
+          <li><a href="#thinking" class="nav-item-link">Thinking Flow</a></li>
+          <li><a href="#journey" class="nav-item-link">Journey</a></li>
+          <li><a href="#modules" class="nav-item-link">Curriculum</a></li>
+          <li><a href="#ai-support" class="nav-item-link">With AI</a></li>
+          <li><a href="#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link" aria-label="GitHub Repository">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Right Action Items (Theme Toggle & Mobile Menu) -->
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme" title="Switch between dark and light mode">
+          <!-- Moon Icon (for switching to dark) -->
+          <svg class="light-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/>
+          </svg>
+          <!-- Sun Icon (for switching to light) -->
+          <svg class="dark-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zm11.07-6.07a1 1 0 0 1 0 1.41l-1.41 1.42a1 1 0 1 1-1.42-1.42l1.42-1.41a1 1 0 0 1 1.41 0zM8.34 16.66a1 1 0 0 1 0 1.41l-1.41 1.42a1 1 0 1 1-1.42-1.42l1.42-1.41a1 1 0 0 1 1.41 0zm9.73 11.48a1 1 0 0 1-1.41 0l-1.42-1.41a1 1 0 1 1 1.42-1.42l1.41 1.42a1 1 0 0 1 0 1.41zM6.93 6.93a1 1 0 0 1-1.41 0L4.1 5.52a1 1 0 1 1 1.42-1.42l1.41 1.41a1 1 0 0 1 0 1.42z"/>
+          </svg>
+        </button>
+
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <!-- =======================================================================
+         2. HERO SECTION
+         ======================================================================= -->
+    <section class="hero-section" aria-labelledby="heroTitle">
+      <div class="container hero-grid">
+        <div class="hero-text-content">
+          <div class="hero-meta-badges">
+            <span class="badge badge-amber">12 Modules • Beginner → Advanced</span>
+            <span class="hero-pillars">Theory • Mathematics • Data • Causal Reasoning</span>
+          </div>
+
+          <h1 id="heroTitle" class="hero-title">Econometrics with AI</h1>
+          <p class="hero-subtitle">Understand economic relationships through data, models, and causal reasoning.</p>
+          <p class="hero-description">
+            Learn how economists move from real-world questions to data, regression models, estimation, inference, and evidence-based conclusions.
+          </p>
+
+          <div class="hero-actions">
+            <a href="modules/module-01/lesson-01.html" class="btn btn-primary">Start Learning</a>
+            <a href="#modules" class="btn btn-secondary">Explore Modules</a>
+          </div>
+        </div>
+
+        <!-- Tasteful Econometric Visualization Card -->
+        <div class="hero-econometric-card" aria-label="Econometric Empirical Model Diagram">
+          <div class="hero-viz-header">
+            <span class="hero-viz-spec">Y_i = β₀ + β₁X_i + u_i</span>
+            <span class="hero-viz-tag">Bivariate OLS</span>
+          </div>
+
+          <!-- Academic Vector Plot: Data, Fitted Line, 95% Confidence Band, Residuals -->
+          <div class="hero-viz-container">
+            <svg class="hero-viz-svg" viewBox="0 0 420 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <defs>
+                <linearGradient id="ciBandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--accent-primary)" stop-opacity="0.12" />
+                  <stop offset="50%" stop-color="var(--accent-primary)" stop-opacity="0.08" />
+                  <stop offset="100%" stop-color="var(--accent-primary)" stop-opacity="0.14" />
+                </linearGradient>
+              </defs>
+
+              <!-- Subtle Grid Lines -->
+              <line x1="45" y1="30" x2="395" y2="30" stroke="var(--border-subtle)" stroke-dasharray="3 3" stroke-width="1" />
+              <line x1="45" y1="65" x2="395" y2="65" stroke="var(--border-subtle)" stroke-dasharray="3 3" stroke-width="1" />
+              <line x1="45" y1="100" x2="395" y2="100" stroke="var(--border-subtle)" stroke-dasharray="3 3" stroke-width="1" />
+              <line x1="45" y1="135" x2="395" y2="135" stroke="var(--border-subtle)" stroke-dasharray="3 3" stroke-width="1" />
+
+              <!-- Axes -->
+              <line x1="45" y1="135" x2="395" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
+              <line x1="45" y1="20" x2="45" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
+              <text x="395" y="148" font-size="10" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">X (Explanatory)</text>
+              <text x="40" y="22" font-size="10" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">Y (Outcome)</text>
+
+              <!-- 95% Confidence Interval Band (Envelope Polygon) -->
+              <polygon points="55,130 140,94 220,68 300,43 385,15 385,39 300,61 220,84 140,108 55,142" fill="url(#ciBandGrad)" />
+
+              <!-- Residual drop lines (u_i = Y_i - Y_hat) -->
+              <line x1="90" y1="126" x2="90" y2="114" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" opacity="0.85" />
+              <line x1="165" y1="80" x2="165" y2="92" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" opacity="0.85" />
+              <line x1="250" y1="74" x2="250" y2="64" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" opacity="0.85" />
+              <line x1="330" y1="36" x2="330" y2="48" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" opacity="0.85" />
+
+              <!-- Fitted OLS Regression Line -->
+              <line x1="55" y1="124" x2="385" y2="28" stroke="var(--accent-primary)" stroke-width="2.5" stroke-linecap="round" />
+
+              <!-- Empirical Scatter Data Points (16 points) -->
+              <circle cx="68" cy="120" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="90" cy="126" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="112" cy="104" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="135" cy="108" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="152" cy="98" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="165" cy="80" r="3.5" fill="var(--accent-primary)" opacity="0.95" />
+              <circle cx="190" cy="86" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="215" cy="74" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="232" cy="80" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="250" cy="74" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="275" cy="56" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="295" cy="62" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="318" cy="46" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="330" cy="36" r="3.5" fill="var(--accent-primary)" opacity="0.9" />
+              <circle cx="355" cy="38" r="3.5" fill="var(--accent-primary)" opacity="0.85" />
+              <circle cx="378" cy="24" r="3.5" fill="var(--accent-primary)" opacity="0.95" />
+
+              <!-- Indicator Label: Beta Hat -->
+              <rect x="235" y="32" width="135" height="22" rx="4" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1" />
+              <text x="302" y="46" font-size="9.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">Ŷ = 1.84 + 0.642X</text>
+            </svg>
+          </div>
+
+          <!-- Statistical Metrics Pill Strip -->
+          <div class="hero-viz-footer">
+            <span class="hero-stat-pill">β̂₁ = 0.642 (SE = 0.133)</span>
+            <span class="hero-stat-pill">t = 4.82 (p &lt; 0.001)</span>
+            <span class="hero-stat-pill">R² = 0.74</span>
+          </div>
+
+          <!-- Conceptual Pipeline Ribbon -->
+          <div class="hero-pipeline-strip">
+            <span>Question</span>
+            <span class="hero-pipeline-sep">→</span>
+            <span>Data</span>
+            <span class="hero-pipeline-sep">→</span>
+            <span>Model</span>
+            <span class="hero-pipeline-sep">→</span>
+            <span>Estimate β̂</span>
+            <span class="hero-pipeline-sep">→</span>
+            <span>Inference</span>
+            <span class="hero-pipeline-sep">→</span>
+            <span>Policy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         3. WHAT IS ECONOMETRICS? (4 PILLARS & SYNTHESIS)
+         ======================================================================= -->
+    <section class="section-wrapper" id="what-is-econometrics" aria-labelledby="whatIsEconometricsTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Core Foundations</span>
+          <h2 id="whatIsEconometricsTitle" class="section-title">What is Econometrics?</h2>
+          <p class="section-subtitle">The quantitative measurement of economic relationships combining theoretical logic, empirical data, and rigorous statistical inference.</p>
+        </div>
+
+        <div class="concepts-grid">
+          <!-- Card 1: Economic Theory -->
+          <article class="concept-card">
+            <div class="concept-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+            </div>
+            <h3>Economic Theory</h3>
+            <p><strong>What relationship should exist?</strong> Provides behavioral logic, agent optimization, market equilibrium, and foundational causal hypotheses.</p>
+          </article>
+
+          <!-- Card 2: Data -->
+          <article class="concept-card">
+            <div class="concept-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            </div>
+            <h3>Data</h3>
+            <p><strong>What do we actually observe?</strong> Captures real-world decisions across cross-sectional surveys, macroeconomic time series, and micro-panel datasets.</p>
+          </article>
+
+          <!-- Card 3: Estimation -->
+          <article class="concept-card">
+            <div class="concept-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 4h2v2h-2V6zm-4 0h2v2H9V6zm0 4h2v2H9v-2zm4 0h2v2h-2v-2zm-4 4h2v2H9v-2zm4 0h2v2h-2v-2zm-4 4h2v2H9v-2zm4 0h2v2h-2v-2z"/></svg>
+            </div>
+            <h3>Estimation</h3>
+            <p><strong>What does the evidence tell us?</strong> Quantifies structural parameters through OLS, Instrumental Variables, Maximum Likelihood, and robust estimators.</p>
+          </article>
+
+          <!-- Card 4: Inference -->
+          <article class="concept-card">
+            <div class="concept-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            </div>
+            <h3>Inference</h3>
+            <p><strong>How confident are we in the conclusion?</strong> Evaluates sampling uncertainty, tests hypotheses, assesses standard errors, and validates identification assumptions.</p>
+          </article>
+        </div>
+
+        <!-- Synthesis Equation Line -->
+        <div class="synthesis-banner" aria-label="Conceptual Synthesis Equation">
+          <div class="synthesis-equation">
+            <span class="synthesis-item">Economic Theory</span>
+            <span class="synthesis-plus">+</span>
+            <span class="synthesis-item">Mathematics</span>
+            <span class="synthesis-plus">+</span>
+            <span class="synthesis-item">Statistics</span>
+            <span class="synthesis-plus">+</span>
+            <span class="synthesis-item">Data</span>
+            <span class="synthesis-arrow">→</span>
+            <span class="synthesis-result">Evidence-Based Economic Conclusions</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         4. THE ECONOMETRIC THINKING FLOW (6 STEPS)
+         ======================================================================= -->
+    <section class="section-wrapper" id="thinking" style="background-color: var(--surface-raised); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);" aria-labelledby="thinkingTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Educational Methodology</span>
+          <h2 id="thinkingTitle" class="section-title">The Econometric Thinking Flow</h2>
+          <p class="section-subtitle">How this course trains you to approach empirical economics with first-principles scientific rigor.</p>
+        </div>
+
+        <div class="thinking-grid">
+          <!-- Step 1: Ask -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">1</span>
+              <span class="thinking-step-name">Ask</span>
+            </div>
+            <div class="thinking-question">What economic question are we trying to answer?</div>
+            <p class="thinking-desc">Identify the core mechanism, policy dilemma, or behavioral causal relationship under investigation.</p>
+          </div>
+
+          <!-- Step 2: Model -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">2</span>
+              <span class="thinking-step-name">Model</span>
+            </div>
+            <div class="thinking-question">How should the relationship be represented?</div>
+            <p class="thinking-desc">Specify functional forms, dependent variables, control sets, and stochastic error properties.</p>
+          </div>
+
+          <!-- Step 3: Estimate -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">3</span>
+              <span class="thinking-step-name">Estimate</span>
+            </div>
+            <div class="thinking-question">What parameters does the data imply?</div>
+            <p class="thinking-desc">Calculate sample coefficients using OLS, Instrumental Variables, Fixed Effects, or Maximum Likelihood.</p>
+          </div>
+
+          <!-- Step 4: Test -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">4</span>
+              <span class="thinking-step-name">Test</span>
+            </div>
+            <div class="thinking-question">How uncertain are our estimates?</div>
+            <p class="thinking-desc">Compute sampling distributions, standard errors, t-statistics, and joint hypothesis restrictions.</p>
+          </div>
+
+          <!-- Step 5: Diagnose -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">5</span>
+              <span class="thinking-step-name">Diagnose</span>
+            </div>
+            <div class="thinking-question">Are our assumptions failing?</div>
+            <p class="thinking-desc">Stress-test for heteroskedasticity, serial correlation, omitted confounders, and instrument weakness.</p>
+          </div>
+
+          <!-- Step 6: Interpret -->
+          <div class="thinking-card">
+            <div class="thinking-card-header">
+              <span class="thinking-num">6</span>
+              <span class="thinking-step-name">Interpret</span>
+            </div>
+            <div class="thinking-question">What does the result actually mean economically?</div>
+            <p class="thinking-desc">Translate parameters into marginal effects, elasticities, counterfactual predictions, and policy impacts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         5. THE LEARNING JOURNEY (8 MILESTONES)
+         ======================================================================= -->
+    <section class="section-wrapper" id="journey" aria-labelledby="learningJourneyTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Curriculum Roadmap</span>
+          <h2 id="learningJourneyTitle" class="section-title">The Learning Journey</h2>
+          <p class="section-subtitle">Structured progressively from bivariate OLS mechanics to modern causal identification and discrete choice.</p>
+        </div>
+
+        <div class="learning-path-wrapper">
+          <div class="learning-path-track" role="list">
+            <!-- Stage 1 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="path-node-title">Foundations</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 2 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+              </div>
+              <span class="path-node-title">OLS</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 3 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+              </div>
+              <span class="path-node-title">Inference</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 4 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+              </div>
+              <span class="path-node-title">Model Problems</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 5 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+              </div>
+              <span class="path-node-title">Panel & Time Data</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 6 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+              </div>
+              <span class="path-node-title">Endogeneity</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 7 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5z"/></svg>
+              </div>
+              <span class="path-node-title">Causal ID</span>
+            </div>
+
+            <div class="path-connector" aria-hidden="true">→</div>
+
+            <!-- Stage 8 -->
+            <div class="path-node" role="listitem">
+              <div class="path-node-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>
+              </div>
+              <span class="path-node-title">Discrete Choice</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         6. COURSE MODULES (EXACTLY 12 CARDS IN 4 PROGRESSION TIERS)
+         ======================================================================= -->
+    <section class="section-wrapper" id="modules" style="background-color: var(--surface-raised); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);" aria-labelledby="modulesTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Complete Curriculum</span>
+          <h2 id="modulesTitle" class="section-title">Course Modules</h2>
+          <p class="section-subtitle">Twelve interconnected modules spanning core regression mechanics, diagnostics, causal identification, and discrete-choice models.</p>
+        </div>
+
+        <div class="curriculum-tier-section">
+          <!-- =================================================================
+               TIER 1: FOUNDATIONS (Modules 01 - 03)
+               ================================================================= -->
+          <div class="curriculum-tier">
+            <div class="tier-header">
+              <span class="tier-pill">Tier 1</span>
+              <span class="tier-title">Foundations & Core Mechanics</span>
+              <span class="tier-count">Modules 01 – 03</span>
+            </div>
+
+            <div class="modules-grid">
+              <!-- Module 01 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">01</span>
+                  <span class="module-group-tag">Foundations</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Scatter + Regression -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="12" y1="36" x2="110" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <line x1="12" y1="8" x2="12" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <line x1="16" y1="32" x2="106" y2="12" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="25" cy="30" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="38" cy="27" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="52" cy="22" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="68" cy="24" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="82" cy="16" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="98" cy="14" r="2.2" fill="var(--accent-primary)" opacity="0.8" />
+                    <text x="108" y="24" font-size="7" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">Ŷ=βX</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">01 Econometrics Fundamentals & Linear Regression</h3>
+                <p class="module-desc">Build the foundations of econometric reasoning, from causal questions and linear regression to OLS assumptions, coefficient interpretation, and functional forms.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Causation vs Prediction</li>
+                    <li class="module-topic-tag">OLS Minimization</li>
+                    <li class="module-topic-tag">CLRM Assumptions</li>
+                    <li class="module-topic-tag">Functional Forms</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-01">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-01" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-01/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 1</a>
+                </div>
+              </article>
+
+              <!-- Module 02 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">02</span>
+                  <span class="module-group-tag">Foundations</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Projection Geometry -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <polygon points="15,36 45,26 105,26 75,36" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="0.75" />
+                    <line x1="25" y1="32" x2="80" y2="10" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="80" y1="10" x2="80" y2="28" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1.5" />
+                    <line x1="25" y1="32" x2="80" y2="28" stroke="var(--text-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <polyline points="76,28 76,24 80,24" fill="none" stroke="var(--accent-secondary)" stroke-width="1" />
+                    <text x="92" y="14" font-size="7" font-family="var(--font-mono)" fill="var(--accent-primary)">Y</text>
+                    <text x="88" y="24" font-size="7" font-family="var(--font-mono)" fill="var(--accent-secondary)">e ⊥ X</text>
+                    <text x="50" y="38" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-muted)">col(X)</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">02 OLS Geometry, Matrix Algebra & Regression Mechanics</h3>
+                <p class="module-desc">Projection matrices, Frisch-Waugh-Lovell theorem, and the algebraic mechanics of multiple regression.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Projection Matrix P</li>
+                    <li class="module-topic-tag">Residual Maker M</li>
+                    <li class="module-topic-tag">FWL Theorem</li>
+                    <li class="module-topic-tag">Gauss-Markov</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-02">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-02" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-02/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 2</a>
+                </div>
+              </article>
+
+              <!-- Module 03 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">03</span>
+                  <span class="module-group-tag">Foundations</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Distribution & Inference -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="10" y1="36" x2="110" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Shaded critical tails -->
+                    <path d="M 15 36 C 25 36, 32 30, 35 24 L 35 36 Z" fill="var(--accent-primary)" opacity="0.25" />
+                    <path d="M 85 24 C 88 30, 95 36, 105 36 L 85 36 Z" fill="var(--accent-primary)" opacity="0.25" />
+                    <!-- Bell curve -->
+                    <path d="M 15 36 C 35 36, 45 10, 60 10 C 75 10, 85 36, 105 36" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="60" y1="10" x2="60" y2="36" stroke="var(--border-subtle)" stroke-dasharray="2 2" />
+                    <line x1="35" y1="24" x2="35" y2="36" stroke="var(--accent-primary)" stroke-dasharray="1 1" />
+                    <line x1="85" y1="24" x2="85" y2="36" stroke="var(--accent-primary)" stroke-dasharray="1 1" />
+                    <text x="60" y="7" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">N(0, 1)</text>
+                    <text x="24" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">-1.96</text>
+                    <text x="96" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">+1.96</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">03 Large-Sample Theory & Statistical Inference</h3>
+                <p class="module-desc">Law of large numbers, Central Limit Theorem, asymptotic distributions, and hypothesis testing.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">LLN & Consistency</li>
+                    <li class="module-topic-tag">CLT & Normality</li>
+                    <li class="module-topic-tag">t-tests & p-values</li>
+                    <li class="module-topic-tag">F-tests & Restrictions</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-03">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-03" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 03"
+                    data-mod-group="Foundations"
+                    data-mod-title="Large-Sample Theory & Statistical Inference"
+                    data-mod-desc="Master asymptotic theory in econometrics: probability limits (plim), convergence in distribution, robust standard errors, Delta method, and joint hypothesis testing via Wald and F statistics."
+                    data-mod-topics="Weak Law of Large Numbers (WLLN)|Lindeberg-Levy Central Limit Theorem|Consistency vs Unbiasedness|Asymptotic Variance Covariance Matrix|Wald, LM, and Likelihood Ratio Tests|Delta Method for Nonlinear Functions">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               TIER 2: REGRESSION CHALLENGES & DATA STRUCTURES (Modules 04 - 06)
+               ================================================================= -->
+          <div class="curriculum-tier">
+            <div class="tier-header">
+              <span class="tier-pill">Tier 2</span>
+              <span class="tier-title">Regression Challenges & Data Structures</span>
+              <span class="tier-count">Modules 04 – 06</span>
+            </div>
+
+            <div class="modules-grid">
+              <!-- Module 04 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">04</span>
+                  <span class="module-group-tag">Diagnostics</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Heteroskedasticity Fan -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="12" y1="22" x2="108" y2="22" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
+                    <!-- Fan envelope -->
+                    <line x1="20" y1="22" x2="102" y2="8" stroke="var(--accent-secondary)" stroke-width="1" opacity="0.6" />
+                    <line x1="20" y1="22" x2="102" y2="36" stroke="var(--accent-secondary)" stroke-width="1" opacity="0.6" />
+                    <!-- Expanding residuals -->
+                    <circle cx="28" cy="21" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="36" cy="24" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="48" cy="19" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="58" cy="26" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="70" cy="16" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="82" cy="30" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="94" cy="11" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="98" cy="33" r="2" fill="var(--accent-secondary)" />
+                    <text x="64" y="38" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-muted)">Var(u|X) ≠ σ²</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">04 Heteroskedasticity, Autocorrelation & GLS</h3>
+                <p class="module-desc">Non-spherical disturbances, White and Newey-West robust standard errors, WLS, and Generalized Least Squares.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Heteroskedasticity Tests</li>
+                    <li class="module-topic-tag">White Robust SE</li>
+                    <li class="module-topic-tag">Newey-West HAC</li>
+                    <li class="module-topic-tag">GLS & Feasible GLS</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-04">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-04" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 04"
+                    data-mod-group="Regression Challenges"
+                    data-mod-title="Heteroskedasticity, Autocorrelation & GLS"
+                    data-mod-desc="Diagnose and resolve violations of spherical error assumptions: Breusch-Pagan and White tests, heteroskedasticity-consistent covariance matrices (HC0-HC3), serial correlation tests, and generalized least squares."
+                    data-mod-topics="Consequences of Non-Spherical Disturbances|Breusch-Pagan & White Tests for Heteroskedasticity|White (Eicker-Huber-White) Robust Standard Errors|Durbin-Watson & Breusch-Godfrey LM Tests|Newey-West HAC Standard Errors|Weighted Least Squares (WLS) & Feasible GLS">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 05 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">05</span>
+                  <span class="module-group-tag">Time Series</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Time Series Trajectory -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Stochastic trajectory -->
+                    <polyline points="14,32 25,26 34,30 46,18 56,23 68,14 78,19 90,11 104,8" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Trend line -->
+                    <line x1="14" y1="32" x2="104" y2="10" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
+                    <text x="108" y="24" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="end">Y_t</text>
+                    <text x="60" y="42" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">AR(1) • Trend</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">05 Time-Series Regression</h3>
+                <p class="module-desc">Dynamic processes, stationarity, unit roots, ARMA specifications, cointegration, and macroeconomic forecasting.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Stationarity & Ergodicity</li>
+                    <li class="module-topic-tag">Dickey-Fuller Test</li>
+                    <li class="module-topic-tag">Spurious Regression</li>
+                    <li class="module-topic-tag">Distributed Lags</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-05">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-05" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 05"
+                    data-mod-group="Data Structures"
+                    data-mod-title="Time-Series Regression"
+                    data-mod-desc="Investigate dynamic economic time series: Autoregressive (AR) and Moving Average (MA) models, unit root diagnostics, Granger causality, error-correction models, and forecasting methods."
+                    data-mod-topics="Weak Stationarity & Autocovariance Functions|Augmented Dickey-Fuller (ADF) & Phillips-Perron Tests|Spurious Regressions & Unit Root Consequences|Finite Distributed Lag Models & Multipliers|Engle-Granger Cointegration & Error Correction|Forecasting Evaluation & Information Criteria">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 06 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">06</span>
+                  <span class="module-group-tag">Panel Data</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Multi-unit panel grid -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Unit 1 trajectory -->
+                    <line x1="20" y1="14" x2="95" y2="8" stroke="var(--accent-primary)" stroke-width="1.6" stroke-linecap="round" />
+                    <circle cx="20" cy="14" r="2" fill="var(--accent-primary)" />
+                    <circle cx="58" cy="11" r="2" fill="var(--accent-primary)" />
+                    <circle cx="95" cy="8" r="2" fill="var(--accent-primary)" />
+                    <!-- Unit 2 trajectory -->
+                    <line x1="20" y1="24" x2="95" y2="18" stroke="var(--accent-secondary)" stroke-width="1.6" stroke-linecap="round" />
+                    <circle cx="20" cy="24" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="58" cy="21" r="2" fill="var(--accent-secondary)" />
+                    <circle cx="95" cy="18" r="2" fill="var(--accent-secondary)" />
+                    <!-- Unit 3 trajectory -->
+                    <line x1="20" y1="33" x2="95" y2="27" stroke="var(--border-strong)" stroke-width="1.6" stroke-linecap="round" />
+                    <circle cx="20" cy="33" r="2" fill="var(--text-muted)" />
+                    <circle cx="58" cy="30" r="2" fill="var(--text-muted)" />
+                    <circle cx="95" cy="27" r="2" fill="var(--text-muted)" />
+                    <text x="108" y="12" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">i=1</text>
+                    <text x="108" y="22" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">i=2</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">06 Panel Data Models</h3>
+                <p class="module-desc">Unobserved heterogeneity, fixed effects within estimation, random effects GLS, and Hausman specification testing.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Pooled OLS</li>
+                    <li class="module-topic-tag">Fixed Effects (Within)</li>
+                    <li class="module-topic-tag">Random Effects</li>
+                    <li class="module-topic-tag">Hausman Test</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-06">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-06" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 06"
+                    data-mod-group="Data Structures"
+                    data-mod-title="Panel Data Models"
+                    data-mod-desc="Harness longitudinal datasets where entities are tracked over time. Understand individual time-invariant unobserved heterogeneity (α_i), First Differencing, the Within Transformation, and Random Effects GLS."
+                    data-mod-topics="Structure of Panel Data (N × T Dimensions)|Unobserved Heterogeneity & Endogeneity Bias|Fixed Effects (FE) Within Estimator|First Differences (FD) vs FE Comparison|Random Effects (RE) Model & Quasi-Demeaning|Hausman Specification Test for FE vs RE">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               TIER 3: CAUSAL IDENTIFICATION (Modules 07 - 09)
+               ================================================================= -->
+          <div class="curriculum-tier">
+            <div class="tier-header">
+              <span class="tier-pill">Tier 3</span>
+              <span class="tier-title">Causal Identification & Quasi-Experiments</span>
+              <span class="tier-count">Modules 07 – 09</span>
+            </div>
+
+            <div class="modules-grid">
+              <!-- Module 07 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">07</span>
+                  <span class="module-group-tag">Causal ID</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: IV DAG -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Nodes -->
+                    <circle cx="20" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <text x="20" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">Z</text>
+                    <circle cx="60" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <text x="60" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">X</text>
+                    <circle cx="100" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <text x="100" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">Y</text>
+                    <!-- Confounder U -->
+                    <circle cx="80" cy="8" r="5" fill="var(--surface-raised)" stroke="var(--text-muted)" stroke-dasharray="1.5 1.5" stroke-width="1" />
+                    <text x="80" y="10.5" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">U</text>
+                    <!-- Arrows -->
+                    <line x1="28" y1="22" x2="52" y2="22" stroke="var(--accent-primary)" stroke-width="1.5" marker-end="url(#arrow)" />
+                    <line x1="68" y1="22" x2="92" y2="22" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <line x1="77" y1="12" x2="65" y2="18" stroke="var(--text-muted)" stroke-dasharray="2 2" stroke-width="1" />
+                    <line x1="83" y1="12" x2="95" y2="18" stroke="var(--text-muted)" stroke-dasharray="2 2" stroke-width="1" />
+                    <text x="40" y="32" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)">Relevance</text>
+                    <text x="60" y="40" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-secondary)">Exclusion Z⊥u</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">07 Endogeneity & Instrumental Variables</h3>
+                <p class="module-desc">Omitted variable bias, simultaneity, instrument relevance and exogeneity, and Two-Stage Least Squares (2SLS).</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Omitted Variable Bias</li>
+                    <li class="module-topic-tag">Simultaneity</li>
+                    <li class="module-topic-tag">Instrument Exogeneity</li>
+                    <li class="module-topic-tag">2SLS Estimation</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-07">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-07" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 07"
+                    data-mod-group="Causal Identification"
+                    data-mod-title="Endogeneity & Instrumental Variables"
+                    data-mod-desc="Address endogeneity when Cov(X, u) ≠ 0. Master the Two-Stage Least Squares (2SLS) algebraic estimator, exclusion restrictions, and classical empirical applications like the returns to schooling."
+                    data-mod-topics="Mechanisms of Endogeneity (OVB, Reverse Causality, Measurement Error)|Instrumental Variables (IV) Core Conditions|Two-Stage Least Squares (2SLS) Mechanics|Local Average Treatment Effect (LATE)|Natural Experiments & Policy Shifts|Standard Error Adjustments in 2SLS">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 08 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">08</span>
+                  <span class="module-group-tag">Diagnostics</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Diagnostics Gauge -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Diagnostic Bar -->
+                    <rect x="15" y="16" width="90" height="12" rx="3" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Weak zone -->
+                    <rect x="15" y="16" width="35" height="12" rx="2" fill="var(--mistake-border)" opacity="0.35" />
+                    <!-- Strong zone -->
+                    <rect x="50" y="16" width="55" height="12" rx="2" fill="var(--ai-box-border)" opacity="0.35" />
+                    <!-- Cutoff line at F=10 -->
+                    <line x1="50" y1="12" x2="50" y2="32" stroke="var(--mistake-accent)" stroke-width="1.5" />
+                    <!-- Needle marker at F=24 -->
+                    <polygon points="76,14 73,8 79,8" fill="var(--accent-primary)" />
+                    <text x="50" y="9" font-size="6" font-family="var(--font-mono)" fill="var(--mistake-accent)" text-anchor="middle">F=10</text>
+                    <text x="76" y="38" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">F = 24.8 (Strong)</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">08 Instrument Diagnostics & Measurement Error</h3>
+                <p class="module-desc">Weak instrument tests, Stock-Yogo critical values, Sargan-Hansen overidentification, and classical errors-in-variables.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Weak Instruments (F &gt; 10)</li>
+                    <li class="module-topic-tag">Sargan-Hansen Test</li>
+                    <li class="module-topic-tag">Attenuation Bias</li>
+                    <li class="module-topic-tag">LIML Estimator</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-08">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-08" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 08"
+                    data-mod-group="Causal Identification"
+                    data-mod-title="Instrument Diagnostics & Measurement Error"
+                    data-mod-desc="Diagnose IV limitations: weak instrument bias toward OLS, first-stage F diagnostics, Sargan and Hansen J tests for overidentifying restrictions, and classical errors-in-variables attenuation bias."
+                    data-mod-topics="Weak Instrument Pathology & Finite Sample Bias|Stock-Yogo First-Stage F-Statistic Benchmarks|Limited Information Maximum Likelihood (LIML)|Sargan & Hansen J Overidentification Tests|Classical Errors-in-Variables & Attenuation Bias|Non-Classical Measurement Error in Economics">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 09 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">09</span>
+                  <span class="module-group-tag">Quasi-Exp</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: RD Cutoff Jump -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Threshold c -->
+                    <line x1="60" y1="6" x2="60" y2="38" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1.2" />
+                    <!-- Left local linear fit -->
+                    <line x1="15" y1="32" x2="58" y2="24" stroke="var(--text-secondary)" stroke-width="1.8" stroke-linecap="round" />
+                    <circle cx="24" cy="30" r="1.8" fill="var(--text-muted)" />
+                    <circle cx="40" cy="27" r="1.8" fill="var(--text-muted)" />
+                    <circle cx="54" cy="25" r="1.8" fill="var(--text-muted)" />
+                    <!-- Discontinuous Jump -->
+                    <line x1="62" y1="14" x2="105" y2="8" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <circle cx="66" cy="13" r="1.8" fill="var(--accent-primary)" />
+                    <circle cx="82" cy="11" r="1.8" fill="var(--accent-primary)" />
+                    <circle cx="98" cy="9" r="1.8" fill="var(--accent-primary)" />
+                    <!-- Jump arrow tau -->
+                    <line x1="60" y1="24" x2="60" y2="14" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <text x="65" y="21" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold">τ_RD</text>
+                    <text x="60" y="42" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Cutoff c</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">09 Regression Discontinuity Design</h3>
+                <p class="module-desc">Sharp and fuzzy cutoffs, local average treatment effects, running variables, and identification at the threshold.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Sharp RDD</li>
+                    <li class="module-topic-tag">Fuzzy RDD & IV</li>
+                    <li class="module-topic-tag">Bandwidth Selection</li>
+                    <li class="module-topic-tag">McCrary Density Test</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-09">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-09" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 09"
+                    data-mod-group="Causal Identification"
+                    data-mod-title="Regression Discontinuity Design"
+                    data-mod-desc="Explore one of the most credible quasi-experimental methods in modern microeconometrics: Sharp and Fuzzy RD, continuity assumptions, optimal bandwidth algorithms, and manipulation tests."
+                    data-mod-topics="The RDD Intuition & Running (Forcing) Variables|Sharp vs Fuzzy Regression Discontinuity Identification|Nonparametric Kernel & Local Polynomial Estimation|Optimal Bandwidth Selection (Calonico-Cattaneo-Titiunik)|McCrary Sorting & Manipulation Diagnostic Tests|Placebo Thresholds & Balance Checks">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               TIER 4: DISCRETE & LIMITED OUTCOMES (Modules 10 - 12)
+               ================================================================= -->
+          <div class="curriculum-tier">
+            <div class="tier-header">
+              <span class="tier-pill">Tier 4</span>
+              <span class="tier-title">Discrete & Limited Outcomes</span>
+              <span class="tier-count">Modules 10 – 12</span>
+            </div>
+
+            <div class="modules-grid">
+              <!-- Module 10 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">10</span>
+                  <span class="module-group-tag">Binary Choice</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Sigmoid S-Curve -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Bounds 0 and 1 -->
+                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
+                    <line x1="12" y1="8" x2="108" y2="8" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
+                    <!-- S-Curve -->
+                    <path d="M 15 35 C 45 35, 52 9, 105 9" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" />
+                    <!-- Binary outcome dots -->
+                    <circle cx="22" cy="35" r="2" fill="var(--accent-primary)" />
+                    <circle cx="35" cy="35" r="2" fill="var(--accent-primary)" />
+                    <circle cx="85" cy="9" r="2" fill="var(--accent-primary)" />
+                    <circle cx="98" cy="9" r="2" fill="var(--accent-primary)" />
+                    <text x="110" y="11" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">P=1</text>
+                    <text x="110" y="37" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">P=0</text>
+                    <text x="60" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">Logit/Probit</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">10 Binary Choice Models: LPM, Logit & Probit</h3>
+                <p class="module-desc">Linear probability model limitations, Maximum Likelihood estimation, logistic odds ratios, and probit marginal effects.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">LPM Deficiencies</li>
+                    <li class="module-topic-tag">Maximum Likelihood (MLE)</li>
+                    <li class="module-topic-tag">Logit Odds Ratios</li>
+                    <li class="module-topic-tag">Average Marginal Effects</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-10">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-10" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 10"
+                    data-mod-group="Discrete Outcomes"
+                    data-mod-title="Binary Choice Models: LPM, Logit & Probit"
+                    data-mod-desc="Model binary economic decisions (work, invest, purchase). Understand Linear Probability Model pitfalls, Cumulative Distribution Functions (Logistic and Standard Normal), and marginal effects."
+                    data-mod-topics="Why OLS Fails for Binary Outcomes (Predictions Outside [0, 1])|The Latent Index Framework (y* = Xβ + ε)|Logit Formulation & Odds Ratio Interpretation|Probit Normal Distribution Integral Specification|Maximum Likelihood Estimation & Convergence|Marginal Effects: APE vs MEM Comparison">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 11 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">11</span>
+                  <span class="module-group-tag">Limited Outcomes</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Censored/Truncated Distribution -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Censoring mass point at 0 -->
+                    <rect x="25" y="14" width="6" height="22" fill="var(--accent-primary)" rx="1.5" />
+                    <!-- Density curve -->
+                    <path d="M 31 16 C 45 16, 60 22, 100 36" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Threshold indicator -->
+                    <line x1="28" y1="8" x2="28" y2="36" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" />
+                    <text x="28" y="7" font-size="6" font-family="var(--font-mono)" fill="var(--accent-secondary)" text-anchor="middle">c=0</text>
+                    <text x="64" y="24" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-muted)">Tobit / Latent y*</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">11 Limited Dependent Variable Models</h3>
+                <p class="module-desc">Censored and truncated regression, latent variable indices, Tobit estimation, and Heckman sample selection correction.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Censoring vs Truncation</li>
+                    <li class="module-topic-tag">Tobit Type I Model</li>
+                    <li class="module-topic-tag">Inverse Mills Ratio</li>
+                    <li class="module-topic-tag">Heckman Two-Step</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-11">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-11" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 11"
+                    data-mod-group="Limited Outcomes"
+                    data-mod-title="Limited Dependent Variable Models"
+                    data-mod-desc="Address corner solution responses and sample selection: distinguishing censoring from truncation, the Tobit likelihood function, decomposition of marginal effects, and Heckman's selection correction."
+                    data-mod-topics="Corner Solutions & Censored Observation Mechanisms|Truncated Distribution Properties & Moments|Tobit (Type I) Specification & Likelihood Function|McDonald-Moffitt Decomposition of Marginal Effects|Incidental Truncation & Sample Selection Bias|Heckman Two-Step Procedure & Inverse Mills Ratio">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+
+              <!-- Module 12 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">12</span>
+                  <span class="module-group-tag">Multinomial</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Multinomial Choice Branches -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Origin Decision Node -->
+                    <circle cx="20" cy="22" r="5" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <!-- Alternative 1 -->
+                    <line x1="25" y1="20" x2="80" y2="10" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <circle cx="80" cy="10" r="4" fill="var(--accent-primary)" />
+                    <text x="90" y="13" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 1</text>
+                    <!-- Alternative 2 -->
+                    <line x1="25" y1="22" x2="80" y2="22" stroke="var(--accent-secondary)" stroke-width="1.5" />
+                    <circle cx="80" cy="22" r="4" fill="var(--accent-secondary)" />
+                    <text x="90" y="25" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 2</text>
+                    <!-- Alternative 3 -->
+                    <line x1="25" y1="24" x2="80" y2="34" stroke="var(--text-muted)" stroke-width="1.5" />
+                    <circle cx="80" cy="34" r="4" fill="var(--text-muted)" />
+                    <text x="90" y="37" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 3</text>
+                    <text x="50" y="42" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)">IIA • Discrete Choice</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">12 Multinomial Choice Models</h3>
+                <p class="module-desc">Multinomial logit, conditional logit, Independence of Irrelevant Alternatives (IIA), and discrete consumer choice.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Random Utility (RUM)</li>
+                    <li class="module-topic-tag">Multinomial Logit</li>
+                    <li class="module-topic-tag">McFadden Choice</li>
+                    <li class="module-topic-tag">Hausman-McFadden IIA</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-12">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-12" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
+                    data-mod-num="Module 12"
+                    data-mod-group="Multinomial Choice"
+                    data-mod-title="Multinomial Choice Models"
+                    data-mod-desc="Model economic choices among multiple unordered alternatives (transport, occupation, school choice). Master Random Utility Models, McFadden's conditional logit, and tests of IIA."
+                    data-mod-topics="Random Utility Maximization (RUM) Foundations|Multinomial Logit (Individual-Specific Characteristics)|McFadden's Conditional Logit (Alternative-Specific Attributes)|Independence of Irrelevant Alternatives (IIA) Assumption|Hausman-McFadden Test for IIA Violations|Nested Logit & Mixed Logit Extensions">
+                    Explore Curriculum
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         7. HOW AI SUPPORTS YOUR LEARNING
+         ======================================================================= -->
+    <section class="section-wrapper" id="ai-support" aria-labelledby="aiSupportTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Pedagogical Framework</span>
+          <h2 id="aiSupportTitle" class="section-title">How AI Supports Your Learning</h2>
+          <p class="section-subtitle">Econometrics is the core discipline; generative AI acts as an active intellectual coach to deepen understanding, not bypass it.</p>
+        </div>
+
+        <div class="why-ai-grid">
+          <!-- Card 1: Visual Intuition -->
+          <article class="why-ai-card">
+            <h3>Visual Intuition</h3>
+            <p>Explore difficult econometric concepts visually—from multidimensional projection geometry to sampling distributions and residual envelopes.</p>
+          </article>
+
+          <!-- Card 2: Ask Why -->
+          <article class="why-ai-card">
+            <h3>Ask Why</h3>
+            <p>Use guided AI prompts to investigate assumptions, probe identifying restrictions, and understand why specific estimators behave differently.</p>
+          </article>
+
+          <!-- Card 3: Interpret Results -->
+          <article class="why-ai-card">
+            <h3>Interpret Results</h3>
+            <p>Practice translating raw statistical outputs into precise economic statements, elasticities, and policy impacts without falling into causal fallacies.</p>
+          </article>
+
+          <!-- Card 4: Experiment -->
+          <article class="why-ai-card">
+            <h3>Experiment</h3>
+            <p>Change assumptions and parameters dynamically—simulate omitted variable bias, measurement error, or heteroskedasticity and observe the consequences live.</p>
+          </article>
+        </div>
+
+        <div class="ai-philosophy-banner">
+          <strong>Core Pedagogical Principle:</strong> AI supports econometric reasoning — it does not replace it.
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         8. COURSE RESOURCES SECTION
+         ======================================================================= -->
+    <section class="section-wrapper" id="resources" style="background-color: var(--surface-raised); border-top: 1px solid var(--border-subtle);" aria-labelledby="resourcesTitle">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-kicker">Companion Materials</span>
+          <h2 id="resourcesTitle" class="section-title">Course Resources</h2>
+          <p class="section-subtitle">Reference guides, code repositories, and datasets designed to support your university-level study.</p>
+        </div>
+
+        <div class="resources-grid">
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Formula Reference</h4>
+              <span>OLS, SE, and asymptotic formulas</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Econometrics Glossary</h4>
+              <span>120+ core statistical definitions</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Datasets</h4>
+              <span>Wage, Card, and Wooldridge microdata</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Python Examples</h4>
+              <span>statsmodels & linearmodels code</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>R Examples</h4>
+              <span>tidyverse, lm, and fixest scripts</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Practice Questions</h4>
+              <span>Exam-style analytical problems</span>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </div>
+            <div class="resource-info">
+              <h4>Revision Notes</h4>
+              <span>Summary cheat sheets for quick review</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       9. FOOTER
+       ========================================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <a href="index.html" class="brand">
+            <div class="brand-icon">β</div>
+            <div class="brand-text">
+              <span class="brand-org">EcoIntuition Academy</span>
+              <span class="brand-title">Econometrics with AI</span>
+            </div>
+          </a>
+          <p class="footer-brand-desc">
+            An open educational platform dedicated to making advanced quantitative economics intuitive, mathematically rigorous, and relevant in the age of artificial intelligence.
+          </p>
+        </div>
+
+        <div class="footer-nav-col">
+          <div class="footer-nav-group">
+            <h5>Curriculum Tiers</h5>
+            <ul class="footer-nav-list">
+              <li><a href="#modules">Foundations (01–03)</a></li>
+              <li><a href="#modules">Regression Challenges (04–06)</a></li>
+              <li><a href="#modules">Causal Identification (07–09)</a></li>
+              <li><a href="#modules">Discrete Outcomes (10–12)</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-nav-group">
+            <h5>Academy</h5>
+            <ul class="footer-nav-list">
+              <li><a href="https://github.com/EcoIntuition-Academy" target="_blank" rel="noopener noreferrer">EcoIntuition Academy</a></li>
+              <li><a href="#">Statistics with AI</a></li>
+              <li><a href="#">Machine Learning with AI</a></li>
+              <li><a href="#">Microeconomics with AI</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-nav-group">
+            <h5>Repository</h5>
+            <ul class="footer-nav-list">
+              <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+              <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-/issues" target="_blank" rel="noopener noreferrer">Report an Issue</a></li>
+              <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Open Source License</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. All rights reserved.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       10. SYLLABUS OVERVIEW MODAL (ACCESSIBLE & LIGHTWEIGHT)
+       ========================================================================= -->
+  <div id="syllabusModal" class="syllabus-modal" role="dialog" aria-modal="true" aria-labelledby="modalModTitle">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-meta">
+            <span class="badge" id="modalModNum">Module</span>
+            <span class="module-group-tag" id="modalModGroup">Curriculum</span>
+          </div>
+          <h4 class="modal-title" id="modalModTitle">Module Overview</h4>
+        </div>
+        <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close overview modal">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <p class="modal-desc" id="modalModDesc">Detailed module syllabus and learning outcomes.</p>
+
+      <div class="modal-topics-card">
+        <h5>Core Syllabus & Analytical Topics</h5>
+        <ul class="modal-topics-list" id="modalModTopics">
+          <!-- Populated dynamically by main.js -->
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('syllabusModal').classList.remove('active'); document.body.style.overflow='';">Close</button>
+        <a href="modules/module-01/lesson-01.html" class="btn btn-primary btn-sm">Start from Module 01 Foundations</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/progress.js"></script>
+</body>
+</html>

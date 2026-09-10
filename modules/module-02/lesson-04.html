@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.4: Residual Orthogonality & the Constant Term — EcoIntuition Academy</title>
+  <meta name="description" content="Why the residual vector is perpendicular to every included regressor (X'e = 0) and why residuals strictly sum to zero only when an intercept is included.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 8 &middot; Residual Orthogonality &amp; the Constant Term</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">50.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 50.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.4</span>
+        <span class="badge">Regression Mechanics</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Residual Orthogonality &amp; the Constant Term
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Unpack the core algebraic condition \(X'e = 0\) and discover why sample residuals necessarily sum to zero (\(\sum e_i = 0\)) when—and only when—an intercept is included in the model.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the residual orthogonality condition \(X'e = 0\) directly from the normal equations.</li>
+        <li>Interpret \(X'e = 0\) as column-by-column orthogonality: each regressor column has zero inner product with \(e\).</li>
+        <li>Specialize the orthogonality condition to an intercept vector of ones \(\iota\), proving \(\sum_{i=1}^n e_i = 0\).</li>
+        <li>Understand signed residual balancing: why positive and negative deviations cancel around the regression line.</li>
+        <li>Avoid the common fallacy that residuals always sum to zero in models without an intercept.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: What the Residual Conditions Really Say -->
+    <section class="lesson-section">
+      <h2>1. What the Residual Conditions Really Say</h2>
+      <p>
+        Recall the normal equations derived in Lesson 2.2:
+      </p>
+      <div class="math-scroll-box">
+        $$X'X\hat{\beta} = X'y \implies X'(y - X\hat{\beta}) = \mathbf{0}$$
+      </div>
+      <p>
+        Because the sample residual vector is defined as \(e = y - X\hat{\beta}\), the normal equations can be written in the fundamental orthogonality form:
+      </p>
+
+      <!-- Reusable Equation Box: Residual Orthogonality -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">ORTHOGONALITY CONDITION</span>
+          <span class="equation-title">Residual Orthogonality to Regressor Columns</span>
+        </div>
+        <div class="equation-main">
+          $$X'e = \mathbf{0} \iff x_j'e = 0 \quad \text{for all } j=1,\dots,k$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(X'e = \mathbf{0}\)</span>
+              <span class="symbol-desc">The residual vector is orthogonal to every column of \(X\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(x_j'e = 0\)</span>
+              <span class="symbol-desc">The residual has zero sample inner product with the \(j\)-th regressor column.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: var(--space-md);">
+        Because \(e\) is orthogonal to every individual column of \(X\), it is necessarily orthogonal to every linear combination of those columns—and therefore strictly perpendicular to the entire regression subspace \(\operatorname{Col}(X)\). This is the exact algebraic counterpart of the closest-shadow projection picture.
+      </p>
+    </section>
+
+    <!-- Section 2: Sum of Residuals as a Special Case -->
+    <section class="lesson-section">
+      <h2>2. Sum of Residuals as a Special Case: The Intercept</h2>
+      <p>
+        Now suppose the regression model includes an intercept constant term. In matrix notation, this means the first column of \(X\) is an \(n \times 1\) <strong>vector of ones</strong>, denoted \(\iota\):
+      </p>
+      <div class="math-scroll-box">
+        $$X = \begin{bmatrix} \iota & X_2 \end{bmatrix} \quad \text{where } \iota = \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}$$
+      </div>
+      <p>
+        Because the first column of \(X\) is the vector of ones \(\iota\), the corresponding normal-equation condition is:
+      </p>
+      <div class="math-scroll-box">
+        $$\iota'e = 0$$
+      </div>
+      <p>
+        The inner product of \(\iota\) with \(e\) is simply the sum of all elements in \(e\):
+      </p>
+
+      <!-- Reusable Equation Box: Zero Sum Residuals -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIAL CASE &middot; WITH AN INTERCEPT</span>
+          <span class="equation-title">Residuals Sum to Zero</span>
+        </div>
+        <div class="equation-main">
+          $$\iota'e = 0 \implies \sum_{i=1}^n e_i = 0 \iff \bar{e} = 0$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\sum e_i = 0\)</span>
+              <span class="symbol-desc">When an intercept is included, positive and negative residuals balance to zero.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\bar{e} = 0\)</span>
+              <span class="symbol-desc">The arithmetic sample mean of the OLS residuals is identically zero.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: var(--space-md);">
+        The residuals may be positive for some observations and negative for others, but on average they cancel exactly.
+      </p>
+      <p>
+        In a 2D scatter plot, this means signed residuals balance to zero: the total vertical distance above the line balances with the total vertical distance below the line when a constant is present.
+      </p>
+    </section>
+
+    <!-- Section 3: Interactive Residual Balance Demonstration -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Visualizer</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Signed Residual Balancing Around the OLS Line</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button id="btnWithConstant" class="btn btn-primary btn-sm active">With Intercept (∑eᵢ = 0)</button>
+            <button id="btnNoConstant" class="btn btn-outline btn-sm">Without Intercept (RTO: ∑eᵢ ≠ 0)</button>
+          </div>
+        </div>
+
+        <!-- Readout Bar -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md); text-align: center;">
+          <div id="balanceSumDisplay" style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: #059669; margin-bottom: 4px;">
+            ∑ eᵢ = 0.000
+          </div>
+          <p id="balanceNoteDisplay" style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            With an intercept (ι ∈ Col(X)): ι'e = 0 guarantees exact zero sum. Positive and negative vertical deviations cancel.
+          </p>
+        </div>
+
+        <!-- SVG Plot Stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="balanceSvg" viewBox="0 0 520 270" width="100%" height="270" style="max-width: 520px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Eight sample observations plotted with an OLS line. Vertical dashed segments show residuals: green for positive (\(y_i > \hat{y}_i\)) and amber for negative (\(y_i < \hat{y}_i\)).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Toggle between "With Intercept" and "Without Intercept". In regression through the origin (RTO), the line is anchored to \((0,0)\), throwing off the vertical balance so \(\sum e_i \neq 0\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Many introductory textbooks casually state "residuals sum to zero" as a universal law of OLS. It is NOT universal: it holds <strong>only when a constant term is included</strong>!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The intercept parameter \(\hat{\beta}_1\) acts as an elevator: it moves the entire regression line vertically up or down until the average residual is precisely zero.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Click <strong>[Without Intercept (RTO)]</strong>. Notice that because the line is constrained to pass through \((0,0)\), the signed residuals fail to cancel (\(\sum e_i \neq 0\)). Then click <strong>[With Intercept (Constant Included)]</strong> to see the exact zero-sum balance restored.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Common Mistake Card -->
+    <section class="lesson-section" style="margin-top: var(--space-xl);">
+      <h2>3. Common Conceptual Pitfalls</h2>
+      
+      <div class="study-card" style="border-left: 5px solid #dc2626; margin: var(--space-md) 0;">
+        <div style="color: #dc2626; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ⚠️ COMMON MISTAKE: "X'e = 0 means every residual equals zero"
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          <strong>Correction:</strong> \(X'e = 0\) is an inner product statement, not an element-wise equality. It means the \(n \times 1\) vector \(e\) is perpendicular to each of the \(k\) column vectors of \(X\). Individual sample residuals \(e_i = y_i - \hat{y}_i\) are almost always non-zero in real data!
+        </p>
+      </div>
+
+      <div class="study-card" style="border-left: 5px solid #dc2626; margin: var(--space-md) 0;">
+        <div style="color: #dc2626; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ⚠️ COMMON MISTAKE: "Residuals always sum to zero in any regression"
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          <strong>Correction:</strong> If a researcher estimates a regression without an intercept (e.g. \(y_i = \beta_2 x_{i2} + e_i\)), \(\iota \notin \text{Col}(X)\). Consequently, \(\iota'e \neq 0\), residuals do not sum to zero, and the sample \(R^2\) can even become negative!
+        </p>
+      </div>
+    </section>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-03.html" class="btn btn-outline">← Lesson 2.3: Projection &amp; Residual Matrices</a>
+      <a href="lesson-05.html" class="btn btn-primary">Next: Lesson 2.5 Means, Fitted Values &amp; Balance →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

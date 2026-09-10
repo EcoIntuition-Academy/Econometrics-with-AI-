@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.2: Deriving the Normal Equations — EcoIntuition Academy</title>
+  <meta name="description" content="Step-by-step matrix derivation of the OLS normal equations X'Xβ̂ = X'y from the sum of squared residuals loss function, gradient, and positive definite Hessian.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 8 &middot; Deriving the Normal Equations</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">25.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 25.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.2</span>
+        <span class="badge">Matrix Calculus</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Deriving the Normal Equations
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Follow the matrix calculus derivation in slow motion: expanding the sum of squared residuals \(S(b)\), computing the gradient vector, establishing the normal equations \(X'X\hat{\beta} = X'y\), and verifying the positive definite Hessian.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Maintain strict notation discipline: true population \(\beta\), candidate vector \(b\), and OLS estimate \(\hat{\beta}\).</li>
+        <li>Expand the quadratic objective function \(S(b) = (y - Xb)'(y - Xb)\) using matrix transpose laws.</li>
+        <li>Differentiate \(S(b)\) with respect to \(b\) to obtain the gradient \(\nabla S(b) = -2X'y + 2X'Xb\).</li>
+        <li>Solve the first-order condition to derive the Normal Equations \(X'X\hat{\beta} = X'y\) and closed-form estimator \(\hat{\beta} = (X'X)^{-1}X'y\).</li>
+        <li>Check the Hessian matrix \(2X'X\) and confirm the second-order condition for a unique global minimum.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Setup and Notation Discipline -->
+    <section class="lesson-section">
+      <h2>1. The Linear Regression Model & Objective Function</h2>
+      <p>
+        Start from the classical linear regression model in matrix form:
+      </p>
+
+      <!-- Reusable Equation Box: Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">POPULATION MODEL</span>
+          <span class="equation-title">Matrix Representation of the Model</span>
+        </div>
+        <div class="equation-main">
+          $$y = X\beta + \varepsilon$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y\)</span>
+              <span class="symbol-desc">\(n \times 1\) observed outcome vector</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(X\)</span>
+              <span class="symbol-desc">\(n \times k\) design matrix of regressors</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta\)</span>
+              <span class="symbol-desc">\(k \times 1\) population coefficient vector</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon\)</span>
+              <span class="symbol-desc">\(n \times 1\) population disturbance vector</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Styled Notation Discipline Card -->
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); background: var(--surface); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem; letter-spacing: 0.06em; margin-bottom: 8px;">
+          NOTATION DISCIPLINE
+        </div>
+        <div class="symbol-grid">
+          <div class="symbol-row">
+            <span class="symbol-name">\(\beta\)</span>
+            <span class="symbol-desc">Unknown population coefficient vector fixed by nature.</span>
+          </div>
+          <div class="symbol-row">
+            <span class="symbol-name">\(b\)</span>
+            <span class="symbol-desc">Candidate coefficient vector used when evaluating the loss function.</span>
+          </div>
+          <div class="symbol-row" style="grid-column: 1 / -1;">
+            <span class="symbol-name">\(\hat{\beta}\)</span>
+            <span class="symbol-desc">The specific value of candidate vector \(b\) that minimizes the OLS objective.</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The OLS idea is simple in words: choose \(\hat{\beta}\) so that the sum of squared residuals—the squared Euclidean distance between what is observed and what is predicted—is as small as possible.
+      </p>
+      <p>
+        For any candidate coefficient vector \(b\), the candidate residual vector is:
+      </p>
+      <div class="math-scroll-box">
+        $$e(b) = y - Xb$$
+      </div>
+      <p>
+        Here, \(e(b)\) is the residual vector in \(n\)-dimensional observation space associated with trial vector \(b\). It is not the unobservable population disturbance \(\varepsilon\).
+      </p>
+      <p>
+        The objective function to be minimized is the sum of squared residuals:
+      </p>
+
+      <!-- Reusable Equation Box: Objective Function -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">OBJECTIVE FUNCTION</span>
+          <span class="equation-title">Sum of Squared Residuals \(S(b)\)</span>
+        </div>
+        <div class="equation-main">
+          $$S(b) = e(b)'e(b) = (y - Xb)'(y - Xb)$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(S(b)\)</span>
+              <span class="symbol-desc">Sum of squared residuals evaluated at candidate vector \(b\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(b\)</span>
+              <span class="symbol-desc">Candidate \(k \times 1\) coefficient vector</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(Xb\)</span>
+              <span class="symbol-desc">Candidate fitted vector in \(\operatorname{Col}(X)\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(y - Xb\)</span>
+              <span class="symbol-desc">Candidate residual vector in observation space \(\mathbb{R}^n\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Step-by-Step Derivation in Slow Motion -->
+    <section class="lesson-section">
+      <h2>2. Deriving the Normal Equations in Slow Motion</h2>
+      <p>
+        To see how the minimization operates algebraically, we expand and differentiate the objective function step by step:
+      </p>
+
+      <!-- Step-by-step Derivation Cards -->
+      <div style="display: flex; flex-direction: column; gap: var(--space-md); margin: var(--space-md) 0;">
+        
+        <!-- Step 1 -->
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 1</span>
+            <strong style="font-size: 0.95rem;">State the Objective Function</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$S(b) = (y - Xb)'(y - Xb)$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            The inner product of the residual vector with itself gives the sum of squared residuals \(\sum_{i=1}^n e_i(b)^2\).
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 2</span>
+            <strong style="font-size: 0.95rem;">Expand Using the Transpose Law \((A - B)' = A' - B'\)</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$S(b) = y'y - b'X'y - y'Xb + b'X'Xb$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Applying the distributive property of matrix multiplication produces four distinct matrix terms.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 3</span>
+            <strong style="font-size: 0.95rem;">Combine Middle Terms via Scalar Symmetry</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$b'X'y = (Xb)'y = y'Xb \implies S(b) = y'y - 2b'X'y + b'X'Xb$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Because \(b'X'y\) is a \(1 \times 1\) scalar, it equals its own transpose: \((b'X'y)' = y'(X')' (b')' = y'Xb\). Thus, the two middle terms combine into \(-2b'X'y\).
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 4</span>
+            <strong style="font-size: 0.95rem;">Differentiate with Respect to Candidate Vector \(b\)</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$\frac{\partial S(b)}{\partial b} = -2X'y + 2X'Xb$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Using standard matrix calculus identities: \(\frac{\partial (a'b)}{\partial b} = a\) and \(\frac{\partial (b'Ab)}{\partial b} = 2Ab\) for symmetric matrix \(A = X'X\).
+          </p>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 5</span>
+            <strong style="font-size: 0.95rem;">First-Order Condition (Set Gradient to Zero)</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$-2X'y + 2X'X\hat{\beta} = 0 \implies X'X\hat{\beta} = X'y$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Setting the derivative equal to zero identifies the stationary point \(\hat{\beta}\). These are the celebrated <strong>Normal Equations</strong>.
+          </p>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="study-card" style="border-left: 4px solid #059669; background: #f0fdf4;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge" style="background: #a7f3d0; color: #065f46; font-weight: 700;">STEP 6</span>
+            <strong style="font-size: 0.95rem; color: #065f46;">Solve for the Unique Closed-Form Estimator</strong>
+          </div>
+          <div class="math-scroll-box" style="margin: 6px 0;">
+            $$\hat{\beta} = (X'X)^{-1}X'y$$
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: #047857;">
+            Under Assumption A2 (Full Column Rank \(\text{rank}(X) = k\)), the \(k \times k\) matrix \(X'X\) is strictly non-singular and invertible, guaranteeing a unique solution!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Reusable Equation Box: Normal Equations -->
+      <div class="equation-box equation-box--estimator" style="margin-top: var(--space-lg);">
+        <div class="equation-header">
+          <span class="equation-badge">FIRST-ORDER CONDITION</span>
+          <span class="equation-title">The Normal Equations</span>
+        </div>
+        <div class="equation-main">
+          $$X'X\hat{\beta} = X'y$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(X'X\)</span>
+              <span class="symbol-desc">\(k \times k\) cross-product matrix of regressors</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(X'y\)</span>
+              <span class="symbol-desc">\(k \times 1\) cross-product vector between regressors and outcome</span>
+            </div>
+            <div class="symbol-row" style="grid-column: 1 / -1;">
+              <span class="symbol-name">\(\hat{\beta}\)</span>
+              <span class="symbol-desc">At the OLS solution, no infinitesimal movement in coefficient space can reduce the sum of squared residuals.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        When \(X\) has full column rank, \(X'X\) is non-singular and invertible, yielding the closed-form estimator:
+      </p>
+      <div class="math-scroll-box">
+        $$\hat{\beta} = (X'X)^{-1}X'y$$
+      </div>
+    </section>
+
+    <!-- Section 3: Second-Order Condition (Hessian) -->
+    <section class="lesson-section">
+      <h2>3. Second-Order Condition: Confirming a Global Minimum</h2>
+      <p>
+        The first-order condition locates a stationary point where the gradient vanishes. To verify whether \(\hat{\beta}\) is a minimum, maximum, or saddle point, we evaluate the second-derivative Hessian matrix:
+      </p>
+      <div class="math-scroll-box">
+        $$\frac{\partial^2 S(b)}{\partial b \partial b'} = 2X'X$$
+      </div>
+      
+      <div class="study-card" style="border-left: 4px solid #10b981; margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: #047857; font-size: 0.95rem; font-weight: 700;">WHY THIS MATTERS</h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          The first-order condition finds a stationary point. Positive definiteness of the Hessian confirms that the stationary point is a unique global minimum. 
+          When \(X\) has full column rank (\(\text{rank}(X) = k\)), for every non-zero vector \(v \in \mathbb{R}^k\), \(v'(2X'X)v = 2\|Xv\|^2 > 0\). 
+          Hence, \(X'X\) is strictly positive definite, the loss surface \(S(b)\) is strictly convex (a multidimensional bowl), and \(\hat{\beta}\) is guaranteed to be the unique minimizer.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive SSE Loss Surface & Contour Lab -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <div>
+            <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">Interactive Lab</span>
+            <span class="visualization-title" style="margin-left: 8px;">Quadratic SSE Loss Bowl &amp; Contour Explorer</span>
+          </div>
+          <span style="font-size: var(--text-xs); color: var(--text-muted);">Navigate the parameter space \((b_1, b_2)\)</span>
+        </div>
+
+        <!-- Controls panel -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: var(--space-md); align-items: center;">
+            <div>
+              <label for="sseSliderB1" style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">
+                Candidate Intercept \(b_1\):
+              </label>
+              <input type="range" id="sseSliderB1" min="0.0" max="4.0" step="0.05" value="0.8" style="width: 100%;">
+            </div>
+            <div>
+              <label for="sseSliderB2" style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">
+                Candidate Slope \(b_2\):
+              </label>
+              <input type="range" id="sseSliderB2" min="0.0" max="3.0" step="0.05" value="0.6" style="width: 100%;">
+            </div>
+            <div>
+              <button id="sseBtnFindMin" class="btn btn-primary btn-sm" style="margin-top: 14px;">
+                Jump to OLS Minimum \(\hat{\beta}\)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Readout bar -->
+        <div style="display: flex; gap: var(--space-md); justify-content: space-around; flex-wrap: wrap; margin-bottom: var(--space-md); background: #ffffff; padding: 10px 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Sum of Squared Residuals \(S(b)\):</span>
+            <strong id="sseReadoutValue" style="font-family: var(--font-mono); font-size: var(--text-base); color: #0f172a;">148.40</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Gradient Magnitude \(\|\nabla S(b)\|\):</span>
+            <strong id="sseReadoutGrad" style="font-family: var(--font-mono); font-size: var(--text-base); color: #b91c1c;">124.50</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Optimization Status:</span>
+            <strong id="sseReadoutStatus" style="font-family: var(--font-mono); font-size: var(--text-sm); color: #d97706;">Suboptimal (∇S ≠ 0)</strong>
+          </div>
+        </div>
+
+        <!-- Plot stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="sseBowlSvg" viewBox="0 0 500 300" width="100%" height="300" style="max-width: 500px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>A 2D contour map of the SSE loss function \(S(b_1, b_2)\) viewed from above. Each elliptical contour represents combinations of \((b_1, b_2)\) that produce the exact same sum of squared residuals.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The contours form concentric ellipses centered around the unique green point \(\hat{\beta} = (2.0, 1.5)\). As your candidate red dot approaches the center, the gradient magnitude \(\|\nabla S\|\) shrinks to zero.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Because \(X'X\) is positive definite, the bowl has strictly positive curvature in every direction. There are no secondary local minima, saddle points, or flat ridges where an algorithm could get trapped.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The normal equations \(X'X\hat{\beta} = X'y\) algebraically pinpoint the exact bottom of this bowl without requiring iterative gradient descent steps—delivering the instantaneous analytical solution.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Drag the \(b_1\) and \(b_2\) sliders around the parameter space. Watch how moving away from \((2.0, 1.5)\) causes the loss surface value \(S(b)\) and gradient \(\|\nabla S\|\) to surge. Then click <strong>"Jump to OLS Minimum"</strong> to snap immediately to the stationary point where \(\nabla S = \mathbf{0}\).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-01.html" class="btn btn-outline">← Lesson 2.1: Orthogonal Projection</a>
+      <a href="lesson-03.html" class="btn btn-primary">Next: Lesson 2.3 Projection &amp; Residual-Maker Matrices →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

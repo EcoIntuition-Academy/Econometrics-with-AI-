@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.3: The Classical Linear Regression Model — EcoIntuition Academy</title>
+  <meta name="description" content="Master simple and multiple linear regression, parameters, disturbance terms, and the complete matrix formulation with dimensions and constant columns.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="3">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 9 &middot; The Classical Linear Regression Model</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.3</span>
+        <span class="badge">Model Specification & Matrix Algebra</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        The Classical Linear Regression Model
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        From simple bivariate lines to high-dimensional matrix equations: understand parameters, disturbance terms, and the algebra of regression.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate the simple bivariate linear model and explain every mathematical symbol.</li>
+        <li>Understand the role of multiple regressors in isolating <em>ceteris paribus</em> effects.</li>
+        <li>Translate scalar regression equations into full matrix notation \(y = X\beta + \varepsilon\).</li>
+        <li>Master matrix dimensions (\(n \times 1\), \(n \times k\), \(k \times 1\)) and understand why the design matrix contains a leading column of 1s.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Simple Linear Model -->
+    <section class="lesson-section">
+      <h2>1. The Simple Bivariate Regression Model</h2>
+      <p>
+        The simplest econometric model describes a relationship between a single dependent variable \(y\) and a single explanatory variable \(x_2\):
+      </p>
+
+      <!-- Equation Box: Simple Bivariate Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Scalar Model</span>
+          <span class="equation-title">Simple Bivariate Linear Specification</span>
+        </div>
+        <div class="equation-main">
+          \[ y_i = \beta_1 + \beta_2 x_{i2} + \varepsilon_i \quad (i = 1, 2, \dots, n) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y_i\)</span>
+              <span class="symbol-desc">Observed outcome for observation \(i\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(x_{i2}\)</span>
+              <span class="symbol-desc">Value of explanatory variable \(x_2\) for observation \(i\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta_1\)</span>
+              <span class="symbol-desc">Intercept. Under the zero-conditional-mean condition, it is the conditional mean of \(y\) when \(x_2 = 0\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta_2\)</span>
+              <span class="symbol-desc">Slope coefficient. In the simple linear conditional-mean model, it gives the change in \(\mathbb{E}[y \mid x_2]\) associated with a one-unit change in \(x_2\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon_i\)</span>
+              <span class="symbol-desc">Unobserved component of \(y_i\) not captured by the included regressors.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        For instance, in our class-size application:
+      </p>
+      <div class="math-scroll-box">
+        $$\text{TestScore}_i = \beta_1 + \beta_2 \text{ClassSize}_i + \varepsilon_i$$
+      </div>
+    </section>
+
+    <!-- Interactive Exploration Widget: Regression Line Simulator -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <div>
+            <div class="lab-kicker">Interactive Exploration</div>
+            <h3 class="interactive-lab-title">How the Regression Line Responds</h3>
+            <p style="margin: 0.35rem 0 0 0; font-size: 0.92rem; color: var(--text-secondary);">
+              Adjust the intercept, slope, and noise to see how each component changes the relationship between \(X\) and \(Y\).
+            </p>
+          </div>
+          <div id="regFormulaDisplay" style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: var(--accent-primary); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.4rem 0.85rem;">
+            $$\mathbb{E}[y \mid x] = 25.0 + 1.5 x_2$$
+          </div>
+        </div>
+
+        <!-- Slider Controls Workspace -->
+        <div class="slider-control-group">
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Intercept (\(\beta_1\)):</span>
+              <span class="slider-val-readout" id="valBeta1">25.0</span>
+            </div>
+            <input type="range" id="sliderBeta1" min="0" max="50" step="1" value="25" aria-label="Intercept beta 1 slider">
+          </div>
+
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Slope (\(\beta_2\)):</span>
+              <span class="slider-val-readout" id="valBeta2">+1.5</span>
+            </div>
+            <input type="range" id="sliderBeta2" min="-3" max="3" step="0.25" value="1.5" aria-label="Slope beta 2 slider">
+          </div>
+
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Noise Level (\(\sigma\)):</span>
+              <span class="slider-val-readout" id="valNoise">3.0</span>
+            </div>
+            <input type="range" id="sliderNoise" min="0" max="10" step="0.5" value="3.0" aria-label="Disturbance noise slider">
+          </div>
+        </div>
+
+        <!-- Centered Chart Canvas -->
+        <div class="interactive-plot-canvas">
+          <svg id="regLineSimulatorSvg" viewBox="0 0 620 290" width="100%" height="290" style="max-width: 620px;" aria-label="Interactive Regression Line Simulator Plot"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          
+          <!-- Card 1: What You Are Seeing (Blue Accent) -->
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The blue line represents the population regression relationship:</p>
+              <div><span class="formula-chip">\(\mathbb{E}[y \mid x] = \beta_1 + \beta_2 x_2\)</span></div>
+              <p>Each point represents an observed sample value. Its vertical distance from the line reflects the influence of factors not captured by \(X\):</p>
+              <div><span class="formula-chip">\(\varepsilon_i = y_i - (\beta_1 + \beta_2 x_{i2})\)</span></div>
+            </div>
+          </div>
+
+          <!-- Card 2: What to Notice (Purple Accent) -->
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p><strong>Change \(\beta_1\):</strong> The entire line moves vertically up or down without tilting.</p>
+              <p><strong>Change \(\beta_2\):</strong> The slope rotates around the intercept—becoming steeper, flatter, positive, or negative.</p>
+              <p><strong>Increase Noise (\(\sigma\)):</strong> The observations spread farther away from the regression line.</p>
+            </div>
+          </div>
+
+          <!-- Card 3: Why It Matters (Amber Accent) -->
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Real economic data rarely fall perfectly on a line.</p>
+              <p>Econometrics tries to recover the underlying systematic relationship even when observations contain substantial randomness, measurement error, and omitted factors.</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Econometric Interpretation (Green Accent) -->
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p><strong>\(\beta_1\) describes the intercept:</strong> The expected baseline outcome when \(x_2 = 0\).</p>
+              <p><strong>\(\beta_2\) describes the marginal effect:</strong> How the conditional mean of \(Y\) changes as \(X\) changes.</p>
+              <p><strong>The error term (\(\varepsilon_i\)):</strong> Captures all omitted influences on \(Y\) not explicitly represented by the regressor.</p>
+            </div>
+          </div>
+
+          <!-- Full-Width Try This Interactive Challenge -->
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Increase the Noise Level substantially (e.g. to 9.0 or 10.0). Notice that the underlying regression line does not change, but identifying its direction and slope from the observed scattered data becomes much harder. This is why statistical inference and hypothesis testing are essential.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Why Multiple Regression? -->
+    <section class="lesson-section">
+      <h2>2. Why Multiple Regression? The Power of Ceteris Paribus</h2>
+      <p>
+        As established in Lesson 1.2, bivariate regression is almost always plagued by omitted variable bias. To hold other factors constant, we expand to \(k-1\) explanatory variables:
+      </p>
+
+      <div class="math-scroll-box">
+        $$y_i = \beta_1 + \beta_2 x_{i2} + \beta_3 x_{i3} + \dots + \beta_k x_{ik} + \varepsilon_i$$
+      </div>
+
+      <p>
+        In our education example:
+      </p>
+      <div class="math-scroll-box">
+        $$\text{TestScore}_i = \beta_1 + \beta_2 \text{ClassSize}_i + \beta_3 \text{TeacherQuality}_i + \beta_4 \text{AvgIncome}_i + \varepsilon_i$$
+      </div>
+
+      <div class="interpretation-box">
+        <div class="interpretation-header">
+          <span>💡</span>
+          <span>Economic Interpretation of \(\beta_2\)</span>
+        </div>
+        <p>
+          Now, \(\beta_2 = \frac{\partial \text{TestScore}}{\partial \text{ClassSize}}\) represents the marginal effect of class size <strong>holding teacher quality and family income fixed</strong> (<em>ceteris paribus</em>). By explicitly including confounders in the model, their influence is partialled out from \(\varepsilon_i\)!
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Matrix Notation -->
+    <section class="lesson-section">
+      <h2>3. Matrix Notation: Compact & Universal</h2>
+      <p>
+        Writing out \(n\) separate equations with \(k\) variables becomes unwieldy. In modern econometrics and computational algorithms, the entire sample is expressed in compact matrix notation:
+      </p>
+
+      <!-- Reusable Equation Box: Matrix CLRM -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Matrix Specification</span>
+          <span class="equation-title">The Classical Linear Regression Model</span>
+        </div>
+        <div class="equation-main">
+          \[ y = X\beta + \varepsilon \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y\)</span>
+              <span class="symbol-desc">\(n \times 1\) vector of observed outcomes.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(X\)</span>
+              <span class="symbol-desc">\(n \times k\) design matrix. Each row corresponds to one observation; each column corresponds to one included regressor.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta\)</span>
+              <span class="symbol-desc">\(k \times 1\) vector of unknown population coefficients.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon\)</span>
+              <span class="symbol-desc">\(n \times 1\) vector of unobserved disturbances.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The first column of \(X\) is typically a column of ones when an intercept is included. Let us write out every component in full matrix form:
+      </p>
+
+      <div class="math-scroll-box" style="text-align: center; padding: var(--space-md) 0;">
+        $$\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix} = \begin{bmatrix} 1 & x_{12} & x_{13} & \dots & x_{1k} \\ 1 & x_{22} & x_{23} & \dots & x_{2k} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & x_{n2} & x_{n3} & \dots & x_{nk} \end{bmatrix} \begin{bmatrix} \beta_1 \\ \beta_2 \\ \vdots \\ \beta_k \end{bmatrix} + \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}$$
+      </div>
+      <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-top: var(--space-xs);">
+        Each row represents one observation. Each column of \(X\) represents one regressor. Multiplying \(X\) (\(n \times k\)) by \(\beta\) (\(k \times 1\)) produces an \(n \times 1\) vector, matching the dimensions of \(y\) and \(\varepsilon\).
+      </p>
+
+      <!-- Matrix Dimensions Breakdown Study Card -->
+      <div class="matrix-dimensions-card">
+        <div class="matrix-card-header">
+          <span class="matrix-card-badge">Matrix Specification</span>
+          <h3 class="matrix-card-title">Matrix Dimensions Breakdown</h3>
+          <p class="matrix-card-subtitle">Understanding the shape of each object in \(y = X\beta + \varepsilon\)</p>
+        </div>
+
+        <div class="matrix-table-wrap">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th class="matrix-symbol-cell">Object</th>
+                <th class="matrix-dim-cell">Dimensions</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="matrix-symbol-cell"><span class="matrix-symbol">\(y\)</span></td>
+                <td class="matrix-dim-cell"><span class="matrix-dimension">\(n \times 1\)</span></td>
+                <td class="matrix-meaning">Column vector of observed outcomes for all \(n\) observations.</td>
+              </tr>
+              <tr>
+                <td class="matrix-symbol-cell"><span class="matrix-symbol">\(X\)</span></td>
+                <td class="matrix-dim-cell"><span class="matrix-dimension">\(n \times k\)</span></td>
+                <td class="matrix-meaning">The <strong>Design Matrix</strong>. Each row represents one observation and each column represents one regressor.</td>
+              </tr>
+              <tr>
+                <td class="matrix-symbol-cell"><span class="matrix-symbol">\(\beta\)</span></td>
+                <td class="matrix-dim-cell"><span class="matrix-dimension">\(k \times 1\)</span></td>
+                <td class="matrix-meaning">Column vector of the \(k\) unknown population coefficients to be estimated.</td>
+              </tr>
+              <tr>
+                <td class="matrix-symbol-cell"><span class="matrix-symbol">\(\varepsilon\)</span></td>
+                <td class="matrix-dim-cell"><span class="matrix-dimension">\(n \times 1\)</span></td>
+                <td class="matrix-meaning">Column vector of unobserved random disturbances for all \(n\) observations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Dimension Intuition Box -->
+        <div class="dimension-intuition">
+          <div class="dimension-intuition-title">
+            <span>📐</span> Dimension Intuition
+          </div>
+          <div class="dimension-intuition-grid">
+            <div class="dimension-intuition-item">
+              <span class="dim-item-label">\(y: n \times 1\)</span>
+              <span class="dim-item-text">One observed outcome for each observation.</span>
+            </div>
+            <div class="dimension-intuition-item">
+              <span class="dim-item-label">\(X: n \times k\)</span>
+              <span class="dim-item-text">\(n\) observations \(\times\) \(k\) regressors (including constant 1s).</span>
+            </div>
+            <div class="dimension-intuition-item">
+              <span class="dim-item-label">\(\beta: k \times 1\)</span>
+              <span class="dim-item-text">One population coefficient for each column of \(X\).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dimension Check Equation Box -->
+        <div class="equation-box equation-box--key" style="margin: 1.25rem 0 0 0;">
+          <div class="equation-header">
+            <span class="equation-badge">Dimension Check</span>
+            <span class="equation-title">Matrix Multiplication Conformability</span>
+          </div>
+          <div class="equation-main">
+            \[ \underbrace{X}_{(n \times k)} \underbrace{\beta}_{(k \times 1)} = \underbrace{X\beta}_{(n \times 1)} \]
+          </div>
+          <div class="equation-explainer">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+              Because the inner dimensions match (\(k = k\)), matrix multiplication is valid:
+              \[ (n \times k)(k \times 1) = n \times 1 \]
+              Therefore, the model \(y = X\beta + \varepsilon\) is dimensionally consistent because \(y\), \(X\beta\), and \(\varepsilon\) are all \(n \times 1\) column vectors.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cleanly Separated Individual Observation Subsection -->
+      <div class="individual-observation-section">
+        <h3>Individual Observation Representation</h3>
+        <p>
+          For an individual observation \(i\), the matrix model reduces cleanly to scalar-product form:
+        </p>
+
+        <div class="equation-box equation-box--interpretation" style="margin: 1rem 0 1.5rem 0;">
+          <div class="equation-header">
+            <span class="equation-badge">Observation Level</span>
+            <span class="equation-title">Scalar Representation for the \(i\)-th Observation</span>
+          </div>
+          <div class="equation-main">
+            \[ y_i = x_i' \beta + \varepsilon_i \]
+          </div>
+          <div class="equation-explainer">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+              where \(x_i' = \begin{bmatrix} 1 & x_{i2} & \dots & x_{ik} \end{bmatrix}\) is a \(1 \times k\) row vector representing the \(i\)-th row of the design matrix \(X\).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why the first column is 1s -->
+      <div class="study-card" style="border-left: 5px solid var(--accent-primary); margin: var(--space-lg) 0;">
+        <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">Why does the first column of \(X\) contain only 1s?</div>
+        <p style="margin: 0; font-size: 0.95rem; line-height: 1.65; color: var(--text-secondary);">
+          Carrying out matrix multiplication of row \(i\) of \(X\) by vector \(\beta\):
+          \[ x_i' \beta = 1 \cdot \beta_1 + x_{i2} \beta_2 + \dots + x_{ik} \beta_k \]
+          The constant column of 1s ensures that \(\beta_1\) is multiplied by 1 for every single observation, creating the intercept term! If we omitted this column of 1s, the regression line would be artificially forced through the origin \((0,0)\).
+        </p>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "In matrix regression, \(X\) has dimension \(n \times (k-1)\) because there are only \(k-1\) economic variables like class size and income."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> In econometrics, \(k\) is defined as the <strong>total number of parameters</strong> in \(\beta\), including the intercept. Because the constant term requires its own column of 1s, the matrix \(X\) contains \(k\) columns, making its dimension strictly \(n \times k\).
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: 0.95rem; font-weight: 700;">Linear Algebra as Computational Superpower</span>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.65; margin: 0; color: var(--ai-box-text);">
+        When modern AI frameworks (like PyTorch or TensorFlow) or econometrics packages (like Stata or statsmodels) solve linear regression with 500,000 observations, they do not iterate over scalar summations. They translate the entire data frame into GPU memory as the tensor \(X\) and perform matrix multiplications. Mastering the matrix formulation connects classical econometrics directly with state-of-the-art computational workflows.
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> An empirical researcher has survey data on \(n = 1,200\) households. She specifies a regression model explaining household savings using income, household size, head of household age, and head of household education. If the model includes an intercept, what are the exact dimensions of \(y\), \(X\), and \(\beta\)?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint3">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol3">Show Solution</button>
+        </div>
+        <div id="hint3" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--text-secondary);">
+            Count the total number of parameters \(k\): intercept + 4 economic regressors. Remember each row of \(X\) corresponds to one observation, and each column corresponds to one parameter.
+          </p>
+        </div>
+        <div id="sol3" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--text-primary);">
+            <strong>Solution:</strong><br>
+            The model has 4 explanatory variables plus 1 intercept, so \(k = 5\).<br>
+            - \(y\) has dimensions \(1,200 \times 1\) (a column vector of savings outcomes).<br>
+            - \(X\) has dimensions \(1,200 \times 5\) (the first column contains 1s; the remaining 4 columns contain data for income, size, age, and education).<br>
+            - \(\beta\) has dimensions \(5 \times 1\) (the vector \([\beta_1, \beta_2, \beta_3, \beta_4, \beta_5]'\)).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Lesson 1.3 Summary</h3>
+      <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: var(--space-md);">
+        Matrix notation \(y = X\beta + \varepsilon\) compresses hundreds of equations into one elegant algebraic expression. It makes computing multi-variable <em>ceteris paribus</em> derivatives computationally tractable. In Lesson 1.4, we will use this matrix foundation to derive the legendary <strong>Ordinary Least Squares (OLS)</strong> formula \(\hat{\beta} = (X'X)^{-1}X'y\) and explore its geometric projection properties.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="lesson-02.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Case Study &amp; Confounding</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="3" style="align-self: center;">
+          ✓ Mark Lesson 3 Complete
+        </button>
+        <a href="lesson-04.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">OLS, Projection &amp; Residuals</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

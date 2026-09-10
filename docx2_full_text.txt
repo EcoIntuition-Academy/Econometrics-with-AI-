@@ -1,0 +1,273 @@
+Seeing OLS as “closest possible shadow”
+
+Imagine each observation as one axis in a big room: if there are nobservations, the room has ndimensions. The outcome vector yis then a point in this room: one coordinate per observation. The regressors in Xdefine a lower-dimensional flat surface (a subspace) inside this large room, spanned by the columns of X.
+
+What OLS does is: it finds the point on this flat surface that lies as close as possible to the point y. In other words, you shine a light orthogonally down onto the subspace spanned by Xand look at where the “shadow” of ylands. That shadow is the fitted vector y=Xβ. The residual vector e=y-yis the difference between yand its shadow; it points straight out of the surface, at a right angle.
+
+This geometric picture already encodes the key idea: OLS is an orthogonal projection of yonto the column space of X. Once that is clear, all the matrix algebra is just a way of writing this down symbolically.
+
+tex
+
+\begin{figure}[h]
+
+\centering
+
+% TikZ idea:
+
+% Draw a plane representing Col(X) in 3D, a point y floating above it,
+
+% its perpendicular projection \hat{y} on the plane, and the vector e from \hat{y} to y.
+
+\caption{Vector \(y\) projected orthogonally onto the column space of \(X\), yielding \(\hat y = X\hat\beta\).}
+
+\end{figure}
+
+Deriving the normal equations in slow motion
+
+Start from the classical linear regression model in matrix form:
+
+y=Xβ+ε,
+
+where yis an n×1vector of outcomes, Xis an n×kmatrix of regressors, βis a k×1vector of unknown coefficients, and εis an n×1vector of errors.
+
+The OLS idea is simple in words: choose βso that the sum of squared residuals, the total squared distance between what is observed and what is predicted, is as small as possible. In symbols, the residual for a candidate bis
+
+e(b)=y-Xb,
+
+and the objective function is
+
+S(b)=e(b)'e(b)=(y-Xb)'(y-Xb).
+
+To see what this looks like algebraically, carefully expand:
+
+S(b)=y'y-b'X'y-y'Xb+b'X'Xb.
+
+The two middle terms are actually the same scalar, just written in different ways. Using (B'A'and a'b=b'afor scalars, we can rewrite:
+
+b'X'y=(Xb)'y=y'Xb.
+
+So those two middle terms combine into a single term with coefficient -2:
+
+S(b)=y'y-2b'X'y+b'X'Xb.
+
+Now treat S(b)as a function of the vector b. Taking the derivative with respect to bgives
+
+∂S(b)∂b=-2X'y+2X'Xb.
+
+Setting this gradient equal to zero (the first-order condition for a minimum) yields
+
+-2X'y+2X'Xβ=0⇒X'Xβ=X'y.
+
+These are the normal equations. They express the idea that, at the optimum, shifting ba tiny bit in any direction does not reduce the sum of squared residuals.
+
+Assuming Xhas full column rank, the matrix X'Xis invertible. Then there is a unique solution:
+
+β=(X'X)-1X'y.
+
+This is the familiar closed-form expression for OLS: it takes the data summarized in X'Xand X'yand turns them into coefficient estimates.
+
+To be sure this indeed corresponds to a minimum, inspect the Hessian:
+
+∂2S(b)∂b∂b'=2X'X.
+
+Under the full-rank condition and n>k, the matrix X'Xis positive definite, so the Hessian is positive definite and the critical point is a global minimum.
+
+Projection and residual-maker matrices as “operators”
+
+The geometry suggests two very special linear operators: one that keeps only the part of a vector that lives in the space spanned by X, and another that keeps only the part that is orthogonal to that space. These are the projection matrix and the residual-maker matrix.
+
+The projection matrix onto the column space of Xis
+
+P=X(X'X)-1X'.
+
+For any vector y, the vector Pylies in the column space of X. If you apply Pto yin the regression context, you get
+
+y=Py=X(X'X)-1X'y=Xβ,
+
+the fitted values from the regression.
+
+The residual-maker matrix is defined as
+
+M=I-P.
+
+It does the opposite job: it strips away any component that lies in the span of Xand leaves only what is orthogonal to that span. Applying Mto yyields
+
+e=My=y-y.
+
+So, in a perfectly compact form, the regression decomposition is
+
+y=Py⏟y+My⏟e.
+
+One elegant property here is that Pand Mare idempotent: P2=P, M2=M. Projecting twice does nothing new. Also, they are symmetric: P'=P, M'=M. These facts make them genuine orthogonal projection operators in the Euclidean geometry of Rn.
+
+What the residual conditions really say
+
+The normal equations X'(Xβ-y)=0can be rewritten as
+
+X'e=0.
+
+This is a very compact way of saying: the residual vector eis orthogonal to each column of X. Geometrically, this is exactly the property that characterizes orthogonal projection: the error between the original vector and its projection is perpendicular to the subspace.
+
+Sum of residuals as a special case
+
+Suppose the first column of Xis a vector of ones i. Then the corresponding condition is
+
+i'e=0.
+
+What does this mean? It says
+
+i=1nei=0.
+
+So if the regression includes a constant term, the residuals necessarily add up to zero. The residuals may swing positive for some observations and negative for others, but on average they cancel exactly.
+
+This can be visualized as follows: if you placed each residual as a vertical segment above or below the fitted line in a standard scatter plot, the total signed “area” above the line equals the total signed “area” below the line when a constant is present.
+
+Passing through the means
+
+Another famous property is that the regression hyperplane passes through the point of sample means. Start from
+
+i=1n(yi-xi'β)=0,
+
+which follows from iei=0. Rearrange:
+
+i=1nyi=i=1nxi'β.
+
+Divide both sides by n:
+
+yˉ=xˉ'β.
+
+So if you take the average of each regressor (forming xˉ) and plug that into the regression equation, the predicted value equals yˉ. In a simple regression, this means the fitted line crosses the point yˉ.
+
+Mean of fitted equals mean of actual
+
+The basic regression equation is
+
+y=Xβ+e.
+
+Take the average of each component:
+
+yˉ=Xβ‾+eˉ.
+
+Knowing that eˉ=0, this simplifies to
+
+yˉ=y‾.
+
+So the average predicted value equals the average actual value. This is another reflection of the same balancing property of residuals when a constant is included.
+
+Frisch–Waugh–Lovell (FWL): “remove the old story, study what’s left”
+
+Suppose the regressors are split into two groups:
+
+X=[X1  X2],
+
+and the model is
+
+y=X1β1+X2β2+ε.
+
+The FWL theorem gives a beautiful way to understand what the coefficients on X2are really doing. Conceptually, there are two stories about y: a story told by X1and a story told by X2. The theorem says: if you want to learn the pure contribution of X2, you should first remove the part of the story already explained by X1, from both yand X2, and then see how much of what remains in ycan be explained by what remains in X2.
+
+Concretely, define the residual-maker with respect to X1as
+
+M1=I-X1(X1'X1)-1X1'.
+
+If you apply this to y, you get
+
+y*=M1y,
+
+the component of yorthogonal to X1. If you apply it to X2, you get
+
+X2*=M1X2,
+
+the component of X2that is orthogonal to X1.
+
+The theorem states that the coefficient vector β2from the full regression of yon X2is exactly the same as the coefficient vector obtained by regressing y*on X2*:
+
+β2=(X2*'X2*)-1X2*'y*.
+
+This is a deep geometric statement: the effect of X2is identified by looking at the angles and lengths inside the part of space that is orthogonal to X1.
+
+This also matches the economics intuition: the coefficient on a variable like “treatment” or “income” is the relationship between what cannot be explained by other controls in that variable and what cannot be explained by those same controls in the outcome.
+
+Demeaning and the role of the constant term
+
+Now specialize X1to be just a constant term. Let
+
+X=[i  X2],
+
+where iis the n×1vector of ones, and X2contains the remaining regressors. The residual-maker for iis
+
+M0=I-i(i'i)-1i'.
+
+Notice that i'i=n, and for any variable z,
+
+M0z=z-1nii'z.
+
+But ii'zis a vector whose entries are all equal to izi, so 1nii'zis a vector whose entries are all equal to zˉ. Thus,
+
+M0z=z-zˉ,
+
+which means M0simply subtracts the sample mean from each coordinate.
+
+Apply this to X2and y:
+
+X2*=M0X2=X2-Xˉ2,y*=M0y=y-yˉ.
+
+The FWL formula says the coefficients on X2in a regression with a constant are
+
+β2=(X2*'X2*)-1X2*'y*.
+
+So, rather than first including a constant and then doing OLS, one can equivalently subtract the means from yand all the non-constant regressors, drop the constant, and run OLS on these mean-adjusted variables. The same slopes appear. The constant itself is then just yˉ-Xˉ2'β2.
+
+This leads to the familiar formula for the slope in simple regression. With regressor vector xand outcome y, define
+
+x*=x-xˉ,y*=y-yˉ.
+
+Then the OLS slope is
+
+β=i(xi-xˉ)(yi-yˉ)i(xi-xˉ)2=sample covariance[x,y]sample variance[x].
+
+This expresses the slope as “how much xand ymove together” divided by “how much xmoves on its own.”
+
+In multiple regression, the same spirit holds but with an extra layer: the coefficient on xkis the covariance between the part of xkremaining after regressing it on other regressors and the part of yremaining after regressing it on those regressors, divided by the variance of that residual part of xk.
+
+Orthogonal regressors and the power of randomization
+
+Consider again a partition X=[X1  X2]. Suppose, in addition, that the two sets of regressors are orthogonal:
+
+X1'X2=0.
+
+This is a very strong condition: it means the column space of X1and the column space of X2are perpendicular in the n-dimensional space.
+
+Look at the expression
+
+X2'M1=X2'(I-X1(X1'X1)-1X1').
+
+If X1'X2=0, then the second term vanishes:
+
+X2'X1(X1'X1)-1X1'=0,
+
+and therefore
+
+X2'M1=X2'.
+
+Plug this back into the FWL expression for β2:
+
+β2=(X2'M1X2)-1X2'M1y=(X2'X2)-1X2'y.
+
+In words: if X1and X2are orthogonal, then the coefficient on X2in the full regression of yon both X1and X2is exactly the same as the coefficient you would get from regressing yon X2alone.
+
+This is one of the most important intuitions behind randomized experiments. If X2is a treatment indicator, and it is randomly assigned, then (in large samples) it is approximately orthogonal to any vector of pre-treatment covariates collected in X1. That means one can estimate the treatment effect simply by regressing the outcome on the treatment indicator; including or excluding the additional controls does not change the expected value of the treatment coefficient, only its precision.
+
+Short quiz
+
+Projection intuition(a) Explain in your own words why the OLS fitted values Xβcan be viewed as the orthogonal projection of yonto the space spanned by the columns of X.(b) Why must the residual vector ebe orthogonal to every column of Xin that picture?
+
+Normal equations and residuals(a) Starting from S(b)=(y-Xb)'(y-Xb), show every algebraic step needed to reach the normal equations X'Xβ=X'y.(b) Using the normal equations, derive the relation X'e=0, and interpret this condition both algebraically and geometrically.
+
+Means, constants, and balancing(a) In a single regressor model with constant, prove that the regression line passes through yˉ.(b) For a multiple regression with a constant term, derive yˉ=y‾and interpret what this says about the relationship between the sample mean of the outcome and the fitted model.
+
+FWL mechanicsConsider the model y=β0+β1X1+β2X2+ε. Describe in detail:(a) How to compute the residuals y*and X2*that are orthogonal to X1.(b) How to obtain β2from a regression of y*on X2*, and why this is equal to the coefficient on X2in the full regression.
+
+Demeaning and covariance form(a) Show that regressing yon xis equivalent to regressing y-yˉon x-xˉwithout an intercept, and write explicitly how the constant term can be recovered afterward.(b) Derive the formula β=Cov[x,y]/Var[x]in simple regression and interpret what it means about the slope being a “standardized co-movement.”
+
+Orthogonality and randomized experiments(a) Suppose regressors are partitioned into X1and a treatment indicator D, and assume X1'D=0. Show rigorously that the coefficient on Dis the same in the regressions y∼Dand y∼X1+D.(b) Using this, give a careful explanation of why random assignment of a treatment makes simple differences in means a valid estimator of the average treatment effect, even if many other covariates could in principle be controlled for.

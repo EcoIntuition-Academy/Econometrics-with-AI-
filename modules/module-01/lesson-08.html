@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.8: Coefficients & Functional Forms — EcoIntuition Academy</title>
+  <meta name="description" content="Master economic coefficient interpretations: marginal effects in linear and quadratic models, semi-log percentage approximations, and log-log constant elasticities.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="8">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 8 of 9 &middot; Coefficients &amp; Functional Forms</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">88%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 88%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.8</span>
+        <span class="badge">Applied Economic Interpretation</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Coefficients & Functional Forms
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        How do you translate estimated numbers into economic meaning? Learn marginal effects, quadratic curves, semi-log growth rates, and log-log constant elasticities.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the exact economic interpretation of marginal effects in linear models.</li>
+        <li>Compute and visualize dynamic marginal effects and turning points in <strong>quadratic models</strong>.</li>
+        <li>Master percentage interpretations in <strong>semi-log (log-level)</strong> regressions.</li>
+        <li>Interpret coefficients as <strong>elasticities</strong> in <strong>log-log</strong> models.</li>
+        <li>Log-linearize multiplicative production functions (Cobb-Douglas).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Marginal Effects in the Linear Model -->
+    <section class="lesson-section">
+      <h2>1. The Linear Model Marginal Effect</h2>
+      <p>
+        Consider the multiple regression model:
+      </p>
+
+      <!-- Reusable Equation Box: Linear Marginal Effect -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">LINEAR SPECIFICATION</span>
+          <span class="equation-title">Conditional Mean Slope Interpretation</span>
+        </div>
+        <div class="equation-main">
+          $$\mathbb{E}[y \mid x] = \beta_1 + \beta_2 x \implies \frac{\partial \mathbb{E}[y \mid x]}{\partial x} = \beta_2$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\partial \mathbb{E}[y \mid x] / \partial x\)</span>
+                <span class="symbol-desc"><strong>Marginal association:</strong> Rate of change in the conditional mean of \(y\) with respect to \(x\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\beta_2\)</span>
+                <span class="symbol-desc"><strong>Slope coefficient:</strong> Change in the conditional mean \(\mathbb{E}[y \mid x]\) associated with a one-unit increase in \(x\)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Preferred Econometric Interpretation:</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+          <em>"Holding the other included regressors fixed, \(\beta_2\) is the change in the conditional mean of \(y\) associated with a one-unit increase in \(x\)."</em>
+        </p>
+      </div>
+
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-sm);">
+        <em>Identification Note:</em> Do not automatically call \(\beta_2\) a causal effect. A causal interpretation requires additional identification assumptions, especially exogeneity.
+      </p>
+    </section>
+
+    <!-- Section 2: Quadratic Models & Diminishing Returns -->
+    <section class="lesson-section">
+      <h2>2. The Quadratic Model: Non-Constant Marginal Effects</h2>
+      <p>
+        In economics, relationships between variables often curve. For instance, in wage equations, early career experience boosts earnings rapidly, but depreciation of skills eventually moderates the marginal gain:
+      </p>
+
+      <!-- Reusable Equation Box: Quadratic Marginal Effect & Turning Point -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">QUADRATIC SPECIFICATION</span>
+          <span class="equation-title">Marginal Association & Turning Point</span>
+        </div>
+        <div class="equation-main">
+          $$y = \beta_1 + \beta_2 x + \beta_3 x^2 + \varepsilon \implies \frac{\partial \mathbb{E}[y \mid x]}{\partial x} = \beta_2 + 2\beta_3 x$$
+          $$x^* = -\frac{\beta_2}{2\beta_3} \quad \left(\text{Turning point where } \frac{\partial \mathbb{E}[y \mid x]}{\partial x} = 0\right)$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\beta_2 + 2\beta_3 x\)</span>
+                <span class="symbol-desc"><strong>Marginal association:</strong> The marginal association varies with \(x\) rather than remaining constant</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(x^*\)</span>
+                <span class="symbol-desc"><strong>Turning point:</strong> The value of \(x\) where the slope of the conditional mean crosses zero</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Notice that <strong>the marginal association varies with \(x\)</strong>. It depends directly on the baseline level of \(x\) at which the change is evaluated.
+      </p>
+    </section>
+
+    <!-- Interactive Exploration Widget: Quadratic Curve & Tangent Simulator -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Derivative Lab</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Quadratic Curve & Dynamic Marginal Effect Tangent</h3>
+          </div>
+          <div id="quadMarginalEffectOutput" style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-primary);">
+            $$\frac{\partial y}{\partial x} = 6.0 + 2(-0.25)(8.0) = \mathbf{2.00}$$
+          </div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="slider-control-group">
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Linear Coeff (\(\beta_2\)):</span>
+              <span class="slider-val-readout" id="valQuadB2">6.0</span>
+            </div>
+            <input type="range" id="sliderQuadB2" min="1.0" max="10.0" step="0.5" value="6.0">
+          </div>
+
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Quadratic Coeff (\(\beta_3\)):</span>
+              <span class="slider-val-readout" id="valQuadB3">-0.25</span>
+            </div>
+            <input type="range" id="sliderQuadB3" min="-0.60" max="-0.05" step="0.05" value="-0.25">
+          </div>
+
+          <div class="slider-control-item">
+            <div class="slider-label-row">
+              <span>Operating Point (\(x\)):</span>
+              <span class="slider-val-readout" id="valQuadX">8.0</span>
+            </div>
+            <input type="range" id="sliderQuadX" min="0" max="20" step="0.5" value="8.0">
+          </div>
+        </div>
+
+        <!-- SVG Plot -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="quadraticSimulatorSvg" viewBox="0 0 620 300" width="100%" height="300" style="max-width: 620px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The blue curve shows the quadratic expectation function:</p>
+              <div><span class="formula-chip">\(y = 15 + \beta_2 x + \beta_3 x^2\)</span></div>
+              <p>The red dot marks the current operating point \(x\), and the dashed red tangent line represents the instantaneous marginal effect \(\partial y / \partial x\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Slide \(x\) from 0 to 20: The slope begins steep and positive, flattens to exactly zero at the turning point:</p>
+              <div><span class="formula-chip">\(x^* = -\frac{\beta_2}{2\beta_3}\)</span></div>
+              <p>Beyond this peak, additional units of \(x\) cause \(y\) to decline!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>In real economic policy, diminishing returns are ubiquitous.</p>
+              <p>Interventions yield major returns at low baseline levels but taper off or become counterproductive when over-expanded.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>When reporting quadratic estimates, you <strong>cannot quote a single slope</strong>!</p>
+              <p>You must evaluate the dynamic marginal effect \(\beta_2 + 2\beta_3 x\) at specific benchmark points (e.g. sample mean \(\bar{x}\), 25th, and 75th percentiles).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Set \(\beta_2 = 8.0\) and \(\beta_3 = -0.20\). Move the operating point slider to \(x = 20\). Notice the tangent slope is exactly zero! Then slide to \(x = 22\) and watch the marginal return turn negative.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Semi-Log Models (Log-Level) -->
+    <section class="lesson-section">
+      <h2>3. Semi-Log Models: Percentage Changes</h2>
+      <p>
+        In many financial and labor settings, wages, prices, and GDP grow exponentially. Taking the natural logarithm of \(y\) yields the <strong>Log-Level (Semi-Log)</strong> model:
+      </p>
+
+      <!-- Reusable Equation Box: Semi-Log Growth / Percentage -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">Log-Level Specification • Semi-Elasticity</span>
+          <span class="equation-title">Percentage Change Interpretation</span>
+        </div>
+        <div class="equation-main">
+          $$\ln(y) = \beta_1 + \beta_2 x + \varepsilon \implies \frac{d\ln(y)}{dx} = \beta_2 \implies \frac{\Delta y}{y} \approx \beta_2 \cdot \Delta x$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE:</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\approx 100\beta_2\%\)</span>
+                <span class="symbol-desc">Approximate percentage change in \(y\) associated with a 1-unit increase in \(x\) (\(\Delta x = 1\)).</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">Exact Change</span>
+                <span class="symbol-desc">For the deterministic conditional relationship with \(\Delta x = 1\), exact change is \(100(e^{\beta_2} - 1)\%\).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Log-Level Economic Interpretation:</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+          <em>"A 1-unit increase in \(x\) is associated with approximately a \(\mathbf{100 \cdot \beta_2\%}\) change in \(y\) (with exact multiplicative effect \(100(e^{\beta_2} - 1)\%\))."</em>
+        </p>
+      </div>
+
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs);">
+        <em>Example:</em> In \(\ln(\text{Wage}) = 1.6 + 0.082 \text{Educ} + \varepsilon\), each additional year of education is associated with an estimated \(\approx 8.2\%\) increase in hourly wage (exact: \(100(e^{0.082} - 1) \approx 8.54\%\)).
+      </p>
+    </section>
+
+    <!-- Section 4: Log-Log Models (Constant Elasticity) -->
+    <section class="lesson-section">
+      <h2>4. Log-Log Models: Elasticities</h2>
+      <p>
+        When both the dependent and independent variables are logged, the slope coefficient directly represents an <strong>economic elasticity</strong>:
+      </p>
+
+      <!-- Reusable Equation Box: Log-Log Elasticity -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">Log-Log Specification • Constant Elasticity</span>
+          <span class="equation-title">Direct Elasticity Interpretation</span>
+        </div>
+        <div class="equation-main">
+          $$\ln(y) = \beta_1 + \beta_2 \ln(x) + \varepsilon \implies \frac{d\ln(y)}{d\ln(x)} = \frac{dy / y}{dx / x} = \mathbf{\beta_2}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE:</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\beta_2\) (Elasticity)</span>
+                <span class="symbol-desc">A 1% increase in \(x\) is associated with approximately a \(\beta_2\%\) change in \(y\) (conditional association unless causal assumptions hold).</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">Scale Invariance</span>
+                <span class="symbol-desc">Because both variables are measured in logarithms, the elasticity interpretation does not depend on the units used for \(x\) and \(y\).</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">Common Applications</span>
+                <span class="symbol-desc">Demand estimation (price elasticity of demand) and production functions (output elasticities) are common examples.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Log-Log Economic Interpretation:</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+          <em>"\(\beta_2\) is the elasticity of \(y\) with respect to \(x\). A \(\mathbf{1\%}\) increase in \(x\) is associated with approximately a \(\mathbf{\beta_2\%}\) change in \(y\)."</em>
+        </p>
+      </div>
+
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs);">
+        <em>Example:</em> In demand estimation, \(\ln(Q) = 4.2 - 0.75 \ln(P) + \varepsilon\). A 1% increase in price leads to a 0.75% decline in quantity demanded.
+      </p>
+    </section>
+
+    <!-- Section 5: Log-Linearization of Multiplicative Models -->
+    <section class="lesson-section">
+      <h2>5. Log-Linearization of the Cobb-Douglas Model</h2>
+      <p>
+        Consider the celebrated Cobb-Douglas production function with stochastic shock:
+      </p>
+
+      <!-- Reusable Equation Box: Cobb-Douglas Log-Linearization -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Transformation • Cobb-Douglas Function</span>
+          <span class="equation-title">Log-Linear Parameter Transformation</span>
+        </div>
+        <div class="equation-main">
+          $$Y = A \cdot L^\alpha \cdot K^\beta \cdot e^\varepsilon \iff \ln(Y) = \beta_0 + \alpha \ln(L) + \beta \ln(K) + \varepsilon \quad (\beta_0 = \ln A)$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE:</span>
+            <div class="symbol-grid">
+              <div class="symbol-row"><span class="symbol-name">\(\alpha, \beta\)</span><span class="symbol-desc">Labor and capital output elasticities; \(\alpha + \beta = 1\) represents constant returns to scale</span></div>
+              <div class="symbol-row"><span class="symbol-name">\(\beta_0 = \ln(A)\)</span><span class="symbol-desc">Transformed total factor productivity (TFP) intercept parameter</span></div>
+              <div class="symbol-row"><span class="symbol-name">\(\varepsilon\)</span><span class="symbol-desc">Additive disturbance term satisfying Assumption A1 (Linearity in parameters)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The model is now strictly <strong>linear in parameters</strong>! Standard OLS can be run directly, where \(\alpha\) is the labor elasticity of output and \(\beta\) is the capital elasticity of output.
+      </p>
+    </section>
+
+    <!-- Master Functional Forms Revision Table -->
+    <section class="lesson-section">
+      <h2>6. Comparative Matrix of Functional Forms</h2>
+      <div class="study-card" style="padding: var(--space-lg); margin: var(--space-md) 0;">
+        <h3 style="margin-top: 0; font-size: var(--text-base); font-weight: 700; color: var(--color-text);">
+          Master Functional Form Comparison Table
+        </h3>
+        <div class="symbol-table-wrapper">
+          <table class="symbol-table">
+            <thead>
+              <tr>
+                <th>Model Specification</th>
+                <th>Formula</th>
+                <th>Marginal Effect \(\partial y / \partial x\)</th>
+                <th>Standard Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Level-Level</strong></td>
+                <td>\(y = \beta_1 + \beta_2 x\)</td>
+                <td>\(\beta_2\) (Constant)</td>
+                <td>\(\Delta x = 1 \implies \Delta y = \beta_2\) units</td>
+              </tr>
+              <tr>
+                <td><strong>Log-Level (Semi-log)</strong></td>
+                <td>\(\ln(y) = \beta_1 + \beta_2 x\)</td>
+                <td>\(\beta_2 \cdot y\)</td>
+                <td>\(\Delta x = 1 \implies \% \Delta y \approx 100 \beta_2\%\)</td>
+              </tr>
+              <tr>
+                <td><strong>Level-Log</strong></td>
+                <td>\(y = \beta_1 + \beta_2 \ln(x)\)</td>
+                <td>\(\beta_2 / x\)</td>
+                <td>\(\% \Delta x = 1\% \implies \Delta y \approx \beta_2 / 100\) units</td>
+              </tr>
+              <tr>
+                <td><strong>Log-Log (Elasticity)</strong></td>
+                <td>\(\ln(y) = \beta_1 + \beta_2 \ln(x)\)</td>
+                <td>\(\beta_2 (y/x)\)</td>
+                <td>\(\% \Delta x = 1\% \implies \% \Delta y \approx \beta_2\%\)</td>
+              </tr>
+              <tr>
+                <td><strong>Quadratic</strong></td>
+                <td>\(y = \beta_1 + \beta_2 x + \beta_3 x^2\)</td>
+                <td>\(\beta_2 + 2\beta_3 x\)</td>
+                <td>Marginal effect changes with \(x\); peak at \(x^* = -\beta_2 / (2\beta_3)\)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "In a log-log model \(\ln(y) = \beta_1 + 0.45 \ln(x)\), a 1-unit increase in \(x\) increases \(y\) by 45%."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> In a log-log model, both variables are measured in percentage changes! The interpretation is: <em>"A <strong>1% increase</strong> in \(x\) is associated with a <strong>0.45% increase</strong> in \(y\)."</em> Do not mix up unit changes with percentage changes!
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: var(--text-sm); font-weight: 600;">The Small \(\beta\) Approximation Warning</span>
+      </div>
+      <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+        In log-level models, saying \(\% \Delta y \approx 100\beta\%\) is an approximation based on the Taylor series \(\ln(1 + g) \approx g\) for small \(g\). If \(\beta = 0.05\), \(100(e^{0.05}-1) = 5.13\%\), so the approximation is outstanding. But if \(\beta = 0.50\), \(100(e^{0.50}-1) = 64.87\%\)! For large coefficients, always use the exact formula.
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> An empirical wage equation is estimated as:
+          $$\widehat{\text{Wage}}_i = 12.0 + 1.6 \text{Exper}_i - 0.02 \text{Exper}_i^2$$
+          (a) What is the marginal effect of an additional year of experience when \(\text{Exper} = 10\)?<br>
+          (b) At what experience level does expected wage reach its peak?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint8">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol8">Show Solution</button>
+        </div>
+        <div id="hint8" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Differentiate with respect to \(\text{Exper}\): \(\frac{\partial \text{Wage}}{\partial \text{Exper}} = \beta_2 + 2\beta_3 \text{Exper}\). Set it to 0 to find the peak.
+          </p>
+        </div>
+        <div id="sol8" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            (a) The marginal effect is:
+            $$\frac{\partial \text{Wage}}{\partial \text{Exper}} = 1.6 + 2(-0.02)\text{Exper} = 1.6 - 0.04\text{Exper}$$
+            At \(\text{Exper} = 10\): \(1.6 - 0.04(10) = 1.6 - 0.40 = \mathbf{+1.20}\) (i.e. +$1.20 per hour).<br>
+            (b) Peak wage occurs where the marginal effect equals zero:
+            $$1.6 - 0.04 \text{Exper}^* = 0 \implies \text{Exper}^* = \frac{1.6}{0.04} = \mathbf{40 \text{ years}}.$$
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 1.8 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Functional form specification dictates economic interpretation. Linear models yield constant marginal effects, quadratics capture turning points, semi-logs express percentage changes, and log-log models estimate constant elasticities. In our final lesson, Lesson 1.9, we analyze <strong>Dummy Variables in Log Models</strong> (exact vs. approximate effects) and conclude Module 1 with a <strong>Comprehensive Synthesis Review and Practice Exam</strong>.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="lesson-07.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Regressors &amp; Normality</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="8" style="align-self: center;">
+          ✓ Mark Lesson 8 Complete
+        </button>
+        <a href="lesson-09.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Dummy Variables &amp; Review</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

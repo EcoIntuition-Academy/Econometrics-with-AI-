@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.7: Demeaning & the Covariance Form of OLS — EcoIntuition Academy</title>
+  <meta name="description" content="Specialize FWL to the constant term with the demeaning operator M₀. Derive the simple regression slope as sample covariance divided by sample variance.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 7 of 8 &middot; Demeaning &amp; the Covariance Form of OLS</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">87.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 87.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.7</span>
+        <span class="badge">Algebraic Specialization</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Demeaning &amp; the Covariance Form of OLS
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Specialize the Frisch–Waugh–Lovell theorem to the intercept constant term: derive the demeaning operator \(M_0\), prove slope invariance, and connect the OLS slope to sample covariance and variance.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define the demeaning matrix operator \(M_0 = I - \frac{1}{n}\iota\iota'\) using precise vector notation.</li>
+        <li>Show that \(M_0 z = z - \bar{z}\iota\) subtracts the sample mean from every observation.</li>
+        <li>Apply FWL to prove that regressing demeaned \(y\) on demeaned \(X_2\) yields identical slope coefficients.</li>
+        <li>Recover the intercept post-estimation using \(\hat{\beta}_0 = \bar{y} - \bar{x}'\hat{\beta}_2\).</li>
+        <li>Derive the familiar simple regression slope \(\hat{\beta}_1 = \frac{\text{Cov}(x,y)}{\text{Var}(x)}\) and understand its co-movement interpretation.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Demeaning and the Constant Term -->
+    <section class="lesson-section">
+      <h2>1. Demeaning as a Special Case of FWL</h2>
+      <p>
+        Now specialize the FWL partition \(X = [X_1 \;\; X_2]\) by setting \(X_1\) to be just the constant term. Let:
+      </p>
+      <div class="math-scroll-box">
+        $$X = \begin{bmatrix} \iota & X_2 \end{bmatrix}$$
+      </div>
+      <p>
+        where \(\iota\) is the \(n \times 1\) vector of ones and \(X_2\) contains the non-constant explanatory variables.
+      </p>
+      <p>
+        The residual-maker matrix for the vector of ones is:
+      </p>
+      <div class="math-scroll-box">
+        $$M_0 = I_n - \iota(\iota'\iota)^{-1}\iota'$$
+      </div>
+      <p>
+        Notice that \(\iota'\iota = \sum_{i=1}^n (1)^2 = n\). Therefore, \(M_0\) simplifies to:
+      </p>
+      <div class="math-scroll-box">
+        $$M_0 = I_n - \frac{1}{n}\iota\iota'$$
+      </div>
+
+      <!-- Reusable Equation Box: Demeaning Operator -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">DEMEANING OPERATOR</span>
+          <span class="equation-title">The Mean-Deviation Matrix M₀</span>
+        </div>
+        <div class="equation-main">
+          $$M_0 z = z - \frac{1}{n}\iota\iota'z = z - \bar{z}\iota$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\iota'z = \sum_{i=1}^n z_i\)</span>
+                <span class="symbol-desc"><strong>Inner product:</strong> Sum of all elements in vector \(z\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\frac{1}{n}\iota\iota'z = \bar{z}\iota\)</span>
+                <span class="symbol-desc"><strong>Mean vector:</strong> An \(n \times 1\) vector whose entries all equal the sample mean \(\bar{z}\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(M_0 z\)</span>
+                <span class="symbol-desc"><strong>Demeaned vector:</strong> Subtracts the arithmetic sample mean from each coordinate: \([z_1 - \bar{z}, \dots, z_n - \bar{z}]^\top\)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: OLS with Demeaned Variables -->
+    <section class="lesson-section">
+      <h2>2. OLS on Mean-Adjusted Variables</h2>
+      <p>
+        Now apply the demeaning operator \(M_0\) to both \(X_2\) and \(y\):
+      </p>
+      <div class="math-scroll-box">
+        $$X_2^* = M_0X_2 = X_2 - \bar{X}_2, \qquad y^* = M_0y = y - \bar{y}\iota$$
+      </div>
+      <p>
+        The Frisch–Waugh–Lovell formula tells us that the slope coefficients on \(X_2\) in a regression with an intercept are:
+      </p>
+      <div class="math-scroll-box">
+        $$\hat{\beta}_2 = (X_2^{*'}X_2^*)^{-1}X_2^{*'}y^*$$
+      </div>
+
+      <div class="study-card" style="border-left: 4px solid var(--accent-primary); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: var(--color-primary); font-size: 0.95rem; font-weight: 700;">Two Equivalent Approaches to OLS</h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          Rather than estimating the regression with an explicit constant vector \(\iota\), one can equivalently:
+        </p>
+        <ol style="margin: 6px 0 0 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.6;">
+          <li>Subtract sample means from \(y\) and from all non-constant regressors in \(X_2\).</li>
+          <li>Drop the constant term completely and run regression through the origin on the demeaned variables.</li>
+        </ol>
+        <p style="margin: 8px 0 0 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          The estimated slope coefficients \(\hat{\beta}_2\) are <strong>identically the same</strong>! The intercept is then recovered post-estimation:
+          $$\hat{\beta}_0 = \bar{y} - \bar{x}_2'\hat{\beta}_2$$
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Simple Regression & Covariance Form -->
+    <section class="lesson-section">
+      <h2>3. The Covariance Form of the Simple Regression Slope</h2>
+      <p>
+        This specialization leads directly to the familiar scalar formula for the slope in simple linear regression. With a single scalar regressor \(x\) and outcome \(y\):
+      </p>
+      <div class="math-scroll-box">
+        $$x^* = x - \bar{x}\iota, \qquad y^* = y - \bar{y}\iota$$
+      </div>
+      <p>
+        The slope formula \(\hat{\beta}_1 = (x^{*'}x^*)^{-1}x^{*'}y^*\) becomes:
+      </p>
+
+      <!-- Reusable Equation Box: Covariance Form -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SAMPLE MOMENT FORM</span>
+          <span class="equation-title">Simple Regression Slope as Covariance / Variance</span>
+        </div>
+        <div class="equation-main">
+          $$\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\text{Cov}(x, y)}{\text{Var}(x)}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(\text{Cov}(x, y)\)</span>
+                <span class="symbol-desc"><strong>Sample covariance:</strong> Measures how much \(x\) and \(y\) move together</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\text{Var}(x)\)</span>
+                <span class="symbol-desc"><strong>Sample variance of \(x\):</strong> Measures how much \(x\) moves on its own</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-note" style="margin-top: var(--space-md);">
+        <div class="callout-header">
+          <span class="callout-icon">💡</span>
+          <span class="callout-title">Sample Normalization Note</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            The division \(\text{Cov}(x,y) / \text{Var}(x)\) holds whether you divide both numerator and denominator by \(n\) or by the degrees-of-freedom degrees \(n-1\), because the identical factor cancels completely.<br>
+            <em>Academic Note:</em> Do not casually call \(\hat{\beta}_1\) a "standardized" coefficient. A standardized regression coefficient normalizes both \(x\) and \(y\) by their standard deviations, yielding the unit-free Pearson correlation \(r_{xy}\). The slope \(\hat{\beta}_1\) is not unit-free; it has units of \(\text{units of } y / \text{units of } x\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Demeaning Demo Widget -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <div>
+            <div class="lab-badge">Interactive Transformation Lab</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Demeaning Centering & Slope Invariance Explorer</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button id="btnDemeanOriginal" class="btn btn-primary btn-sm active">Original Data (x, y)</button>
+            <button id="btnDemeanShifted" class="btn btn-outline btn-sm">Demeaned Data (x*, y*)</button>
+          </div>
+        </div>
+
+        <!-- Readout Bar -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md); text-align: center;">
+          <div id="demeanSlopeDisplay" style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: #1d4ed8; margin-bottom: 4px;">
+            Slope β̂₁ = 1.13 (Identical in both)
+          </div>
+          <p id="demeanCenterDisplay" style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Centered at (x̄, ȳ) = (5.0, 6.6) — Intercept β̂₀ = 0.95
+          </p>
+        </div>
+
+        <!-- SVG Plot Stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="demeanSvg" viewBox="0 0 520 270" width="100%" height="270" style="max-width: 520px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Toggle between the original scatter plot (centered at \((5.0, 6.6)\)) and the demeaned scatter plot (shifted cleanly so the centroid is \((0, 0)\)).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The relative positions of the points to each other do not change at all. Consequently, the slope of the regression line is completely preserved (\(\hat{\beta}_1 = 1.13\)).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>This demeaning transformation is the exact mathematical foundation of the <strong>Within Estimator</strong> used throughout Panel Data econometrics to eliminate unobserved fixed effects!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The slope \(\hat{\beta}_1\) reflects pure co-variation: how deviations from average \(x\) accompany deviations from average \(y\).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Click <strong>[Original Data Centered at (x̄, ȳ)]</strong> then click <strong>[Demeaned Data Centered at (0, 0)]</strong>. Confirm that while the intercept changes from \(\hat{\beta}_0 = 0.95\) to zero, the slope remains identically \(\hat{\beta}_1 = 1.13\).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-06.html" class="btn btn-outline">← Lesson 2.6: The FWL Theorem</a>
+      <a href="lesson-08.html" class="btn btn-primary">Next: Lesson 2.8 Orthogonal Regressors &amp; Module Review →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

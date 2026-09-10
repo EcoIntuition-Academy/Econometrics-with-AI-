@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.7: Fixed/Random Regressors & Normality — EcoIntuition Academy</title>
+  <meta name="description" content="Understand fixed vs random regressors, conditional expectation E[β|X], the exact role of normality in finite-sample inference, and the master CLRM summary table.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="7">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 7 of 9 &middot; Fixed/Random Regressors &amp; Normality</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">77%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 77%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.7</span>
+        <span class="badge">CLRM Assumptions (Part 3) & Master Summary</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Fixed/Random Regressors & Normality
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Conclude the Classical Linear Regression Model assumptions: discover why conditioning on \(X\) simplifies derivations, demystify the exact role of normal errors, and study the complete CLRM synthesis table.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Differentiate between <strong>fixed regressors</strong> in controlled trials vs. <strong>random regressors</strong> in observational economics.</li>
+        <li>Understand why econometric derivations condition on \(X\): \(\mathbb{E}[\hat{\beta} \mid X]\).</li>
+        <li>Clarify what Normality of errors \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2)\) is — and is <strong>not</strong> — required for.</li>
+        <li>Distinguish exact finite-sample inference from large-sample Central Limit Theorem (CLT) asymptotic validity.</li>
+        <li>Synthesize all 6 CLRM assumptions in a master comparison matrix.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Assumption 5 — Fixed vs. Random Regressors -->
+    <section class="lesson-section">
+      <h2>1. Assumption A5: Regressor Treatment (Fixed vs. Random)</h2>
+      <p>
+        Econometric theory distinguishes how the regressor matrix \(X\) is treated in probability statements:
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card" style="margin: 0; border-left: 4px solid var(--color-primary);">
+          <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Fixed-X View</div>
+          <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            For theoretical derivations, \(X\) may be treated as given and probability statements are made conditional on the observed regressor matrix. While typical in laboratory experiments, this is a conceptual modeling stance.
+          </p>
+        </div>
+
+        <div class="study-card" style="margin: 0; border-left: 4px solid #059669;">
+          <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">Random-X View</div>
+          <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            In observational settings, \(X\) is itself generated by a stochastic process or joint population distribution \((Y, X)\). When a new sample of households or firms is drawn, their regressors vary randomly as well.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Even when regressors are random, econometric derivations often condition on the realized \(X\). Examples can illustrate experiments vs. observational data, but do not imply an exact equivalence between fixed/random regressors and experimental/observational data.
+      </p>
+
+      <h3>Why do Econometric Derivations Condition on \(X\)?</h3>
+      <p>
+        When \(X\) is stochastic, the term \((X'X)^{-1}X'\varepsilon\) is a ratio of random variables. To simplify algebraic derivations while maintaining complete generality, econometricians evaluate expectations <strong>conditional on the realized matrix \(X\)</strong>:
+      </p>
+
+      <!-- Reusable Equation Box: Law of Iterated Expectations -->
+      <div class="equation-box equation-box--assumption">
+        <div class="equation-header">
+          <span class="equation-badge">Assumption A5 • Conditional Expectation</span>
+          <span class="equation-title">Law of Iterated Expectations (LIE)</span>
+        </div>
+        <div class="equation-main">
+          $$\mathbb{E}[\hat{\beta} \mid X] = \beta + (X'X)^{-1}X'\mathbb{E}[\varepsilon \mid X] = \beta$$
+          $$\mathbb{E}[\hat{\beta}] = \mathbb{E}_X\left[\mathbb{E}[\hat{\beta} \mid X]\right] = \mathbb{E}_X[\beta] = \mathbf{\beta}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE:</span>
+            <div class="symbol-grid">
+              <div class="symbol-row"><span class="symbol-name">\(\mathbb{E}[\hat{\beta} \mid X]\)</span><span class="symbol-desc">Conditional expectation evaluating properties conditional on the realized sample matrix \(X\)</span></div>
+              <div class="symbol-row"><span class="symbol-name">\(\mathbb{E}_X[\cdot]\)</span><span class="symbol-desc">Outer expectation taken over the joint distribution of stochastic regressors \(X\)</span></div>
+              <div class="symbol-row"><span class="symbol-name">\(\beta\)</span><span class="symbol-desc">True population parameter vector; proves unconditional unbiasedness holds for observational data</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Thus, unconditional unbiasedness holds effortlessly, confirming that conditioning on \(X\) is fully compatible with stochastic economic regressors.
+      </p>
+    </section>
+
+    <!-- Section 2: Assumption 6 — Normality of Errors -->
+    <section class="lesson-section">
+      <h2>2. Assumption A6: Normality of Disturbances</h2>
+      <p>
+        Assumption A6 states that the disturbances, conditional on \(X\), follow a normal distribution:
+      </p>
+
+      <!-- Reusable Equation Box: Normality of Disturbances -->
+      <div class="equation-box equation-box--assumption">
+        <div class="equation-header">
+          <span class="equation-badge">Assumption A6 • Error Distribution</span>
+          <span class="equation-title">Normality of Disturbances</span>
+        </div>
+        <div class="equation-main">
+          $$\varepsilon_i \mid X \sim \text{i.i.d. } \mathcal{N}(0, \sigma^2) \quad \iff \quad \varepsilon \mid X \sim \mathcal{N}(0, \sigma^2 I_n)$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE:</span>
+            <div class="symbol-grid">
+              <div class="symbol-row"><span class="symbol-name">\(\varepsilon \mid X\)</span><span class="symbol-desc">Vector of disturbance terms conditional on the realized regressor matrix</span></div>
+              <div class="symbol-row"><span class="symbol-name">\(\mathcal{N}(0, \sigma^2 I_n)\)</span><span class="symbol-desc">Multivariate normal distribution with mean zero and spherical covariance matrix</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Balanced Normality Role Cards -->
+      <div class="normality-cards-grid">
+        <div class="normality-card normality-card--not-required">
+          <h4 class="normality-card-title">NORMALITY IS NOT REQUIRED FOR:</h4>
+          <ul class="normality-card-list">
+            <li><strong>OLS Unbiasedness:</strong> \(\mathbb{E}[\hat{\beta}] = \beta\) holds strictly under exogeneity (\(\mathbb{E}[\varepsilon \mid X] = 0\)), regardless of whether disturbances are skewed or heavy-tailed.</li>
+            <li><strong>OLS Consistency:</strong> \(\text{plim } \hat{\beta} = \beta\) holds without normality under standard regularity conditions.</li>
+            <li><strong>Gauss–Markov Theorem (BLUE):</strong> Under Linearity, Full Rank, Zero Conditional Mean, and Spherical Errors, OLS is the Best Linear Unbiased Estimator without requiring normality.</li>
+          </ul>
+        </div>
+
+        <div class="normality-card normality-card--useful">
+          <h4 class="normality-card-title">NORMALITY IS USEFUL FOR:</h4>
+          <ul class="normality-card-list">
+            <li><strong>Exact Finite-Sample \(t\)-Inference:</strong> Guarantees that standard \(t\)-statistics follow the exact Student's \(t\)-distribution.</li>
+            <li><strong>Exact Finite-Sample \(F\)-Inference:</strong> Enables exact \(F\)-tests for multiple linear hypothesis restrictions.</li>
+            <li><strong>Exact Confidence Intervals:</strong> Supports finite-sample confidence intervals with exact coverage probabilities under the classical normal model.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Finite-Sample vs. Large-Sample (Asymptotic) Inference</h3>
+      <div class="inference-cards-grid">
+        <div class="study-card" style="margin: 0; border-left: 4px solid #b45309;">
+          <div style="font-weight: 700; color: #b45309; margin-bottom: 6px;">Exact Finite-Sample Inference</div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            With normal disturbances and the required classical assumptions, exact \(t\)- and \(F\)-distribution results are available for any sample size.
+          </p>
+        </div>
+
+        <div class="study-card" style="margin: 0; border-left: 4px solid #059669;">
+          <div style="font-weight: 700; color: #059669; margin-bottom: 6px;">Large-Sample / Asymptotic Inference</div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Without normality, estimators and test statistics often have approximately normal large-sample distributions through Central Limit Theorem arguments under appropriate regularity conditions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Master CLRM Summary Component -->
+    <section class="lesson-section">
+      <h2>3. Master CLRM Synthesis</h2>
+      <div class="study-card" style="padding: var(--space-lg); margin: var(--space-md) 0;">
+        <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text);">
+          Master CLRM Summary: Assumptions, Meanings, and Consequences of Violation
+        </h3>
+        <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+          Keep this comprehensive matrix open as your reference throughout empirical coursework:
+        </p>
+
+        <div class="symbol-table-wrapper">
+          <table class="symbol-table">
+            <thead>
+              <tr>
+                <th style="min-width: 140px;">Assumption</th>
+                <th>Formal Statement</th>
+                <th>Why It Matters</th>
+                <th>If Violated...</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>A1: Linearity in Parameters</strong></td>
+                <td>\(y = X\beta + \varepsilon\)</td>
+                <td>Ensures linear Normal Equations and closed-form OLS solution.</td>
+                <td>OLS cannot be computed. Must use Non-linear Least Squares (NLS) or transformations.</td>
+              </tr>
+              <tr>
+                <td><strong>A2: Full Rank</strong></td>
+                <td>\(\text{rank}(X) = k\) (\(n \ge k\))</td>
+                <td>Guarantees \((X'X)^{-1}\) exists, uniquely identifying each coefficient.</td>
+                <td>Matrix is singular. Infinite coefficient solutions; OLS cannot isolate individual effects.</td>
+              </tr>
+              <tr>
+                <td><strong>A3: Strict Exogeneity</strong></td>
+                <td>\(\mathbb{E}[\varepsilon \mid X] = 0\)</td>
+                <td>Master key to <strong>unbiasedness</strong>: \(\mathbb{E}[\hat{\beta}] = \beta\).</td>
+                <td><strong>Endogeneity bias!</strong> \(\hat{\beta}\) is systematically wrong; more data does not fix it.</td>
+              </tr>
+              <tr>
+                <td><strong>A4: Spherical Errors</strong></td>
+                <td>\(\text{Var}(\varepsilon|X) = \sigma^2 I_n\)</td>
+                <td>Guarantees OLS is <strong>BLUE</strong> (efficient) and classical standard errors are valid.</td>
+                <td>OLS remains unbiased, but loses efficiency. Standard errors are invalid (requires Robust SEs).</td>
+              </tr>
+              <tr>
+                <td><strong>A5: Regressor Treatment</strong></td>
+                <td>\(X\) treated as given conditional</td>
+                <td>Allows straightforward calculation of moments \(\mathbb{E}[\hat{\beta} \mid X]\).</td>
+                <td>Requires asynchronous limit theorems and instrumental variables if simultaneity exists.</td>
+              </tr>
+              <tr>
+                <td><strong>A6: Normal Errors</strong></td>
+                <td>\(\varepsilon \mid X \sim \mathcal{N}(0, \sigma^2 I)\)</td>
+                <td>Guarantees exact finite-sample \(t\) and \(F\) distributions for testing.</td>
+                <td>Finite-sample tests approximate; in large samples, Central Limit Theorem rescues inference.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "My dependent variable \(y\) (e.g. wages) is heavily right-skewed and non-normal. Therefore, linear regression assumptions are violated and I cannot run OLS."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> <em>The CLRM makes NO assumption that the variables \(X\) or \(y\) must follow a normal distribution!</em> The normality assumption applies exclusively to the <strong>unobserved disturbance term \(\varepsilon\)</strong>, and even then, it is only required for exact small-sample tests. In modern empirical datasets (\(n > 500\)), non-normal variables are completely acceptable.
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: var(--text-sm); font-weight: 600;">The Asymptotic Revolution in Econometrics</span>
+      </div>
+      <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+        Fifty years ago, econometrics textbooks devoted entire chapters to testing for normal errors because datasets had 25 observations. Today, administrative registries and big datasets contain hundreds of thousands of rows. The Central Limit Theorem does the heavy lifting, shifting the modern econometrician's primary focus almost entirely to <strong>Assumption A3 (Exogeneity)</strong>!
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> An empirical researcher has a sample of \(n = 10,000\) workers. A Jarque-Bera test rejects normality of the regression residuals at \(p < 0.001\). The research advisor suggests discarding the model, claiming the OLS coefficients are biased and hypothesis tests are invalid. Is the advisor correct?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint7">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol7">Show Solution</button>
+        </div>
+        <div id="hint7" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Review what guarantees unbiasedness (\(\mathbb{E}[\varepsilon|X]=0\)) and how sample size \(n=10,000\) affects asymptotic distribution under the Central Limit Theorem.
+          </p>
+        </div>
+        <div id="sol7" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            <strong>The advisor is incorrect on both counts:</strong><br>
+            1. <strong>Unbiasedness:</strong> Unbiasedness depends exclusively on Strict Exogeneity (\(\mathbb{E}[\varepsilon \mid X] = 0\)). Normality plays zero role in whether \(\mathbb{E}[\hat{\beta}] = \beta\).<br>
+            2. <strong>Hypothesis Testing:</strong> With \(n = 10,000\) observations, the Central Limit Theorem guarantees that \(\hat{\beta}\) converges to a normal distribution asymptotically. Asymptotic \(t\)-tests, \(z\)-tests, and confidence intervals remain completely valid.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 1.7 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        We have now completed the 6 CLRM assumptions: Linearity (A1), Full Rank (A2), Exogeneity (A3), Spherical Errors (A4), Regressor Treatment (A5), and Normality (A6). With the estimation foundations solidly built, Lesson 1.8 tackles economic interpretation: <strong>marginal effects, quadratic models, and logarithmic transformations</strong>.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="lesson-06.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Exogeneity &amp; Spherical Errors</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="7" style="align-self: center;">
+          ✓ Mark Lesson 7 Complete
+        </button>
+        <a href="lesson-08.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Coefficients &amp; Functional Forms</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

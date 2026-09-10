@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.1: What Is Econometrics? — EcoIntuition Academy</title>
+  <meta name="description" content="Discover what econometrics is, the fundamental difference between causal questions and prediction, the counterfactual parallel universes framework, and systematic signals vs noise.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 9 &middot; What Is Econometrics?</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">11%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 11%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.1</span>
+        <span class="badge">Foundations of Econometric Reasoning</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        What Is Econometrics?
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Econometrics is the quantitative discipline that unifies economic theory, real-world data, mathematics, and statistical inference to answer one indispensable question: <em>"What if?"</em>
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Articulate the synthesis of economic theory, mathematical specification, and statistical inference.</li>
+        <li>Distinguish between <strong>causal questions</strong> (policy interventions) and <strong>predictive tasks</strong> (forecasting).</li>
+        <li>Understand the counterfactual "parallel universes" framework and the Fundamental Problem of Causal Inference.</li>
+        <li>Identify why economic relationships are stochastic rather than deterministic (signal vs. noise).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Why This Matters -->
+    <section class="lesson-section">
+      <h2>1. Why Econometrics Matters</h2>
+      <p>
+        Economic theory produces qualitative propositions: <em>"If price increases, quantity demanded falls"</em>, or <em>"Acquiring an additional degree raises labor market productivity."</em> But theory alone cannot tell a policymaker:
+      </p>
+      <ul>
+        <li><strong>By how much</strong> will demand fall if we levy a 12% carbon tax?</li>
+        <li><strong>Will investing</strong> $15 million in smaller elementary classroom sizes meaningfully boost standardized exam performance?</li>
+        <li><strong>Does job-training</strong> cause an unemployed worker to earn $4,000 more annually, or were the workers who enrolled already more motivated?</li>
+      </ul>
+      <p>
+        Econometrics provides the empirical apparatus to measure magnitudes, test theoretical hypotheses against messy observational data, and evaluate counterfactual policies.
+      </p>
+    </section>
+
+    <!-- Section 2: Intuition First — The Four Pillars -->
+    <section class="lesson-section">
+      <h2>2. Intuition First: The Four Pillars</h2>
+      <p>
+        Econometrics is neither pure statistics nor pure theoretical economics. It exists at the precise intersection of four disciplines:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">1. Economic Theory</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;">Dictates which variables belong in the model and the expected sign of the relationship (e.g., downward-sloping demand).</div>
+        </div>
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">2. Mathematics</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;">Translates verbal hypotheses into explicit functional forms: linear equations, logs, quadratics, or systems of equations.</div>
+        </div>
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">3. Empirical Data</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;">Observational records from surveys, administrative registries, or natural experiments capturing actual agent decisions.</div>
+        </div>
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">4. Statistical Inference</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;">Provides the probability laws to quantify sampling uncertainty, hypothesis testing, and confidence intervals.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Two Major Purposes — Causality vs Prediction -->
+    <section class="lesson-section">
+      <h2>3. Two Major Purposes: Causal Questions vs. Prediction</h2>
+      <p>
+        In modern applied econometrics and data science, questions generally fall into two distinct domains. Conflating them is one of the most hazardous mistakes in empirical research:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg); margin: var(--space-md) 0;">
+        <div class="study-card" style="border-left: 5px solid var(--accent-primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--accent-primary); color: #fff; font-weight: 700;">PURPOSE A</span>
+            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">Causal Questions</h3>
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 0.75rem;">
+            <strong>"What happens to \(Y\) if we actively intervene and change \(X\)?"</strong>
+          </p>
+          <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; margin-bottom: 0;">
+            <li>Does cutting class sizes from 25 to 18 students cause test scores to rise?</li>
+            <li>Does increasing the minimum wage by $2 lead to lower teenage employment?</li>
+            <li>Requires <em>ceteris paribus</em> (holding all other unobserved influences equal).</li>
+          </ul>
+        </div>
+
+        <div class="study-card" style="border-left: 5px solid var(--border-strong);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--surface-raised); border: 1px solid var(--border-subtle); color: var(--text-primary); font-weight: 700;">PURPOSE B</span>
+            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">Prediction Questions</h3>
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 0.75rem;">
+            <strong>"Given observed values of \(X\), what is the most likely value of \(Y\)?"</strong>
+          </p>
+          <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; margin-bottom: 0;">
+            <li>Given the current Treasury yield curve and unemployment, what will inflation be next quarter?</li>
+            <li>What will retail sales be in December given consumer sentiment?</li>
+            <li>Does <em>not</em> require isolating causal mechanisms; stability of joint distribution is sufficient.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Exploration Widget: Causality vs Prediction Tabs -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Exploration</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Causal Question vs. Predictive Forecast</h3>
+          </div>
+          <div class="interactive-tab-bar">
+            <button class="interactive-tab-btn active" data-purpose-tab="causal">Causal Question</button>
+            <button class="interactive-tab-btn" data-purpose-tab="predictive">Prediction Question</button>
+          </div>
+        </div>
+
+        <!-- Causal Panel -->
+        <div class="purpose-panel active" data-purpose-panel="causal">
+          <div style="background: var(--surface-raised); padding: var(--space-md); border-radius: var(--radius-md); border-left: 4px solid var(--accent-primary); margin-bottom: var(--space-md); border: 1px solid var(--border-light); border-left-width: 4px;">
+            <div style="font-weight: 700; font-size: var(--text-base); color: var(--text-primary); margin-bottom: 4px;">
+              Empirical Setting: Education \(\to\) Wage
+            </div>
+            <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+              <strong>Question:</strong> If the <em>exact same individual</em> had acquired one additional year of schooling, how much would their wage change?
+            </div>
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--space-sm);">
+            Here, we care about the structural parameter \(\beta_{\text{educ}}\). If higher ability or family wealth leads individuals to both stay in school longer and earn higher wages, a naive regression will suffer from <em>omitted variable bias</em>. Causality requires severing this confounding correlation.
+          </p>
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            <span class="badge badge-success">Requires Ceteris Paribus</span>
+            <span class="badge">Informs Policy Interventions</span>
+            <span class="badge">Counterfactual Logic</span>
+          </div>
+        </div>
+
+        <!-- Predictive Panel -->
+        <div class="purpose-panel" data-purpose-panel="predictive">
+          <div style="background: var(--surface-raised); padding: var(--space-md); border-radius: var(--radius-md); border-left: 4px solid var(--accent-secondary); margin-bottom: var(--space-md); border: 1px solid var(--border-light); border-left-width: 4px;">
+            <div style="font-weight: 700; font-size: var(--text-base); color: var(--text-primary); margin-bottom: 4px;">
+              Empirical Setting: Leading Indicators \(\to\) Inflation Rate
+            </div>
+            <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+              <strong>Question:</strong> Given the current interest rates, oil futures, and wage index, what inflation rate is expected next month?
+            </div>
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--space-sm);">
+            Here, we do not need to claim that oil futures <em>caused</em> overall economic inflation. Even if the correlation is driven by global supply expectations, the model provides an optimal conditional prediction \(\hat{Y}\). However, you cannot use this predictive model to conclude that artificially capping oil futures will stop inflation!
+          </p>
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            <span class="badge badge-success">Optimizes Out-of-Sample R²</span>
+            <span class="badge">Correlation is Useful</span>
+            <span class="badge">Vulnerable to Lucas Critique</span>
+          </div>
+        </div>
+
+        <!-- Pedagogical Explanation Block -->
+        <div class="graph-explanation-block">
+          <div class="explanation-col">
+            <h4>WHAT YOU ARE SEEING</h4>
+            <p>A side-by-side comparison of empirical objectives: isolating a structural policy response vs generating an accurate forecast.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHAT TO NOTICE</h4>
+            <p>A model with magnificent predictive accuracy can be entirely misleading for evaluating policy if omitted factors drive the correlation.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHY IT MATTERS</h4>
+            <p>Econometrics was specifically invented because standard statistical forecasting tools break down when policies change.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>ECONOMETRIC INTERPRETATION</h4>
+            <p>Causal inference estimates the structural derivative \(\partial Y / \partial X\). Prediction estimates conditional expectation \(\mathbb{E}[Y \mid X]\).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: The Counterfactual Framework (Parallel Universes) -->
+    <section class="lesson-section">
+      <h2>4. The Counterfactual Idea: "Parallel Universes"</h2>
+      <p>
+        To understand causality rigorously, modern econometrics relies on the <strong>Potential Outcomes Framework</strong> (originated by Neyman and Rubin). Imagine observing a single individual, district, or firm \(i\):
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card" style="text-align: center;">
+          <div style="font-size: var(--text-xs); font-weight: 700; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Universe A (Treated: \(D_i = 1\))</div>
+          <div style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 6px; color: var(--text-primary);">\(Y_i(1)\)</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.5;">Outcome when unit \(i\) receives treatment (e.g. Student enrolled in a small class size of 15).</div>
+        </div>
+
+        <div class="study-card" style="text-align: center;">
+          <div style="font-size: var(--text-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Universe B (Control: \(D_i = 0\))</div>
+          <div style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 6px; color: var(--text-primary);">\(Y_i(0)\)</div>
+          <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.5;">Outcome when unit \(i\) does not receive treatment (e.g. Exact same student in a regular class size of 28).</div>
+        </div>
+      </div>
+
+      <p>
+        The <strong>true causal effect</strong> of the treatment for unit \(i\) is defined as:
+      </p>
+
+      <!-- Equation Box: Causal Treatment Effect -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Causal Effect</span>
+          <span class="equation-title">Potential Outcomes Framework</span>
+        </div>
+        <div class="equation-main">
+          \[ \tau_i = Y_i(1) - Y_i(0) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\tau_i\)</span>
+              <span class="symbol-desc">True causal treatment effect for individual unit \(i\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(Y_i(1)\)</span>
+              <span class="symbol-desc">Potential outcome if treated (Universe A)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(Y_i(0)\)</span>
+              <span class="symbol-desc">Potential outcome if untreated / control (Universe B)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="common-mistake" style="margin: var(--space-md) 0;">
+        <div class="mistake-header">
+          <span>⚠️</span>
+          <span class="mistake-title">The Fundamental Problem of Causal Inference</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; line-height: 1.65; color: var(--mistake-text);">
+          We can never observe both universes simultaneously for the same unit at the same moment in time. If student \(i\) was assigned to a small class, \(Y_i(1)\) is observed, but \(Y_i(0)\) is counterfactual (unobserved). Econometric identification strategies exist to construct credible empirical proxies for this unobserved counterfactual.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 5: Systematic Signal vs. Random Noise -->
+    <section class="lesson-section">
+      <h2>5. Systematic Signal vs. Random Noise</h2>
+      <p>
+        In physics, the equation for a falling stone in a vacuum is exact: \(s = \frac{1}{2}gt^2\). In economics, human interactions and market outcomes are never deterministic. Every econometric equation separates reality into two distinct components:
+      </p>
+
+      <!-- Equation Box: Econometric Model Signal vs Noise -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Structural Model</span>
+          <span class="equation-title">Decomposition of Economic Reality</span>
+        </div>
+        <div class="equation-main">
+          \[ y_i = \underbrace{f(x_i)}_{\text{Systematic Component (Signal)}} + \underbrace{\varepsilon_i}_{\text{Random Disturbance (Noise)}} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y_i\)</span>
+              <span class="symbol-desc">Dependent variable: observed economic outcome (wage, test score, output)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(f(x_i)\)</span>
+              <span class="symbol-desc">Systematic relationship dictated by economic theory (e.g. \(\beta_1 + \beta_2 x_i\))</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon_i\)</span>
+              <span class="symbol-desc">Random disturbance: omitted variables, measurement error, idiosyncratic noise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "Because modern AI and Machine Learning can predict economic outcomes with tiny errors, we no longer need econometrics or causal identification."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> Predictive algorithms rely entirely on correlation remaining stable. If a government or business changes a policy (e.g., changes tax rates or subsidizes tuition), the historical correlation breaks down (the <em>Lucas Critique</em>). Only causal econometrics can forecast the impact of unprecedented interventions!
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: 0.95rem; font-weight: 700;">The Prediction vs. Causation Paradox</span>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.65; margin: 0; color: var(--ai-box-text);">
+        Imagine an AI model predicting house fires. It discovers that the presence of 10+ fire trucks at an address is correlated with $500,000 in structural damage. If treated as a causal model, a city council would conclude: <em>"To cut property damage, we should ban fire trucks from attending fires."</em> Econometrics teaches you to recognize when an algorithm is confusing symptoms with causes.
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> A central bank uses a high-dimensional neural network to forecast GDP growth next quarter using 400 financial indicators. Is this primarily a causal investigation or a prediction task? If the central bank suddenly decides to raise interest rates by 150 basis points, can it blindly trust this neural network's forecast?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint1">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol1">Show Solution</button>
+        </div>
+        <div id="hint1" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Think about whether the central bank is simply observing the existing economic momentum or actively altering the rules through a major structural policy change.
+          </p>
+        </div>
+        <div id="sol1" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            1. Forecasting GDP from 400 indicators under normal conditions is a <strong>prediction task</strong>. It exploits statistical correlations across historical time series without needing to isolate structural causality.<br>
+            2. <strong>No</strong>, it cannot blindly trust the model after a 150 bps rate hike! That rate hike is an active policy intervention. Unless the model has correctly isolated the <em>causal monetary transmission mechanism</em>, the sudden policy shift alters economic expectations and historical correlations (Lucas Critique), rendering purely predictive models unreliable.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 1.1 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Econometrics bridges theoretical economic concepts and messy empirical data. It serves two distinct purposes: <strong>causal questions</strong> (which require counterfactual reasoning and <em>ceteris paribus</em>) and <strong>predictive tasks</strong> (which optimize correlation for forecasting). Next, we explore the famous class-size vs test-score dilemma and how confounding variables distort empirical relationships.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Module 01</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="1" style="align-self: center;">
+          ✓ Mark Lesson 1 Complete
+        </button>
+        <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Correlation &amp; Causation</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

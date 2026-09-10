@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.3: Projection & Residual-Maker Matrices — EcoIntuition Academy</title>
+  <meta name="description" content="Explore the projection matrix P and residual-maker matrix M as geometric linear operators: idempotence, symmetry, and the orthogonal decomposition y = Py + My.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 8 &middot; Projection &amp; Residual-Maker Matrices</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">37.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 37.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.3</span>
+        <span class="badge">Linear Operators</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Projection &amp; Residual-Maker Matrices
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Explore \(P\) and \(M\) as geometric matrix operators: mapping vectors onto the regressor subspace, extracting orthogonal residuals, and examining their fundamental idempotent and symmetric algebraic properties.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define the projection matrix \(P = X(X'X)^{-1}X'\) and prove why \(\hat{y} = Py\).</li>
+        <li>Define the residual-maker matrix \(M = I - P\) and prove why \(e = My\).</li>
+        <li>Express the fundamental regression decomposition in operator form: \(y = Py + My = \hat{y} + e\).</li>
+        <li>Understand and verify the algebraic properties of genuine projection operators: idempotence (\(P^2 = P, M^2 = M\)) and symmetry (\(P' = P, M' = M\)).</li>
+        <li>Demonstrate that \(PM = MP = 0\), establishing mutual orthogonality.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Operators P and M -->
+    <section class="lesson-section">
+      <h2>1. The Two Fundamental Linear Operators</h2>
+      <p>
+        The geometry of OLS suggests two very special \(n \times n\) linear operators:
+      </p>
+      <ul>
+        <li><strong>The Projection Matrix (\(P\)):</strong> Keeps only the component of a vector that lives in the subspace spanned by \(X\) (\(\text{Col}(X)\)).</li>
+        <li><strong>The Residual-Maker Matrix (\(M\)):</strong> Strips away any component in \(\text{Col}(X)\) and leaves only the component that is orthogonal to that subspace.</li>
+      </ul>
+
+      <!-- Reusable Equation Box: Projection Matrix P -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">PROJECTION OPERATOR</span>
+          <span class="equation-title">The Projection Matrix P ("Hat Matrix")</span>
+        </div>
+        <div class="equation-main">
+          $$P = X(X'X)^{-1}X' \implies \hat{y} = Py$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(P \in \mathbb{R}^{n \times n}\)</span>
+                <span class="symbol-desc"><strong>Projection matrix:</strong> Linear operator mapping any vector in \(\mathbb{R}^n\) onto \(\text{Col}(X)\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(\hat{y} = Py\)</span>
+                <span class="symbol-desc"><strong>Fitted vector:</strong> Since \(\hat{\beta} = (X'X)^{-1}X'y\), \(Py = X(X'X)^{-1}X'y = X\hat{\beta}\)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: var(--space-md);">
+        The <strong>residual-maker matrix</strong> \(M\) is defined by subtracting \(P\) from the identity operator:
+      </p>
+
+      <!-- Reusable Equation Box: Residual-Maker Matrix M -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">RESIDUAL-MAKER OPERATOR</span>
+          <span class="equation-title">The Annihilator Matrix M</span>
+        </div>
+        <div class="equation-main">
+          $$M = I_n - P = I_n - X(X'X)^{-1}X' \implies e = My$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">
+            <span class="where-label">WHERE</span>
+            <div class="symbol-grid">
+              <div class="symbol-row">
+                <span class="symbol-name">\(M \in \mathbb{R}^{n \times n}\)</span>
+                <span class="symbol-desc"><strong>Residual-maker matrix:</strong> Projects any vector onto the orthogonal complement \(\text{Col}(X)^\perp\)</span>
+              </div>
+              <div class="symbol-row">
+                <span class="symbol-name">\(e = My\)</span>
+                <span class="symbol-desc"><strong>Sample residual vector:</strong> \(My = (I - P)y = y - Py = y - \hat{y}\)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Compact Regression Decomposition -->
+    <section class="lesson-section">
+      <h2>2. Compact Regression Decomposition</h2>
+      <p>
+        In perfectly compact operator form, every observed outcome vector \(y\) is partitioned into its explained and unexplained components:
+      </p>
+      
+      <div class="math-scroll-box" style="font-size: 1.15rem; text-align: center; padding: var(--space-md);">
+        $$y = \underbrace{Py}_{\hat{y} \in \text{Col}(X)} + \underbrace{My}_{e \perp \text{Col}(X)}$$
+      </div>
+
+      <p>
+        Because \(P + M = P + (I - P) = I\), the two operators completely partition the \(n\)-dimensional observation space into two mutually orthogonal vector subspaces.
+      </p>
+    </section>
+
+    <!-- Section 3: Operator Properties -->
+    <section class="lesson-section">
+      <h2>3. Algebraic Properties of Orthogonal Projection Operators</h2>
+      <p>
+        Under the standard Euclidean inner product, a real square matrix represents an <strong>orthogonal projection</strong> if and only if it is both <em>idempotent</em> and <em>symmetric</em>. Both \(P\) and \(M\) satisfy these fundamental properties:
+      </p>
+
+      <!-- Balanced 2x2 Property Grid -->
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin: var(--space-md) 0;" class="symbol-grid">
+        
+        <!-- Idempotence Card -->
+        <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: 0; background: var(--surface);">
+          <h4 style="margin: 0 0 6px 0; color: var(--color-primary); font-size: 0.92rem; font-weight: 700;">
+            1. IDEMPOTENCE
+          </h4>
+          <div style="font-size: 1.05rem; font-weight: 600; margin: 4px 0 8px 0; color: var(--text-primary);">
+            \[P^2 = P \quad \text{and} \quad M^2 = M\]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);">
+            <strong>Meaning:</strong> Applying the same projection twice gives the same result as applying it once. Once a point's shadow is cast onto the subspace \(\operatorname{Col}(X)\), projecting the shadow again changes nothing.
+          </p>
+        </div>
+
+        <!-- Symmetry Card -->
+        <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: 0; background: var(--surface);">
+          <h4 style="margin: 0 0 6px 0; color: var(--color-primary); font-size: 0.92rem; font-weight: 700;">
+            2. SYMMETRY
+          </h4>
+          <div style="font-size: 1.05rem; font-weight: 600; margin: 4px 0 8px 0; color: var(--text-primary);">
+            \[P' = P \quad \text{and} \quad M' = M\]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);">
+            <strong>Meaning:</strong> Both operators equal their transposes. Under the Euclidean inner product, symmetry ensures that projection lines meet the subspace at exact \(90^\circ\) angles, minimizing distance.
+          </p>
+        </div>
+
+        <!-- Orthogonality Card -->
+        <div class="study-card" style="border-left: 4px solid #059669; margin: 0; background: var(--surface);">
+          <h4 style="margin: 0 0 6px 0; color: #047857; font-size: 0.92rem; font-weight: 700;">
+            3. COMPLEMENTARY DECOMPOSITION
+          </h4>
+          <div style="font-size: 1.05rem; font-weight: 600; margin: 4px 0 8px 0; color: var(--text-primary);">
+            \[PM = MP = \mathbf{0}\]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);">
+            <strong>Meaning:</strong> The fitted component \(\hat{y} = Py\) and residual vector \(e = My\) lie in mutually orthogonal subspaces. Their inner product is identically zero: \(\hat{y}'e = y'P'My = \mathbf{0}\).
+          </p>
+        </div>
+
+        <!-- Trace & Rank Card -->
+        <div class="study-card" style="border-left: 4px solid #059669; margin: 0; background: var(--surface);">
+          <h4 style="margin: 0 0 6px 0; color: #047857; font-size: 0.92rem; font-weight: 700;">
+            4. TRACE &amp; RANK
+          </h4>
+          <div style="font-size: 1.05rem; font-weight: 600; margin: 4px 0 8px 0; color: var(--text-primary);">
+            \[\operatorname{tr}(P) = k, \quad \operatorname{tr}(M) = n - k\]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);">
+            <strong>Meaning:</strong> The trace of an idempotent matrix equals its rank. \(P\) projects onto the \(k\)-dimensional regressor space, while \(M\) projects onto the \((n - k)\)-dimensional residual space.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Operator Toggle Widget -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Operator Lab</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">P and M Operator Decomposition Inspector</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+            <button id="btnOpP" class="btn btn-outline btn-sm">Projection P (ŷ)</button>
+            <button id="btnOpM" class="btn btn-outline btn-sm">Residual Maker M (e)</button>
+            <button id="btnOpBoth" class="btn btn-primary btn-sm active">Full Decomposition y = Py + My</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Formula & Description readouts -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md); text-align: center;">
+          <div id="operatorFormulaDisplay" style="font-size: 1.1rem; margin-bottom: 6px;">
+            $$y = Py + My = \hat{y} + e$$
+          </div>
+          <p id="operatorDescDisplay" style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Orthogonal Decomposition: Any vector y is decomposed into explained component Py and perpendicular residual My. PM = MP = 0.
+          </p>
+        </div>
+
+        <!-- SVG Stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="operatorSvg" viewBox="0 0 420 260" width="100%" height="260" style="max-width: 420px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The floor plane represents \(\text{Col}(X)\). Vector \(y\) is partitioned into blue vector \(\hat{y} = Py\) lying flat inside \(\text{Col}(X)\) and vertical dashed red vector \(e = My\) pointing straight upward.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Click "Projection P" to isolate the explained part; click "Residual Maker M" to isolate the orthogonal disturbance. In both cases, the components add up vectorially to the original vector \(y\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Whenever you see \(My\) in advanced econometrics (e.g., Frisch–Waugh–Lovell or Fixed Effects), you immediately know it means: <em>"the residuals from regressing \(y\) on \(X\)."</em></p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>\(M\) acts as a "purging filter": applying \(M\) to any vector removes all linear correlation with the columns of \(X\).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Toggle between <strong>[Projection P]</strong>, <strong>[Residual Maker M]</strong>, and <strong>[Both: Py + My]</strong>. Observe how \(P\) and \(M\) partition observation space into two orthogonal complements where \(PM = MP = \mathbf{0}\).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-02.html" class="btn btn-outline">← Lesson 2.2: Deriving Normal Equations</a>
+      <a href="lesson-04.html" class="btn btn-primary">Next: Lesson 2.4 Residual Orthogonality &amp; the Constant Term →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

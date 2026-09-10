@@ -1,0 +1,293 @@
+/* ==========================================================================
+   RESPONSIVE LAYOUT & MEDIA QUERIES
+   EcoIntuition Academy — Econometrics with AI
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DESKTOP & LARGE LAPTOPS (<= 1280px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1280px) {
+  .hero-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-xl);
+  }
+
+  .concepts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .thinking-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .why-ai-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resources-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLET LANDSCAPE & COMPACT LAPTOPS (<= 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 64px;
+    --main-nav-height: 64px;
+    --module-bar-height: 56px;
+    --total-sticky-offset: calc(var(--main-nav-height) + var(--module-bar-height));
+    --sidebar-width: 260px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .hero-econometric-card {
+    max-width: 620px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .modules-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .thinking-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .chart-explanations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLET PORTRAIT & MEDIUM SCREENS (<= 860px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* Navigation Bar Mobile Menu */
+  .mobile-nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-direction: column;
+    padding: var(--space-md) var(--space-lg);
+    gap: 0.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+  }
+
+  .nav-item-link {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Top Lesson Nav & Main Content Adjustments */
+  .top-lesson-nav-inner {
+    padding: 0.6rem var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .lesson-content-area,
+  .lesson-content {
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .chart-canvas-container,
+  .chart-container {
+    height: 260px;
+  }
+
+  .lab-controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mistake-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE PHONES (<= 640px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .section-wrapper {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-section {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .concepts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .thinking-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-ai-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .synthesis-equation {
+    font-size: var(--text-sm);
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .footer-nav-col {
+    gap: var(--space-lg);
+    width: 100%;
+  }
+
+  .lesson-title-main {
+    font-size: var(--text-xl);
+  }
+
+  .lesson-header-card,
+  .lesson-header-block {
+    margin-bottom: var(--space-lg);
+  }
+
+  .formula-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-canvas-container,
+  .chart-container {
+    height: 220px;
+  }
+
+  /* Mobile Top Lesson Nav */
+  .top-lesson-nav-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem var(--space-md);
+  }
+
+  .top-nav-right {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .lesson-dropdown-menu {
+    width: calc(100vw - 32px);
+    max-width: 380px;
+    right: 0;
+    max-height: 380px;
+  }
+
+  /* Mobile Pagination */
+  .lesson-pagination {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .lesson-nav-btn {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .lesson-nav-btn.btn-next {
+    text-align: center;
+  }
+
+  /* Module 1 Landing Page Lesson Rows */
+  .module-lesson-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+
+  .lesson-row-action {
+    width: 100%;
+  }
+
+  .lesson-row-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TINY SCREENS (<= 400px e.g. 390px, 375px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+  .container {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .lesson-content-area {
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .thinking-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-topics-list {
+    grid-template-columns: 1fr;
+  }
+
+  .tier-header {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+}

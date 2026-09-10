@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.5: Means, Fitted Values & Regression Balance — EcoIntuition Academy</title>
+  <meta name="description" content="Prove why the OLS regression hyperplane passes through the sample centroid (ȳ = x̄'β̂) and why the mean of fitted values equals the mean of observed outcomes.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 8 &middot; Means, Fitted Values &amp; Regression Balance</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">62.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 62.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.5</span>
+        <span class="badge">Centroid Geometry</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Means, Fitted Values &amp; Regression Balance
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Explore the profound balancing properties of OLS with an intercept: why the fitted regression hyperplane is anchored to the sample centroid \((\bar{x}, \bar{y})\) and why the average predicted outcome always equals the average observed outcome.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Prove that the regression hyperplane crosses the sample centroid: \(\bar{y} = \bar{x}'\hat{\beta}\).</li>
+        <li>Derive why the mean of the fitted values equals the mean of the actual outcomes: \(\bar{\hat{y}} = \bar{y}\).</li>
+        <li>Trace the structural link: \(\text{Intercept Included} \implies \sum e_i = 0 \implies \bar{e} = 0 \implies \bar{\hat{y}} = \bar{y}\).</li>
+        <li>Visualize how the OLS regression line pivots around the centroid point \((\bar{x}, \bar{y})\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Passing Through the Means -->
+    <section class="lesson-section">
+      <h2>1. The Regression Hyperplane Passes Through Sample Means</h2>
+      <p>
+        In any regression model that contains an intercept constant term, a celebrated property holds: the fitted regression line passes directly through the point of sample means.
+      </p>
+      <p>
+        To see why this occurs mathematically, start from the zero-sum residual property established in Lesson 2.4:
+      </p>
+      <div class="math-scroll-box">
+        $$\sum_{i=1}^n e_i = \sum_{i=1}^n (y_i - x_i'\hat{\beta}) = 0$$
+      </div>
+      <p>
+        Expanding the summation across both terms:
+      </p>
+      <div class="math-scroll-box">
+        $$\sum_{i=1}^n y_i - \sum_{i=1}^n x_i'\hat{\beta} = 0 \implies \sum_{i=1}^n y_i = \sum_{i=1}^n x_i'\hat{\beta}$$
+      </div>
+      <p>
+        Now divide both sides by the sample size \(n\):
+      </p>
+      <div class="math-scroll-box">
+        $$\frac{1}{n} \sum_{i=1}^n y_i = \left(\frac{1}{n} \sum_{i=1}^n x_i'\right) \hat{\beta}$$
+      </div>
+      <p>
+        Recognizing the sample mean of the outcome \(\bar{y} = \frac{1}{n}\sum y_i\) and the vector of regressor sample means \(\bar{x} = \frac{1}{n}\sum x_i\), we arrive at the elegant theorem:
+      </p>
+
+      <!-- Reusable Equation Box: Passing Through Means -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">WITH AN INTERCEPT</span>
+          <span class="equation-title">Regression Through the Sample Means</span>
+        </div>
+        <div class="equation-main">
+          $$\bar{y} = \bar{x}'\hat{\beta}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\bar{y}\)</span>
+              <span class="symbol-desc">Sample mean of the observed outcome</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\bar{x}\)</span>
+              <span class="symbol-desc">Vector of regressor sample means, with leading 1 for the intercept: \([1, \bar{x}_2, \dots, \bar{x}_k]'\)</span>
+            </div>
+            <div class="symbol-row" style="grid-column: 1 / -1;">
+              <span class="symbol-name">\(\bar{x}'\hat{\beta}\)</span>
+              <span class="symbol-desc">Fitted value evaluated at the sample mean of the regressors. In simple regression, \(\hat{y}(\bar{x}) = \bar{y}\), so the fitted line passes directly through the sample-mean point \((\bar{x}, \bar{y})\).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Mean of Fitted Equals Mean of Actual -->
+    <section class="lesson-section">
+      <h2>2. Mean of Fitted Equals Mean of Observed Outcomes</h2>
+      <p>
+        A direct consequence of residual balancing with an intercept is that the average fitted prediction always equals the average actual observed value:
+      </p>
+      <div class="math-scroll-box">
+        $$y = \hat{y} + e$$
+      </div>
+      <p>
+        Taking sample averages across all \(n\) observations:
+      </p>
+      <div class="math-scroll-box">
+        $$\bar{y} = \bar{\hat{y}} + \bar{e}$$
+      </div>
+      <p>
+        Because \(\bar{e} = 0\) when an intercept is included, the residual average vanishes:
+      </p>
+
+      <!-- Reusable Equation Box: Mean Fitted Equals Mean Actual -->
+      <div class="equation-box equation-box--interpretation">
+        <div class="equation-header">
+          <span class="equation-badge">WITH AN INTERCEPT</span>
+          <span class="equation-title">Mean Fitted Value Equals Mean Actual Value</span>
+        </div>
+        <div class="equation-main">
+          $$\bar{\hat{y}} = \bar{y}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\bar{\hat{y}}\)</span>
+              <span class="symbol-desc">Sample mean of the fitted values: \(\frac{1}{n}\sum_{i=1}^n \hat{y}_i\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\bar{y}\)</span>
+              <span class="symbol-desc">Sample mean of the observed outcomes: \(\frac{1}{n}\sum_{i=1}^n y_i\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+
+      <p style="margin-top: var(--space-md);">
+        This means an OLS model with an intercept is <strong>unconditionally unbiased in sample</strong>: it never systematically over-predicts or under-predicts the aggregate level of the outcome.
+      </p>
+    </section>
+
+    <!-- Section 3: Interactive Centroid & Point of Means Visualizer -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <div>
+            <div class="lab-badge">Interactive Visualizer</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">The OLS Line Anchored to Sample Centroid (x̄, ȳ)</h3>
+          </div>
+          <span style="font-size: var(--text-xs); color: var(--text-muted);">Geometric balance verification</span>
+        </div>
+
+        <!-- Readout Bar -->
+        <div style="display: flex; gap: var(--space-md); justify-content: space-around; flex-wrap: wrap; margin-bottom: var(--space-md); background: #ffffff; padding: 10px 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Regressor Mean (\(\bar{x}\)):</span>
+            <strong id="readoutXBar" style="font-family: var(--font-mono); font-size: var(--text-base); color: #7e22ce;">4.60</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Observed Outcome Mean (\(\bar{y}\)):</span>
+            <strong id="readoutYBar" style="font-family: var(--font-mono); font-size: var(--text-base); color: #7e22ce;">6.40</strong>
+          </div>
+          <div>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); display: block;">Fitted Prediction Mean (\(\bar{\hat{y}}\)):</span>
+            <strong id="readoutFittedMean" style="font-family: var(--font-mono); font-size: var(--text-base); color: #059669;">6.40 (Exact Match)</strong>
+          </div>
+        </div>
+
+        <!-- SVG Plot Stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="meansSvg" viewBox="0 0 520 270" width="100%" height="270" style="max-width: 520px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>A scatter plot of observations (dark dots) and the fitted OLS line (blue). The purple crosshair marks the exact sample centroid \((\bar{x}, \bar{y}) = (4.6, 6.4)\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The regression line passes right through the purple centroid circle. If the slope coefficient \(\hat{\beta}_2\) changes, the line rotates around \((\bar{x}, \bar{y})\) like a fulcrum on a seesaw!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Knowing that the line crosses \((\bar{x}, \bar{y})\) provides the algebraic key to recovering the intercept: \(\hat{\beta}_1 = \bar{y} - \hat{\beta}_2\bar{x}\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>In a linear regression with an intercept, evaluating the fitted regression at the vector of sample regressor means gives the sample mean of the fitted outcomes, which equals the sample mean of \(y\). For simple regression, this corresponds geometrically to the fitted line passing through the centroid \((\bar{x}, \bar{y})\).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Check the three readouts above: notice that the sample mean of \(y\) (\(\bar{y} = 6.40\)) exactly equals the mean fitted value (\(\bar{\hat{y}} = 6.40\)). This equality holds for every OLS model that contains a constant term.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Structural Relationship Summary Card -->
+    <section class="lesson-section" style="margin-top: var(--space-xl);">
+      <h2>3. The Intercept Balancing Chain</h2>
+      
+      <div style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-lg);">
+        <h4 style="margin-top: 0; font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); font-weight: 700;">
+          WITH AN INTERCEPT INCLUDED IN THE MODEL:
+        </h4>
+        
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm); margin-top: var(--space-md); align-items: center;">
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); padding: 10px 20px; border-radius: var(--radius-sm); width: 100%; max-width: 480px; text-align: center; font-weight: 600;">
+            1. Vector of ones is in regressor subspace: \(\iota \in \text{Col}(X)\)
+          </div>
+          <div style="color: var(--text-muted);">↓</div>
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); padding: 10px 20px; border-radius: var(--radius-sm); width: 100%; max-width: 480px; text-align: center; font-weight: 600;">
+            2. First row of normal equations forces: \(\iota'e = 0 \iff \sum_{i=1}^n e_i = 0\)
+          </div>
+          <div style="color: var(--text-muted);">↓</div>
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); padding: 10px 20px; border-radius: var(--radius-sm); width: 100%; max-width: 480px; text-align: center; font-weight: 600;">
+            3. Average residual is identically zero: \(\bar{e} = 0\)
+          </div>
+          <div style="color: var(--text-muted);">↓</div>
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e3a8a; padding: 12px 24px; border-radius: var(--radius-sm); width: 100%; max-width: 480px; text-align: center; font-weight: 700;">
+            4. Mean Fitted = Mean Observed (\(\bar{\hat{y}} = \bar{y}\)) &amp; Line Crosses Centroid (\(\bar{y} = \bar{x}'\hat{\beta}\))
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-04.html" class="btn btn-outline">← Lesson 2.4: Residual Orthogonality</a>
+      <a href="lesson-06.html" class="btn btn-primary">Next: Lesson 2.6 The Frisch–Waugh–Lovell Theorem →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

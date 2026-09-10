@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.8: Orthogonal Regressors, Randomization & Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Discover how regressor orthogonality simplifies FWL partialling out, explore the experimental mechanics of randomization, and review the unified geometry of Module 2 with the comprehensive source quiz.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 8 of 8 &middot; Orthogonal Regressors, Randomization &amp; Module Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item active" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-badge">100% Complete</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.8</span>
+        <span class="badge">Capstone &amp; Review</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Orthogonal Regressors, Randomization & Module Review
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Discover what happens when regressors are mutually perpendicular: partialling out leaves coefficients completely unaltered. Connect this mathematical mechanism to the power of randomized experiments, review the unified geometric journey of Module 2, and test your mastery with the comprehensive source quiz.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Explain sample orthogonality between regressor blocks.</li>
+        <li>Use the FWL theorem to show how orthogonality simplifies partial regression.</li>
+        <li>Distinguish exact sample orthogonality from randomization-based independence.</li>
+        <li>Explain why randomized assignment helps separate treatment from pre-treatment covariates.</li>
+        <li>Describe why controls may still improve precision in randomized studies.</li>
+        <li>Review the geometric and algebraic structure of Module 2.</li>
+        <li>Synthesize your knowledge by solving the 6 foundational problem sets from the source quiz.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Orthogonal Regressors -->
+    <section class="lesson-section">
+      <h2>1. Orthogonal Regressors &amp; Subspace Perpendicularity</h2>
+      <p>
+        Consider again our partitioned regression matrix \(X = [X_1 \quad X_2]\). Suppose that the two sets of regressors are mutually orthogonal in the sample inner product:
+      </p>
+
+      <!-- Reusable Equation Box: Orthogonality Condition -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">CONDITION</span>
+          <span class="equation-title">Sample Regressor Orthogonality</span>
+        </div>
+        <div class="equation-main">
+          $$X_1' X_2 = \mathbf{0}$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(X_1'X_2 = \mathbf{0}\)</span>
+              <span class="symbol-desc">Every column of regressor block \(X_1\) has an inner product of zero with every column of \(X_2\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\operatorname{Col}(X_1) \perp \operatorname{Col}(X_2)\)</span>
+              <span class="symbol-desc">The two regression subspaces are perpendicular under the standard Euclidean inner product in \(\mathbb{R}^n\).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        This is a very strong geometric condition: it means that no component of any column in \(X_2\) lies inside the column space spanned by \(X_1\). 
+        Consequently, projecting \(X_2\) onto \(\operatorname{Col}(X_1)\) produces zero: \(P_1 X_2 = \mathbf{0}\).
+      </p>
+    </section>
+
+    <!-- Section 2: Step-by-Step Derivation of FWL Invariance -->
+    <section class="lesson-section">
+      <h2>2. FWL Simplification Under Orthogonality</h2>
+      <p>
+        Let us trace what happens when we apply the Frisch–Waugh–Lovell residual-maker matrix \(M_1\) to \(X_2\):
+      </p>
+
+      <div class="study-card" style="margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-sm) 0; color: var(--color-primary); font-size: 0.95rem;">
+          Step-by-Step Derivation of Coefficient Invariance
+        </h4>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+          <div>
+            <strong>Step 1 &middot; Expand the Operator:</strong>
+            <div class="math-scroll-box">$$X_2' M_1 = X_2' \left(I - X_1(X_1'X_1)^{-1}X_1'\right)$$</div>
+          </div>
+
+          <div>
+            <strong>Step 2 &middot; Distribute across the Parenthesis:</strong>
+            <div class="math-scroll-box">$$X_2' M_1 = X_2' - X_2' X_1 (X_1'X_1)^{-1} X_1'$$</div>
+          </div>
+
+          <div>
+            <strong>Step 3 &middot; Apply Orthogonality:</strong>
+            <p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Because \(X_1' X_2 = \mathbf{0} \implies X_2' X_1 = \mathbf{0}'\), the subtracted projection component vanishes completely:
+            </p>
+            <div class="math-scroll-box">$$\mathbf{0} \cdot (X_1'X_1)^{-1}X_1' = \mathbf{0}$$</div>
+          </div>
+
+          <div>
+            <strong>Step 4 &middot; Residualized Regressor Simplification:</strong>
+            <div class="math-scroll-box">$$X_2' M_1 = X_2' \quad \text{and} \quad M_1 X_2 = X_2$$</div>
+            <p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Partialling out \(X_1\) does not remove anything from \(X_2\), because \(X_2\) had zero overlap with \(\operatorname{Col}(X_1)\) to begin with!
+            </p>
+          </div>
+
+          <div>
+            <strong>Step 5 &middot; Plug Back into the FWL Estimator:</strong>
+            <div class="math-scroll-box">$$\hat{\beta}_2 = (X_2' M_1 X_2)^{-1} X_2' M_1 y = (X_2' X_2)^{-1} X_2' y$$</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reusable Equation Box: Invariance Theorem -->
+      <div class="equation-box equation-box--estimator">
+        <div class="equation-header">
+          <span class="equation-badge">INVARIANCE THEOREM</span>
+          <span class="equation-title">Regression Invariance Under Regressor Orthogonality</span>
+        </div>
+        <div class="equation-main">
+          $$\hat{\beta}_2 = (X_2' X_2)^{-1} X_2' y$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">Multiple Regression</span>
+              <span class="symbol-desc">The coefficient \(\hat{\beta}_2\) obtained from regressing \(y\) on \([X_1, X_2]\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">Univariate Regression</span>
+              <span class="symbol-desc">The coefficient obtained from regressing \(y\) on \(X_2\) alone, omitting \(X_1\) entirely.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: var(--space-md);">
+        <strong>In words:</strong> If \(X_1\) and \(X_2\) are sample-orthogonal, including or omitting \(X_1\) from the regression produces <em>exactly the same coefficient estimate</em> on \(X_2\).
+      </p>
+    </section>
+
+    <!-- Section 3: Randomization & Experimental Econometrics -->
+    <section class="lesson-section">
+      <h2>3. Randomization &amp; Experimental Econometrics</h2>
+      <p>
+        This mathematical result provides the primary motivation for <strong>randomized controlled trials (RCTs)</strong> in empirical economics.
+      </p>
+      <p>
+        Suppose \(X_2 = D\) is a binary treatment indicator (\(D_i \in \{0, 1\}\)), and \(X_1\) contains pre-treatment baseline characteristics (such as age, prior test scores, or baseline income).
+      </p>
+
+      <!-- Design-Based Independence Box -->
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem; letter-spacing: 0.06em; margin-bottom: 8px;">
+          DESIGN-BASED INDEPENDENCE
+        </div>
+        <p style="margin: 0 0 8px 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          Under random assignment, treatment assignment is determined by a physical randomization mechanism (such as a lottery), so \(D \perp X_{\text{pre}}\) by design.
+          In expectation, treatment status does not systematically depend on pre-treatment covariates:
+        </p>
+        <div class="math-scroll-box" style="margin: 6px 0;">
+          $$\mathbb{E}[X_{\text{pre}} \mid D = 1] = \mathbb{E}[X_{\text{pre}} \mid D = 0]$$
+        </div>
+        <p style="margin: 8px 0 0 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          In finite samples, chance imbalance can still occur. As sample size grows under standard randomized designs, these imbalances typically become small.
+        </p>
+      </div>
+
+      <!-- Common Mistake Card -->
+      <div class="study-card common-mistake-card" style="border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.04); margin: var(--space-md) 0;">
+        <div style="font-weight: 700; color: #dc2626; font-size: 0.85rem; margin-bottom: 4px;">⚠️ COMMON MISTAKE</div>
+        <p style="margin: 0 0 8px 0; font-weight: 600; color: var(--text-primary);">
+          “Random assignment guarantees exact sample orthogonality between treatment and every baseline covariate.”
+        </p>
+        <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+          <strong>Correction:</strong> Random assignment guarantees independence by design, not exact equality of realized sample covariate means in every finite sample. Chance imbalance can remain.
+        </p>
+      </div>
+
+      <!-- Critical Intercept Caveat -->
+      <div class="study-card" style="border-left: 4px solid #d97706; margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: #b45309; font-size: 0.92rem; font-weight: 700;">
+          Important Mathematical Caveat: Uncentered Variables &amp; the Intercept
+        </h4>
+        <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+          If \(X_1\) includes an intercept column of ones \(\iota\), then \(\iota'D = \sum_{i=1}^n D_i = n_1\) (the total number of treated units), which is strictly positive! 
+          Furthermore, for an uncentered binary indicator \(D\) and non-negative covariate \(X\), \(\mathbb{E}[XD] = \mathbb{E}[X]\mathbb{E}[D] = p\mathbb{E}[X] \neq 0\).<br>
+          What converges to zero under independence is the <strong>sample covariance</strong>:
+          \[\frac{1}{n} \sum_{i=1}^n (D_i - \bar{D})(X_i - \bar{X}) \xrightarrow{p} 0\]
+          Therefore, in empirical work, we evaluate orthogonality after mean-centering or partialling out the intercept.
+        </p>
+      </div>
+
+      <h3>Difference in Means &amp; the Average Treatment Effect</h3>
+      <p>
+        Under randomized treatment assignment, the treated-control difference in mean outcomes provides an unbiased estimator of the average treatment effect under the randomization design:
+      </p>
+      <div class="math-scroll-box">
+        $$\hat{\tau} = \bar{y}_{D=1} - \bar{y}_{D=0}$$
+      </div>
+
+      <h3>Why Include Controls in Randomized Experiments?</h3>
+      <p>
+        If the simple difference in means is already unbiased, why do researchers include pre-treatment controls \(X_1\)?
+      </p>
+      <ul style="line-height: 1.65; color: var(--text-secondary); margin-bottom: var(--space-md);">
+        <li>
+          <strong>Precision &amp; Variance Reduction:</strong> Including strong pre-treatment predictors of the outcome can improve precision by explaining outcome variation that is unrelated to treatment. However, the amount of precision improvement depends on the covariates and specification.
+        </li>
+        <li>
+          <strong>Adjusting for Chance Imbalance:</strong> In any single finite sample, random assignment may leave small chance differences in baseline covariates between treatment and control groups; controlling for \(X_1\) explicitly adjusts for these realized differences.
+        </li>
+      </ul>
+
+      <!-- Randomization + FWL Connection -->
+      <div class="study-card" style="border-left: 4px solid #059669; margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: #047857; font-size: 0.92rem; font-weight: 700;">
+          The Randomization + FWL Connection
+        </h4>
+        <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+          FWL tells us that the treatment coefficient depends on the component of treatment remaining after projecting treatment on the controls.
+          Under random assignment, treatment is unrelated in expectation to pre-treatment covariates.
+          Therefore, in well-balanced randomized samples, residualizing treatment on those controls typically changes the treatment variation only modestly.
+          This provides the core intuition for why treatment-effect estimates can remain similar with or without baseline controls, while precision may change.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: Module 2 Master Review Map -->
+    <section class="lesson-section">
+      <h2>4. Module 2 Master Geometry &amp; Algebra Knowledge Map</h2>
+      <p>
+        Here is the unified mathematical and geometric architecture developed throughout Module 2:
+      </p>
+
+      <div class="study-card" style="background: var(--surface); padding: var(--space-lg); border: 1.5px solid var(--border-subtle); margin: var(--space-lg) 0;">
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm); align-items: stretch; max-width: 680px; margin: 0 auto;">
+
+          <!-- Node 1 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Observed Outcome Vector</div>
+            <div style="font-size: 1.1rem; font-weight: 600; margin-top: 2px;">\(y \in \mathbb{R}^n\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 2 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Regression Subspace</div>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-top: 2px;">\(\operatorname{Col}(X) = \operatorname{span}\{x_1, \dots, x_k\} \subset \mathbb{R}^n\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 3 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Orthogonal Projection &amp; Residual Split</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px;">
+              \(\hat{y} = Py = X(X'X)^{-1}X'y \quad \text{and} \quad e = My = (I - P)y\)
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+              \(P^2 = P, \; P' = P \quad \text{and} \quad M^2 = M, \; M' = M\)
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 4 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Normal Equations &amp; Orthogonality</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px;">
+              \(X'X\hat{\beta} = X'y \iff X'e = \mathbf{0}\)
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+              Residual vector \(e\) is perpendicular to every column of \(X\)
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 5 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Balancing Properties (With Intercept \(\iota\))</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px;">
+              \(\iota'e = \sum e_i = 0 \implies \bar{e} = 0 \implies \bar{\hat{y}} = \bar{y} \quad \text{and} \quad \bar{y} = \bar{x}'\hat{\beta}\)
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 6 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Frisch–Waugh–Lovell Theorem</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px;">
+              \(y^* = M_1 y, \; X_2^* = M_1 X_2 \implies \hat{\beta}_2 = (X_2^{*\prime} X_2^*)^{-1} X_2^{*\prime} y^*\)
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+              Purge the linear projection on controls \(X_1\) from both outcome and target regressor
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 7 -->
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">Demeaning &amp; Covariance Form</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px;">
+              \(M_0 z = z - \bar{z}\iota \implies \hat{\beta}_1 = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2} = \frac{\widehat{\operatorname{Cov}}(x,y)}{\widehat{\operatorname{Var}}(x)}\)
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <!-- Node 8 -->
+          <div style="background: rgba(5, 150, 105, 0.06); border: 1.5px solid #059669; border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+            <div style="font-weight: 700; color: #059669; font-size: 0.85rem;">Regressor Orthogonality &amp; Randomization</div>
+            <div style="font-size: 1rem; font-weight: 600; margin-top: 2px; color: var(--text-primary);">
+              \(X_1' X_2 = \mathbf{0} \implies X_2' M_1 = X_2' \implies \hat{\beta}_2 = (X_2' X_2)^{-1} X_2' y\)
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+              Treatment effects remain stable whether controls are included or omitted
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: The Source Quiz -->
+    <section class="lesson-section" id="sourceQuizSection">
+      <h2>5. Module 2 Source Quiz &amp; Derivations</h2>
+      <p>
+        These six comprehensive problem sets are taken directly from the primary source document (<code>Econometrics 2.docx</code>). They test rigorous geometric intuition, matrix derivations, and econometric reasoning. Work through each problem before revealing the hints and full derivations.
+      </p>
+
+      <!-- Quiz Item 1: Projection Intuition -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 1</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Projection Intuition</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          1. Geometric Projection &amp; Residual Orthogonality
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p><strong>(a)</strong> Explain in your own words why the OLS fitted values \(X\hat{\beta}\) can be viewed as the orthogonal projection of \(y\) onto the space spanned by the columns of \(X\).</p>
+          <p><strong>(b)</strong> Why must the residual vector \(e\) be orthogonal to every column of \(X\) in that picture?</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q1">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q1">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q1" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> Think of \(\mathbb{R}^n\) as the universe of all possible outcome vectors. The columns of \(X\) form a flat hyperplane \(\operatorname{Col}(X)\). Under Euclidean distance, what is the shortest path from a point outside a plane to a point on that plane?
+        </div>
+
+        <div id="sol-q1" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> Any candidate fitted vector is a linear combination of the columns of \(X\), so \(Xb \in \operatorname{Col}(X)\). The OLS criterion minimizes the squared Euclidean distance \(\|y - Xb\|^2 = \sum (y_i - x_i'b)^2\). In Euclidean geometry, the unique point on a linear subspace closest to an exterior point \(y\) is the orthogonal projection \(\hat{y}\). Thus, \(\hat{y} = X\hat{\beta}\) is the orthogonal shadow of \(y\) on \(\operatorname{Col}(X)\).</p>
+          <p><strong>(b)</strong> The residual vector is the geometric difference vector \(e = y - \hat{y}\). If \(e\) were not orthogonal to \(\operatorname{Col}(X)\), it would have a non-zero component lying inside \(\operatorname{Col}(X)\). We could then add that component to \(\hat{y}\) and strictly decrease the distance to \(y\), violating the assumption that \(\hat{y}\) is already the closest point. Therefore, the shortest distance vector must be strictly perpendicular to every basis direction of the subspace: \(x_j' e = 0\) for all \(j=1,\dots,k\).</p>
+        </div>
+      </div>
+
+      <!-- Quiz Item 2: Normal Equations and Residuals -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 2</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Normal Equations &amp; Residuals</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          2. Normal Equations Derivation &amp; Residual Matrix Algebra
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p><strong>(a)</strong> Starting from \(S(b)=(y-Xb)'(y-Xb)\), show every algebraic step needed to reach the normal equations \(X'X\hat{\beta}=X'y\).</p>
+          <p><strong>(b)</strong> Using the normal equations, derive the relation \(X'e=0\), and interpret this condition both algebraically and geometrically.</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q2">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q2">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q2" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> For (a), expand the quadratic form using transpose rules and note that \(b'X'y\) is a \(1 \times 1\) scalar. For (b), substitute \(e = y - X\hat{\beta}\) into \(X'e\).
+        </div>
+
+        <div id="sol-q2" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> Expanding the quadratic objective:
+            \[
+            S(b) = y'y - b'X'y - y'Xb + b'X'Xb
+            \]
+            Since \(b'X'y = (b'X'y)' = y'Xb\) is a scalar, the cross-terms combine:
+            \[
+            S(b) = y'y - 2b'X'y + b'X'Xb
+            \]
+            Taking the gradient with respect to vector \(b\):
+            \[
+            \frac{\partial S(b)}{\partial b} = -2X'y + 2X'Xb
+            \]
+            Setting the gradient to zero at the optimal candidate \(b = \hat{\beta}\):
+            \[
+            -2X'y + 2X'X\hat{\beta} = \mathbf{0} \implies X'X\hat{\beta} = X'y
+            \]
+          </p>
+          <p><strong>(b)</strong> Subtract \(X'X\hat{\beta}\) from both sides or factor:
+            \[
+            X'y - X'X\hat{\beta} = \mathbf{0} \implies X'(y - X\hat{\beta}) = \mathbf{0} \implies X'e = \mathbf{0}
+            \]
+            <strong>Algebraic interpretation:</strong> Writing \(X'e\) row by row: \(x_j' e = \sum_{i=1}^n x_{ij} e_i = 0\) for each regressor column \(j=1,\dots,k\). The sample inner product between each regressor and the residual is zero.<br>
+            <strong>Geometric interpretation:</strong> The residual vector \(e\) is perpendicular (\(90^\circ\) angle) to every column of \(X\), and thus to the subspace \(\operatorname{Col}(X)\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Quiz Item 3: Means, Constants, and Balancing -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 3</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Means, Constants &amp; Balancing</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          3. Sample Centroid &amp; Mean Fitted Equality
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p><strong>(a)</strong> In a single regressor model with constant, prove that the regression line passes through \((\bar{x}, \bar{y})\).</p>
+          <p><strong>(b)</strong> For a multiple regression with a constant term, derive \(\bar{\hat{y}}=\bar{y}\) and interpret what this says about the relationship between the sample mean of the outcome and the fitted model.</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q3">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q3">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q3" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> What equation do you get when you set the derivative with respect to the intercept \(\hat{\beta}_0\) to zero? Use \(\sum e_i = 0\).
+        </div>
+
+        <div id="sol-q3" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> The normal equation corresponding to the constant column \(\iota\) is \(\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0\). Dividing the entire sum by sample size \(n\):
+            \[
+            \frac{1}{n}\sum y_i - \hat{\beta}_0 - \hat{\beta}_1 \left(\frac{1}{n}\sum x_i\right) = 0 \implies \bar{y} - \hat{\beta}_0 - \hat{\beta}_1 \bar{x} = 0 \implies \bar{y} = \hat{\beta}_0 + \hat{\beta}_1 \bar{x}
+            \]
+            This confirms that evaluating the fitted regression line at \(x = \bar{x}\) produces exactly \(\hat{y} = \bar{y}\). The fitted line passes through the sample-mean centroid point.</p>
+          <p><strong>(b)</strong> Each observation decomposes as \(y_i = \hat{y}_i + e_i\). Summing over all \(n\) observations:
+            \[
+            \sum_{i=1}^n y_i = \sum_{i=1}^n \hat{y}_i + \sum_{i=1}^n e_i
+            \]
+            Because an intercept is included, \(\iota'e = \sum e_i = 0\). Thus:
+            \[
+            \sum_{i=1}^n y_i = \sum_{i=1}^n \hat{y}_i \implies \frac{1}{n}\sum y_i = \frac{1}{n}\sum \hat{y}_i \implies \bar{y} = \bar{\hat{y}}
+            \]
+            <strong>Interpretation:</strong> The model neither overpredicts nor underpredicts the outcome in aggregate. The fitted model is globally unbiased on the sample.</p>
+        </div>
+      </div>
+
+      <!-- Quiz Item 4: FWL Mechanics -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 4</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">FWL Mechanics</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          4. Frisch–Waugh–Lovell Residualization Steps
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p>Consider the model \(y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon\). Describe in detail:</p>
+          <p><strong>(a)</strong> How to compute the residuals \(y^*\) and \(X_2^*\) that are orthogonal to \(X_1\).</p>
+          <p><strong>(b)</strong> How to obtain \(\hat{\beta}_2\) from a regression of \(y^*\) on \(X_2^*\), and why this is equal to the coefficient on \(X_2\) in the full regression.</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q4">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q4">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q4" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> Remember that the control block includes both the constant and \(X_1\): \(W_1 = [\iota \quad X_1]\). Apply its residual-maker matrix \(M_1\).
+        </div>
+
+        <div id="sol-q4" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> Define the control matrix \(W_1 = [\iota \quad X_1]\) and its residual-maker matrix \(M_1 = I - W_1(W_1'W_1)^{-1}W_1'\).
+            <ol style="margin-top: 4px;">
+              <li>Regress \(y\) on \(W_1\) and collect residuals: \(y^* = M_1 y = y - W_1(W_1'W_1)^{-1}W_1'y\).</li>
+              <li>Regress \(X_2\) on \(W_1\) and collect residuals: \(X_2^* = M_1 X_2 = X_2 - W_1(W_1'W_1)^{-1}W_1'X_2\).</li>
+            </ol>
+            Both \(y^*\) and \(X_2^*\) are orthogonal to \(\operatorname{Col}(W_1)\) and satisfy \(W_1'y^* = \mathbf{0}\) and \(W_1'X_2^* = \mathbf{0}\).
+          </p>
+          <p><strong>(b)</strong> Regress \(y^*\) on \(X_2^*\) via OLS without controls:
+            \[
+            \hat{\beta}_2 = (X_2^{*\prime} X_2^*)^{-1} X_2^{*\prime} y^*
+            \]
+            By substituting \(y^* = M_1 y\) and \(X_2^* = M_1 X_2\) and using the idempotence and symmetry of \(M_1\) (\(M_1'M_1 = M_1\)):
+            \[
+            (X_2' M_1' M_1 X_2)^{-1} X_2' M_1' M_1 y = (X_2' M_1 X_2)^{-1} X_2' M_1 y
+            \]
+            This formula matches the algebraic solution for the second block of coefficients from the partitioned normal equations of the full regression \([W_1 \quad X_2]\). Thus, \(\hat{\beta}_2\) isolates the unique partial association between \(X_2\) and \(y\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Quiz Item 5: Demeaning and Covariance Form -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 5</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Demeaning &amp; Covariance Form</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          5. Demeaning Operator &amp; Co-Movement Slope Form
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p><strong>(a)</strong> Show that regressing \(y\) on \(x\) is equivalent to regressing \(y-\bar{y}\) on \(x-\bar{x}\) without an intercept, and write explicitly how the constant term can be recovered afterward.</p>
+          <p><strong>(b)</strong> Derive the formula \(\hat{\beta}_1 = \frac{\operatorname{Cov}[x,y]}{\operatorname{Var}[x]}\) in simple regression and interpret what it means about the slope being a measure of co-movement.</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q5">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q5">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q5" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> Apply FWL where the control block is just the constant column \(\iota\). Note that \(M_0 = I - \frac{1}{n}\iota\iota'\). For (b), divide numerator and denominator by \(n-1\).
+        </div>
+
+        <div id="sol-q5" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> In FWL, let the controls consist only of the constant column \(\iota\). The residual-maker is \(M_0 = I - \iota(\iota'\iota)^{-1}\iota' = I - \frac{1}{n}\iota\iota'\). Applying \(M_0\) to any vector \(z\) gives:
+            \[
+            M_0 z = z - \left(\frac{1}{n}\sum z_i\right)\iota = z - \bar{z}\iota
+            \]
+            By FWL, the slope coefficient on \(x\) in the full model is identical to the univariate regression of \(y^* = M_0 y\) on \(x^* = M_0 x\) without an intercept:
+            \[
+            \hat{\beta}_1 = (x^{*\prime} x^*)^{-1} x^{*\prime} y^* = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2}
+            \]
+            The intercept is recovered afterward from the regression-through-means condition: \(\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}\).</p>
+          <p><strong>(b)</strong> Dividing numerator and denominator by \(n-1\):
+            \[
+            \hat{\beta}_1 = \frac{\frac{1}{n-1}\sum (x_i - \bar{x})(y_i - \bar{y})}{\frac{1}{n-1}\sum (x_i - \bar{x})^2} = \frac{\widehat{\operatorname{Cov}}(x,y)}{\widehat{\operatorname{Var}}(x)}
+            \]
+            <strong>Interpretation:</strong> The numerator measures sample co-movement between \(x\) and \(y\). The denominator measures the dispersion of \(x\) on its own. The slope is not a unitless correlation; rather, it scales the co-movement per unit of variation in \(x\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Quiz Item 6: Orthogonality and Randomized Experiments -->
+      <div class="study-card quiz-card" style="margin-bottom: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs);">
+          <span class="quiz-item-badge" style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">PROBLEM SET 6</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Orthogonality &amp; Randomization</span>
+        </div>
+
+        <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.05rem; color: var(--text-primary);">
+          6. Regressor Orthogonality &amp; Experimental Causal Identification
+        </h3>
+
+        <div style="margin-bottom: var(--space-md); line-height: 1.6; color: var(--text-secondary); font-size: 0.92rem;">
+          <p><strong>(a)</strong> Suppose regressors are partitioned into \(X_1\) and a treatment indicator \(D\), and assume \(X_1'D = 0\). Show rigorously that the coefficient on \(D\) is the same in the regressions \(y \sim D\) and \(y \sim X_1 + D\).</p>
+          <p><strong>(b)</strong> Using this, give a careful explanation of why random assignment of a treatment makes simple differences in means a valid estimator of the average treatment effect, even if many other covariates could in principle be controlled for.</p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm hint-toggle" data-target="hint-q6">Show Hint</button>
+          <button type="button" class="btn btn-primary btn-sm solution-toggle" data-target="sol-q6">Show Full Solution</button>
+        </div>
+
+        <div id="hint-q6" class="hint-box" style="display: none; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: var(--space-md); margin-bottom: var(--space-sm); border-radius: 4px; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong>Hint:</strong> Use \(D'M_1 = D'\) when \(X_1'D = 0\). For (b), explain how design independence ensures omitted variable bias vanishes asymptotically.
+        </div>
+
+        <div id="sol-q6" class="solution-box" style="display: none; background: rgba(5, 150, 105, 0.06); border-left: 3px solid #059669; padding: var(--space-md); border-radius: 4px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          <h4 style="margin: 0 0 6px 0; color: #059669; font-size: 0.95rem;">Derivation &amp; Academic Explanation</h4>
+          <p><strong>(a)</strong> In the multiple regression \(y \sim X_1 + D\), the FWL estimator for the treatment coefficient is:
+            \[
+            \hat{\beta}_D^{\text{full}} = (D' M_1 D)^{-1} D' M_1 y
+            \]
+            where \(M_1 = I - X_1(X_1'X_1)^{-1}X_1'\). Expanding \(D'M_1\):
+            \[
+            D' M_1 = D' - D'X_1(X_1'X_1)^{-1}X_1' = D' - \mathbf{0} = D'
+            \]
+            Substituting this back into the estimator:
+            \[
+            \hat{\beta}_D^{\text{full}} = (D' D)^{-1} D' y = \hat{\beta}_D^{\text{univariate}}
+            \]
+            The coefficient on \(D\) is identically equal to the estimate obtained from regressing \(y\) on \(D\) alone.</p>
+          <p><strong>(b)</strong> When treatment \(D\) is randomly assigned, the assignment process is independent of all pre-treatment characteristics \(X_1\) by design: \(\mathbb{E}[X_1 \mid D=1] = \mathbb{E}[X_1 \mid D=0]\). In expectation and in large samples, the centered covariance between \(D\) and any pre-treatment confounder is zero (\(\frac{1}{n}\sum(D_i - \bar{D})(X_{1i} - \bar{X}_1) \xrightarrow{p} \mathbf{0}\)). Therefore, omitting \(X_1\) does not introduce omitted variable bias into the treatment effect estimator. A simple difference in means (\(\bar{y}_{D=1} - \bar{y}_{D=0}\)) consistently identifies the Average Treatment Effect (ATE). Controlling for \(X_1\) is primarily useful for reducing residual variance and improving estimation precision.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: wrap; gap: var(--space-md);">
+      <a href="lesson-07.html" class="btn btn-outline">← Lesson 2.7: Demeaning &amp; Covariance Form</a>
+      <a href="index.html" class="btn btn-primary">✓ Complete Module 2 &middot; Back to Overview</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>

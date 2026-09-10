@@ -1,0 +1,2601 @@
+/* ==========================================================================
+   REUSABLE LESSON ARCHITECTURE & COMPONENTS
+   EcoIntuition Academy — Econometrics with AI
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   LESSON PAGE LAYOUT (CENTERED FULL-CONTENT — NO SIDEBAR)
+   -------------------------------------------------------------------------- */
+.lesson-layout,
+.lesson-shell {
+  display: block;
+  min-height: calc(100vh - var(--header-height, 70px));
+  position: relative;
+  background-color: var(--bg-body);
+}
+
+/* Scroll Margins for Sticky Headers Navigation Safety */
+:target,
+section,
+.lesson-section,
+h1,
+h2,
+h3,
+[id] {
+  scroll-margin-top: calc(var(--total-sticky-offset, 128px) + 1.25rem);
+}
+
+/* Centered Main Content Area */
+.lesson-content,
+.lesson-content-area,
+.lesson-container {
+  width: min(100% - 32px, 900px);
+  margin-inline: auto;
+  padding-top: 2rem; /* Clean breathing room after sticky top nav */
+  padding-bottom: var(--space-3xl);
+  min-width: 0; /* Prevents flex/grid overflow */
+}
+
+/* Wide Breakout Container for Graphs, Matrices, and Labs */
+.lesson-wide,
+.lesson-wide-container {
+  width: min(100% - 32px, 1180px);
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   TOP LESSON NAVIGATOR & DROPDOWN MENU (NO SIDEBAR)
+   -------------------------------------------------------------------------- */
+.top-lesson-nav,
+.module-topbar {
+  position: sticky;
+  top: var(--main-nav-height, var(--header-height, 70px));
+  z-index: 95;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.top-lesson-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 0.65rem var(--space-lg);
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+/* Left: Module context and Current Lesson */
+.top-nav-left,
+.module-context,
+.top-nav-module-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.top-nav-module-hierarchy {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.module-kicker,
+.module-kicker-badge,
+.top-nav-kicker,
+.module-crumb {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background-color: var(--accent-primary-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.module-kicker:hover,
+.module-kicker-badge:hover,
+.top-nav-kicker:hover,
+.module-crumb:hover {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.module-nav-title,
+.module-title-context {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-nav-current,
+.lesson-nav-current-title,
+.top-nav-lesson-title,
+.lesson-crumb-current {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-crumb-sep {
+  color: var(--border-strong);
+  margin: 0 0.25rem;
+}
+
+/* Right: Navigation Controls (View Lessons + Progress) */
+.top-nav-right,
+.top-nav-controls,
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+/* Lesson Selector / Dropdown Wrapper */
+.lesson-dropdown-wrapper,
+.lesson-dropdown-container,
+.lesson-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.lesson-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.lesson-dropdown-toggle:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.lesson-dropdown-toggle[aria-expanded="true"] {
+  background-color: var(--surface-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.lesson-dropdown-toggle svg {
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.lesson-dropdown-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Floating Dropdown Overlay (0px layout space when closed) */
+.lesson-dropdown-menu,
+.lesson-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  list-style: none;
+}
+
+.lesson-dropdown-menu.active,
+.lesson-dropdown-menu.is-open,
+.lesson-dropdown.active,
+.lesson-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dropdown-header,
+.dropdown-menu-header {
+  padding: 0.4rem 0.65rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 0.25rem;
+}
+
+.dropdown-item,
+.lesson-dropdown-item,
+.dropdown-item a,
+.lesson-dropdown-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  transition: all var(--transition-fast);
+}
+
+.dropdown-item:hover,
+.lesson-dropdown-item:hover,
+.dropdown-item a:hover,
+.lesson-dropdown-item a:hover {
+  background-color: var(--surface-hover);
+  color: var(--accent-primary);
+}
+
+.dropdown-item.current,
+.lesson-dropdown-item.current,
+.dropdown-item.current a,
+.lesson-dropdown-item.current a {
+  background-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.status-indicator,
+.lesson-dropdown-status {
+  width: 18px;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.item-title,
+.dropdown-item-title {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Progress Indicator */
+.top-nav-progress,
+.module-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 110px;
+}
+
+.progress-info-text,
+.progress-meta,
+.top-nav-progress-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.progress-percent,
+.progress-meta-pct,
+.top-nav-progress-text {
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.progress-bar-track,
+.top-nav-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--border-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar-fill,
+.top-nav-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), #3b82f6);
+  border-radius: var(--radius-pill);
+  transition: width 0.35s ease;
+}
+
+/* Completely remove the naked stepper from the document flow */
+.lesson-stepper-bar {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   PEDAGOGICAL LESSON COMPONENTS
+   -------------------------------------------------------------------------- */
+
+/* 1. Lesson Header */
+.lesson-header-card,
+.lesson-header-block,
+.lesson-header {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.lesson-meta-bar,
+.lesson-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.lesson-title-main,
+.lesson-header-block h1 {
+  font-size: clamp(2rem, 3.2vw, 2.55rem);
+  font-weight: 800;
+  line-height: 1.22;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  letter-spacing: -0.02em;
+}
+
+.lesson-intro-lead,
+.lesson-header-block p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.72;
+  max-width: 840px;
+  margin-bottom: var(--space-md);
+  font-weight: 400;
+}
+
+.lesson-header-nav-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Common Section Block Spacing & Hierarchy */
+.lesson-section,
+.lesson-block {
+  margin-bottom: clamp(3rem, 5vw, 4rem);
+  position: relative;
+}
+
+.lesson-section > h2,
+.lesson-block-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: clamp(1.45rem, 2.3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.28;
+  margin-top: 1rem;
+  margin-bottom: 1.35rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 2px solid var(--border-subtle);
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+}
+
+.lesson-section > h3,
+.lesson-subsection-title {
+  font-size: clamp(1.15rem, 1.85vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+  color: var(--text-primary);
+}
+
+.lesson-section p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+.lesson-section ul,
+.lesson-section ol {
+  margin-bottom: 1.35rem;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-size: 1.025rem;
+}
+
+.lesson-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* Reusable General Study Card */
+.study-card {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+/* Subtle Section Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+  margin: 3.5rem 0;
+  border: none;
+}
+
+/* 2. Learning Objectives Box (Stronger contrast, crisp border, academic look) */
+.objectives-card,
+.learning-objectives {
+  background-color: var(--surface);
+  border: 1.5px solid #bfdbfe;
+  border-left: 5px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: var(--space-md) 0 var(--space-xl) 0;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.objectives-card h3,
+.learning-objectives h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.objectives-card ul,
+.learning-objectives ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+}
+
+.objectives-card ul li,
+.learning-objectives ul li {
+  display: block; /* Strict block, NOT flex! Prevents text fragmentation into pseudo-columns */
+  position: relative;
+  padding-left: 1.35rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.objectives-card ul li::before,
+.learning-objectives ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0.15rem;
+  top: 0;
+  color: var(--accent-primary);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+/* 3. Why This Matters */
+.why-matters-card {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+/* 4. Intuition First Box */
+.intuition-box {
+  background-color: var(--intuition-bg);
+  border: 1px solid var(--intuition-border);
+  border-left: 4px solid var(--intuition-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  color: var(--intuition-text);
+}
+
+.intuition-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--fw-bold);
+  font-size: var(--text-md);
+  color: var(--intuition-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.intuition-box p {
+  color: inherit;
+  opacity: 0.95;
+}
+
+/* 5. Formal Definition */
+.definition-box {
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  position: relative;
+}
+
+.definition-term {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-xs);
+}
+
+/* 6. Formula Box Component (Robust, No wrap, Overflow-safe KaTeX) */
+/* --------------------------------------------------------------------------
+   6. REUSABLE EQUATION BOXES & STUDY FORMULA COMPONENTS
+   -------------------------------------------------------------------------- */
+.equation-box,
+.key-equation-card,
+.formula-box-card,
+.formula-card,
+.formula-box {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-subtle);
+  border-left: 5px solid var(--equation-accent-key);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: 1.75rem 0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Study Equation Variants */
+.equation-box--key {
+  border-left-color: var(--equation-accent-key);
+}
+
+.equation-box--estimator {
+  border-left-color: var(--equation-accent-estimator);
+}
+
+.equation-box--assumption {
+  border-left-color: var(--equation-accent-assumption);
+}
+
+.equation-box--interpretation {
+  border-left-color: var(--equation-accent-interp);
+}
+
+/* Equation Header */
+.equation-header,
+.formula-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.equation-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xs);
+  background-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+}
+
+.equation-box--estimator .equation-badge {
+  background-color: var(--accent-secondary-light);
+  color: var(--accent-secondary);
+}
+
+.equation-box--assumption .equation-badge {
+  background-color: #fffbeb;
+  color: #b45309;
+}
+
+.equation-box--interpretation .equation-badge {
+  background-color: #f0fdf4;
+  color: #15803d;
+}
+
+.equation-title,
+.formula-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Equation Body & Display Math */
+.equation-body,
+.equation-main,
+.formula-main,
+.formula-math-render,
+.math-scroll-box,
+.math-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.15rem 1rem;
+  text-align: center;
+  font-size: 1.25rem;
+  background-color: var(--equation-main-bg);
+  border: 1px solid var(--equation-main-border);
+  border-radius: var(--radius-sm);
+  margin: 0.65rem 0 1rem 0;
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+
+/* Standalone math-scroll-box styling when used outside equation boxes */
+div.math-scroll-box {
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+/* Ensure MathJax CHTML output scales responsively and never causes horizontal page overflow */
+mjx-container[jax="CHTML"] {
+  outline: none;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+  margin: 0.4em 0 !important;
+}
+
+mjx-container[jax="CHTML"]:not([display="true"]) {
+  display: inline-block;
+  vertical-align: -0.15em;
+  line-height: 1;
+}
+
+/* Equation Explainer & Symbol Breakdown */
+.equation-explainer,
+.formula-explainer {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.equation-where,
+.formula-where {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+
+.symbol-grid,
+.formula-symbol-grid,
+.equation-definitions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem 1.4rem;
+  font-size: 0.9rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-light);
+}
+
+@media (max-width: 768px) {
+  .symbol-grid,
+  .formula-symbol-grid,
+  .equation-definitions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.def-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  line-height: 1.55;
+}
+
+.def-term {
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  font-size: 0.95rem;
+}
+
+.def-desc {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.symbol-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  line-height: 1.55;
+}
+
+.symbol-name {
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  min-width: 26px;
+  flex-shrink: 0;
+}
+
+.equation-box--estimator .symbol-name {
+  color: var(--accent-secondary);
+}
+
+.equation-box--assumption .symbol-name {
+  color: #b45309;
+}
+
+.equation-box--interpretation .symbol-name {
+  color: #15803d;
+}
+
+.symbol-desc {
+  color: var(--text-secondary);
+}
+
+/* Refined Module 1 Lesson List Presentation (Requirement #12) */
+.module-lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0 var(--space-2xl) 0;
+}
+
+.module-lesson-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-xs);
+}
+
+.module-lesson-row:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
+}
+
+.module-lesson-row:hover .lesson-row-title {
+  color: var(--color-primary);
+}
+
+.module-lesson-row:hover .lesson-row-btn {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.lesson-row-num {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 32px;
+}
+
+.lesson-row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lesson-row-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 4px 0;
+  line-height: 1.35;
+}
+
+.lesson-row-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.lesson-row-action {
+  flex-shrink: 0;
+}
+
+.lesson-row-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+/* Variable Explanation Breakdown */
+.formula-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.45rem 0.65rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  font-size: var(--text-sm);
+}
+
+.breakdown-symbol {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--accent-primary);
+  background-color: var(--accent-primary-light);
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-xs);
+}
+
+.breakdown-arrow {
+  color: var(--text-light);
+}
+
+.breakdown-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* 7. Step-by-Step Derivation */
+.derivation-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.derivation-step {
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background-color: var(--accent-primary-light);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.step-math {
+  overflow-x: auto;
+  padding: var(--space-xs) 0;
+  margin: var(--space-xs) 0;
+}
+
+/* 8. Graphical Intuition Component (Controlled height, 4 mandatory areas) */
+.chart-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-canvas-container {
+  width: 100%;
+  max-width: 100%;
+  height: 320px;
+  max-height: 340px;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.chart-canvas-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 4 Mandatory Explanation Blocks */
+.chart-explanations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.chart-explanation-block {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+}
+
+.chart-explanation-block h5 {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chart-explanation-block p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 9. Worked Example */
+.worked-example-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.example-subheading {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-top: var(--space-md);
+  margin-bottom: 0.3rem;
+}
+
+.example-given-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-sm);
+  background-color: var(--surface-raised);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+/* 10. Interactive Lab Placeholder Component */
+.lab-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.lab-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background-color: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.lab-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lab-control-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.lab-slider {
+  width: 100%;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.lab-dynamic-output {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* 11. Coding Section (Tabs for Python, R, Interpretation) */
+.coding-tabs-container {
+  background-color: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.coding-tabs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--code-header-bg);
+  padding: 0 var(--space-sm);
+  border-bottom: 1px solid var(--code-border);
+}
+
+.tab-btn-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 0.75rem 1.15rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+  color: #f1f5f9;
+}
+
+.tab-btn.active {
+  color: #ffffff;
+  border-bottom-color: var(--accent-primary);
+  font-weight: var(--fw-semibold);
+}
+
+.tab-copy-btn {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tab-copy-btn:hover {
+  color: #ffffff;
+  border-color: #64748b;
+}
+
+.tab-content-panel {
+  display: none;
+  padding: var(--space-lg);
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.tab-content-panel.active {
+  display: block;
+}
+
+.tab-content-panel pre {
+  margin: 0;
+}
+
+/* 12. AI Insight Box (Refined Scholarly Violet/Purple) */
+.ai-insight-box,
+.ai-prompt-box {
+  background-color: var(--ai-box-bg);
+  border: 1.5px solid var(--ai-box-border);
+  border-left: 5px solid var(--ai-box-accent);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  color: var(--ai-box-text);
+  margin: 1.85rem 0;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.ai-insight-header,
+.ai-prompt-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ai-box-accent);
+  margin-bottom: 0.65rem;
+}
+
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background-color: #ede9fe;
+  color: #6d28d9;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xs);
+}
+
+.ai-prompt-callout {
+  background-color: var(--surface);
+  border: 1px dashed var(--ai-box-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  margin: var(--space-sm) 0;
+}
+
+/* 13. Common Mistake Box (Academic Amber, Gentle Warning) */
+.mistake-box,
+.common-mistake,
+.common-mistake-card {
+  background-color: var(--mistake-bg);
+  border: 1.5px solid var(--mistake-border);
+  border-left: 5px solid var(--mistake-accent);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: 1.85rem 0;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.mistake-header,
+.common-mistake-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--mistake-accent);
+  margin-bottom: 0.75rem;
+}
+
+.mistake-title {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.mistake-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.mistake-wrong,
+.mistake-col-wrong {
+  background-color: var(--surface);
+  border: 1.5px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.15rem;
+  color: #991b1b;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.mistake-correct,
+.mistake-col-right {
+  background-color: var(--surface);
+  border: 1.5px solid #bbf7d0;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.15rem;
+  color: #166534;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.mistake-label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.label-wrong { color: #dc2626; }
+.label-right { color: #16a34a; }
+
+/* 14. Economic Interpretation Box (Scholarly Emerald/Teal Tone) */
+.interpretation-box,
+.economic-interpretation {
+  background-color: var(--interp-bg);
+  border: 1.5px solid var(--interp-border);
+  border-left: 5px solid var(--interp-accent);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: 1.85rem 0;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.interpretation-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--interp-accent);
+  margin-bottom: 0.65rem;
+}
+
+.interpretation-box p,
+.economic-interpretation p {
+  color: var(--interp-text);
+  line-height: 1.7;
+  font-size: 0.96rem;
+  margin-bottom: 0.5rem;
+}
+
+.interpretation-box p:last-child,
+.economic-interpretation p:last-child {
+  margin-bottom: 0;
+}
+
+/* 15. Practice Section & Knowledge Check Items */
+.practice-card,
+.practice-item {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: 1.75rem 0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.practice-question {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+}
+
+.practice-actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.practice-accordion-panel,
+.practice-collapsible-content {
+  display: none;
+  margin-top: 0.85rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.practice-accordion-panel.active,
+.practice-collapsible-content.active {
+  display: block;
+}
+
+.practice-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.practice-pill {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.practice-pill.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+}
+
+.practice-question-item {
+  border-top: 1px solid var(--border-light);
+  padding: var(--space-md) 0;
+}
+
+.practice-actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.practice-collapsible-content {
+  display: none;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.practice-collapsible-content.active {
+  display: block;
+}
+
+.hint-box-content {
+  background-color: var(--surface-raised);
+  border: 1px dashed var(--border-strong);
+}
+
+.solution-box-content {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+}
+
+/* 16. Lesson Summary */
+.summary-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.summary-list {
+  list-style: square inside;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+/* 17. Bottom Navigation */
+.lesson-nav-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding-top: var(--space-xl);
+  margin-top: var(--space-2xl);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.lesson-nav-bottom .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* 18. Formula Scroll Box (Critical for Math & Matrix Safety) */
+.math-scroll-box {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-xs) 0;
+  margin: var(--space-xs) 0;
+}
+
+/* --------------------------------------------------------------------------
+   19. STRUCTURED VISUALIZATION EXPLANATION GRID (2x2 STUDY GRID)
+   -------------------------------------------------------------------------- */
+.visual-explanation-grid,
+.graph-explanation-block {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.15rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .visual-explanation-grid,
+  .graph-explanation-block {
+    grid-template-columns: 1fr;
+  }
+}
+
+.visual-explanation-card,
+.visual-card,
+.graph-explanation-block > .explanation-col,
+.graph-exp-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.visual-explanation-card:hover,
+.graph-explanation-block > .explanation-col:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+/* 4 Coordinated Pedagogical Accents */
+.visual-card--seeing,
+.graph-explanation-block > .explanation-col:nth-child(1) {
+  border-top: 3.5px solid var(--viz-accent-seeing);
+}
+
+.visual-card--notice,
+.graph-explanation-block > .explanation-col:nth-child(2) {
+  border-top: 3.5px solid var(--viz-accent-notice);
+}
+
+.visual-card--matters,
+.graph-explanation-block > .explanation-col:nth-child(3) {
+  border-top: 3.5px solid var(--viz-accent-matters);
+}
+
+.visual-card--interp,
+.graph-explanation-block > .explanation-col:nth-child(4) {
+  border-top: 3.5px solid var(--viz-accent-interp);
+}
+
+.visual-explanation-title,
+.graph-explanation-block > .explanation-col > h4,
+.graph-exp-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 0.4rem 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+}
+
+.visual-card--seeing .visual-explanation-title,
+.graph-explanation-block > .explanation-col:nth-child(1) > h4 {
+  color: var(--viz-accent-seeing);
+}
+
+.visual-card--notice .visual-explanation-title,
+.graph-explanation-block > .explanation-col:nth-child(2) > h4 {
+  color: var(--viz-accent-notice);
+}
+
+.visual-card--matters .visual-explanation-title,
+.graph-explanation-block > .explanation-col:nth-child(3) > h4 {
+  color: var(--viz-accent-matters);
+}
+
+.visual-card--interp .visual-explanation-title,
+.graph-explanation-block > .explanation-col:nth-child(4) > h4 {
+  color: var(--viz-accent-interp);
+}
+
+.visual-explanation-body,
+.graph-explanation-block > .explanation-col > p,
+.graph-exp-text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.visual-explanation-body p,
+.graph-explanation-block > .explanation-col p {
+  margin: 0 0 0.5rem 0;
+}
+
+.visual-explanation-body p:last-child,
+.graph-explanation-block > .explanation-col p:last-child {
+  margin-bottom: 0;
+}
+
+/* Mini Formula Chip inside explanations */
+.formula-chip,
+.mini-formula {
+  display: inline-block;
+  padding: 3px 10px;
+  margin: 4px 0;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Highlighted Try This Box */
+.visual-try-this,
+.lab-hint-box,
+.graph-try-this {
+  grid-column: 1 / -1;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #1d4ed8;
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.35rem;
+  margin-top: 1.15rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #1e3a8a;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.06);
+}
+
+.visual-try-this strong,
+.lab-hint-box strong,
+.graph-try-this strong {
+  color: #1d4ed8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 0.45rem;
+}
+
+/* --------------------------------------------------------------------------
+   20. INTERACTIVE LAB WIDGETS & WORKSPACE
+   -------------------------------------------------------------------------- */
+.interactive-lab-card,
+.visualization-card {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  margin: var(--space-xl) 0;
+}
+
+.interactive-lab-card .lab-header,
+.visualization-card .visualization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.lab-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-primary);
+  margin-bottom: 0.2rem;
+}
+
+.interactive-lab-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+/* Slider Controls Panel */
+.slider-control-group,
+.visualization-controls,
+.lab-controls-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1.25rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
+  margin: var(--space-md) 0;
+}
+
+.slider-control-item,
+.lab-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.slider-label-row,
+.lab-slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.slider-val-readout,
+.lab-slider-val {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: #ffffff;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Custom Range Slider Inputs */
+.slider-control-item input[type="range"],
+.lab-slider-group input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  outline: none;
+  cursor: pointer;
+  margin: 6px 0;
+}
+
+.slider-control-item input[type="range"]::-webkit-slider-thumb,
+.lab-slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.slider-control-item input[type="range"]::-webkit-slider-thumb:hover,
+.lab-slider-group input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #1e40af;
+}
+
+.slider-control-item input[type="range"]:focus-visible,
+.lab-slider-group input[type="range"]:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Chart Canvas & SVG Containers */
+.interactive-plot-canvas,
+.ols-plot-wrapper,
+.visualization-chart,
+.chart-box {
+  width: 100%;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: var(--space-md) 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.chart-box svg,
+.interactive-plot-canvas svg,
+.ols-plot-wrapper svg,
+svg#ols-svg {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* OLS Interactive Stage (Plot + Legend) */
+.ols-stage-container {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  margin: var(--space-md) 0;
+  width: 100%;
+}
+
+.ols-stage-container .ols-plot-wrapper {
+  flex: 1 1 0%;
+  min-width: 0;
+  margin: 0;
+}
+
+.ols-legend-card {
+  width: 220px;
+  flex: 0 0 220px;
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
+}
+
+.ols-legend-header {
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ols-legend-heading {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.ols-legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ols-legend-card .ols-legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ols-legend-marker {
+  display: inline-block;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.ols-marker-line {
+  width: 22px;
+  height: 3.5px;
+  background-color: #1d4ed8;
+  border-radius: 2px;
+}
+
+.ols-marker-residual {
+  width: 22px;
+  height: 0;
+  border-top: 2.5px dashed #dc2626;
+  margin-top: 6px;
+}
+
+.ols-marker-point {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #0f172a;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #475569;
+}
+
+.ols-legend-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ols-item-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.ols-item-math {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.25;
+}
+
+/* Tablet & Mobile Responsive */
+@media (max-width: 860px) {
+  .ols-stage-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ols-legend-card {
+    width: 100%;
+    flex: 0 0 auto;
+    padding: 0.65rem 1rem;
+    order: -1; /* Placed above graph */
+    box-shadow: none;
+    background: #f8fafc;
+  }
+
+  .ols-legend-header {
+    display: none;
+  }
+
+  .ols-legend-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ols-legend-card .ols-legend-item {
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ols-legend-desc {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .ols-legend-items {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .ols-legend-desc {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+}
+
+/* 21. Comparison & Matrix Layouts */
+.matrix-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding: var(--space-md);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  margin: var(--space-md) 0;
+  overflow-x: auto;
+}
+
+.matrix-annotated {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.matrix-dim-tag {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  font-weight: var(--fw-bold);
+}
+
+/* Responsive Table */
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: var(--space-md) 0;
+}
+
+.academic-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.academic-table th,
+.academic-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.academic-table th {
+  background-color: var(--surface-raised);
+  color: var(--text-primary);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+}
+
+.academic-table tr:hover td {
+  background-color: var(--surface-hover);
+}
+
+/* --------------------------------------------------------------------------
+   21.5. MATRIX REFERENCE & DIMENSIONS STUDY COMPONENT
+   -------------------------------------------------------------------------- */
+.matrix-dimensions-card,
+.matrix-card {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.matrix-card-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.matrix-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  background-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+  display: inline-block;
+  margin-bottom: 0.35rem;
+}
+
+.matrix-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.25rem 0;
+  line-height: 1.3;
+}
+
+.matrix-card-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.matrix-table-wrap,
+.symbol-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.15rem 0;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+}
+
+.matrix-table,
+.symbol-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  text-align: left;
+}
+
+.matrix-table thead th,
+.symbol-table thead th {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.matrix-table tbody tr,
+.symbol-table tbody tr {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.15s ease;
+}
+
+.matrix-table tbody tr:nth-child(even),
+.symbol-table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.matrix-table tbody tr:last-child,
+.symbol-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.matrix-table tbody tr:hover,
+.symbol-table tbody tr:hover {
+  background-color: #eff6ff;
+}
+
+.matrix-table td,
+.symbol-table td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+}
+
+.matrix-symbol-cell {
+  text-align: center;
+  width: 15%;
+  min-width: 80px;
+}
+
+.matrix-symbol {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matrix-dim-cell {
+  text-align: center;
+  width: 25%;
+  min-width: 130px;
+  white-space: nowrap;
+}
+
+.matrix-dimension {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e40af;
+  background-color: #dbeafe;
+  border: 1px solid #93c5fd;
+  padding: 0.25rem 0.65rem;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.matrix-meaning {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.dimension-intuition {
+  background-color: #f8fafc;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.dimension-intuition-title {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dimension-intuition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.dimension-intuition-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: #ffffff;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.dim-item-label {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--accent-primary);
+}
+
+.dim-item-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.individual-observation-section {
+  margin-top: 2.25rem;
+}
+
+@media (max-width: 640px) {
+  .matrix-dimensions-card {
+    padding: 1.15rem 1rem;
+  }
+  .matrix-table td,
+  .matrix-table th {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .dimension-intuition-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   22. BOTTOM LESSON PAGINATION & NAVIGATION
+   -------------------------------------------------------------------------- */
+.lesson-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.lesson-nav-btn {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 0.75rem 1.15rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+  min-width: 180px;
+  max-width: 320px;
+  transition: all var(--transition-fast);
+}
+
+.lesson-nav-btn:hover {
+  border-color: var(--accent-primary);
+  background-color: var(--surface-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  color: var(--accent-primary);
+}
+
+.lesson-nav-btn.btn-prev {
+  text-align: left;
+}
+
+.lesson-nav-btn.btn-next {
+  text-align: right;
+  margin-left: auto;
+  background-color: var(--accent-primary-light);
+  border-color: var(--accent-primary);
+}
+
+.lesson-nav-btn.btn-next:hover {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.lesson-nav-btn.btn-next:hover .nav-btn-sub,
+.lesson-nav-btn.btn-next:hover .nav-btn-title {
+  color: #ffffff;
+}
+
+.nav-btn-sub {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nav-btn-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------
+   23. VISUALIZATION & DIAGRAM CARDS
+   -------------------------------------------------------------------------- */
+.visualization-card {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.65rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.visualization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.visualization-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.visualization-caption {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 0.75rem;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  height: 320px;
+  max-height: 340px;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+/* --------------------------------------------------------------------------
+   24. REFINED REVIEW CARDS GRID (LESSON 9 RAPID REVISION)
+   -------------------------------------------------------------------------- */
+.review-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.15rem;
+  margin: var(--space-md) 0 var(--space-xl) 0;
+}
+
+@media (max-width: 960px) {
+  .review-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .review-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.review-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.review-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(29, 78, 216, 0.06);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.45rem;
+}
+
+.review-card-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: var(--accent-primary-light);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+}
+
+.review-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.review-formula-strip {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
+  margin: 0.45rem 0 0.65rem 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #1e3a8a;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.review-card-body {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0;
+  flex-grow: 1;
+}
+
+.review-card-consequence {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #9a3412;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 0.35rem 0.55rem;
+  margin-top: 0.65rem;
+}
+
+/* --------------------------------------------------------------------------
+   25. DEDICATED CONCEPT CARDS (HOMOSKEDASTICITY & AUTOCORRELATION)
+   -------------------------------------------------------------------------- */
+.concept-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin: var(--space-md) 0 var(--space-lg) 0;
+}
+
+@media (max-width: 768px) {
+  .concept-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.concept-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.45rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.concept-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.concept-card-block {
+  margin-bottom: 0.85rem;
+}
+
+.concept-card-block:last-child {
+  margin-bottom: 0;
+}
+
+.concept-card-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.concept-card-text {
+  font-size: 0.92rem;
+  line-height: 1.58;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   26. NORMALITY COMPARISON CARDS (LESSON 7)
+   -------------------------------------------------------------------------- */
+.normality-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin: var(--space-md) 0 var(--space-lg) 0;
+}
+
+@media (max-width: 768px) {
+  .normality-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.normality-card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.45rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.normality-card--not-required {
+  border: 1.5px solid #a7f3d0;
+  border-left: 5px solid #059669;
+}
+
+.normality-card--useful {
+  border: 1.5px solid #bfdbfe;
+  border-left: 5px solid #2563eb;
+}
+
+.normality-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem 0;
+}
+
+.normality-card--not-required .normality-card-title {
+  color: #047857;
+}
+
+.normality-card--useful .normality-card-title {
+  color: #1d4ed8;
+}
+
+.normality-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.normality-card-list li {
+  position: relative;
+  padding-left: 1.35rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.normality-card--not-required .normality-card-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0.1rem;
+  top: 0;
+  color: #059669;
+  font-weight: 700;
+}
+
+.normality-card--useful .normality-card-list li::before {
+  content: "★";
+  position: absolute;
+  left: 0.1rem;
+  top: 0;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* Inference Comparison (Finite-Sample vs Large-Sample) */
+.inference-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin: var(--space-md) 0;
+}
+
+@media (max-width: 768px) {
+  .inference-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

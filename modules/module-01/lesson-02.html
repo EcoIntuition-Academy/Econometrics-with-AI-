@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.2: Correlation, Causation & Economic Questions — EcoIntuition Academy</title>
+  <meta name="description" content="Explore the class-size and test-score dilemma, confounding variables, causal DAGs, and why correlation does not imply causation in econometrics.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 9 &middot; Correlation, Causation &amp; Economic Questions</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">22%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 22%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.2</span>
+        <span class="badge">Causal Identification</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Correlation, Causation & Economic Questions
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Why do students in smaller classrooms score higher on exams? Is it the smaller class size itself, or the hidden advantages of affluent districts?
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul>
+        <li>Explain why an observed association between class size and test scores does not by itself establish causation.</li>
+        <li>Identify teacher quality and parental involvement as possible confounders that can affect both class size and student achievement.</li>
+        <li>Read a simple causal diagram and distinguish the relationship of interest from confounding pathways.</li>
+        <li>Explain why causal identification matters for policy decisions.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Observed Empirical Pattern -->
+    <section class="lesson-section">
+      <h2>1. The Observed Empirical Pattern</h2>
+      <p>
+        Across public school districts, observational data reveals a consistent statistical pattern:
+      </p>
+
+      <div class="study-card" style="text-align: center; margin: var(--space-md) 0;">
+        <span style="font-size: 1.05rem; font-weight: 700; color: var(--accent-primary);">Smaller Class Size</span>
+        <span style="font-size: 1.35rem; margin: 0 var(--space-md); color: var(--text-muted);">⟷</span>
+        <span style="font-size: 1.05rem; font-weight: 700; color: #10b981;">Higher Average Test Score</span>
+        <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.5rem; font-style: italic;">
+          This is an observed association, not yet a causal conclusion.
+        </div>
+      </div>
+
+      <p>
+        If a researcher runs a naive bivariate linear regression:
+      </p>
+
+      <!-- Equation Box: Class Size Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Bivariate Specification</span>
+          <span class="equation-title">The Naive Class Size Regression</span>
+        </div>
+        <div class="equation-main">
+          \[ \text{TestScore}_i = \beta_1 + \beta_2 \text{ClassSize}_i + \varepsilon_i \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row"><span class="symbol-name">\(\text{TestScore}_i\)</span><span class="symbol-desc">District average standardized exam score</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\text{ClassSize}_i\)</span><span class="symbol-desc">Student-to-teacher classroom ratio</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\beta_1\)</span><span class="symbol-desc">Regression intercept (baseline score)</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\beta_2\)</span><span class="symbol-desc">Marginal association of class size</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\varepsilon_i\)</span><span class="symbol-desc">Unobserved influences (teacher quality, family wealth, tutoring)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The estimated slope \(\hat{\beta}_2\) typically turns out to be negative and statistically significant (\(\hat{\beta}_2 < 0\)). A school board might conclude:
+        <em>"If we spend $20 million hiring 150 new teachers to lower our class sizes from 26 to 19, student test scores will automatically rise by 12 points."</em>
+      </p>
+      <p>
+        Is this conclusion economically and scientifically justified?
+      </p>
+    </section>
+
+    <!-- Section 2: Enter the Confounders -->
+    <section class="lesson-section">
+      <h2>2. Enter the Confounders: Omitted Variables</h2>
+      <p>
+        School districts are not randomly assigned class sizes. In real economic systems:
+      </p>
+      <ul>
+        <li><strong>Affluent School Districts:</strong> Have higher property tax revenues, allowing them to fund smaller classrooms. Simultaneously, parents in these districts often have higher levels of education, provide home tutoring, and purchase supplementary learning materials.</li>
+        <li><strong>Teacher Quality Sorting:</strong> Top-tier, experienced educators often choose to teach in well-funded schools with smaller class sizes and better administrative support.</li>
+      </ul>
+      <p>
+        Therefore, factors such as <strong>Teacher Quality</strong> and <strong>Parental Involvement</strong> simultaneously influence both the regressor (\(\text{ClassSize}\)) and the outcome (\(\text{TestScore}\)).
+      </p>
+    </section>
+
+    <!-- Confounding Visual (Causal DAG) in Visualization Card -->
+    <div class="lesson-wide-container">
+      <div class="visualization-card">
+        <div class="visualization-header">
+          <span class="visualization-title">Directed Acyclic Graph (Causal DAG) of the Identification Challenge</span>
+          <span class="badge">Structural Causal Model</span>
+        </div>
+        <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-md);">
+          The question mark represents the true causal relationship \(\beta_{\text{causal}}\) we wish to measure. The confounding paths introduce backdoor bias.
+        </p>
+
+        <!-- Redesigned High-Contrast Academic SVG DAG -->
+        <div style="display: flex; justify-content: center; padding: 0.5rem 0; width: 100%;">
+          <svg viewBox="0 0 760 300" width="100%" style="max-width: 740px; height: auto; display: block; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;" aria-label="Causal Directed Acyclic Graph illustrating confounding paths">
+            <defs>
+              <!-- Subtle Card Drop Shadow Filter -->
+              <filter id="dag-shadow" x="-6%" y="-10%" width="116%" height="126%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+              </filter>
+              <!-- Marker: Confounder Path Arrow -->
+              <marker id="dag-arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#64748b"/>
+              </marker>
+              <!-- Marker: Main Causal Arrow -->
+              <marker id="dag-arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1d4ed8"/>
+              </marker>
+            </defs>
+
+            <!-- ================= ARROWS / PATHS (Drawn Under Nodes) ================= -->
+
+            <!-- Path 1: Confounder 1 (Teacher Quality) -> Class Size (X) -->
+            <path d="M 240 64 C 265 64, 260 126, 278 136" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#dag-arrow-slate)"/>
+
+            <!-- Path 2: Confounder 1 (Teacher Quality) -> Test Score (Y) [Upper Backdoor Arc] -->
+            <path d="M 240 46 C 360 4, 490 8, 626 104" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#dag-arrow-slate)"/>
+            <!-- Path 2 Badge -->
+            <rect x="360" y="8" width="140" height="22" rx="11" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#dag-shadow)"/>
+            <text x="430" y="23" font-size="10.5" font-weight="600" fill="#475569" text-anchor="middle">Direct impact on Y</text>
+
+            <!-- Path 3: Confounder 2 (Parental Involvement) -> Class Size (X) -->
+            <path d="M 240 229 C 265 229, 260 168, 278 158" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#dag-arrow-slate)"/>
+
+            <!-- Path 4: Confounder 2 (Parental Involvement) -> Test Score (Y) [Lower Backdoor Arc] -->
+            <path d="M 240 247 C 360 290, 490 286, 626 188" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#dag-arrow-slate)"/>
+            <!-- Path 4 Badge -->
+            <rect x="360" y="264" width="140" height="22" rx="11" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#dag-shadow)"/>
+            <text x="430" y="279" font-size="10.5" font-weight="600" fill="#475569" text-anchor="middle">Direct impact on Y</text>
+
+            <!-- Path 5: Main Causal Path: Class Size (X) -> Test Score (Y) -->
+            <line x1="440" y1="147" x2="552" y2="147" stroke="#1d4ed8" stroke-width="2.5" marker-end="url(#dag-arrow-blue)"/>
+
+            <!-- Question Mark Badge on Causal Path -->
+            <circle cx="496" cy="147" r="16" fill="#ffffff" stroke="#1d4ed8" stroke-width="2.5" filter="url(#dag-shadow)"/>
+            <text x="496" y="153" font-size="18" font-weight="800" fill="#1d4ed8" text-anchor="middle">?</text>
+
+            <!-- Causal Goal Pill Badge Above Line -->
+            <rect x="438" y="106" width="116" height="22" rx="11" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.2"/>
+            <text x="496" y="121" font-size="10.5" font-weight="700" fill="#1d4ed8" text-anchor="middle">Causal Effect (β₂?)</text>
+
+            <!-- Subtitle Below Causal Line -->
+            <text x="496" y="178" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">Target to Identify</text>
+
+            <!-- ================= NODES (Cards with Solid Surfaces) ================= -->
+
+            <!-- Node 1: Teacher Quality (Z₁) -->
+            <g transform="translate(40, 30)">
+              <rect width="200" height="68" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.75" filter="url(#dag-shadow)"/>
+              <rect x="12" y="12" width="94" height="18" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+              <text x="59" y="24" font-size="9" font-weight="700" fill="#475569" text-anchor="middle" letter-spacing="0.5">CONFOUNDER</text>
+              <text x="12" y="46" font-size="14" font-weight="700" fill="#0f172a">Teacher Quality</text>
+              <text x="12" y="60" font-size="11.5" font-weight="600" fill="#64748b">Variable (Z₁)</text>
+            </g>
+
+            <!-- Node 2: Parental Involvement (Z₂) -->
+            <g transform="translate(40, 195)">
+              <rect width="200" height="68" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.75" filter="url(#dag-shadow)"/>
+              <rect x="12" y="12" width="94" height="18" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+              <text x="59" y="24" font-size="9" font-weight="700" fill="#475569" text-anchor="middle" letter-spacing="0.5">CONFOUNDER</text>
+              <text x="12" y="46" font-size="14" font-weight="700" fill="#0f172a">Parental Involvement</text>
+              <text x="12" y="60" font-size="11.5" font-weight="600" fill="#64748b">Variable (Z₂)</text>
+            </g>
+
+            <!-- Node 3: Class Size (X) [Explanatory Variable] -->
+            <g transform="translate(280, 112)">
+              <rect width="160" height="70" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="2.2" filter="url(#dag-shadow)"/>
+              <rect x="12" y="11" width="82" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+              <text x="53" y="23" font-size="9" font-weight="700" fill="#1d4ed8" text-anchor="middle" letter-spacing="0.5">REGRESSOR</text>
+              <text x="12" y="47" font-size="15" font-weight="700" fill="#1d4ed8">Class Size (X)</text>
+              <text x="12" y="61" font-size="11" font-weight="600" fill="#475569">Treatment Variable</text>
+            </g>
+
+            <!-- Node 4: Test Score (Y) [Outcome Variable] -->
+            <g transform="translate(560, 112)">
+              <rect width="160" height="70" rx="10" fill="#ffffff" stroke="#059669" stroke-width="2.2" filter="url(#dag-shadow)"/>
+              <rect x="12" y="11" width="76" height="18" rx="4" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+              <text x="50" y="23" font-size="9" font-weight="700" fill="#059669" text-anchor="middle" letter-spacing="0.5">OUTCOME</text>
+              <text x="12" y="47" font-size="15" font-weight="700" fill="#065f46">Test Score (Y)</text>
+              <text x="12" y="61" font-size="11" font-weight="600" fill="#475569">Dependent Variable</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- DAG Legend Row -->
+        <div style="display: flex; justify-content: center; gap: var(--space-md); margin-top: var(--space-md); flex-wrap: wrap; font-size: var(--text-xs); color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: var(--space-sm);">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 14px; height: 14px; border-radius: 3px; background: #eff6ff; border: 2px solid #1d4ed8;"></span>
+            <strong style="color: var(--text-primary);">Observed Regressor (X)</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 14px; height: 14px; border-radius: 3px; background: #ecfdf5; border: 2px solid #059669;"></span>
+            <strong style="color: var(--text-primary);">Observed Outcome (Y)</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 14px; height: 14px; border-radius: 3px; background: #f8fafc; border: 1.5px solid #94a3b8;"></span>
+            <strong style="color: var(--text-primary);">Unobserved Confounders (Z₁, Z₂)</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 20px; height: 0; border-top: 2px dashed #94a3b8;"></span>
+            <strong style="color: var(--text-primary);">Backdoor Confounding Paths</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 20px; height: 2.5px; background: #1d4ed8;"></span>
+            <strong style="color: var(--text-primary);">Causal Path to Identify (?)</strong>
+          </div>
+        </div>
+
+        <!-- DAG Educational Explanation -->
+        <div style="margin-top: var(--space-md); padding: var(--space-md); background: var(--bg-body); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--text-sm); line-height: 1.65; color: var(--text-secondary);">
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 6px; font-size: var(--text-base);">
+            Confounding in the Class Size–Test Score Relationship:
+          </strong>
+          <p style="margin: 0 0 var(--space-xs) 0;">
+            Teacher quality (\(Z_1\)) and parental involvement (\(Z_2\)) simultaneously affect both classroom size and student test scores, making the observed statistical correlation between class size and achievement potentially misleading:
+          </p>
+          <ul style="margin: 0; padding-left: 1.25rem;">
+            <li><strong>The Identification Goal:</strong> We seek the true causal effect of class size on test scores (\(\beta_2\)), represented by the central arrow with the question mark (?).</li>
+            <li><strong>The Backdoor Bias:</strong> Affluent school districts have higher parental support and attract top-tier educators, which naturally leads both to smaller classrooms and higher exam marks.</li>
+            <li><strong>Omitted Variable Bias:</strong> Because \(Z_1\) and \(Z_2\) are unobserved in simple bivariate regression, OLS bundles their positive benefits into the class size estimate, creating severe upward bias (or an overly negative slope estimate).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Interactive Scatterplot — Unveiling Confounders -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Demonstration</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Simulated District Scatterplot: Observed vs. Hidden Variables</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button class="btn btn-outline btn-sm active" data-confounder-btn="observed">Observed Relationship</button>
+            <button class="btn btn-primary btn-sm" data-confounder-btn="hidden">Reveal Hidden Variables</button>
+          </div>
+        </div>
+
+        <!-- SVG Container -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="confounderSvg" viewBox="0 0 620 300" width="100%" height="300" style="max-width: 620px; overflow: visible;"></svg>
+        </div>
+
+        <!-- Dynamic Explanation Text -->
+        <div id="confounderExplanationText" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: var(--text-sm); line-height: 1.6;">
+          <strong>Naive Bivariate Association:</strong> The raw scatterplot shows a stark downward slope (\(\hat{\beta}_2 \approx -1.73\)). Policymakers might conclude cutting class sizes drastically raises test scores alone, ignoring that affluent districts simultaneously have smaller classes, master teachers, and higher parental tutoring.
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>12 simulated school districts plotting Class Size on the horizontal axis against standardized Test Scores on the vertical axis.</p>
+              <p>The gray dashed line represents the naive bivariate regression slope \(\hat{\beta}_2 \approx -1.73\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Click <strong>"Reveal Hidden Variables"</strong>: the data instantly splits into two distinct socio-economic clusters!</p>
+              <p>The true causal slope within each socio-economic tier is much flatter (\(\beta_{\text{true}} \approx -0.5\)).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The steep negative slope in the aggregate data is largely an artifact of comparing wealthy districts to under-resourced districts.</p>
+              <p>It is not the isolated causal effect of class size!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p><strong>Omitted Variable Bias:</strong></p>
+              <div><span class="formula-chip">\(\text{Bias} = \beta_{\text{confounder}} \times \frac{\text{Cov}(X, Z)}{\text{Var}(X)}\)</span></div>
+              <p>Because both terms are positive, the naive slope is severely contaminated by omitted confounders.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Toggle between "Observed Relationship" and "Reveal Hidden Variables" several times. Notice how the dashed gray line misleads you by bridging the gap between two entirely different socio-economic populations.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: The High-Stakes Policy Dilemma -->
+    <section class="lesson-section">
+      <h2>3. The High-Stakes Policy Dilemma</h2>
+      <p>
+        Suppose a state legislature allocates $200 million for class size reduction. If the true causal slope is \(-0.5\) rather than the naive \(-1.73\):
+      </p>
+      <ul>
+        <li>The actual test score improvement will be less than one-third of what was promised.</li>
+        <li>Hiring hundreds of new teachers in a hurry may dilute average teacher quality (\(Z_1\)), potentially reducing student learning overall!</li>
+      </ul>
+      <p>
+        This is why econometrics is critical: rigorous identification separates genuine policy levers from mere statistical illusions.
+      </p>
+
+      <!-- Equation Box: OVB Estimator Formula -->
+      <div class="equation-box equation-box--estimator">
+        <div class="equation-header">
+          <span class="equation-badge">Confounding Bias</span>
+          <span class="equation-title">Omitted Variable Bias Decomposition</span>
+        </div>
+        <div class="equation-main">
+          \[ \text{Bias} = \beta_{\text{confounder}} \times \frac{\text{Cov}(X, \text{Confounder})}{\text{Var}(X)} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row"><span class="symbol-name">\(\text{Bias}\)</span><span class="symbol-desc">Discrepancy between \(\mathbb{E}[\hat{\beta}_2]\) and the true causal parameter</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\beta_{\text{confounder}}\)</span><span class="symbol-desc">Direct impact of omitted factor on standardized test score</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\text{Cov}(X, Z)\)</span><span class="symbol-desc">Covariance between class size and the omitted factor</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\text{Var}(X)\)</span><span class="symbol-desc">Sample variance of class size</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "If we collect a massive dataset with 5,000,000 students instead of 500, the law of large numbers will eliminate the confounding bias."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> <em>More data does not fix endogeneity!</em> If your model omits a critical confounding variable, gathering 5 million observations will merely estimate the <em>wrong number</em> with extreme precision. Identification is a theoretical and design requirement, not a sample size problem.
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: 0.95rem; font-weight: 700;">Omitted Variable Intuition</span>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.65; margin: 0; color: var(--ai-box-text);">
+        In labor economics, the correlation between owning golf clubs and having higher earnings is strongly positive. Does buying golf clubs increase your salary? No. Golf club ownership proxies for wealth, executive networks, and leisure time. In econometrics, whenever an explanatory variable acts as a proxy for unobserved advantages, naive OLS fails to identify causality.
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> In the regression \(\text{TestScore}_i = \beta_1 + \beta_2 \text{ClassSize}_i + \varepsilon_i\), assume parental tutoring has been omitted. Parental tutoring positively affects test scores, and affluent parents are more likely to place children in districts with smaller class sizes (\(\text{Cov}(\text{ClassSize}, \text{Tutoring}) < 0\)). Will the naive OLS estimate \(\hat{\beta}_2\) overestimate or underestimate the beneficial effect of small class sizes?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint2">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol2">Show Solution</button>
+        </div>
+        <div id="hint2" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--text-secondary);">
+            Recall the omitted variable bias formula: \(\text{Bias} = \gamma \times \frac{\text{Cov}(X, Z)}{\text{Var}(X)}\). Note that \(\gamma > 0\) (tutoring raises scores) and \(\text{Cov}(X, Z) < 0\) (smaller classes correlate with more tutoring).
+          </p>
+        </div>
+        <div id="sol2" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--text-primary);">
+            <strong>Solution:</strong><br>
+            The omitted variable bias is \(\text{Bias} = (+) \times (-) = \text{negative}\). Because the expected causal effect of class size on test scores is negative (increasing class size reduces scores), a negative bias makes \(\hat{\beta}_2\) <em>more negative</em> than the true effect (e.g. \(-1.73\) instead of \(-0.5\)). Consequently, naive OLS <strong>exaggerates (overestimates) the apparent benefit</strong> of smaller class sizes by attributing the benefits of parental tutoring directly to class size!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Lesson 1.2 Summary</h3>
+      <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: var(--space-md);">
+        Correlation between economic variables often reflects shared confounders rather than direct cause and effect. To address this, we must build explicit mathematical models that control for multiple variables simultaneously. In the next lesson, we introduce the formal <strong>Classical Linear Regression Model (CLRM)</strong> and its elegant matrix representation.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">What Is Econometrics?</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="2" style="align-self: center;">
+          ✓ Mark Lesson 2 Complete
+        </button>
+        <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Linear Regression Model</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

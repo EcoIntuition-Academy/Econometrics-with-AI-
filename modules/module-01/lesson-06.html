@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1.6: CLRM: Exogeneity & Spherical Errors — EcoIntuition Academy</title>
+  <meta name="description" content="Master strict exogeneity E[ε|X]=0, omitted variable endogeneity, homoskedasticity, autocorrelation, and the spherical error covariance matrix σ²I.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-01" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 01</a>
+          <span class="module-nav-title">Econometrics Fundamentals &amp; Linear Regression</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 9 &middot; CLRM: Exogeneity &amp; Spherical Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 1 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.1 What Is Econometrics?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.2 Correlation, Causation &amp; Economic Questions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.3 The Classical Linear Regression Model</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.4 OLS, Projection &amp; Residuals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">1.5 CLRM: Linearity &amp; Full Rank</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">1.6 CLRM: Exogeneity &amp; Spherical Errors</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.7 Fixed/Random Regressors &amp; Normality</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.8 Coefficients &amp; Functional Forms</span>
+            </a>
+            <a href="lesson-09.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">1.9 Dummy Variables &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">66%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 66%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 1.6</span>
+        <span class="badge">CLRM Assumptions (Part 2)</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        CLRM: Exogeneity & Spherical Errors
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        The crown jewel of econometric identification: why zero conditional mean ensures unbiased estimates, and how spherical error structures protect statistical inference.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand strict exogeneity \(\mathbb{E}[\varepsilon_i \mid x_i] = 0\) and why it is not just "mean zero".</li>
+        <li>Trace how omitted variable bias causes endogeneity, and why gathering more data cannot resolve it.</li>
+        <li>Distinguish between <strong>homoskedasticity</strong> and <strong>heteroskedasticity</strong>, identifying their impact on efficiency vs. unbiasedness.</li>
+        <li>Diagnose <strong>autocorrelation</strong> in time-series data and inspect the spherical covariance matrix \(\mathbb{E}[\varepsilon\varepsilon' \mid X] = \sigma^2 I\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Assumption 3 — Strict Exogeneity -->
+    <section class="lesson-section">
+      <h2>1. Assumption A3: Strict Exogeneity</h2>
+
+      <!-- Reusable Equation Box: Assumption A3 -->
+      <div class="equation-box equation-box--assumption">
+        <div class="equation-header">
+          <span class="equation-badge">Assumption A3</span>
+          <span class="equation-title">Strict Conditional Exogeneity</span>
+        </div>
+        <div class="equation-main">
+          \[ \mathbb{E}[\varepsilon_i \mid x_i] = 0 \quad \iff \quad \mathbb{E}[\varepsilon \mid X] = 0 \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">MASTER KEY TO UNBIASEDNESS:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row"><span class="symbol-name">\(\mathbb{E}[\varepsilon \mid X] = 0\)</span><span class="symbol-desc">Disturbances average zero for every observed combination of \(X\)</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\mathbb{E}[\hat{\beta} \mid X] = \beta\)</span><span class="symbol-desc">Guarantees OLS is unconditionally centered on the true population parameter</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        <strong>Do NOT simply say:</strong> <em>"The error has mean zero."</em><br>
+        An unconditional mean of zero (\(\mathbb{E}[\varepsilon] = 0\)) is trivial; it is automatically satisfied as long as an intercept is included. <strong>Conditional mean zero</strong> is far stronger: it demands that for <em>any specific value of \(X\)</em>, the average of the unobserved disturbances is zero. In plain English:
+      </p>
+      <div class="study-card" style="border-left: 5px solid var(--accent-primary); margin: var(--space-md) 0; font-weight: 600; color: var(--text-primary);">
+        "Knowing the value of the explanatory variables tells you nothing systematic about the unobserved disturbances."
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card" style="border-left: 5px solid #10b981;">
+          <h4 style="margin: 0 0 6px 0; color: #10b981; font-size: 0.95rem; text-transform: uppercase; font-weight: 700;">WHY DOES IT MATTER?</h4>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+            Exogeneity is the <strong>master key to unbiasedness</strong>! Taking the conditional expectation of the OLS estimator:
+            \[ \mathbb{E}[\hat{\beta} \mid X] = \beta + (X'X)^{-1}X'\underbrace{\mathbb{E}[\varepsilon \mid X]}_{=0} = \mathbf{\beta} \]
+            Without exogeneity, OLS does not center around the truth!
+          </p>
+        </div>
+
+        <div class="study-card" style="border-left: 5px solid #dc2626;">
+          <h4 style="margin: 0 0 6px 0; color: #dc2626; font-size: 0.95rem; text-transform: uppercase; font-weight: 700;">WHAT HAPPENS IF IT FAILS?</h4>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+            If \(\mathbb{E}[\varepsilon \mid X] \neq 0\), the regressors are <strong>endogenous</strong>. OLS is biased (\(\mathbb{E}[\hat{\beta}] \neq \beta\)) and inconsistent (the bias does not disappear even with infinite sample size).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Exploration Widget: Exogeneity Visual Toggle -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive Visualizer</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Exogeneity Inspection: Disturbance vs. Regressor</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button class="btn btn-primary btn-sm active" data-exo-mode="valid">Exogeneity Holds</button>
+            <button class="btn btn-outline btn-sm" data-exo-mode="fail">Exogeneity Fails (Endogeneity)</button>
+          </div>
+        </div>
+
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="exogeneitySvg" viewBox="0 0 620 260" width="100%" height="260" style="max-width: 620px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 4-Quadrant Explanation Block -->
+        <div class="graph-explanation-block">
+          <div class="explanation-col">
+            <h4>WHAT YOU ARE SEEING</h4>
+            <p>A plot of unobserved true disturbances \(\varepsilon_i\) against regressor \(x_i\). Dashed line is zero expectation line.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHAT TO NOTICE</h4>
+            <p>Click "Exogeneity Fails": points tilt upward! Higher \(x\) values systematically accompany positive errors. The error is no longer centered at 0 conditional on \(x\).</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHY IT MATTERS</h4>
+            <p>When \(\varepsilon\) correlates with \(X\), OLS mistakenly credits the effect of the omitted error to \(X\), distorting the estimated slope.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>ECONOMETRIC INTERPRETATION</h4>
+            <p>Omitted Variable Bias: If \(y = \beta_1 + \beta_2 x + \gamma z + u\) and \(z\) is omitted into \(\varepsilon = \gamma z + u\), then \(\text{Cov}(x, \varepsilon) \neq 0\).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strong Learner Insight Box -->
+    <div class="common-mistake" style="margin: var(--space-lg) 0;">
+      <div class="mistake-header">
+        <span>⚡</span>
+        <span class="mistake-title">Critical Econometric Insight: More Data Does Not Fix Endogeneity!</span>
+      </div>
+      <p style="margin: 0; font-size: 0.95rem; line-height: 1.65; color: var(--mistake-text);">
+        In statistical sampling, larger sample sizes shrink variance (\(\sigma^2 / n \to 0\)). However, if your estimator is aiming at the wrong target due to omitted variable endogeneity, collecting 10 million observations simply ensures that you <strong>estimate the wrong number with supreme precision!</strong> Endogeneity is an identification flaw that can only be solved through experimental design, instrumental variables, or controlling for the confounder.
+      </p>
+    </div>
+
+    <!-- Section 2: Assumption 4 — Spherical Errors -->
+    <section class="lesson-section">
+      <h2>2. Assumption A4: Spherical Errors</h2>
+      <p>
+        Assumption A4 requires that the disturbances have constant conditional variance and are uncorrelated across different observations.
+      </p>
+
+      <div class="concept-cards-grid">
+        <!-- Part A: Homoskedasticity Concept Card -->
+        <div class="concept-card">
+          <h3 class="concept-card-title">Part A: Homoskedasticity</h3>
+          <div class="equation-box equation-box--assumption" style="margin: 0 0 1rem 0; padding: 0.85rem 1rem;">
+            <div class="equation-main" style="font-size: 1.05rem; margin: 0;">
+              \[ \text{Var}(\varepsilon_i \mid X) = \sigma^2 \quad \text{for all } i = 1, \dots, n \]
+            </div>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHAT IT MEANS</div>
+            <p class="concept-card-text">Equal conditional variance across observations: every observation's disturbance is drawn from a distribution with the identical conditional variance \(\sigma^2\).</p>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHEN IT FAILS (HETEROSKEDASTICITY)</div>
+            <p class="concept-card-text">The conditional variance changes across observations: \(\text{Var}(\varepsilon_i \mid X) = \sigma_i^2\). For example, in cross-state traffic-fatality data, observations from larger states may exhibit greater error variability than observations from smaller states.</p>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHY IT MATTERS</div>
+            <p class="concept-card-text">Under exogeneity, heteroskedasticity does not bias OLS coefficients. However, conventional homoskedastic standard errors are invalid, and OLS is no longer generally efficient (not BLUE).</p>
+          </div>
+        </div>
+
+        <!-- Part B: No Autocorrelation Concept Card -->
+        <div class="concept-card">
+          <h3 class="concept-card-title">Part B: No Autocorrelation</h3>
+          <div class="equation-box equation-box--assumption" style="margin: 0 0 1rem 0; padding: 0.85rem 1rem;">
+            <div class="equation-main" style="font-size: 1.05rem; margin: 0;">
+              \[ \text{Cov}(\varepsilon_i, \varepsilon_j \mid X) = 0 \quad \text{for all } i \neq j \]
+            </div>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHAT IT MEANS</div>
+            <p class="concept-card-text">Conditional on \(X\), disturbances from different observations are mutually uncorrelated: one observation's error conveys zero information about another's.</p>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHEN IT FAILS (AUTOCORRELATION)</div>
+            <p class="concept-card-text">Disturbances move together across observations or time. In time-series data, a macroeconomic shock may persist over time, causing neighboring disturbances to move in the same direction.</p>
+          </div>
+          <div class="concept-card-block">
+            <div class="concept-card-label">WHY IT MATTERS</div>
+            <p class="concept-card-text">Under exogeneity, OLS remains unbiased, but conventional standard errors and classical efficiency results no longer apply; inference requires serial-correlation robust standard errors or alternative estimators.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Demonstration: Homoskedasticity vs Heteroskedasticity -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Variance Visualizer</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Homoskedastic Band vs. Heteroskedastic Fan</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button class="btn btn-primary btn-sm active" data-het-mode="homo">Homoskedastic Band</button>
+            <button class="btn btn-outline btn-sm" data-het-mode="hetero">Heteroskedastic Fan</button>
+          </div>
+        </div>
+
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="heteroDemoSvg" viewBox="0 0 620 260" width="100%" height="260" style="max-width: 620px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 4-Quadrant Explanation Block -->
+        <div class="graph-explanation-block">
+          <div class="explanation-col">
+            <h4>WHAT YOU ARE SEEING</h4>
+            <p>Disturbances \(\varepsilon_i\) plotted across increasing values of regressor \(x_i\) (e.g. firm size or state population).</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHAT TO NOTICE</h4>
+            <p>Toggle to "Heteroskedastic Fan": at low \(x\), points hug the axis tightly. At high \(x\), the dispersion explodes outward like a megaphone.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>WHY IT MATTERS</h4>
+            <p>Conventional OLS standard errors assume constant spread. In a fan pattern, conventional homoskedastic standard errors are invalid, producing unreliable confidence intervals unless robust standard errors are used.</p>
+          </div>
+          <div class="explanation-col">
+            <h4>ECONOMETRIC INTERPRETATION</h4>
+            <p>Does heteroskedasticity bias \(\hat{\beta}\)? <strong>NO!</strong> If exogeneity holds, OLS remains unbiased, but it loses efficiency (it is no longer BLUE among linear unbiased estimators).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: The Spherical Error Covariance Matrix -->
+    <section class="lesson-section">
+      <h2>3. The Spherical Error Covariance Matrix</h2>
+      <p>
+        When Homoskedasticity and No Autocorrelation both hold, we say the disturbances are <strong>Spherical</strong>. In matrix notation, this elegant condition is summarized as:
+      </p>
+
+      <!-- Reusable Equation Box: Spherical Error Covariance -->
+      <div class="equation-box equation-box--assumption">
+        <div class="equation-header">
+          <span class="equation-badge">Assumption A4</span>
+          <span class="equation-title">Spherical Error Covariance Matrix</span>
+        </div>
+        <div class="equation-main">
+          \[ \mathbb{E}[\varepsilon\varepsilon' \mid X] = \sigma^2 I_n = \begin{bmatrix} \sigma^2 & 0 & \dots & 0 \\ 0 & \sigma^2 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \sigma^2 \end{bmatrix} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">DUAL CONDITIONS:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row"><span class="symbol-name">\(\text{Var}(\varepsilon_i \mid X) = \sigma^2\)</span><span class="symbol-desc"><strong>Homoskedasticity:</strong> Constant error variance \(\sigma^2\) along the diagonal</span></div>
+            <div class="symbol-row"><span class="symbol-name">\(\text{Cov}(\varepsilon_i, \varepsilon_j \mid X) = 0\)</span><span class="symbol-desc"><strong>No Autocorrelation:</strong> Zero correlation on all off-diagonal entries (\(i \neq j\))</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="symbol-table-wrapper">
+        <table class="symbol-table">
+          <thead>
+            <tr>
+              <th>Matrix Element</th>
+              <th>Mathematical Value</th>
+              <th>Economic Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Diagonal Entries</td>
+              <td>\(\sigma^2\) (Constant)</td>
+              <td><strong>Homoskedasticity:</strong> Every observation has identical variance \(\sigma^2\).</td>
+            </tr>
+            <tr>
+              <td>Off-Diagonal Entries</td>
+              <td>\(0\) (Zero)</td>
+              <td><strong>No Autocorrelation:</strong> No two observations share common unmodeled shocks.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="common-mistake-card">
+      <div class="common-mistake-header">
+        <span class="mistake-icon">⚠️</span>
+        <span class="mistake-title">Common Student Mistake</span>
+      </div>
+      <div class="mistake-content">
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "My dataset has heteroskedasticity, so my estimated slope coefficients \(\hat{\beta}\) are biased and incorrect."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> <em>Heteroskedasticity does NOT bias OLS coefficients!</em> Look at the proof of unbiasedness: \(\mathbb{E}[\hat{\beta} \mid X] = \beta + (X'X)^{-1}X'\mathbb{E}[\varepsilon \mid X]\). As long as Exogeneity holds (\(\mathbb{E}[\varepsilon \mid X] = 0\)), \(\hat{\beta}\) remains perfectly unbiased. What breaks is the <strong>variance formula and standard errors</strong>. To fix this, you do not throw away OLS; you simply use <strong>Huber-White Robust Standard Errors</strong>!
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Box -->
+    <div class="ai-prompt-box">
+      <div class="ai-prompt-header">
+        <span class="ai-badge">🤖 AI Insight</span>
+        <span style="font-size: var(--text-sm); font-weight: 600;">Heteroskedasticity in Machine Learning vs. Econometrics</span>
+      </div>
+      <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+        In standard machine learning, algorithms like XGBoost minimize mean squared error without reporting hypothesis tests, so practitioners often ignore heteroskedasticity. In econometrics, because we must decide whether a policy parameter is statistically different from zero (p &lt; 0.05), failing to correct for heteroskedasticity leads to wildly overconfident claims and false discoveries!
+      </p>
+    </div>
+
+    <!-- Practice / Knowledge Check -->
+    <section>
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> An economist regresses municipal police expenditures on crime rates across 400 cities. A diagnostic test detects severe heteroskedasticity (large cities have huge variance in expenditure errors). (a) Are the OLS slope estimates biased? (b) What happens if the economist uses standard textbook formulas for standard errors and t-statistics?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint6">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol6">Show Solution</button>
+        </div>
+        <div id="hint6" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Separate the conditions required for unbiasedness (\(\mathbb{E}[\varepsilon|X]=0\)) from the conditions required for classical standard error validity (\(\mathbb{E}[\varepsilon\varepsilon'|X]=\sigma^2 I\)).
+          </p>
+        </div>
+        <div id="sol6" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            (a) <strong>No</strong>, the OLS slope estimates are not biased, provided strict exogeneity holds.<br>
+            (b) If standard textbook standard errors are used, they will be <strong>invalid and typically underestimated</strong>. The resulting t-statistics will be artificially inflated, leading to overly narrow confidence intervals and falsely declaring regressors to be statistically significant when they are not! The researcher must report heteroskedasticity-robust (Huber-White) standard errors.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 1.6 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Strict exogeneity \(\mathbb{E}[\varepsilon \mid X] = 0\) guarantees that OLS is unbiased. Spherical errors (\(\sigma^2 I\)) guarantee efficiency and valid classical standard errors. In Lesson 1.7, we conclude the CLRM assumptions by analyzing <strong>Fixed vs. Random Regressors and the role of Normality</strong>, complete with a master CLRM summary table.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Linearity &amp; Full Rank</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-01" data-lesson="6" style="align-self: center;">
+          ✓ Mark Lesson 6 Complete
+        </button>
+        <a href="lesson-07.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Regressors &amp; Normality</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

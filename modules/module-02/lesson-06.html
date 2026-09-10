@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2.6: The Frisch–Waugh–Lovell Theorem — EcoIntuition Academy</title>
+  <meta name="description" content="Master the Frisch-Waugh-Lovell (FWL) theorem: remove the old story from both outcome and regressor, and understand multiple regression as bivariate regression on residualized variables.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 02</a>
+          <span class="module-nav-title">OLS Geometry, Matrix Algebra & Regression Mechanics</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 8 &middot; The Frisch–Waugh–Lovell Theorem</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 2 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.1 OLS as Orthogonal Projection</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.2 Deriving the Normal Equations</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.3 Projection &amp; Residual-Maker Matrices</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.4 Residual Orthogonality &amp; the Constant Term</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">2.5 Means, Fitted Values &amp; Regression Balance</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">2.6 The Frisch–Waugh–Lovell Theorem</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.7 Demeaning &amp; the Covariance Form of OLS</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">2.8 Orthogonal Regressors, Randomization &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">75.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 75.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 2.6</span>
+        <span class="badge">Master Theorem</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        The Frisch–Waugh–Lovell Theorem
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        "Remove the old story, study what's left." Master the fundamental theorem of multiple regression: proving how partialling out control variables transforms multiple regression into a bivariate regression on orthogonalized residuals.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Articulate the FWL intuition: purging the component of both outcome and target regressor explained by controls.</li>
+        <li>Define the residual-maker matrix with respect to controls: \(M_1 = I - X_1(X_1'X_1)^{-1}X_1'\).</li>
+        <li>Compute residualized variables \(y^* = M_1y\) and \(X_2^* = M_1X_2\).</li>
+        <li>Prove that the coefficient from regressing \(y^*\) on \(X_2^*\) equals the coefficient \(\hat{\beta}_2\) from the full regression of \(y\) on \([X_1, X_2]\).</li>
+        <li>Interpret multiple regression coefficients as relationships within the subspace orthogonal to controls.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: FWL Intuition First -->
+    <section class="lesson-section">
+      <h2>1. The Intuition: "Remove the Old Story, Study What's Left"</h2>
+      <p>
+        Suppose our regressors are partitioned into two groups:
+      </p>
+      <div class="math-scroll-box">
+        $$X = \begin{bmatrix} X_1 & X_2 \end{bmatrix}$$
+      </div>
+      <p>
+        and the full multiple regression model is:
+      </p>
+      <div class="math-scroll-box">
+        $$y = X_1\beta_1 + X_2\beta_2 + \varepsilon$$
+      </div>
+      <p>
+        We want to understand what the coefficient vector \(\beta_2\) on \(X_2\) is really doing when we control for \(X_1\).
+      </p>
+      
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 6px 0; color: var(--color-primary); font-size: 0.95rem; font-weight: 700;">The Two Stories About Outcome \(y\)</h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          Conceptually, there are two stories about \(y\): a story told by \(X_1\) (the controls) and a story told by \(X_2\) (our variables of interest).<br>
+          The Frisch–Waugh–Lovell (FWL) theorem says: if you want to learn the pure contribution of \(X_2\), you must:
+        </p>
+        <ol style="margin: 8px 0 0 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.6;">
+          <li>Remove the part of the story already explained by \(X_1\) from the outcome \(y\).</li>
+          <li>Remove the part of the story already explained by \(X_1\) from the regressor \(X_2\).</li>
+          <li>See how much of what remains in \(y\) can be explained by what remains in \(X_2\).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 2: Mathematical Formulation -->
+    <section class="lesson-section">
+      <h2>2. Mathematical Mechanics of Partialling Out</h2>
+      <p>
+        Define the residual-maker matrix with respect to \(X_1\):
+      </p>
+      <div class="math-scroll-box">
+        $$M_1 = I_n - X_1(X_1'X_1)^{-1}X_1'$$
+      </div>
+      <p>
+        Now apply this operator to both the outcome and the target regressor:
+      </p>
+      <ul>
+        <li><strong>Residualize \(y\) on \(X_1\):</strong>
+          $$y^* = M_1y$$
+          This is the component of \(y\) that cannot be explained linearly by \(X_1\).
+        </li>
+        <li><strong>Residualize \(X_2\) on \(X_1\):</strong>
+          $$X_2^* = M_1X_2$$
+          This is the component of \(X_2\) that is completely orthogonal to \(X_1\).
+        </li>
+      </ul>
+
+      <!-- Reusable Equation Box: FWL Theorem -->
+      <div class="equation-box equation-box--key" style="margin-top: var(--space-lg);">
+        <div class="equation-header">
+          <span class="equation-badge">FUNDAMENTAL THEOREM</span>
+          <span class="equation-title">The Frisch–Waugh–Lovell (FWL) Theorem</span>
+        </div>
+        <div class="equation-main">
+          $$\hat{\beta}_2 = (X_2^{*\prime}X_2^*)^{-1}X_2^{*\prime}y^* \quad \text{where } y^* = M_1y \text{ and } X_2^* = M_1X_2$$
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\beta}_2\)</span>
+              <span class="symbol-desc">Partial regression coefficient on \(X_2\) from the full regression of \(y\) on \([X_1, X_2]\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(y^* = M_1y\)</span>
+              <span class="symbol-desc">The residual from projecting \(y\) onto \(\operatorname{Col}(X_1)\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(X_2^* = M_1X_2\)</span>
+              <span class="symbol-desc">The component of \(X_2\) orthogonal to \(\operatorname{Col}(X_1)\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(M_1\)</span>
+              <span class="symbol-desc">Residual-maker matrix for \(X_1\): \(I - X_1(X_1'X_1)^{-1}X_1'\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card" style="border-left: 4px solid #10b981; margin-top: var(--space-md);">
+        <h4 style="margin: 0 0 6px 0; color: #047857; font-size: 0.95rem; font-weight: 700;">Geometric &amp; Econometric Meaning</h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          Geometrically, FWL shows that the coefficient on \(X_2\) depends only on the variation in \(X_2\) that remains after removing its linear projection on \(X_1\), and the corresponding residual variation in \(y\).<br>
+          Economically, this isolates the partial relationship between \(y\) and \(X_2\) after linearly controlling for \(X_1\). Note that this is a mathematical theorem that holds on any dataset; whether \(\hat{\beta}_2\) reflects a causal effect depends on whether the conditional independence assumption holds.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: The Three-Step Visual Flow -->
+    <section class="lesson-section">
+      <h2>3. The FWL Three-Step Workflow</h2>
+      
+      <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-lg);">
+        <div style="display: flex; flex-direction: column; gap: var(--space-md); align-items: center;">
+          
+          <div style="background: var(--surface-raised); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 20px; width: 100%; max-width: 520px; text-align: center;">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; margin-bottom: 4px;">STEP 1</span>
+            <div style="font-weight: 700; font-size: 0.95rem;">Regress \(y\) on \(X_1\) &rarr; Save Residuals \(y^* = M_1y\)</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Purges outcome of all linear influence from control variables.</div>
+          </div>
+          
+          <div style="color: var(--text-muted); font-size: 1.2rem;">&darr;</div>
+
+          <div style="background: var(--surface-raised); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 20px; width: 100%; max-width: 520px; text-align: center;">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; margin-bottom: 4px;">STEP 2</span>
+            <div style="font-weight: 700; font-size: 0.95rem;">Regress \(X_2\) on \(X_1\) &rarr; Save Residuals \(X_2^* = M_1X_2\)</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Purges regressor of interest of any collinearity with controls.</div>
+          </div>
+
+          <div style="color: var(--text-muted); font-size: 1.2rem;">&darr;</div>
+
+          <div style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: var(--radius-sm); padding: 14px 20px; width: 100%; max-width: 520px; text-align: center;">
+            <span class="badge" style="background: #2563eb; color: #ffffff; margin-bottom: 4px;">STEP 3</span>
+            <div style="font-weight: 700; font-size: 1rem; color: #1e3a8a;">Regress \(y^*\) on \(X_2^*\) &rarr; Estimated Slope \(= \hat{\beta}_2\)</div>
+            <div style="font-size: 0.85rem; color: #1d4ed8; font-weight: 600; margin-top: 2px;">
+              Mathematically identical to the coefficient on \(X_2\) from the full regression \(y \sim [X_1, X_2]\)!
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive FWL Lab Widget -->
+    <div class="lesson-wide-container">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div>
+            <div class="lab-badge">Interactive FWL Lab</div>
+            <h3 style="margin: 4px 0 0 0; font-size: var(--text-base);">Frisch–Waugh–Lovell 3-Stage Inspector</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+            <button id="btnFwlRaw" class="btn btn-primary btn-sm active">Stage 1: Raw Y vs X₂</button>
+            <button id="btnFwlRes" class="btn btn-outline btn-sm">Stage 2: Residualize on X₁</button>
+            <button id="btnFwlPartial" class="btn btn-outline btn-sm">Stage 3: Regress y* on X₂*</button>
+          </div>
+        </div>
+
+        <!-- Readout Bar -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md); text-align: center;">
+          <div id="fwlBeta2Display" style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: #1d4ed8; margin-bottom: 4px;">
+            Bivariate β̃₂ = 1.625 (Distorted by omitted X₁)
+          </div>
+          <p id="fwlDescDisplay" style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+            Stage 1: Raw scatter of Y vs X₂. Because X₁ correlates with both Y and X₂, the simple slope is biased and overstates the true relationship.
+          </p>
+        </div>
+
+        <!-- Plot stage -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <svg id="fwlSvg" viewBox="0 0 520 270" width="100%" height="270" style="max-width: 520px; overflow: visible;"></svg>
+        </div>
+
+        <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid">
+          <div class="visual-explanation-card visual-card--seeing">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Toggle through the 3 stages: in Stage 1, the raw slope is steep (1.625). In Stage 3, after removing \(X_1\), the partial regression slope flattens to exactly 0.8000.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The partial regression line in Stage 3 passes through \((0,0)\) because both residual vectors \(y^*\) and \(X_2^*\) have had their sample projections removed.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>FWL proves that multiple regression is not a "black box": every multiple regression coefficient can be plotted as a clean, two-dimensional scatter plot!</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>This is the mathematical definition of <em>ceteris paribus</em>: holding \(X_1\) fixed is identical to removing all variation correlated with \(X_1\).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Step through all 3 stages: click <strong>[Stage 1: Raw Relationship]</strong>, then <strong>[Stage 2: Residualize on X₁]</strong>, and finally <strong>[Stage 3: Partial Relationship]</strong>. Notice that the bivariate slope in Stage 3 (\(\hat{\beta}_2 = 0.8000\)) is identical to the multiple regression coefficient of \(Y\) on \([X_1, X_2]\).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Language Precision & Pitfalls -->
+    <section class="lesson-section" style="margin-top: var(--space-xl);">
+      <h2>4. Common Misconceptions & Academic Precision</h2>
+      
+      <div class="study-card" style="border-left: 5px solid #dc2626; margin: var(--space-md) 0;">
+        <div style="color: #dc2626; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ⚠️ COMMON MISTAKE: "FWL means we simply delete the controls from the dataset"
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          <strong>Correction:</strong> Deleting \(X_1\) gives the omitted variable bias of Stage 1! FWL requires removing the component explained by \(X_1\) from <strong>both</strong> the outcome \(y\) and the regressor \(X_2\). You only regress the residuals on each other.
+        </p>
+      </div>
+
+      <div class="study-card" style="border-left: 5px solid #d97706; margin: var(--space-md) 0;">
+        <div style="color: #b45309; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
+          ⚠️ ACADEMIC CAUTION: Do not automatically call \(\hat{\beta}_2\) a causal effect
+        </div>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          FWL is an algebraic theorem that holds for any sample data, regardless of whether the model is causally identified. 
+          \(\hat{\beta}_2\) is the <em>partial regression coefficient</em> of \(y\) on \(X_2\) after controlling for \(X_1\). It only reflects a causal effect if the omitted variables in the error term satisfy conditional independence / exogeneity.
+        </p>
+      </div>
+    </section>
+
+    <!-- Bottom Lesson Pagination Navigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: var(--space-2xl); flex-wrap: gap; gap: var(--space-md);">
+      <a href="lesson-05.html" class="btn btn-outline">← Lesson 2.5: Means, Fitted Values &amp; Balance</a>
+      <a href="lesson-07.html" class="btn btn-primary">Next: Lesson 2.7 Demeaning &amp; Covariance Form →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-02-interactions.js"></script>
+</body>
+</html>
