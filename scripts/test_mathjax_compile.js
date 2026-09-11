@@ -26,7 +26,9 @@ const html = mathjax.document('', { InputJax: tex, OutputJax: chtml });
 const rootDir = path.resolve(__dirname, '..');
 const targetDirs = [
   path.join(rootDir, 'modules', 'module-04'),
-  path.join(rootDir, 'modules', 'module-05')
+  path.join(rootDir, 'modules', 'module-05'),
+  path.join(rootDir, 'modules', 'module-06'),
+  path.join(rootDir, 'modules', 'module-07')
 ];
 
 let totalErrors = 0;

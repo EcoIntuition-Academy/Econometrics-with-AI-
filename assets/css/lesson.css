@@ -883,6 +883,33 @@ mjx-container[jax="CHTML"][display="true"] {
   margin: 0.4em 0 !important;
 }
 
+/* Ensure equation surfaces, study cards, and structured equation boxes show math directly without scrollbars */
+.equation-surface mjx-container[jax="CHTML"][display="true"],
+.equation-card mjx-container[jax="CHTML"][display="true"],
+.equation-box mjx-container[jax="CHTML"][display="true"],
+.study-card mjx-container[jax="CHTML"][display="true"],
+.study-section mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: visible;
+  max-width: 100%;
+}
+
+.equation-box .equation-body,
+.equation-box .equation-main {
+  overflow-x: visible;
+}
+
+@media (max-width: 480px) {
+  .equation-surface mjx-container[jax="CHTML"][display="true"],
+  .equation-card mjx-container[jax="CHTML"][display="true"],
+  .equation-box mjx-container[jax="CHTML"][display="true"],
+  .study-card mjx-container[jax="CHTML"][display="true"],
+  .study-section mjx-container[jax="CHTML"][display="true"],
+  .equation-box .equation-body,
+  .equation-box .equation-main {
+    overflow-x: auto;
+  }
+}
+
 mjx-container[jax="CHTML"]:not([display="true"]) {
   display: inline-block;
   vertical-align: -0.15em;
@@ -4468,5 +4495,38 @@ svg#ols-svg {
 [data-theme="dark"] .visual-explanation-grid > .grid-card:nth-child(5) .grid-card-tag {
   color: #93c5fd !important;
 }
+/* Responsive Table and Mobile Stacked Cards for Group Means */
+@media (max-width: 640px) {
+  .desktop-table-view {
+    display: none !important;
+  }
+  .mobile-group-cards {
+    display: flex !important;
+  }
+}
 
+@media (min-width: 641px) {
+  .desktop-table-view {
+    display: block !important;
+  }
+  .mobile-group-cards {
+    display: none !important;
+  }
+}
 
+/* Responsive Lesson Pagination */
+@media (max-width: 768px) {
+  .lesson-pagination {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  .lesson-pagination .lesson-nav-btn {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: unset !important;
+  }
+  .lesson-pagination .lesson-nav-btn.btn-next {
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 01: Econometrics Fundamentals & Linear Regression — EcoIntuition Academy</title>
+  <title>Module 01: Econometrics Fundamentals &amp; Linear Regression — EcoIntuition Academy</title>
   <meta name="description" content="Build the foundations of econometric reasoning, from causal questions and linear regression to OLS assumptions, coefficient interpretation, and functional forms.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
@@ -21,9 +21,9 @@
 
   <!-- Centralized MathJax 3 Configuration & Library -->
   <script src="../../assets/js/math-config.js"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
 </head>
-<body>
+<body data-module="module-01">
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
@@ -38,7 +38,20 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
-          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="index.html" class="nav-dropdown-item active">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
           <li><a href="index.html" class="nav-item-link active">Module 1</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
@@ -62,27 +75,27 @@
   </header>
 
   <!-- Centered Landing Content (Strictly NO Sidebar) -->
-  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+  <main class="module-overview-area">
     
     <!-- Hero Header -->
-    <div style="margin-bottom: var(--space-xl);">
-      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+    <div class="module-hero">
+      <div class="module-hero-badges">
         <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 01</span>
         <span class="badge badge-success">Foundational Level</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">9 Lessons</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Core Econometrics</span>
       </div>
 
-      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
-        Econometrics Fundamentals & Linear Regression
+      <h1 class="module-hero-title">
+        Econometrics Fundamentals &amp; Linear Regression
       </h1>
       
-      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 820px;">
+      <p class="module-hero-desc">
         Build the foundations of econometric reasoning, from causal questions and linear regression to OLS assumptions, coefficient interpretation, and functional forms.
       </p>
 
       <!-- Action Buttons & Progress -->
-      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+      <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
           Start Module 1 →
         </a>
@@ -92,150 +105,227 @@
       </div>
 
       <!-- Module Progress Card -->
-      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
-        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
           <span>Module 1 Completion</span>
-          <span id="progress-text-module-01" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+          <span id="progress-text-module-01" class="module-progress-percent">0% Complete</span>
         </div>
-        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
-          <div class="progress-bar-fill" id="progress-fill-module-01" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-01"></div>
         </div>
       </div>
     </div>
 
     <!-- Structured Learning Path -->
-    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
-      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
-        Curriculum Learning Flow
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
       </h3>
-      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Economic Questions</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Correlation vs Causation</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Regression Model</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OLS</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">CLRM Assumptions</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-primary-light); color: var(--color-primary); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600;">Interpretation & Functional Forms</span>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">Economic Questions</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Correlation vs Causation</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Regression Model</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">OLS Mechanics</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">CLRM Assumptions</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Exogeneity &amp; Spherical Errors</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Interpretation &amp; Functional Forms</span></span>
       </div>
     </div>
 
-    <!-- Refined Lesson Rows (Clean, Learner-Friendly, Zero Raw Equations) -->
-    <div style="margin-bottom: var(--space-2xl);">
-      <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text);">
-        Lessons in this Module
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
       </h2>
 
-      <div class="module-lesson-list">
+      <div class="module-lessons-list">
         
         <!-- Lesson 01 -->
-        <a href="lesson-01.html" class="module-lesson-row">
-          <div class="lesson-row-num">01</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">What Is Econometrics?</h3>
-            <p class="lesson-row-desc">Learn how econometrics uses data to answer causal and predictive economic questions.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.1</span>
+                <span class="badge badge-cat">Foundations</span>
+              </div>
+              <h2 class="lesson-card-title">
+                What Is Econometrics?
+              </h2>
+              <p class="lesson-card-desc">
+                Learn how econometrics uses data and statistical models to answer causal and predictive economic questions with mathematical rigor.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 02 -->
-        <a href="lesson-02.html" class="module-lesson-row">
-          <div class="lesson-row-num">02</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">Correlation, Causation & Economic Questions</h3>
-            <p class="lesson-row-desc">Understand why variables can move together without one necessarily causing the other.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.2</span>
+                <span class="badge badge-cat">Causal Reasoning</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Correlation, Causation &amp; Economic Questions
+              </h2>
+              <p class="lesson-card-desc">
+                Understand why variables can move together without one necessarily causing the other, and explore observational pitfalls.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 03 -->
-        <a href="lesson-03.html" class="module-lesson-row">
-          <div class="lesson-row-num">03</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">The Classical Linear Regression Model</h3>
-            <p class="lesson-row-desc">Build simple and multiple regression models and learn how regressors, coefficients, and errors fit together.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.3</span>
+                <span class="badge badge-cat">Model Specification</span>
+              </div>
+              <h2 class="lesson-card-title">
+                The Classical Linear Regression Model
+              </h2>
+              <p class="lesson-card-desc">
+                Build simple and multiple regression models and learn how regressors, coefficients, and error terms fit together.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 04 -->
-        <a href="lesson-04.html" class="module-lesson-row">
-          <div class="lesson-row-num">04</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">OLS, Projection & Residuals</h3>
-            <p class="lesson-row-desc">See how OLS chooses the best-fitting regression and understand fitted values, residuals, and geometric projection.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.4</span>
+                <span class="badge badge-cat">Estimation</span>
+              </div>
+              <h2 class="lesson-card-title">
+                OLS, Projection &amp; Residuals
+              </h2>
+              <p class="lesson-card-desc">
+                See how OLS chooses the best-fitting regression line and understand fitted values, residuals, and orthogonal projection.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 05 -->
-        <a href="lesson-05.html" class="module-lesson-row">
-          <div class="lesson-row-num">05</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">CLRM: Linearity & Full Rank</h3>
-            <p class="lesson-row-desc">Learn what "linear in parameters" really means and why regressors must provide independent information.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.5</span>
+                <span class="badge badge-cat">CLRM Theory</span>
+              </div>
+              <h2 class="lesson-card-title">
+                CLRM: Linearity &amp; Full Rank
+              </h2>
+              <p class="lesson-card-desc">
+                Learn what "linear in parameters" really means, explore matrix rank conditions, and see why regressors must provide independent variation.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 06 -->
-        <a href="lesson-06.html" class="module-lesson-row">
-          <div class="lesson-row-num">06</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">CLRM: Exogeneity & Spherical Errors</h3>
-            <p class="lesson-row-desc">Study zero conditional mean, heteroskedasticity, autocorrelation, and why these assumptions matter.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.6</span>
+                <span class="badge badge-cat">Error Assumptions</span>
+              </div>
+              <h2 class="lesson-card-title">
+                CLRM: Exogeneity &amp; Spherical Errors
+              </h2>
+              <p class="lesson-card-desc">
+                Study the zero conditional mean assumption, understand homoskedasticity vs heteroskedasticity, and examine uncorrelated disturbances.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 07 -->
-        <a href="lesson-07.html" class="module-lesson-row">
-          <div class="lesson-row-num">07</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">Fixed/Random Regressors & Normality</h3>
-            <p class="lesson-row-desc">Understand how regressors are treated and what normality contributes to statistical inference.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-07.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.7</span>
+                <span class="badge badge-cat">Distributional Theory</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Fixed/Random Regressors &amp; Normality
+              </h2>
+              <p class="lesson-card-desc">
+                Understand how regressors are treated in conditioning arguments, and discover what normality contributes to exact finite-sample inference.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 08 -->
-        <a href="lesson-08.html" class="module-lesson-row">
-          <div class="lesson-row-num">08</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">Coefficients & Functional Forms</h3>
-            <p class="lesson-row-desc">Interpret coefficients across linear, quadratic, semi-log, and log-log specifications.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-08.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.8</span>
+                <span class="badge badge-cat">Applied Interpretation</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Coefficients &amp; Functional Forms
+              </h2>
+              <p class="lesson-card-desc">
+                Interpret regression coefficients across linear, quadratic, semi-logarithmic, and log-log models with economic intuition.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
         <!-- Lesson 09 -->
-        <a href="lesson-09.html" class="module-lesson-row">
-          <div class="lesson-row-num">09</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">Dummy Variables & Review</h3>
-            <p class="lesson-row-desc">Learn exact percentage interpretation for dummy variables in log models and consolidate Module 1.</p>
-          </div>
-          <div class="lesson-row-action">
-            <span class="lesson-row-btn">Start Lesson →</span>
+        <a href="lesson-09.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 1.9</span>
+                <span class="badge badge-cat">Review &amp; Synthesis</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Dummy Variables &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Learn exact percentage interpretations for indicator variables in log models, synthesize foundational principles, and complete the review.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
@@ -243,8 +333,10 @@
     </div>
 
     <!-- Back to Course Homepage -->
-    <div style="padding-top: var(--space-lg); border-top: 1px solid var(--color-border);">
-      <a href="../../index.html" class="btn btn-outline">← Back to Course Homepage</a>
+    <div style="text-align: center;">
+      <a href="../../index.html#modules" class="btn btn-outline">
+        ← Return to All Course Modules
+      </a>
     </div>
 
   </main>
@@ -254,13 +346,12 @@
     <div class="container footer-inner">
       <div class="footer-bottom">
         <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
-        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="../../assets/js/main.js"></script>
   <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
 </body>
 </html>

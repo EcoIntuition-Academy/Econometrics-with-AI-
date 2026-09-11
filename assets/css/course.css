@@ -888,3 +888,982 @@
   padding-top: var(--space-sm);
   border-top: 1px solid var(--border-light);
 }
+
+/* ==========================================================================
+   CANONICAL NAVBAR DROPDOWN SYSTEM (FUTURE-PROOF FOR MODULES 1–12)
+   ========================================================================== */
+.nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.nav-dropdown-toggle:hover,
+.nav-dropdown-toggle[aria-expanded="true"],
+.nav-dropdown.is-open .nav-dropdown-toggle {
+  color: var(--accent-primary);
+  background-color: var(--surface-hover);
+}
+
+.dropdown-chevron {
+  transition: transform var(--transition-fast);
+  width: 14px;
+  height: 14px;
+}
+
+.nav-dropdown.is-open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 290px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  padding: 0.4rem 0;
+  z-index: 1050;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .nav-dropdown:hover .nav-dropdown-menu {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .nav-dropdown:hover .dropdown-chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.nav-dropdown.is-open .nav-dropdown-menu {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav-dropdown-item {
+  padding: 0.65rem 1rem;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.nav-dropdown-item:hover {
+  background-color: var(--surface-hover);
+  color: var(--accent-primary);
+}
+
+.nav-dropdown-item.active {
+  color: var(--accent-primary);
+  font-weight: var(--fw-semibold);
+  background-color: var(--accent-primary-light);
+}
+
+/* ==========================================================================
+   CANONICAL MODULE OVERVIEW SHELL & LESSON CARDS (MODULES 1–6)
+   ========================================================================== */
+.module-overview-area {
+  max-width: 1080px;
+  width: min(1080px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-3xl);
+  min-width: 0;
+}
+
+.module-hero {
+  margin-bottom: var(--space-xl);
+}
+
+.module-hero-badges {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.module-hero-title {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text, var(--text-primary));
+}
+
+.module-hero-desc {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--color-text-secondary, var(--text-secondary));
+  margin-bottom: var(--space-lg);
+  max-width: 860px;
+}
+
+.module-actions {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+}
+
+.module-progress-card {
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-surface, var(--surface));
+  border: 1px solid var(--color-border, var(--border-subtle));
+  box-shadow: var(--shadow-sm);
+}
+
+.module-progress-labels {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+}
+
+.module-progress-percent {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.module-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-border, var(--border-subtle));
+  overflow: hidden;
+}
+
+.module-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* Standardized Module Learning Path Component */
+.module-learning-path-card {
+  margin-bottom: var(--space-2xl);
+  background: var(--color-surface, var(--surface));
+  border: 1px solid var(--color-border, var(--border-subtle));
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.module-learning-path-title {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary, var(--text-muted));
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+}
+
+.module-learning-path-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.learning-path-step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.learning-path-pill {
+  background: var(--color-bg, var(--background));
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border, var(--border-subtle));
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.learning-path-pill.highlight {
+  background: var(--color-primary-light, var(--accent-primary-light));
+  color: var(--color-primary, var(--accent-primary));
+  font-weight: 600;
+}
+
+.learning-path-arrow {
+  color: var(--color-text-secondary, var(--text-muted));
+  font-weight: 600;
+  user-select: none;
+}
+
+/* Module Lessons Section & Canonical Single-Column Cards */
+.module-lessons-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.module-lessons-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text, var(--text-primary));
+}
+
+.module-lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.module-lesson-card {
+  display: block;
+  text-decoration: none;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-surface, var(--surface));
+  border: 1.5px solid var(--color-border, var(--border-subtle));
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-lesson-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.lesson-card-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.lesson-card-main {
+  flex: 1;
+  min-width: 260px;
+}
+
+.lesson-card-badges {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  margin-bottom: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.lesson-card-badges .badge-num {
+  background: var(--color-primary-light, var(--accent-primary-light));
+  color: var(--color-primary, var(--accent-primary));
+  font-weight: 600;
+}
+
+.lesson-card-badges .badge-cat {
+  background: var(--color-surface, var(--surface));
+  border: 1px solid var(--color-border, var(--border-subtle));
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary, var(--text-secondary));
+}
+
+.lesson-card-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text, var(--text-primary));
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+}
+
+.lesson-card-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary, var(--text-secondary));
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lesson-card-action {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .lesson-card-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lesson-card-action {
+    align-items: flex-start;
+    margin-top: var(--space-xs);
+  }
+  .lesson-card-action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* =========================================================================
+   CANONICAL COURSE-WIDE VISUAL LEGEND SYSTEM
+   Format Lock: Legends strictly live OUTSIDE the graph canvas/SVG
+   ========================================================================= */
+.visual-legend,
+.outside-chart-legend,
+.chart-legend-top {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 10px 18px;
+  background: var(--surface-secondary, #F7FAFF);
+  border: 1.5px solid var(--border-subtle, #cbd5e1);
+  border-radius: var(--radius-sm, 6px);
+  margin: 14px 0 16px 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #475569);
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.visual-legend-item,
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--color-text-secondary, #475569);
+  white-space: nowrap;
+}
+
+/* Base Swatch */
+.visual-legend-swatch,
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Solid Line Series */
+.visual-legend-swatch--line,
+.legend-swatch--line {
+  width: 22px;
+  height: 3px;
+  border-radius: 1px;
+  background: currentColor;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Dashed Line Series */
+.visual-legend-swatch--dashed,
+.legend-swatch--dashed {
+  width: 22px;
+  height: 0;
+  border-top: 2.5px dashed currentColor;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Point Series (Observation Dots) */
+.visual-legend-swatch--point {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Reference Line Series (Vertical) */
+.visual-legend-swatch--ref {
+  width: 0;
+  height: 16px;
+  border-left: 2px dashed currentColor;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Area / Distribution Polygon */
+.visual-legend-swatch--area {
+  width: 16px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1.5px solid currentColor;
+  background: currentColor;
+  opacity: 0.45;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Text Label */
+.visual-legend-label {
+  font-weight: 500;
+  color: var(--color-text, #1e293b);
+}
+
+/* Dynamic Value Badge (e.g. SE = 0.52) */
+.visual-legend-value {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--color-bg, #f1f5f9);
+  border: 1px solid var(--border-subtle, #cbd5e1);
+  color: var(--color-text, #0f172a);
+  margin-left: 4px;
+  display: inline-block;
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .visual-legend,
+[data-theme="dark"] .outside-chart-legend,
+[data-theme="dark"] .chart-legend-top {
+  background: var(--surface-secondary, #1e293b);
+  border-color: var(--border-subtle, #334155);
+  color: var(--color-text-secondary, #94a3b8);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .visual-legend-label {
+  color: var(--color-text, #f8fafc);
+}
+
+[data-theme="dark"] .visual-legend-value {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+  color: var(--color-text, #f8fafc);
+}
+
+/* Mobile responsive legend layout */
+@media (max-width: 640px) {
+  .visual-legend,
+  .outside-chart-legend,
+  .chart-legend-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+  .visual-legend-item,
+  .legend-item {
+    white-space: normal;
+  }
+}
+
+/* =========================================================================
+   CANONICAL STUDY SECTION & DIGITAL TEXTBOOK CONTENT SURFACES
+   Course-Wide Format Lock: Eliminates raw floating text on page background
+   ========================================================================= */
+.study-section,
+.lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) {
+  background: var(--color-surface, var(--surface, #ffffff));
+  border: 1.5px solid var(--color-border, var(--border-subtle, #e2e8f0));
+  border-radius: var(--radius-lg, 16px);
+  padding: 30px 36px;
+  margin-bottom: 34px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .study-section,
+  .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) {
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    border-radius: var(--radius-md, 12px);
+  }
+}
+
+.study-section-header,
+.lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > h2:first-child {
+  border-bottom: 1px solid var(--color-border, var(--border-subtle, #e2e8f0));
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.study-section-title,
+.study-section h2,
+.lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-text, var(--text-primary, #0f172a));
+  margin: 0;
+  line-height: 1.3;
+}
+
+.study-section-body {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--color-text, var(--text-primary, #334155));
+}
+
+.study-section-body > p,
+.study-section > p,
+.lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > p {
+  margin-bottom: 16px;
+  line-height: 1.7;
+  color: var(--color-text, var(--text-primary, #334155));
+}
+
+.study-section-body > p:last-child,
+.study-section > p:last-child,
+.lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > p:last-child {
+  margin-bottom: 0;
+}
+
+/* Dedicated Equation Surface */
+.equation-surface {
+  background: var(--color-bg, var(--surface-secondary, #f8fafc));
+  border: 1px solid var(--color-border, var(--border-subtle, #cbd5e1));
+  border-radius: var(--radius-sm, 8px);
+  padding: 18px 24px;
+  margin: 18px 0;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.equation-surface--warning {
+  background: rgba(239, 68, 68, 0.04);
+  border-color: rgba(239, 68, 68, 0.35);
+  border-left: 4px solid #dc2626;
+}
+
+.equation-surface--accent {
+  background: rgba(37, 99, 235, 0.04);
+  border-color: rgba(37, 99, 235, 0.35);
+  border-left: 4px solid #2563eb;
+}
+
+.equation-surface--success {
+  background: rgba(5, 150, 105, 0.04);
+  border-color: rgba(5, 150, 105, 0.35);
+  border-left: 4px solid #059669;
+}
+
+.equation-surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.equation-surface-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.badge-warning {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-accent {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-success {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.equation-surface-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, var(--text-muted, #64748b));
+}
+
+.equation-surface-math {
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 6px 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Compatible Equation Card styling across all study modules */
+.equation-card {
+  background: var(--color-bg, var(--surface-secondary, #f8fafc));
+  border: 1px solid var(--color-border, var(--border-subtle, #cbd5e1));
+  border-radius: var(--radius-sm, 8px);
+  padding: 18px 24px;
+  margin: 18px 0;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.equation-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary, #2563eb);
+  margin-bottom: 8px;
+}
+
+.equation-content {
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 6px 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+@media (max-width: 480px) {
+  .equation-surface {
+    padding: 14px 14px;
+  }
+  .equation-surface-math,
+  .equation-content {
+    font-size: 0.9rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .equation-surface mjx-container[jax="CHTML"],
+  .equation-card mjx-container[jax="CHTML"] {
+    font-size: 90% !important;
+  }
+}
+
+/* Key Idea / Takeaway Box */
+.key-idea-card {
+  background: var(--color-bg, var(--surface-secondary, #f8fafc));
+  border: 1px solid var(--border-subtle, #cbd5e1);
+  border-left: 4px solid #2563eb;
+  border-radius: var(--radius-sm, 8px);
+  padding: 14px 18px;
+  margin: 18px 0 0 0;
+}
+
+.key-idea-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2563eb;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.key-idea-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text, #1e293b);
+  margin: 0;
+}
+
+/* Nested Study Cards inside Study Sections (2-level hierarchy contrast) */
+.study-section .study-card,
+.lesson-section:not(#labSection) .study-card {
+  background: var(--color-bg, #f8fafc);
+  border: 1px solid var(--border-subtle, #e2e8f0);
+}
+
+[data-theme="dark"] .study-section .study-card,
+[data-theme="dark"] .lesson-section:not(#labSection) .study-card {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+}
+
+/* Dark Mode Adaptations */
+[data-theme="dark"] .study-section,
+[data-theme="dark"] .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) {
+  background: var(--color-surface, var(--surface, #1e293b));
+  border-color: var(--border-subtle, #334155);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .study-section-header,
+[data-theme="dark"] .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > h2:first-child {
+  border-color: var(--border-subtle, #334155);
+}
+
+[data-theme="dark"] .study-section-title,
+[data-theme="dark"] .study-section h2,
+[data-theme="dark"] .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > h2 {
+  color: var(--color-text, #f8fafc);
+}
+
+[data-theme="dark"] .study-section-body,
+[data-theme="dark"] .study-section-body > p,
+[data-theme="dark"] .study-section > p,
+[data-theme="dark"] .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) > p {
+  color: var(--color-text, #cbd5e1);
+}
+
+[data-theme="dark"] .equation-surface {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+}
+
+[data-theme="dark"] .key-idea-card {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+  border-left-color: #3b82f6;
+}
+
+[data-theme="dark"] .key-idea-text {
+  color: #f1f5f9;
+}
+
+/* --------------------------------------------------------------------------
+   2×2×2 GROUP MEANS DECOMPOSITION TABLES (DDD WORKED EXAMPLE)
+   -------------------------------------------------------------------------- */
+.group-means-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+.group-means-panel {
+  background: var(--color-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-fast);
+}
+
+.group-means-panel--target {
+  border-left: 4px solid #2563eb;
+}
+
+.group-means-panel--control {
+  border-left: 4px solid #64748b;
+}
+
+.group-means-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.group-means-panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.group-means-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.group-means-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  text-align: left;
+}
+
+.group-means-table th {
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.group-means-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--color-text);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.group-means-table tr:last-child td {
+  border-bottom: none;
+}
+
+.group-means-table .col-grade {
+  font-weight: 600;
+  width: 24%;
+}
+
+.group-means-table .col-pre {
+  font-family: var(--font-mono);
+  width: 24%;
+}
+
+.group-means-table .col-post {
+  font-family: var(--font-mono);
+  width: 28%;
+}
+
+.group-means-table .col-delta {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #2563eb;
+  width: 24%;
+}
+
+.group-means-table .row-highlight {
+  background: rgba(5, 150, 105, 0.08);
+}
+
+.group-means-table .row-highlight td {
+  color: #059669;
+}
+
+.group-means-table .row-highlight .col-delta {
+  color: #059669;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .group-means-panel {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+}
+
+[data-theme="dark"] .group-means-table .row-highlight {
+  background: rgba(5, 150, 105, 0.16);
+}
+
+/* Derivation Steps inside Study Section (Eliminating double-card syndrome) */
+.study-section .derivation-journey {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.study-section .derivation-step-body {
+  background: var(--color-bg, #f8fafc);
+  border: 1px solid var(--border-subtle, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 1.15rem 1.35rem;
+  color: var(--color-text, #1e293b);
+}
+
+[data-theme="dark"] .study-section .derivation-step-body {
+  background: var(--color-bg, #0f172a);
+  border-color: var(--border-subtle, #334155);
+  color: var(--color-text, #f8fafc);
+}
+
+.study-section .derivation-step-title {
+  color: var(--color-text, #0f172a);
+}
+
+[data-theme="dark"] .study-section .derivation-step-title {
+  color: var(--color-text, #f8fafc);
+}
+
+.study-section .derivation-step-desc {
+  color: var(--color-text-secondary, #475569);
+}
+
+[data-theme="dark"] .study-section .derivation-step-desc {
+  color: var(--color-text-secondary, #94a3b8);
+}
+
+.study-section .derivation-step-math {
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-subtle, #cbd5e1);
+  color: var(--color-text, #0f172a);
+}
+
+[data-theme="dark"] .study-section .derivation-step-math {
+  background: var(--surface, #1e293b);
+  border-color: var(--border-subtle, #334155);
+  color: var(--color-text, #f8fafc);
+}
+
+.study-section .derivation-why {
+  background: rgba(37, 99, 235, 0.08);
+  border-left: 3px solid var(--color-primary, #3b82f6);
+  color: var(--color-text, #1e3a8a);
+}
+
+[data-theme="dark"] .study-section .derivation-why {
+  background: rgba(37, 99, 235, 0.15);
+  color: #93c5fd;
+}
+
+.study-section .derivation-why-label {
+  color: var(--color-primary, #2563eb);
+}
+
+[data-theme="dark"] .study-section .derivation-why-label {
+  color: #60a5fa;
+}
+
+
+

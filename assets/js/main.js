@@ -56,6 +56,42 @@
       });
     }
 
+    // 2.5 Navbar Modules Dropdown (Desktop Click & Mobile Tap Support)
+    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+      const toggleBtn = dropdown.querySelector('.nav-dropdown-toggle');
+      if (!toggleBtn) return;
+
+      toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle('is-open');
+        toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(dropdown => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          const toggleBtn = dropdown.querySelector('.nav-dropdown-toggle');
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.nav-dropdown.is-open').forEach(dropdown => {
+          dropdown.classList.remove('is-open');
+          const toggleBtn = dropdown.querySelector('.nav-dropdown-toggle');
+          if (toggleBtn) {
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            toggleBtn.focus();
+          }
+        });
+      }
+    });
+
     // 3. Syllabus Overview Modal
     const modal = document.getElementById('syllabusModal');
     const modalCloseBtn = document.getElementById('modalCloseBtn');

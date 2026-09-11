@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7.2: The DDD Regression &amp; Coefficient Interpretation — EcoIntuition Academy</title>
+  <meta name="description" content="Explore the full saturated DDD regression specification, decompose the eight group-mean combinations across city, grade, and time, and interpret all coefficients from β0 to β7.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-07" data-lesson="02">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 7</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 07</a>
+          <span class="module-nav-title">Advanced Difference-in-Differences</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 5 &middot; The DDD Regression &amp; Coefficient Interpretation</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 7 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.1 Why Difference-in-Difference-in-Differences?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">7.2 The DDD Regression &amp; Coefficient Interpretation</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.3 Deriving the Triple-Interaction Effect</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.4 DDD in Changes &amp; the Role of Controls</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.5 DDD Assumptions, Interpretation &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">40%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 40%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 7.2</span>
+        <span class="badge">Model Specification</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        The DDD Regression &amp; Coefficient Interpretation
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        To estimate a triple difference in an econometric regression, we specify a saturated model containing main effects, all pairwise two-way interactions, and a single triple-interaction term.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formalize the Philadelphia vs. Pittsburgh extra-math tutoring empirical design.</li>
+        <li>Write down the complete 8-parameter saturated DDD regression equation.</li>
+        <li>Decompose all 8 expected group means across City, Grade, and Time for both Pre and Post periods.</li>
+        <li>Interpret each individual coefficient from the baseline constant \(\beta_0\) to the double-interactions \(\beta_3, \beta_5, \beta_6\).</li>
+        <li>Understand why the triple-interaction parameter \(\beta_7\) captures the true differential post-treatment gain.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Empirical Setup -->
+    <section class="study-section" id="setupSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Empirical Research Design: Extra Math in Philadelphia</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Consider an educational intervention where an <strong>extra-math tutoring program</strong> is specifically targeted at high school <strong>juniors</strong> in <strong>Philadelphia</strong> public schools. We want to estimate whether this program improved standardized math test scores (\(\text{score}_{itc}\)).
+        </p>
+
+        <div class="study-card">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; margin-bottom: 4px;">THE THREE DIMENSIONS</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 12px;">Defining the Indicator Variables</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md);">
+            <div style="background: var(--color-bg); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong>1. City Dimension (\(\text{Philly}_i\))</strong>
+              <ul style="margin: 6px 0 0 0; padding-left: 1.2rem; font-size: 0.88rem; line-height: 1.5;">
+                <li>\(\text{Philly}_i = 1\): Philadelphia (Treated City)</li>
+                <li>\(\text{Philly}_i = 0\): Pittsburgh (Control City)</li>
+              </ul>
+            </div>
+            <div style="background: var(--color-bg); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong>2. Grade Dimension (\(\text{Junior}_i\))</strong>
+              <ul style="margin: 6px 0 0 0; padding-left: 1.2rem; font-size: 0.88rem; line-height: 1.5;">
+                <li>\(\text{Junior}_i = 1\): Juniors (Targeted Grade)</li>
+                <li>\(\text{Junior}_i = 0\): Sophomores (Placebo Grade)</li>
+              </ul>
+            </div>
+            <div style="background: var(--color-bg); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong>3. Time Dimension (\(\text{Time}_t\))</strong>
+              <ul style="margin: 6px 0 0 0; padding-left: 1.2rem; font-size: 0.88rem; line-height: 1.5;">
+                <li>\(\text{Time}_t = 1\): Post-Treatment School Year</li>
+                <li>\(\text{Time}_t = 0\): Pre-Treatment School Year</li>
+              </ul>
+            </div>
+          </div>
+          <div style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--color-primary-light); border-radius: var(--radius-sm); color: var(--color-primary); font-size: 0.9rem;">
+            <strong>Targeted Group:</strong> The only students who participate in the extra-math tutoring program are <strong>Philadelphia Juniors in the Post-Treatment period</strong> (\(\text{Philly}_i = 1, \text{Junior}_i = 1, \text{Time}_t = 1\)).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Full Saturated DDD Regression -->
+    <section class="study-section" id="modelSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Full Saturated DDD Regression Model</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          To allow complete flexibility for all main effects, permanent baseline gaps, and grade- and city-specific time shocks, the DDD regression includes all three main indicators, all three two-way interaction products, and the single three-way interaction product:
+        </p>
+
+        <div class="equation-surface equation-surface--accent">
+          <div class="equation-surface-header">
+            <span class="equation-surface-badge badge-accent">DDD SPECIFICATION</span>
+            <span class="equation-surface-title">Philadelphia &times; Junior &times; Post</span>
+          </div>
+          <div class="equation-surface-math">
+            \[\begin{aligned}
+            \text{score}_{itc} = \; & \beta_0 + \beta_1 \text{Philly}_i + \beta_2 \text{Junior}_i + \beta_3 (\text{Philly}_i \times \text{Junior}_i) \\
+            & + \beta_4 \text{Time}_t + \beta_5 (\text{Philly}_i \times \text{Time}_t) + \beta_6 (\text{Junior}_i \times \text{Time}_t) \\
+            & + \beta_7 (\text{Philly}_i \times \text{Junior}_i \times \text{Time}_t) + W'_{ic}\Gamma + \varepsilon_{itc}
+            \end{aligned}\]
+          </div>
+          <div style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--color-text-secondary); text-align: center;">
+            where \(W'_{ic}\) is a vector of pre-treatment student and classroom covariates, and \(\varepsilon_{itc}\) is the idiosyncratic error term.
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-header">
+            <span class="callout-badge">KEY PARAMETER</span>
+            <span class="callout-title">WHERE / KEY PARAMETER: \(\beta_7\)</span>
+          </div>
+          <div class="callout-body">
+            <p>
+              Notice that the triple-interaction term \(\text{Philly}_i \times \text{Junior}_i \times \text{Time}_t\) equals \(1\) <em>if and only if</em> the student is a junior in Philadelphia during the post-treatment period. \(\beta_7\) is the DDD estimand in this specification. Under the stated identifying assumptions, it has the causal treatment-effect interpretation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Eight Cell Means Decomposition -->
+    <section class="study-section" id="decompositionSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Decomposing the Eight Group Means</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          With three binary dimensions (\(2 \times 2 \times 2\)), there are exactly eight possible group-by-time cells. Evaluating the conditional expectation \(\mathbb{E}[\text{score}_{itc}]\) for each cell across both the <strong>PRE-TREATMENT PERIOD</strong> (\(\text{Time}_t = 0\)) and <strong>POST-TREATMENT PERIOD</strong> (\(\text{Time}_t = 1\)) reveals how each \(\beta\) coefficient enters the model:
+        </p>
+
+        <!-- Full-Width Group Means Decomposition Stack -->
+        <div class="group-means-container">
+          
+          <!-- Panel A: Pittsburgh (Control City) -->
+          <div class="group-means-panel group-means-panel--control">
+            <div class="group-means-panel-header">
+              <h3 class="group-means-panel-title" style="color: #64748b;">
+                PITTSBURGH (\(\text{Philly} = 0\)) — CONTROL CITY
+              </h3>
+              <span class="badge" style="background: #e2e8f0; color: #475569; font-weight: 600;">Comparison City · No Tutoring Policy</span>
+            </div>
+            <div class="group-means-table-wrapper">
+              <table class="group-means-table">
+                <thead>
+                  <tr>
+                    <th class="col-grade">Grade Level</th>
+                    <th class="col-pre">PRE-TREATMENT PERIOD (\(\text{Time}=0\))</th>
+                    <th class="col-post">POST-TREATMENT PERIOD (\(\text{Time}=1\))</th>
+                    <th class="col-delta">\(\Delta\) (Time Change)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-grade">Sophomores (\(\text{Junior}=0\))</td>
+                    <td class="col-pre">\(\beta_0\)</td>
+                    <td class="col-post">\(\beta_0 + \beta_4\)</td>
+                    <td class="col-delta">\(\Delta_{\text{Pitt Soph}} = \beta_4\)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-grade">Juniors (\(\text{Junior}=1\))</td>
+                    <td class="col-pre">\(\beta_0 + \beta_2\)</td>
+                    <td class="col-post">\(\beta_0 + \beta_2 + \beta_4 + \beta_6\)</td>
+                    <td class="col-delta">\(\Delta_{\text{Pitt Jr}} = \beta_4 + \beta_6\)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top: 0.75rem; padding-top: 0.65rem; border-top: 1px dashed var(--border-subtle); font-size: 0.85rem; color: var(--color-text-secondary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <span><strong>Within-Pittsburgh DD (Grade Secular Difference):</strong></span>
+              <span style="font-family: var(--font-mono); font-weight: 700; color: #2563eb;">\(\text{DD}_{\text{Pitt}} = \Delta_{\text{Pitt Jr}} - \Delta_{\text{Pitt Soph}} = (\beta_4 + \beta_6) - \beta_4 = \beta_6\)</span>
+            </div>
+          </div>
+
+          <!-- Panel B: Philadelphia (Treated City) -->
+          <div class="group-means-panel group-means-panel--target">
+            <div class="group-means-panel-header">
+              <h3 class="group-means-panel-title" style="color: #2563eb;">
+                PHILADELPHIA (\(\text{Philly} = 1\)) — TREATED CITY
+              </h3>
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">Target City · Intensive Tutoring Reform for Juniors</span>
+            </div>
+            <div class="group-means-table-wrapper">
+              <table class="group-means-table">
+                <thead>
+                  <tr>
+                    <th class="col-grade">Grade Level</th>
+                    <th class="col-pre">PRE-TREATMENT PERIOD (\(\text{Time}=0\))</th>
+                    <th class="col-post">POST-TREATMENT PERIOD (\(\text{Time}=1\))</th>
+                    <th class="col-delta">\(\Delta\) (Time Change)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-grade">Sophomores (\(\text{Junior}=0\))</td>
+                    <td class="col-pre">\(\beta_0 + \beta_1\)</td>
+                    <td class="col-post">\(\beta_0 + \beta_1 + \beta_4 + \beta_5\)</td>
+                    <td class="col-delta">\(\Delta_{\text{Philly Soph}} = \beta_4 + \beta_5\)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-grade">Juniors (\(\text{Junior}=1\))</td>
+                    <td class="col-pre">\(\beta_0 + \beta_1 + \beta_2 + \beta_3\)</td>
+                    <td class="col-post" style="font-weight: 700; color: #b91c1c; background: rgba(239, 68, 68, 0.08);">
+                      \(\beta_0 + \beta_1 + \beta_2 + \beta_3 + \beta_4 + \beta_5 + \beta_6 + \mathbf{\beta_7}\)
+                    </td>
+                    <td class="col-delta">\(\Delta_{\text{Philly Jr}} = \beta_4 + \beta_5 + \beta_6 + \beta_7\)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top: 0.75rem; padding-top: 0.65rem; border-top: 1px dashed var(--border-subtle); font-size: 0.85rem; color: var(--color-text-secondary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <span><strong>Within-Philadelphia DD (Treated Grade vs Placebo Grade):</strong></span>
+              <span style="font-family: var(--font-mono); font-weight: 700; color: #2563eb;">\(\text{DD}_{\text{Philly}} = \Delta_{\text{Philly Jr}} - \Delta_{\text{Philly Soph}} = \beta_6 + \beta_7\)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Rigorous Parameter Interpretation -->
+    <section class="study-section" id="interpretationSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Exact Interpretation of All Eight Parameters</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Every coefficient in the saturated DDD equation corresponds to a specific structural component of the data-generating process:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_0\) (Baseline Constant)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Average pre-period score for the baseline reference group: <strong>Pittsburgh Sophomores</strong> (\(\text{Philly}=0, \text{Junior}=0, \text{Time}=0\)).
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_1\) (City Baseline Gap)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Permanent pre-treatment baseline difference between Philadelphia sophomores and Pittsburgh sophomores.
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_2\) (Grade Baseline Gap)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Permanent pre-treatment baseline difference between juniors and sophomores in the control city (Pittsburgh).
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_3\) (City &times; Grade Baseline Interaction)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Permanent Philadelphia &times; Junior baseline interaction: the additional pre-period difference between juniors and sophomores specific to Philadelphia beyond \(\beta_1\) and \(\beta_2\).
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_4\) (Common Time Trend)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Over-time change in test scores experienced by the baseline group (Pittsburgh sophomores) between pre- and post-periods.
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_5\) (City &times; Time Shock)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              <strong>The confounding shock:</strong> Additional over-time change common to all Philadelphia students (both sophomores and juniors), such as a district-wide curriculum reform.
+            </p>
+          </div>
+
+          <div class="study-card">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_6\) (Grade &times; Time Trend)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Additional over-time change common to all juniors across both cities (e.g., statewide changes in junior-year standardized testing formats).
+            </p>
+          </div>
+
+          <div class="study-card" style="border: 2px solid var(--color-primary); background: var(--color-primary-light);">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin-bottom: 4px;">\(\beta_7\) (Triple Interaction Estimand)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; font-weight: 600; color: var(--color-text);">
+              The DDD estimand: additional post-treatment change for Philadelphia juniors beyond lower-order group, geography, and time effects. Under the stated identifying assumptions, it has the causal treatment-effect interpretation.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Key Idea Card -->
+        <div class="key-idea-card" style="margin-top: var(--space-lg);">
+          <div class="key-idea-title">WHAT DOES \(\beta_7\) ISOLATE?</div>
+          <p class="key-idea-text">
+            \(\beta_7\) is the additional post-treatment change for Philadelphia juniors after the specification accounts for:
+          </p>
+          <ul style="margin: 6px 0 0 0; padding-left: 1.25rem; font-size: 0.88rem; line-height: 1.6;">
+            <li>The permanent Philadelphia level difference (\(\beta_1\)).</li>
+            <li>The permanent junior-group level difference (\(\beta_2\)).</li>
+            <li>The permanent Philadelphia &times; Junior baseline interaction (\(\beta_3\)).</li>
+            <li>The common post-period change (\(\beta_4\)).</li>
+            <li>The Philadelphia-specific time change (\(\beta_5\)).</li>
+            <li>The junior-specific time change (\(\beta_6\)).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The full DDD specification includes 3 main effects (\(\beta_1, \beta_2, \beta_4\)), 3 two-way interactions (\(\beta_3, \beta_5, \beta_6\)), and 1 triple-interaction term (\(\beta_7\)).</li>
+        <li>The triple interaction \(\text{Philly}_i \times \text{Junior}_i \times \text{Time}_t\) activates only for Philadelphia juniors in the post-treatment period.</li>
+        <li>Decomposing the saturated model yields all 8 expected group means across City, Grade, and Time.</li>
+        <li>The parameter \(\beta_5\) absorbs city-specific time shocks, while \(\beta_6\) absorbs grade-specific time shocks.</li>
+        <li>\(\beta_7\) is the DDD estimand. Under the stated identifying assumptions, it has the causal treatment-effect interpretation.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Lesson 7.1: Why DDD?
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: 7.3 Triple Interaction →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

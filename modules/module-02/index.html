@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 02: OLS Geometry, Matrix Algebra & Regression Mechanics — EcoIntuition Academy</title>
+  <title>Module 02: OLS Geometry, Matrix Algebra &amp; Regression Mechanics — EcoIntuition Academy</title>
   <meta name="description" content="Develop a geometric and algebraic understanding of OLS—from orthogonal projection and the normal equations to residual-maker matrices, the Frisch–Waugh–Lovell theorem, demeaning, and orthogonal regressors.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
@@ -21,9 +21,9 @@
 
   <!-- Centralized MathJax 3 Configuration & Library -->
   <script src="../../assets/js/math-config.js"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
 </head>
-<body>
+<body data-module="module-02">
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
@@ -38,8 +38,20 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
-          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
-          <li><a href="../module-01/index.html" class="nav-item-link">Module 1</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
           <li><a href="index.html" class="nav-item-link active">Module 2</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
@@ -63,27 +75,27 @@
   </header>
 
   <!-- Centered Landing Content (Strictly NO Sidebar) -->
-  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+  <main class="module-overview-area">
     
     <!-- Hero Header -->
-    <div style="margin-bottom: var(--space-xl);">
-      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+    <div class="module-hero">
+      <div class="module-hero-badges">
         <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 02</span>
-        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Intermediate / Mathematical Foundations</span>
+        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Mathematical Foundations</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">8 Lessons</span>
-        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Linear Algebra & Geometry</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Linear Algebra &amp; Geometry</span>
       </div>
 
-      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
-        OLS Geometry, Matrix Algebra & Regression Mechanics
+      <h1 class="module-hero-title">
+        OLS Geometry, Matrix Algebra &amp; Regression Mechanics
       </h1>
       
-      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 860px;">
+      <p class="module-hero-desc">
         Develop a geometric and algebraic understanding of OLS—from orthogonal projection and the normal equations to residual-maker matrices, the Frisch–Waugh–Lovell theorem, demeaning, and orthogonal regressors.
       </p>
 
       <!-- Action Buttons & Progress -->
-      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+      <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
           Start Module 2 →
         </a>
@@ -93,177 +105,234 @@
       </div>
 
       <!-- Module Progress Card -->
-      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
-        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
           <span>Module 2 Completion</span>
-          <span id="progress-text-module-02" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+          <span id="progress-text-module-02" class="module-progress-percent">0% Complete</span>
         </div>
-        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
-          <div class="progress-bar-fill" id="progress-fill-module-02" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-02"></div>
         </div>
       </div>
     </div>
 
     <!-- Structured Learning Path -->
-    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
-      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
-        Curriculum Learning Flow
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
       </h3>
-      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Projection</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Normal Equations</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Projection Matrices</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Residual Properties</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Means & Constants</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">FWL</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Demeaning</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-primary-light); color: var(--color-primary); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600;">Orthogonality</span>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">Projection</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Normal Equations</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Projection Matrices</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Residual Properties</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Means &amp; Centroids</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Frisch–Waugh–Lovell</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Demeaning Matrix</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Orthogonal Regressors</span></span>
       </div>
     </div>
 
-    <!-- Lesson Rows -->
-    <div style="margin-bottom: var(--space-2xl);">
-      <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text);">
-        Lessons in this Module
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
       </h2>
 
-      <div class="module-lesson-list">
+      <div class="module-lessons-list">
         
-        <!-- Lesson 01 -->
-        <a href="lesson-01.html" class="module-lesson-row">
-          <div class="lesson-row-num">01</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.1 OLS as Orthogonal Projection</h3>
-            <p class="lesson-row-desc">Understand OLS as the "closest possible shadow" of outcome vector y onto the column space Col(X) in n-dimensional observation space.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Geometry</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-01">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 02 -->
-        <a href="lesson-02.html" class="module-lesson-row">
-          <div class="lesson-row-num">02</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.2 Deriving the Normal Equations</h3>
-            <p class="lesson-row-desc">Step-by-step matrix derivation of the normal equations X'Xβ̂ = X'y from the SSE loss function, gradient, and positive definite Hessian.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Matrix Calculus</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-02">Not Started</span>
+        <!-- Lesson 2.1 -->
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.1</span>
+                <span class="badge badge-cat">Geometry</span>
+              </div>
+              <h2 class="lesson-card-title">
+                OLS as Orthogonal Projection
+              </h2>
+              <p class="lesson-card-desc">
+                Understand OLS as the closest possible shadow of outcome vector y onto the column space of X in n-dimensional observation space, minimizing Euclidean distance.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 03 -->
-        <a href="lesson-03.html" class="module-lesson-row">
-          <div class="lesson-row-num">03</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.3 Projection & Residual-Maker Matrices</h3>
-            <p class="lesson-row-desc">The projection matrix P and residual-maker M as linear operators: idempotence (P² = P), symmetry (P' = P), and regression decomposition y = Py + My.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Operators</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-03">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 04 -->
-        <a href="lesson-04.html" class="module-lesson-row">
-          <div class="lesson-row-num">04</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.4 Residual Orthogonality & the Constant Term</h3>
-            <p class="lesson-row-desc">Why the residual vector is perpendicular to every regressor (X'e = 0) and why residuals strictly sum to zero (∑eᵢ = 0) only when an intercept is included.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Mechanics</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-04">Not Started</span>
+        <!-- Lesson 2.2 -->
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.2</span>
+                <span class="badge badge-cat">Matrix Calculus</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Deriving the Normal Equations
+              </h2>
+              <p class="lesson-card-desc">
+                Step-by-step matrix derivation of the normal equations from the sum of squared errors objective function, gradient first-order conditions, and positive definite Hessian.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 05 -->
-        <a href="lesson-05.html" class="module-lesson-row">
-          <div class="lesson-row-num">05</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.5 Means, Fitted Values & Regression Balance</h3>
-            <p class="lesson-row-desc">Prove why the fitted regression hyperplane passes through the sample means centroid (ȳ = x̄'β̂) and why mean fitted outcome equals mean actual outcome (ȳ̂ = ȳ).</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Sample Centroids</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-05">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 06 -->
-        <a href="lesson-06.html" class="module-lesson-row">
-          <div class="lesson-row-num">06</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.6 The Frisch–Waugh–Lovell Theorem</h3>
-            <p class="lesson-row-desc">"Remove the old story, study what's left." Derive the FWL partialling-out mechanics and verify that partial regression on residualized vectors yields the exact multiple regression coefficient.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Core Theorem</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-06">Not Started</span>
+        <!-- Lesson 2.3 -->
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.3</span>
+                <span class="badge badge-cat">Projection Operators</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Projection &amp; Residual-Maker Matrices
+              </h2>
+              <p class="lesson-card-desc">
+                Examine the projection matrix P and residual-maker M as linear algebraic operators: idempotence, symmetry, orthogonality, and the fundamental decomposition y = Py + My.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 07 -->
-        <a href="lesson-07.html" class="module-lesson-row">
-          <div class="lesson-row-num">07</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.7 Demeaning & the Covariance Form of OLS</h3>
-            <p class="lesson-row-desc">Specializing FWL to the constant term with demeaning matrix M₀. Derive the simple regression slope as sample covariance divided by sample variance.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Transformations</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-07">Not Started</span>
+        <!-- Lesson 2.4 -->
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.4</span>
+                <span class="badge badge-cat">Mechanics</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Residual Orthogonality &amp; the Constant Term
+              </h2>
+              <p class="lesson-card-desc">
+                Discover why the residual vector is perpendicular to every regressor column, and understand why residuals strictly sum to zero only when an intercept is included.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 08 -->
-        <a href="lesson-08.html" class="module-lesson-row">
-          <div class="lesson-row-num">08</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">2.8 Orthogonal Regressors, Randomization & Module Review</h3>
-            <p class="lesson-row-desc">Analyze orthogonal regressors (X₁'X₂ = 0), randomized experiment intuitions, synthesize the Module 2 roadmap, and complete the 6-part Source Quiz.</p>
+        <!-- Lesson 2.5 -->
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.5</span>
+                <span class="badge badge-cat">Sample Centroids</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Means, Fitted Values &amp; Regression Balance
+              </h2>
+              <p class="lesson-card-desc">
+                Prove why the fitted regression hyperplane passes through the sample centroid of means, and verify why the average fitted outcome equals the average actual outcome.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Capstone & Quiz</span>
-            <span class="lesson-status-tag" data-lesson-id="module-02-lesson-08">Not Started</span>
+        </a>
+
+        <!-- Lesson 2.6 -->
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.6</span>
+                <span class="badge badge-cat">Core Theorem</span>
+              </div>
+              <h2 class="lesson-card-title">
+                The Frisch–Waugh–Lovell Theorem
+              </h2>
+              <p class="lesson-card-desc">
+                "Remove the old story, study what's left." Derive the FWL partialling-out mechanics and verify that bivariate regression on residualized vectors yields the exact multiple coefficient.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 2.7 -->
+        <a href="lesson-07.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.7</span>
+                <span class="badge badge-cat">Transformations</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Demeaning &amp; the Covariance Form of OLS
+              </h2>
+              <p class="lesson-card-desc">
+                Specialize FWL to the constant term using the demeaning matrix, and derive the simple regression slope as sample covariance divided by sample variance.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 2.8 -->
+        <a href="lesson-08.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 2.8</span>
+                <span class="badge badge-cat">Capstone &amp; Review</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Orthogonal Regressors, Randomization &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Analyze uncorrelated regressors where cross-products vanish, explore connections to randomized experiments, synthesize the Module 2 roadmap, and complete the review quiz.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
       </div>
     </div>
 
-    <!-- Return to Overview Navigation -->
-    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); flex-wrap: wrap; gap: var(--space-md);">
-      <a href="../module-01/index.html" class="btn btn-outline">← Back to Module 1</a>
-      <a href="../../index.html#modules" class="btn btn-primary">Course Curriculum Overview</a>
+    <!-- Quick Navigation Back -->
+    <div style="text-align: center;">
+      <a href="../../index.html#modules" class="btn btn-outline">
+        ← Return to All Course Modules
+      </a>
     </div>
 
   </main>
 
-  <!-- Footer -->
+  <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-bottom">
         <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
-        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="../../assets/js/main.js"></script>
   <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
   <script src="../../assets/js/interactions.js"></script>
 </body>
 </html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6.6: Testing Trends &amp; No-Anticipation — EcoIntuition Academy</title>
+  <meta name="description" content="Discover how to formally test for differential pre-trends using group-specific linear trend models, explore quadratic extensions, and master the critical No-Anticipation assumption.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-06" data-lesson="06">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+            <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations & Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra & Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties & Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory & Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing & Dummies</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 6: OVB, Experiments & DD</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 6</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 06</a>
+          <span class="module-nav-title">Omitted Variable Bias, Experiments &amp; DD</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 8 &middot; Testing Trends &amp; No-Anticipation</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 6 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.1 OVB — Formal Derivation &amp; Intuition</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.2 Omitted Variables, Variance &amp; Standard Errors</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.3 Controls &amp; OVB in Randomized Experiments</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.4 Difference-in-Differences Fundamentals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.5 Parallel Trends &amp; DD Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">6.6 Testing Trends &amp; No-Anticipation</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.7 Difference-in-Difference-in-Differences (DDD)</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.8 DDD Worked Example &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">75.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 75.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 6.6</span>
+        <span class="badge">Testing &amp; Assumptions</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Testing Trends &amp; the No-Anticipation Assumption
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        How can an empirical researcher formally test whether pre-trends are parallel? Discover the extended group-specific trend regression from page 14 of the primary source, explore quadratic extensions for non-linear drift, and master the <strong>No-Anticipation</strong> assumption that prevents behavioral reactions from contaminating nominal pre-periods.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate the group-specific linear trend regression using pre-treatment observations.</li>
+        <li>Set up and conduct the statistical hypothesis test for parallel linear pre-slopes (\(H_0: \beta_3 = 0\)).</li>
+        <li>Understand quadratic trend extensions that allow for non-linear secular curvature.</li>
+        <li>Define the No-Anticipation assumption and explain why advance announcements contaminate pre-treatment data.</li>
+        <li>Analyze the cigarette tax case study where anticipatory behavior biases the estimated policy impact.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Testing Pre-Trends -->
+    <section class="lesson-section" id="modelSection">
+      <h2>1. The Group-Specific Trend Model (Source Page 14)</h2>
+      <p>
+        When researchers possess panel or repeated cross-sectional data spanning multiple pre-treatment periods (\(t = -T_0, \dots, 0\)), they can test whether the treated and control groups had statistically indistinguishable pre-treatment growth rates.
+      </p>
+      <p>
+        Following the exact specification on page 14 of the source:
+      </p>
+
+      <!-- Key Equation: Group-Specific Trend Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Group-Specific Linear Trend Regression (Pre-Treatment Sample)</div>
+        <div class="equation-box-math">
+          \[y_{it} = \beta_0 + \beta_1 D_i + \beta_2 \text{Trend}_t + \beta_3 (D_i \cdot \text{Trend}_t) + \mathbf{W}_{it}'\boldsymbol{\Gamma} + \varepsilon_{it}\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(D_i\) is the treated group indicator, \(\text{Trend}_t \in \{1, 2, 3, \dots\}\) is a continuous time counter, \(D_i \cdot \text{Trend}_t\) is the group-specific trend interaction, and \(\mathbf{W}_{it}\) is a vector of additional control variables.
+        </div>
+      </div>
+
+      <!-- Parameter Meaning Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-lg);">
+        
+        <div class="study-card" style="background: var(--surface); padding: 1rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm); border-top: 3px solid #64748b;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">CONTROL SLOPE</div>
+          <div style="font-size: 1.2rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-text); margin: 4px 0;">\(\beta_2\)</div>
+          <p style="font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); margin: 0;">
+            Measures the baseline linear growth rate per period experienced by the untreated control group before the policy.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 1rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); border-top: 3px solid #2563eb;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #2563eb; text-transform: uppercase;">DIFFERENTIAL SLOPE</div>
+          <div style="font-size: 1.2rem; font-family: var(--font-mono); font-weight: 800; color: #2563eb; margin: 4px 0;">\(\beta_3\)</div>
+          <p style="font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); margin: 0;">
+            Measures the difference in linear trend slope between the treated group and the control group prior to treatment.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Key Statistical Test -->
+    <section class="lesson-section" id="testSection">
+      <h2>2. The Formal Hypothesis Test for Parallel Pre-Trends</h2>
+      <p>
+        To evaluate whether pre-trends were statistically parallel, we formulate a restriction on the interaction coefficient \(\beta_3\):
+      </p>
+
+      <!-- Hypothesis Test Box -->
+      <div class="equation-box">
+        <div class="equation-box-title">Hypothesis Test for Equal Linear Slopes</div>
+        <div class="equation-box-math">
+          \[H_0: \beta_3 = 0 \quad \text{versus} \quad H_1: \beta_3 \neq 0\]
+        </div>
+        <div class="equation-box-sub">
+          <strong>Under \(H_0\):</strong> Both groups share the identical linear slope \(\beta_2\) in the pre-period (supporting the parallel trends assumption).<br>
+          <strong>Under \(H_1\):</strong> The treated group’s pre-trend slope (\(\beta_2 + \beta_3\)) differs significantly from the control group’s slope, signaling identification failure.
+        </div>
+      </div>
+
+      <!-- Quadratic Extension Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <h4 style="margin: 0 0 0.5rem; font-size: 0.95rem; color: #1e3a8a;">
+          Source Note: Quadratic Trend Extension
+        </h4>
+        <p style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text); margin: 0;">
+          As noted on page 14 of the source, economic variables often accelerate or decelerate over time. Researchers can test for non-linear pre-trend differences by adding quadratic terms:
+          <br>
+          <span style="font-family: var(--font-mono); font-weight: 700; color: #2563eb;">
+            \(+ \beta_4 \text{Trend}_t^2 + \beta_5 (D_i \cdot \text{Trend}_t^2)\)
+          </span>
+          <br>
+          A joint \(F\)-test of \(H_0: \beta_3 = 0 \text{ and } \beta_5 = 0\) then tests for both linear and quadratic pre-trend equivalence.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: The No-Anticipation Assumption -->
+    <section class="lesson-section" id="anticipationSection">
+      <h2>3. The No-Anticipation Assumption</h2>
+      <p>
+        In addition to parallel trends, Difference-in-Differences requires that units <strong>do not change their behavior in anticipation</strong> of future treatment:
+      </p>
+
+      <!-- Definition Box -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: The No-Anticipation Assumption</div>
+        <div class="equation-box-math">
+          \[y_{it}(D_i) = y_{it}(0) \quad \text{for all } t < t_{\text{implementation}}\]
+        </div>
+        <div class="equation-box-sub">
+          Treatment status must have <strong>zero causal effect</strong> on the outcome prior to the official implementation date.
+        </div>
+      </div>
+
+      <!-- Cigarette Tax Case Study Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.5rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="academic-badge" style="background: #fee2e2; color: #991b1b; font-weight: 700;">PRIMARY SOURCE CASE</span>
+          <h4 style="margin: 0; font-size: 1.05rem; color: #991b1b;">The Cigarette Tax Announcement</h4>
+        </div>
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text); margin-bottom: 0.75rem;">
+          Consider the primary source example from page 14:
+        </p>
+        <ul style="margin: 0 0 1rem; padding-left: 1.25rem; font-size: 0.88rem; line-height: 1.6;">
+          <li><strong>\(t = 0\) (Baseline):</strong> Normal smoking behavior in both states.</li>
+          <li><strong>\(t = 1\) (Announcement):</strong> State legislature announces that a major cigarette tax will take effect at \(t = 2\). Smokers in the treated state start stocking up or quitting early.</li>
+          <li><strong>\(t = 2\) (Official Rollout):</strong> The tax officially takes effect.</li>
+        </ul>
+        <div style="background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #dc2626; font-size: 0.88rem; line-height: 1.5; color: var(--color-text);">
+          <strong>The Contamination Problem:</strong> Although the law officially begins at \(t = 2\), the nominal "pre-period" at \(t = 1\) is already partially treated! Calculating DD using \(t=1\) as the pre-treatment baseline will produce a heavily biased estimate of the true tax elasticity.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Trend Tester & Anticipation Lab -->
+    <section class="lesson-section lesson-section--plain" id="labSection">
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-lg);">
+        <div class="lab-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 4px;">
+              <span class="academic-badge badge-lab">INTERACTIVE LAB</span>
+              <span style="font-size: 0.8rem; color: var(--color-text-secondary); font-family: var(--font-mono);">Page 14 Testing Model</span>
+            </div>
+            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--color-text);">4. Interactive Trend Diagnostic &amp; Anticipation Lab</h2>
+          </div>
+        </div>
+        <p style="font-size: 0.92rem; color: var(--color-text-secondary); margin-bottom: 1.25rem;">
+          Toggle between statistical slope testing and anticipation contamination to inspect how non-parallel trends and behavioral responses affect identification:
+        </p>
+
+        <!-- Mode Selection Tabs -->
+        <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap; margin-bottom: 1.25rem;">
+          <button id="trendTabTesting" class="btn btn-primary btn-sm active" type="button">1. Test Slope Divergence (β₃ = 0)</button>
+          <button id="trendTabAnticipation" class="btn btn-outline btn-sm" type="button">2. Cigarette Tax Anticipation</button>
+        </div>
+
+        <!-- Controls Container for Mode 1: Slope Testing -->
+        <div id="trendModeTestingControls" style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px;">
+            <span>Differential Slope (\(\beta_3\))</span>
+            <span id="trendReadoutDiff" style="font-family: var(--font-mono); color: #2563eb; font-weight: 700;">+0.00</span>
+          </div>
+          <input type="range" id="trendSliderDiff" min="-0.50" max="0.50" step="0.02" value="0.00" style="width: 100%;">
+          <div style="font-size: 0.76rem; color: var(--color-text-secondary); margin-top: 4px;">
+            <em>Illustrative visual threshold: \(|\beta_3| \le 0.15\) visually approximates parallel pre-trends.</em>
+          </div>
+        </div>
+
+        <!-- Controls Container for Mode 2: Anticipation -->
+        <div id="trendModeAnticipationControls" style="display: none; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 600; margin-bottom: 8px;">
+            <span>Anticipation Response at \(t = 1\):</span>
+            <span id="trendReadoutAnticipation" style="font-family: var(--font-mono); color: #dc2626; font-weight: 700;">Strong Response (Contaminated)</span>
+          </div>
+          <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+            <button id="antBtnNone" class="btn btn-outline btn-sm" type="button">None (Clean Pre-Period)</button>
+            <button id="antBtnModerate" class="btn btn-outline btn-sm" type="button">Moderate Response</button>
+            <button id="antBtnStrong" class="btn btn-primary btn-sm active" type="button">Strong Response</button>
+          </div>
+        </div>
+
+        <!-- Readout Banner -->
+        <div id="trendStatusBanner" style="background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 4px solid #059669; margin-bottom: 1.25rem;">
+          <div id="trendReadoutDecision" style="font-size: 0.95rem; font-weight: 700; color: #059669; font-family: var(--font-mono);">PARALLEL PRE-TRENDS (β₃ ≈ 0.00)</div>
+          <div id="trendReadoutExpl" style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text); margin-top: 4px;">Control and treated groups track parallel trajectories prior to treatment (Illustrative visual threshold).</div>
+        </div>
+
+        <!-- Canonical Outside Chart Legend (Dynamic) -->
+        <div id="trendLegendContainer" class="visual-legend" aria-label="Pre-Trend Test Legend">
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--line" style="background: #64748b;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Control Group</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--line" id="trendLegendTrtSwatch" style="background: #2563eb;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Treated Group</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--dashed" style="border-color: #94a3b8;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Parallel Benchmark</span>
+          </span>
+        </div>
+
+        <!-- SVG Container -->
+        <div class="chart-svg-shell">
+          <svg id="trendTestSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive slope testing and anticipation graph"></svg>
+        </div>
+      </div>
+
+      <!-- 5-Box Visual Explanation Grid (Fully Dynamic) -->
+      <div class="visual-explanation-grid" id="trendExplanationGrid">
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+          <p id="trendCardSeeing">Two groups before treatment. The slider changes the difference between their pre-treatment slopes.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT TO NOTICE</div>
+          <p id="trendCardNotice">When \(\beta_3\) is close to zero, both groups move similarly over time. As \(\beta_3\) moves away from zero, the treated group develops a visibly different pre-treatment trend.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHY IT MATTERS</div>
+          <p id="trendCardWhy">Difference-in-Differences requires a credible counterfactual trend. Systematically different pre-treatment slopes cast doubt on the parallel-trends assumption.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+          <p id="trendCardInterp">In a regression containing a group-specific time trend, \(\beta_3\) captures the differential trend between groups under the source specification. Evidence that this term differs from zero suggests the groups may not share the same linear pre-trend.</p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-tag">TRY THIS</div>
+          <p id="trendCardTry">Move \(\beta_3\) in both positive and negative directions and observe how the two trajectories stop moving in parallel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Common Mistake -->
+    <section class="lesson-section" id="mistakeSection">
+      <h2>5. Common Methodological Pitfall</h2>
+
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">METHODOLOGICAL CAUTION</span>
+          <span class="callout-title">Common Mistake: Ignoring Anticipatory Contamination</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>"The policy took effect on July 1, so our pre-period is January 1 to June 30."</strong><br><br>
+            <em>Correction:</em> If the law was debated in parliament and signed into law in March, firms and households likely adjusted their behavior long before July 1.<br><br>
+            Using observations immediately preceding official implementation when anticipation is present will contaminate the baseline, attenuating or distorting the estimated treatment effect. Best practice is to define the pre-period strictly prior to the policy announcement.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Interpreting a Pre-Trend F-Test
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a pre-trend model with quadratic interactions, you test \(H_0: \beta_{\text{linear}} = 0 \text{ and } \beta_{\text{quad}} = 0\) and obtain \(F = 0.82\) with \(p = 0.44\). Does this support or contradict the validity of a DD design?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> It SUPPORTS the validity of the DD design.<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>The null hypothesis \(H_0\) states that the treated and control groups shared both identical linear slopes and identical quadratic curvature in the pre-period.</li>
+            <li>A \(p\)-value of \(0.44 > 0.05\) means we fail to reject \(H_0\).</li>
+            <li>There is no statistically significant evidence of pre-trend divergence, lending strong empirical credibility to the parallel trends assumption!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Pre-treatment parallel trends can be formally evaluated using the interaction model \(y_{it} = \dots + \beta_3 (D_i \cdot \text{Trend}_t)\).</li>
+        <li>Testing \(H_0: \beta_3 = 0\) examines whether treated and control groups exhibited equal linear pre-slopes.</li>
+        <li>Non-linear pre-trend curvature can be investigated by adding quadratic terms \(\text{Trend}_t^2\) and \(D_i \cdot \text{Trend}_t^2\).</li>
+        <li>The No-Anticipation assumption requires that economic agents do not alter their behavior before the policy takes effect.</li>
+        <li>When policies are announced in advance, nominal pre-periods become contaminated, necessitating the use of clean pre-announcement baselines.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-05.html" class="btn btn-outline">
+        ← Lesson 6.5: Parallel Trends
+      </a>
+      <a href="lesson-07.html" class="btn btn-primary">
+        Next: Difference-in-Difference-in-Differences →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-06-interactions.js"></script>
+</body>
+</html>

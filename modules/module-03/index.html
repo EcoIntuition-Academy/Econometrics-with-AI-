@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 03: Goodness of Fit & Finite-Sample OLS Properties — EcoIntuition Academy</title>
+  <title>Module 03: Goodness of Fit &amp; Finite-Sample OLS Properties — EcoIntuition Academy</title>
   <meta name="description" content="Learn how well OLS fits observed data, how R² and adjusted R² are interpreted, and why OLS has important finite-sample properties such as unbiasedness, variance efficiency, and exact inference under normality.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
@@ -21,7 +21,7 @@
 
   <!-- Centralized MathJax 3 Configuration & Library -->
   <script src="../../assets/js/math-config.js"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
 </head>
 <body data-module="module-03">
   <!-- Header -->
@@ -38,9 +38,20 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
-          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
-          <li><a href="../module-01/index.html" class="nav-item-link">Module 1</a></li>
-          <li><a href="../module-02/index.html" class="nav-item-link">Module 2</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
           <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
@@ -64,27 +75,27 @@
   </header>
 
   <!-- Centered Landing Content (Strictly NO Sidebar) -->
-  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+  <main class="module-overview-area">
     
     <!-- Hero Header -->
-    <div style="margin-bottom: var(--space-xl);">
-      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+    <div class="module-hero">
+      <div class="module-hero-badges">
         <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 03</span>
         <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Finite-Sample Theory &amp; Inference</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">7 Lessons</span>
-        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Primary Source: Econometrics (3).pdf</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Core Econometrics</span>
       </div>
 
-      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
+      <h1 class="module-hero-title">
         Goodness of Fit &amp; Finite-Sample OLS Properties
       </h1>
       
-      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 860px;">
-        Learn how well OLS fits observed data, how \(R^2\) and adjusted \(R^2\) are interpreted, and why OLS possesses critical finite-sample properties such as unbiasedness, variance efficiency (Gauss–Markov / BLUE), degrees-of-freedom variance correction, and exact normal and \(t\) inference.
+      <p class="module-hero-desc">
+        Learn how well OLS fits observed data, how R-squared and adjusted R-squared are interpreted, and why OLS possesses critical finite-sample properties such as unbiasedness, variance efficiency (Gauss–Markov / BLUE), and exact inference under normality.
       </p>
 
       <!-- Action Buttons & Progress -->
-      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+      <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
           Start Module 3 →
         </a>
@@ -94,157 +105,200 @@
       </div>
 
       <!-- Module Progress Card -->
-      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
-        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
           <span>Module 3 Completion</span>
-          <span id="progress-text-module-03" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+          <span id="progress-text-module-03" class="module-progress-percent">0% Complete</span>
         </div>
-        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
-          <div class="progress-bar-fill" id="progress-fill-module-03" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-03"></div>
         </div>
       </div>
     </div>
 
     <!-- Structured Learning Path -->
-    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
-      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
-        Curriculum Learning Flow
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
       </h3>
-      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Goodness of Fit</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">\(R^2\)</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Adjusted \(\bar{R}^2\)</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">\(F\) Tests</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Unbiasedness</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OVB</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OLS Variance</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Gauss–Markov / BLUE</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Estimating \(\sigma^2\)</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Normality &amp; \(t\)</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-primary-light); color: var(--color-primary); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600;">CLT Asymptotics</span>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">Goodness of Fit</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">R-Squared</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Adjusted R-Squared</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">F Tests</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Unbiasedness</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">OVB</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">OLS Variance</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Gauss–Markov (BLUE)</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Estimating Residual Variance</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Normality &amp; t Tests</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">CLT Asymptotics</span></span>
       </div>
     </div>
 
-    <!-- Lesson Rows -->
-    <div style="margin-bottom: var(--space-2xl);">
-      <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text);">
-        Lessons in this Module
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
       </h2>
 
-      <div class="module-lesson-list">
+      <div class="module-lessons-list">
         
-        <!-- Lesson 01 -->
-        <a href="lesson-01.html" class="module-lesson-row">
-          <div class="lesson-row-num">01</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.1 Goodness of Fit &amp; R-Squared</h3>
-            <p class="lesson-row-desc">Understand how variation in regressors predicts variation in \(y\), derive the SST = SSR + SSE decomposition via summation and demeaning matrix \(M_0\), and evaluate the predictive limits of \(R^2\).</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Variance Decomposition</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-01">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 02 -->
-        <a href="lesson-02.html" class="module-lesson-row">
-          <div class="lesson-row-num">02</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.2 Adjusted R-Squared &amp; Model Comparison</h3>
-            <p class="lesson-row-desc">Examine why adding regressors mechanically inflates ordinary \(R^2\), explore the degrees-of-freedom penalty in adjusted \(\bar{R}^2\), and learn rigorous rules for comparing non-nested models.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Model Selection</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-02">Not Started</span>
+        <!-- Lesson 3.1 -->
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.1</span>
+                <span class="badge badge-cat">Variance Decomposition</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Goodness of Fit &amp; R-Squared
+              </h2>
+              <p class="lesson-card-desc">
+                Understand how regressor variation explains variation in y, derive the total sum of squares decomposition via summation and demeaning matrices, and evaluate the predictive boundaries of R-squared.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 03 -->
-        <a href="lesson-03.html" class="module-lesson-row">
-          <div class="lesson-row-num">03</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.3 R-Squared &amp; F Tests</h3>
-            <p class="lesson-row-desc">Construct hypothesis tests for multiple parameter restrictions by comparing unrestricted vs restricted \(R^2\), and understand the geometry of joint statistical significance.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Hypothesis Testing</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-03">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 04 -->
-        <a href="lesson-04.html" class="module-lesson-row">
-          <div class="lesson-row-num">04</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</h3>
-            <p class="lesson-row-desc">Derive finite-sample conditional unbiasedness under strict exogeneity, and analyze the exact mathematical formula and 2×2 diagnostic table for omitted-variable bias.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Identification &amp; Bias</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-04">Not Started</span>
+        <!-- Lesson 3.2 -->
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.2</span>
+                <span class="badge badge-cat">Model Selection</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Adjusted R-Squared &amp; Model Comparison
+              </h2>
+              <p class="lesson-card-desc">
+                Examine why adding regressors mechanically inflates ordinary R-squared, explore the degrees-of-freedom penalty in adjusted R-squared, and master rigorous rules for comparing non-nested models.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 05 -->
-        <a href="lesson-05.html" class="module-lesson-row">
-          <div class="lesson-row-num">05</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.5 Variance of the OLS Estimator</h3>
-            <p class="lesson-row-desc">Derive the variance-covariance matrix \(\operatorname{Var}(b \mid X) = \sigma^2(X'X)^{-1}\) under spherical errors, evaluate the diagonal 2-regressor matrix, and inspect standard error precision drivers.</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Precision &amp; Sampling</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-05">Not Started</span>
-          </div>
-        </a>
-
-        <!-- Lesson 06 -->
-        <a href="lesson-06.html" class="module-lesson-row">
-          <div class="lesson-row-num">06</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</h3>
-            <p class="lesson-row-desc">Prove that OLS is the Best Linear Unbiased Estimator (BLUE) via non-negative definite matrix \(DD'\), and derive the unbiased residual variance estimator \(s^2 = e'e / (n - k)\).</p>
-          </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Efficiency &amp; Estimation</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-06">Not Started</span>
+        <!-- Lesson 3.3 -->
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.3</span>
+                <span class="badge badge-cat">Hypothesis Testing</span>
+              </div>
+              <h2 class="lesson-card-title">
+                R-Squared &amp; F Tests
+              </h2>
+              <p class="lesson-card-desc">
+                Construct hypothesis tests for multiple parameter restrictions by comparing unrestricted versus restricted model fit, and understand the geometry of joint statistical significance.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
-        <!-- Lesson 07 -->
-        <a href="lesson-07.html" class="module-lesson-row">
-          <div class="lesson-row-num">07</div>
-          <div class="lesson-row-info">
-            <h3 class="lesson-row-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</h3>
-            <p class="lesson-row-desc">Connect exact normal error distributions to the Student's \(t_{n-k}\) statistic, contrast the Lindeberg–Lévy and Lindeberg–Feller central limit theorems, and master the full 15-topic Module 3 review.</p>
+        <!-- Lesson 3.4 -->
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.4</span>
+                <span class="badge badge-cat">Identification &amp; Bias</span>
+              </div>
+              <h2 class="lesson-card-title">
+                OLS Unbiasedness &amp; Omitted Variable Bias
+              </h2>
+              <p class="lesson-card-desc">
+                Derive finite-sample conditional unbiasedness under strict exogeneity, and analyze the exact mathematical formula and diagnostic framework for omitted-variable bias.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
-          <div class="lesson-row-meta">
-            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Asymptotics &amp; Review</span>
-            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-07">Not Started</span>
+        </a>
+
+        <!-- Lesson 3.5 -->
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.5</span>
+                <span class="badge badge-cat">Precision &amp; Sampling</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Variance of the OLS Estimator
+              </h2>
+              <p class="lesson-card-desc">
+                Derive the variance-covariance matrix under spherical errors, evaluate the diagonal 2-regressor matrix structure, and inspect the key drivers of standard error precision.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 3.6 -->
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.6</span>
+                <span class="badge badge-cat">Efficiency &amp; Estimation</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Gauss–Markov, BLUE &amp; Estimating Error Variance
+              </h2>
+              <p class="lesson-card-desc">
+                Prove that OLS is the Best Linear Unbiased Estimator via positive semi-definite matrix differences, and derive the unbiased residual variance estimator with degrees-of-freedom correction.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 3.7 -->
+        <a href="lesson-07.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 3.7</span>
+                <span class="badge badge-cat">Asymptotics &amp; Review</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Normality, t Statistics, CLTs &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Connect exact normal error distributions to the Student's t statistic, contrast the Lindeberg–Lévy and Lindeberg–Feller central limit theorems, and master the full Module 3 synthesis.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
           </div>
         </a>
 
       </div>
     </div>
 
-    <!-- Source Reference Banner -->
-    <div class="study-card" style="background: var(--surface); padding: var(--space-lg); border: 1.5px solid var(--border-subtle);">
-      <h3 style="font-size: var(--text-base); font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">
-        Primary Academic Source
-      </h3>
-      <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
-        This module is constructed directly from <code>Econometrics (3).pdf</code>, preserving all mathematical derivations, summation and matrix expansions of \(R^2\), the 2×2 OVB bias table, spherical error variance structures, the modern Gauss–Markov proof (Hansen 2022), exact Student's \(t\) distribution mechanics, and the Lindeberg–Lévy and Lindeberg–Feller central limit theorems.
-      </p>
+    <!-- Quick Navigation Back -->
+    <div style="text-align: center;">
+      <a href="../../index.html#modules" class="btn btn-outline">
+        ← Return to All Course Modules
+      </a>
     </div>
 
   </main>

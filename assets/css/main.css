@@ -264,6 +264,8 @@ code, kbd, samp, pre {
   gap: 0.75rem;
   text-decoration: none;
   color: var(--text-primary);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .brand-icon {
@@ -279,11 +281,13 @@ code, kbd, samp, pre {
   font-weight: var(--fw-bold);
   font-size: 1.05rem;
   box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
 }
 
 .brand-org {
@@ -292,6 +296,7 @@ code, kbd, samp, pre {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .brand-title {
@@ -299,6 +304,7 @@ code, kbd, samp, pre {
   font-weight: var(--fw-bold);
   color: var(--text-primary);
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .nav-links {

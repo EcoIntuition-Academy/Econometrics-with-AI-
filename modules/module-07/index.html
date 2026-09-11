@@ -3,18 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 7: Endogeneity and Causal Inference — Econometrics with AI</title>
+  <title>Module 7: Advanced Difference-in-Differences — EcoIntuition Academy</title>
+  <meta name="description" content="Extend Difference-in-Differences using a third comparison dimension. Learn how Difference-in-Difference-in-Differences isolates treatment effects using a placebo subgroup, derive the triple-interaction estimator, compare levels and changes specifications, and understand how controls change interpretation and precision.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="../../assets/css/variables.css">
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/course.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
 </head>
-<body>
+<body data-module="module-07">
+  <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
       <a href="../../index.html" class="brand">
@@ -24,53 +34,237 @@
           <span class="brand-title">Econometrics with AI</span>
         </div>
       </a>
+
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
-          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 7</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
-          <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
         </ul>
       </nav>
+
       <div class="nav-right-actions">
         <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
           <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
           <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
         </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="container section-wrapper" style="max-width: 960px;">
-    <div style="margin-bottom: var(--space-2xl);">
-      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
-        <span class="badge">Module 7</span>
-        <span class="badge badge-amber">In Preparation</span>
+  <!-- Centered Landing Content (Strictly NO Sidebar) -->
+  <main class="module-overview-area">
+    
+    <!-- Hero Header -->
+    <div class="module-hero">
+      <div class="module-hero-badges">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 07</span>
+        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Advanced Difference-in-Differences</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">5 Lessons</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Quasi-Experimental Design</span>
       </div>
-      <h1 style="font-size: var(--text-hero); margin-bottom: var(--space-xs);">Endogeneity and Causal Inference</h1>
-      <p class="section-subtitle">Address omitted variable bias, simultaneity, and master instrumental variables and natural experiments.</p>
+
+      <h1 class="module-hero-title">
+        Advanced Difference-in-Differences: DDD, Triple Interactions &amp; Controlled Comparisons
+      </h1>
+      
+      <p class="module-hero-desc">
+        Extend Difference-in-Differences using a third comparison dimension. Learn how Difference-in-Difference-in-Differences isolates treatment effects using a placebo subgroup, derive the triple-interaction estimator, compare levels and changes specifications, and understand how controls change interpretation and precision.
+      </p>
+
+      <!-- Action Buttons & Progress -->
+      <div class="module-actions">
+        <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
+          Start Module 7 →
+        </a>
+        <a href="../../index.html#modules" class="btn btn-outline btn-lg">
+          Explore All Modules
+        </a>
+      </div>
+
+      <!-- Module Progress Card -->
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
+          <span>Module 7 Completion</span>
+          <span id="progress-text-module-07" class="module-progress-percent">0% Complete</span>
+        </div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-07"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="why-matters-card" style="margin-bottom: var(--space-xl);">
-      <h3 style="margin-bottom: var(--space-xs);">Architecture Ready for Content Addition</h3>
-      <p>This module folder is structured and ready for lessons. Detailed lesson pages following the 17-section template will be added progressively.</p>
-      <a href="../module-01/lesson-01.html" class="btn btn-primary btn-sm" style="margin-top: var(--space-sm);">Explore Module 1 Demonstration Lesson</a>
+    <!-- Structured Learning Path -->
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
+      </h3>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">DD Reminder</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Why Add a Third Difference?</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Placebo Groups</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">DDD Regression</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Triple Interaction</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">DDD Algebra</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Changes Specification</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Controls</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">DDD Assumptions</span></span>
+      </div>
     </div>
 
-    <div>
-      <a href="../../index.html#modules" class="btn btn-outline">← Return to Course Modules</a>
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
+      </h2>
+
+      <div class="module-lessons-list">
+        
+        <!-- Lesson 7.1 Card -->
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 7.1</span>
+                <span class="badge badge-cat">Motivation &amp; Placebos</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Why Difference-in-Difference-in-Differences?
+              </h2>
+              <p class="lesson-card-desc">
+                Connect standard Difference-in-Differences to potential concurrent shock contaminations, explore the Medicaid expansion case study, and see how a placebo subgroup builds a robust triple difference.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 7.2 Card -->
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 7.2</span>
+                <span class="badge badge-cat">Model Specification</span>
+              </div>
+              <h2 class="lesson-card-title">
+                The DDD Regression &amp; Coefficient Interpretation
+              </h2>
+              <p class="lesson-card-desc">
+                Master the saturated triple-interaction regression using the Philadelphia–Pittsburgh math tutoring design, decompose all eight group-mean combinations, and interpret parameters β0 through β7.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 7.3 Card -->
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 7.3</span>
+                <span class="badge badge-cat">Derivation &amp; Interactive Lab</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Deriving the Triple-Interaction Effect
+              </h2>
+              <p class="lesson-card-desc">
+                Step through the algebraic subtraction proving the DDD estimator strictly equals β7, explore the intuition of eliminating common city shocks, and experiment with the Interactive DDD Table Builder.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 7.4 Card -->
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 7.4</span>
+                <span class="badge badge-cat">Changes &amp; Covariates</span>
+              </div>
+              <h2 class="lesson-card-title">
+                DDD in Changes &amp; the Role of Controls
+              </h2>
+              <p class="lesson-card-desc">
+                Examine the first-differenced changes specification that eliminates time-invariant group traits, contrast raw group means with conditional expectations, and discover how baseline controls boost precision.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 7.5 Card -->
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 7.5</span>
+                <span class="badge badge-cat">Identification &amp; Review</span>
+              </div>
+              <h2 class="lesson-card-title">
+                DDD Assumptions, Interpretation &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Evaluate the three indispensable DDD identification assumptions, tie causal interpretations strictly to empirical conditions, and synthesize core principles through structured review cards.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
     </div>
+
   </main>
 
+  <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-bottom">
         <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
-        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
       </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
   <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
 </body>
 </html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7.3: Deriving the Triple-Interaction Effect — EcoIntuition Academy</title>
+  <meta name="description" content="Step through the algebraic proof showing that the Difference-in-Difference-in-Differences estimator strictly equals β7, and explore the Interactive DDD Table Builder.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-07" data-lesson="03">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 7</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 07</a>
+          <span class="module-nav-title">Advanced Difference-in-Differences</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 5 &middot; Deriving the Triple-Interaction Effect</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 7 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.1 Why Difference-in-Difference-in-Differences?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.2 The DDD Regression &amp; Coefficient Interpretation</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">7.3 Deriving the Triple-Interaction Effect</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.4 DDD in Changes &amp; the Role of Controls</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.5 DDD Assumptions, Interpretation &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">60%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 60%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 7.3</span>
+        <span class="badge">Derivation &amp; Interactive Lab</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Deriving the Triple-Interaction Effect
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        In this lesson, we prove algebraically that subtracting the Difference-in-Differences of the placebo group from that of the treated group isolates the triple-interaction coefficient \(\beta_7\), netting out city-wide concurrent shocks.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the junior-subgroup difference-in-differences: \(\text{DD}_{\text{Juniors}} = \beta_5 + \beta_7\).</li>
+        <li>Derive the sophomore-subgroup placebo difference-in-differences: \(\text{DD}_{\text{Sophomores}} = \beta_5\).</li>
+        <li>Perform the third differencing step proving \(\text{DDD} = \beta_7\).</li>
+        <li>Understand intuitively how subtracting \(\text{DD}_{\text{Sophomores}}\) purges the local confounding trend \(\beta_5\).</li>
+        <li>Experiment with arbitrary group means in the Interactive DDD Table Builder to see the arithmetic in real time.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Formal Derivation Journey -->
+    <section class="study-section" id="derivationSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Derivation Journey: Proving \(\text{DDD} = \beta_7\)</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          We now evaluate the algebraic subtractions using the group means established in Lesson 7.2.
+        </p>
+
+        <div class="derivation-journey">
+          
+          <!-- Derivation Goal -->
+          <div class="derivation-goal-card">
+            <div class="derivation-goal-badge">DERIVATION GOAL</div>
+            <h3 class="derivation-goal-title">What Are We Trying to Show?</h3>
+            <p class="derivation-goal-desc">
+              Show that under the saturated regression model, the sample Difference-in-Difference-in-Differences estimator identically recovers the triple-interaction coefficient:
+              \[\text{DDD} \equiv \text{DD}_{\text{Juniors}} - \text{DD}_{\text{Sophomores}} = \beta_7\]
+            </p>
+          </div>
+
+          <div class="derivation-steps-rail">
+            
+            <!-- Step 1: Part A Juniors -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">A</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Part A: Over-Time Change &amp; DD for Juniors</h4>
+                  <span class="derivation-result-badge">\(\text{DD}_{\text{Juniors}} = \beta_5 + \beta_7\)</span>
+                </div>
+                <p class="derivation-step-desc">
+                  Compute the pre-to-post change for juniors in each city:
+                </p>
+                <div class="derivation-step-math">
+                  \[\begin{aligned}
+                  \Delta \text{Philly}_{\text{Jr}} &= (\beta_0 + \beta_1 + \beta_2 + \beta_3 + \beta_4 + \beta_5 + \beta_6 + \beta_7) - (\beta_0 + \beta_1 + \beta_2 + \beta_3) \\[4pt]
+                  &= \beta_4 + \beta_5 + \beta_6 + \beta_7 \\[8pt]
+                  \Delta \text{Pitt}_{\text{Jr}} &= (\beta_0 + \beta_2 + \beta_4 + \beta_6) - (\beta_0 + \beta_2) = \beta_4 + \beta_6
+                  \end{aligned}\]
+                </div>
+                <p class="derivation-step-desc" style="margin-top: 8px;">
+                  Subtracting Pittsburgh juniors from Philadelphia juniors yields the standard junior DD:
+                </p>
+                <div class="derivation-step-math">
+                  \[\begin{aligned}
+                  \text{DD}_{\text{Juniors}} &= \Delta \text{Philly}_{\text{Jr}} - \Delta \text{Pitt}_{\text{Jr}} \\[6pt]
+                  &= (\beta_4 + \beta_5 + \beta_6 + \beta_7) - (\beta_4 + \beta_6) = \mathbf{\beta_5 + \beta_7}
+                  \end{aligned}\]
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">What this shows</span>
+                  <p>A standard DD on juniors alone is contaminated by \(\beta_5\)—the city-wide shock common to all Philadelphia schools.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Part B Sophomores -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">B</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Part B: Over-Time Change &amp; DD for Sophomores</h4>
+                  <span class="derivation-result-badge">\(\text{DD}_{\text{Sophomores}} = \beta_5\)</span>
+                </div>
+                <p class="derivation-step-desc">
+                  Now compute the pre-to-post change for the placebo subgroup (sophomores):
+                </p>
+                <div class="derivation-step-math">
+                  \[\begin{aligned}
+                  \Delta \text{Philly}_{\text{Soph}} &= (\beta_0 + \beta_1 + \beta_4 + \beta_5) - (\beta_0 + \beta_1) = \beta_4 + \beta_5 \\[6pt]
+                  \Delta \text{Pitt}_{\text{Soph}} &= (\beta_0 + \beta_4) - \beta_0 = \beta_4
+                  \end{aligned}\]
+                </div>
+                <p class="derivation-step-desc" style="margin-top: 8px;">
+                  Subtracting Pittsburgh sophomores from Philadelphia sophomores gives:
+                </p>
+                <div class="derivation-step-math">
+                  \[\begin{aligned}
+                  \text{DD}_{\text{Sophomores}} &= \Delta \text{Philly}_{\text{Soph}} - \Delta \text{Pitt}_{\text{Soph}} \\[6pt]
+                  &= (\beta_4 + \beta_5) - \beta_4 = \mathbf{\beta_5}
+                  \end{aligned}\]
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">What this shows</span>
+                  <p>Because sophomores received no tutoring, their difference-in-differences measures purely the Philadelphia-specific concurrent time shock \(\beta_5\).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Part C The Third Difference -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">C</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Part C: The Third Difference</h4>
+                  <span class="derivation-result-badge">\(\text{DDD} = \beta_7\)</span>
+                </div>
+                <p class="derivation-step-desc">
+                  Finally, take the difference between the two Difference-in-Differences:
+                </p>
+                <div class="derivation-step-math">
+                  \[\begin{aligned}
+                  \text{DDD} &= \text{DD}_{\text{Juniors}} - \text{DD}_{\text{Sophomores}} \\[6pt]
+                  &= (\beta_5 + \beta_7) - \beta_5 = \mathbf{\beta_7}
+                  \end{aligned}\]
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">The Core Algebraic Mechanism</span>
+                  <p>The third difference cancels the confounding city-wide shock \(\beta_5\), leaving strictly the triple interaction \(\beta_7\).</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Key Result Box -->
+        <div class="equation-surface equation-surface--success" style="margin-top: var(--space-lg);">
+          <div class="equation-surface-header">
+            <span class="equation-surface-badge badge-success">KEY RESULT &middot; DDD ESTIMATOR</span>
+            <span class="equation-surface-title">Equivalence with Triple Interaction Coefficient</span>
+          </div>
+          <div class="equation-surface-math" style="font-size: 1.8rem; font-weight: 700; color: var(--color-primary); text-align: center;">
+            \[\mathbf{\text{DDD} = \beta_7}\]
+          </div>
+          <p style="margin-top: var(--space-sm); text-align: center; color: var(--color-text); font-size: 0.95rem;">
+            Under the stated model assumptions, the triple-difference sample estimator identically equals the OLS coefficient on the triple interaction \(\text{Philly}_i \times \text{Junior}_i \times \text{Time}_t\).
+          </p>
+        </div>
+
+        <!-- Big Picture Card -->
+        <div class="key-idea-card" style="margin-top: var(--space-lg);">
+          <div class="key-idea-title">THE BIG PICTURE: WHY THE THIRD DIFFERENCE WORKS</div>
+          <p class="key-idea-text">
+            The third difference removes the extra Philadelphia-wide time change \(\beta_5\) that affects both junior and sophomore groups. The remaining coefficient \(\beta_7\) captures the differential post-treatment effect specific to Philadelphia juniors under the model and identifying assumptions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive DDD Builder Lab -->
+    <section class="lesson-section lesson-section--plain" id="labSection">
+      <div class="interactive-lab-card" id="dddBuilderApp" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-lg);">
+        
+        <!-- Lab Header -->
+        <div class="lab-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 4px;">
+              <span class="academic-badge badge-lab">INTERACTIVE LAB</span>
+              <span style="font-size: 0.8rem; color: var(--color-text-secondary); font-family: var(--font-mono);">Interactive DDD Table Builder</span>
+            </div>
+            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--color-text);">2. Interactive DDD Table Builder</h2>
+          </div>
+          <!-- Preset buttons -->
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" id="presetBaseline">Baseline Case</button>
+            <button type="button" class="btn btn-outline btn-sm" id="presetNoEffect">No Treatment (\(\beta_7 = 0\))</button>
+            <button type="button" class="btn btn-outline btn-sm" id="presetNoCityShock">Zero City Shock (\(\beta_5 = 0\))</button>
+            <button type="button" class="btn btn-outline btn-sm" id="presetReset">Reset</button>
+          </div>
+        </div>
+
+        <p style="font-size: 0.92rem; color: var(--color-text-secondary); margin-bottom: 1.25rem;">
+          Test this mathematical property yourself. Enter custom values for the eight group means below, or choose a preset scenario to see how \(\text{DD}_{\text{Juniors}}\), \(\text{DD}_{\text{Sophomores}}\), and \(\text{DDD}\) calculate dynamically:
+        </p>
+
+        <!-- Top Metric Badges -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 10px; border-radius: var(--radius-sm); border-left: 3px solid #64748b; text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); text-transform: uppercase;">Placebo DD (Sophomores)</div>
+            <div style="font-size: 1.3rem; font-family: var(--font-mono); font-weight: 700; color: #64748b;" id="metricDdSoph">+5.0</div>
+            <div style="font-size: 0.7rem; color: var(--color-text-secondary);">Captures City Shock \(\beta_5\)</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 10px; border-radius: var(--radius-sm); border-left: 3px solid #2563eb; text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); text-transform: uppercase;">Treated DD (Juniors)</div>
+            <div style="font-size: 1.3rem; font-family: var(--font-mono); font-weight: 700; color: #2563eb;" id="metricDdJr">+13.0</div>
+            <div style="font-size: 0.7rem; color: var(--color-text-secondary);">\(\beta_5 + \beta_7\)</div>
+          </div>
+          <div style="background: var(--color-primary-light); padding: 10px; border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-primary); text-transform: uppercase; font-weight: 600;">Triple Difference (DDD)</div>
+            <div style="font-size: 1.5rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);" id="metricDdd">+8.0</div>
+            <div style="font-size: 0.7rem; color: var(--color-primary);">Isolated Treatment Effect \(\beta_7\)</div>
+          </div>
+        </div>
+
+        <!-- External Legend Lock Compliant -->
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: var(--space-md); padding: 8px 12px; background: var(--color-bg); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--color-text-secondary);">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 2px;"></span>
+            <span>Editable Input Cell</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: #e2e8f0; border-radius: 2px;"></span>
+            <span>Calculated Difference (\(\Delta\))</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: var(--color-primary-light); border: 1px solid var(--color-primary); border-radius: 2px;"></span>
+            <span>DDD Output</span>
+          </div>
+        </div>
+
+        <!-- Clean Interactive Table -->
+        <div class="table-responsive">
+          <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: center;">
+            <thead>
+              <tr style="background: var(--color-bg); border-bottom: 2px solid var(--color-border);">
+                <th style="padding: 10px 12px; text-align: left; white-space: nowrap;">Grade</th>
+                <th style="padding: 10px 12px; text-align: left; white-space: nowrap;">City</th>
+                <th style="padding: 10px 12px; white-space: nowrap;">Pre Score (\(t=0\))</th>
+                <th style="padding: 10px 12px; white-space: nowrap;">Post Score (\(t=1\))</th>
+                <th style="padding: 10px 12px; white-space: nowrap;">Over-Time Change (\(\Delta\))</th>
+                <th style="padding: 10px 12px; white-space: nowrap;">Subgroup DD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Sophomores Pittsburgh -->
+              <tr style="border-bottom: 1px solid var(--color-border);">
+                <td rowspan="2" style="padding: 8px; text-align: left; font-weight: 600; background: var(--color-bg);">
+                  Sophomores<br><small style="color: var(--color-text-muted); font-weight: 400;">(Placebo Subgroup)</small>
+                </td>
+                <td style="padding: 8px; text-align: left;">Pittsburgh</td>
+                <td style="padding: 8px;">
+                  <input type="number" id="pittSophPre" value="68" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px;">
+                  <input type="number" id="pittSophPost" value="70" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px; font-family: var(--font-mono); font-weight: 600;" id="diffPittSoph">+2.0</td>
+                <td rowspan="2" style="padding: 8px; font-family: var(--font-mono); font-weight: 700; color: #64748b; background: rgba(100, 116, 139, 0.08);" id="ddSoph">
+                  +5.0
+                </td>
+              </tr>
+              <!-- Sophomores Philadelphia -->
+              <tr style="border-bottom: 2px solid var(--color-border);">
+                <td style="padding: 8px; text-align: left;">Philadelphia</td>
+                <td style="padding: 8px;">
+                  <input type="number" id="phillySophPre" value="64" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px;">
+                  <input type="number" id="phillySophPost" value="71" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px; font-family: var(--font-mono); font-weight: 600;" id="diffPhillySoph">+7.0</td>
+              </tr>
+
+              <!-- Juniors Pittsburgh -->
+              <tr style="border-bottom: 1px solid var(--color-border);">
+                <td rowspan="2" style="padding: 8px; text-align: left; font-weight: 600; background: var(--color-bg);">
+                  Juniors<br><small style="color: var(--color-primary); font-weight: 500;">(Treated Subgroup)</small>
+                </td>
+                <td style="padding: 8px; text-align: left;">Pittsburgh</td>
+                <td style="padding: 8px;">
+                  <input type="number" id="pittJrPre" value="72" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px;">
+                  <input type="number" id="pittJrPost" value="75" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px; font-family: var(--font-mono); font-weight: 600;" id="diffPittJr">+3.0</td>
+                <td rowspan="2" style="padding: 8px; font-family: var(--font-mono); font-weight: 700; color: #2563eb; background: rgba(37, 99, 235, 0.08);" id="ddJr">
+                  +13.0
+                </td>
+              </tr>
+              <!-- Juniors Philadelphia -->
+              <tr style="border-bottom: 2px solid var(--color-border);">
+                <td style="padding: 8px; text-align: left;">Philadelphia</td>
+                <td style="padding: 8px;">
+                  <input type="number" id="phillyJrPre" value="70" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px;">
+                  <input type="number" id="phillyJrPost" value="86" step="0.5" style="width: 72px; padding: 4px; text-align: center; font-family: var(--font-mono); border: 1px solid var(--color-border); border-radius: 4px;">
+                </td>
+                <td style="padding: 8px; font-family: var(--font-mono); font-weight: 600;" id="diffPhillyJr">+16.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Subtraction Formula Display -->
+        <div style="margin-top: var(--space-md); padding: var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+          <div style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 4px;">Triple Difference Calculation</div>
+          <div id="dddFormulaDisplay" style="font-size: 1.15rem; font-family: var(--font-mono);">
+            DDD = DD<sub>Juniors</sub> − DD<sub>Sophomores</sub> = <strong>(+13.0)</strong> − <strong>(+5.0)</strong> = <span style="color: var(--color-primary); font-weight: 700;">+8.0</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div id="dddInsightText" style="margin-top: var(--space-md); padding: 12px; background: var(--color-primary-light); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.6;">
+          <strong>Positive Tutoring Effect (β₇ = +8.0):</strong> Philadelphia juniors gained <em>+16.0</em> pts vs <em>+3.0</em> for Pittsburgh juniors (DD<sub>Jr</sub> = <em>+13.0</em>). Because Philadelphia sophomores also experienced a city-wide gain of <em>+5.0</em> pts (DD<sub>Soph</sub> = β₅), subtracting this placebo DD leaves a net differential treatment effect of <strong>+8.0 points</strong>.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Visual Explanation Grid -->
+    <section class="study-section" id="gridSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Visual Intuition: Five Perspectives on the DDD Table</h2>
+      </div>
+      <div class="study-section-body">
+        <div class="visual-explanation-grid">
+          
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>
+              A complete \(2 \times 2 \times 2\) table showing all eight group-by-time means across Grade, City, and Time, alongside their first differences (\(\Delta\)) and subgroup DDs.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>
+              Even though sophomores received zero tutoring, their DD is \(+5.0\) in the baseline. This demonstrates that Philadelphia experienced a city-wide shock that lifted all students' test scores over time.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>
+              If we had evaluated this policy with standard DD using juniors only, we would have erroneously claimed the tutoring improved scores by \(+13.0\) points! DDD prevents this \(+5.0\) point overestimation.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              Under the assumption that the confounding shock \(\beta_5\) impacted sophomores and juniors equally, the difference \(\text{DD}_{\text{Jr}} - \text{DD}_{\text{Soph}}\) strictly identifies the triple-interaction parameter \(\beta_7\).
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p id="tryThisText">
+              Click <strong>No Treatment (\(\beta_7 = 0\))</strong> to observe the estimate drop to zero, or select <strong>Zero City Shock (\(\beta_5 = 0\))</strong> to see both standard DD and DDD align.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The junior Difference-in-Differences is \(\text{DD}_{\text{Juniors}} = \beta_5 + \beta_7\), which includes the common city shock.</li>
+        <li>The sophomore Difference-in-Differences is \(\text{DD}_{\text{Sophomores}} = \beta_5\), which isolates the common city shock.</li>
+        <li>Subtracting the two DDs cancels \(\beta_5\), leaving \(\text{DDD} = \beta_7\).</li>
+        <li>The third difference removes concurrent city-wide reforms that would otherwise bias a standard DD.</li>
+        <li>The interactive table demonstrates that altering the city shock shifts both DDs equally, leaving the triple difference invariant.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-02.html" class="btn btn-outline">
+        ← Lesson 7.2: The DDD Regression
+      </a>
+      <a href="lesson-04.html" class="btn btn-primary">
+        Next: 7.4 DDD in Changes &amp; Controls →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-07-interactions.js"></script>
+</body>
+</html>

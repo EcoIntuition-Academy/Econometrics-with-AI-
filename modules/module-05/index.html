@@ -38,11 +38,20 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
-          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
-          <li><a href="../module-01/index.html" class="nav-item-link">Module 1</a></li>
-          <li><a href="../module-02/index.html" class="nav-item-link">Module 2</a></li>
-          <li><a href="../module-03/index.html" class="nav-item-link">Module 3</a></li>
-          <li><a href="../module-04/index.html" class="nav-item-link">Module 4</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
           <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
@@ -66,27 +75,27 @@
   </header>
 
   <!-- Centered Landing Content (Strictly NO Sidebar) -->
-  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+  <main class="module-overview-area">
     
     <!-- Hero Header -->
-    <div style="margin-bottom: var(--space-xl);">
-      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+    <div class="module-hero">
+      <div class="module-hero-badges">
         <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 05</span>
         <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Hypothesis Testing &amp; Dummy Variables</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">7 Lessons</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Core Curriculum</span>
       </div>
 
-      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
+      <h1 class="module-hero-title">
         Hypothesis Testing, Linear Restrictions &amp; Dummy Variables
       </h1>
       
-      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 860px;">
+      <p class="module-hero-desc">
         Learn how econometric hypotheses are formulated and tested, how Type I and Type II errors arise, how Wald and F tests evaluate joint restrictions, and how dummy variables represent groups, categories, and percentage differences in regression models.
       </p>
 
       <!-- Action Buttons & Progress -->
-      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+      <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
           Start Module 5 →
         </a>
@@ -96,199 +105,194 @@
       </div>
 
       <!-- Module Progress Card -->
-      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
-        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
           <span>Module 5 Completion</span>
-          <span id="progress-text-module-05" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+          <span id="progress-text-module-05" class="module-progress-percent">0% Complete</span>
         </div>
-        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
-          <div class="progress-bar-fill" id="progress-fill-module-05" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-05"></div>
         </div>
       </div>
     </div>
 
     <!-- Structured Learning Path -->
-    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
-      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
-        Curriculum Learning Flow
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
       </h3>
-      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Null &amp; Alternative Hypotheses</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Type I Error &amp; α</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Type II Error</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Statistical Power</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">One-Sided vs Two-Sided Tests</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Linear Restrictions (\(R\beta = q\))</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Wald Test</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">F Test</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Binary Dummy Variables</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Adding Controls</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Categorical Indicators &amp; Reference Groups</span>
-        <span style="color: var(--color-text-secondary);">→</span>
-        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Log-Dummy Exact Percentage</span>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">Null &amp; Alternative Hypotheses</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Type I Error &amp; α</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Type II Error</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Statistical Power</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">One-Sided vs Two-Sided Tests</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Linear Restrictions</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Wald Test</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">F Test</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Binary Dummy Variables</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Adding Controls</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Categorical Indicators</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Log-Dummy Exact Percentage</span></span>
       </div>
     </div>
 
-    <!-- Lesson Cards Grid -->
-    <div style="display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: var(--space-2xl);">
-      
-      <!-- Lesson 5.1 -->
-      <a href="lesson-01.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.1</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Inference Foundations</span>
-            </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Hypothesis Testing &amp; Type I Error
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Formulate null and alternative hypotheses in a multiple regression model, follow the logical testing sequence from assuming \(H_0\) to drawing decisions, define Type I error and its control via significance level \(\alpha = 0.05\), and master two-tailed critical thresholds \(\pm 1.96\).
-            </p>
-          </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
+      </h2>
 
-      <!-- Lesson 5.2 -->
-      <a href="lesson-02.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.2</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Decision Theory</span>
+      <div class="module-lessons-list">
+        
+        <!-- Lesson 5.1 -->
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.1</span>
+                <span class="badge badge-cat">Inference Foundations</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Hypothesis Testing &amp; Type I Error
+              </h2>
+              <p class="lesson-card-desc">
+                Formulate null and alternative hypotheses in a multiple regression model, follow the logical testing sequence from assuming \(H_0\) to drawing decisions, define Type I error and its control via significance level \(\alpha = 0.05\), and master two-tailed critical thresholds \(\pm 1.96\).
+              </p>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              One-Sided Tests, Type II Error &amp; Power
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Examine one-sided right-tailed tests (\(H_0: \beta_2 \le 0\) vs \(H_1: \beta_2 > 0\)) with critical value \(t = 1.645\), contrast directional hypotheses with two-sided tests, define Type II error (false negative), and explore statistical power (\(1 - \text{Type II Error}\)) across effect sizes and standard errors.
-            </p>
-          </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Lesson 5.3 -->
-      <a href="lesson-03.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.3</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Linear Restrictions</span>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Testing Linear Restrictions: Rβ = q
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Master the general matrix framework \(R\beta = q\) for testing \(J\) linear restrictions on \(K\) parameters, understand the dimensions of \(R\) and \(q\), and construct exact restriction matrices for single zero restrictions (\(\beta_2 = 0\)), linear combinations (\(\beta_2 + \beta_3 = 1\)), and joint simultaneous hypotheses (\(\beta_2 = 0, \beta_3 = \beta_4\)).
-            </p>
           </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
+        </a>
 
-      <!-- Lesson 5.4 -->
-      <a href="lesson-04.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.4</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Joint Testing</span>
+        <!-- Lesson 5.2 -->
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.2</span>
+                <span class="badge badge-cat">Decision Theory</span>
+              </div>
+              <h2 class="lesson-card-title">
+                One-Sided Tests, Type II Error &amp; Power
+              </h2>
+              <p class="lesson-card-desc">
+                Examine one-sided right-tailed tests with critical value \(t = 1.645\), contrast directional hypotheses with two-sided tests, define Type II error (false negative), and explore statistical power across effect sizes and standard errors.
+              </p>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Wald &amp; F Tests for Joint Restrictions
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Derive the variance matrix of restrictions \(\operatorname{Var}(R\hat{\beta} - q) = \sigma^2 R(X'X)^{-1}R'\), formulate the quadratic Wald statistic \(W \sim \chi^2_J\), construct the \(F\)-statistic \(F(J, n-k) = W/J\), and evaluate the alternative \(R^2\)-based \(F\)-test contrasting unrestricted (\(R^2_U\)) vs restricted (\(R^2_R\)) model fit.
-            </p>
-          </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Lesson 5.5 -->
-      <a href="lesson-05.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.5</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Indicator Variables</span>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Binary Dummy Variables
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Define binary indicator variables taking values 0 or 1, examine the basic wage model \(\ln(\text{wage}) = \beta_1 + \beta_2 \cdot \text{male} + \varepsilon\), derive conditional group expectations (\(\beta_1\) vs \(\beta_1 + \beta_2\)), interpret \(\beta_2\) as the conditional group mean difference, and connect testing \(\beta_2 = 0\) to testing mean equality across groups.
-            </p>
           </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
+        </a>
 
-      <!-- Lesson 5.6 -->
-      <a href="lesson-06.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.6</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Multiple Regressors</span>
+        <!-- Lesson 5.3 -->
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.3</span>
+                <span class="badge badge-cat">Linear Restrictions</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Testing Linear Restrictions: Rβ = q
+              </h2>
+              <p class="lesson-card-desc">
+                Master the general matrix framework for testing linear restrictions on regression parameters, understand the dimensions of \(R\) and \(q\), and construct exact restriction matrices for single zero restrictions, linear combinations, and joint simultaneous hypotheses.
+              </p>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Controls, Categories &amp; Reference Groups
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Add continuous control variables to dummy models, visualize the parallel regression lines geometry with identical slopes \(\beta_3\) and vertical shift \(\beta_2\), master the \(m - 1\) dummy rule with an intercept to prevent the Dummy Variable Trap, understand reference categories, and evaluate the no-intercept alternative.
-            </p>
-          </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Lesson 5.7 -->
-      <a href="lesson-07.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
-              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.7</span>
-              <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-secondary);">Nonlinear Models</span>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
             </div>
-            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
-              Dummy Variables in Log-Linear Models &amp; Module Review
-            </h2>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
-              Distinguish log differences (\(\beta_2\)), multiplicative ratios (\(\exp(\beta_2)\)), and exact percentage changes (\(100[\exp(\beta_2) - 1]\%\)), analyze the source example (\(\beta_2 = 0.10 \implies 10.5\%\)), examine the small-coefficient approximation rule (\(|\beta_2| < 0.10\)), and review the 15-Card Knowledge Map synthesizing Module 5.
-            </p>
           </div>
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
-            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
-          </div>
-        </div>
-      </a>
+        </a>
 
+        <!-- Lesson 5.4 -->
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.4</span>
+                <span class="badge badge-cat">Joint Testing</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Wald &amp; F Tests for Joint Restrictions
+              </h2>
+              <p class="lesson-card-desc">
+                Derive the variance matrix of restrictions, formulate the quadratic Wald statistic distributed as chi-squared, construct the corresponding F-statistic, and evaluate the alternative R-squared-based F-test comparing unrestricted versus restricted fit.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 5.5 -->
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.5</span>
+                <span class="badge badge-cat">Indicator Variables</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Binary Dummy Variables
+              </h2>
+              <p class="lesson-card-desc">
+                Define binary indicator variables taking values 0 or 1, examine the basic wage model, derive conditional group expectations, interpret the dummy coefficient as the conditional group mean difference, and connect hypothesis testing to mean equality across groups.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 5.6 -->
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.6</span>
+                <span class="badge badge-cat">Multiple Regressors</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Controls, Categories &amp; Reference Groups
+              </h2>
+              <p class="lesson-card-desc">
+                Add continuous control variables to dummy models, visualize the parallel regression lines geometry with identical slopes and vertical shifts, master the m - 1 dummy rule to avoid the Dummy Variable Trap, and understand omitted reference categories.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 5.7 -->
+        <a href="lesson-07.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 5.7</span>
+                <span class="badge badge-cat">Nonlinear Models</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Dummy Variables in Log-Linear Models &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Distinguish log differences, multiplicative ratios, and exact percentage changes in semi-logarithmic models, examine the small-coefficient approximation rule, and synthesize the entire module with the comprehensive Knowledge Map.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
     </div>
 
     <!-- Quick Navigation Back -->

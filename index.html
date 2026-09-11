@@ -721,43 +721,52 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">06</span>
-                  <span class="module-group-tag">Panel Data</span>
+                  <span class="module-group-tag">Causal Inference</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Multi-unit panel grid -->
+                <!-- Topic-Specific Micro Visual: Difference-in-Differences & Parallel Trends -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
                     <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
-                    <!-- Unit 1 trajectory -->
-                    <line x1="20" y1="14" x2="95" y2="8" stroke="var(--accent-primary)" stroke-width="1.6" stroke-linecap="round" />
-                    <circle cx="20" cy="14" r="2" fill="var(--accent-primary)" />
-                    <circle cx="58" cy="11" r="2" fill="var(--accent-primary)" />
-                    <circle cx="95" cy="8" r="2" fill="var(--accent-primary)" />
-                    <!-- Unit 2 trajectory -->
-                    <line x1="20" y1="24" x2="95" y2="18" stroke="var(--accent-secondary)" stroke-width="1.6" stroke-linecap="round" />
-                    <circle cx="20" cy="24" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="58" cy="21" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="95" cy="18" r="2" fill="var(--accent-secondary)" />
-                    <!-- Unit 3 trajectory -->
-                    <line x1="20" y1="33" x2="95" y2="27" stroke="var(--border-strong)" stroke-width="1.6" stroke-linecap="round" />
-                    <circle cx="20" cy="33" r="2" fill="var(--text-muted)" />
-                    <circle cx="58" cy="30" r="2" fill="var(--text-muted)" />
-                    <circle cx="95" cy="27" r="2" fill="var(--text-muted)" />
-                    <text x="108" y="12" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">i=1</text>
-                    <text x="108" y="22" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">i=2</text>
+                    <!-- Pre/Post demarcation -->
+                    <line x1="60" y1="6" x2="60" y2="36" stroke="var(--border-strong)" stroke-dasharray="1.5 1.5" />
+                    <!-- Control group trajectory -->
+                    <line x1="20" y1="28" x2="60" y2="24" stroke="var(--text-muted)" stroke-width="1.6" />
+                    <line x1="60" y1="24" x2="100" y2="20" stroke="var(--text-muted)" stroke-width="1.6" />
+                    <circle cx="20" cy="28" r="2" fill="var(--text-muted)" />
+                    <circle cx="60" cy="24" r="2" fill="var(--text-muted)" />
+                    <circle cx="100" cy="20" r="2" fill="var(--text-muted)" />
+                    <!-- Treated group pre -->
+                    <line x1="20" y1="20" x2="60" y2="16" stroke="var(--accent-primary)" stroke-width="1.6" />
+                    <circle cx="20" cy="20" r="2" fill="var(--accent-primary)" />
+                    <circle cx="60" cy="16" r="2" fill="var(--accent-primary)" />
+                    <!-- Counterfactual dashed line -->
+                    <line x1="60" y1="16" x2="100" y2="12" stroke="var(--accent-primary)" stroke-width="1.2" stroke-dasharray="2 1.5" opacity="0.6" />
+                    <circle cx="100" cy="12" r="1.5" fill="none" stroke="var(--accent-primary)" />
+                    <!-- Treated group post with treatment jump -->
+                    <line x1="60" y1="16" x2="100" y2="6" stroke="var(--accent-primary)" stroke-width="2" />
+                    <circle cx="100" cy="6" r="2.2" fill="var(--accent-primary)" />
+                    <!-- Treatment effect bracket β4 -->
+                    <line x1="104" y1="6" x2="104" y2="12" stroke="#059669" stroke-width="1.5" />
+                    <text x="107" y="10.5" font-size="5.5" font-family="var(--font-mono)" fill="#059669" font-weight="bold">β₄</text>
+                    <text x="36" y="32" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">Pre</text>
+                    <text x="80" y="32" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">Post</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">06 Panel Data Models</h3>
-                <p class="module-desc">Unobserved heterogeneity, fixed effects within estimation, random effects GLS, and Hausman specification testing.</p>
+                <h3 class="module-title">06 Omitted Variable Bias, Randomized Experiments &amp; Difference-in-Differences</h3>
+                <p class="module-desc">Understand when omitted variables bias OLS estimates, how omitted or included regressors affect precision, why random assignment changes the OVB problem, and how Difference-in-Differences and DDD recover treatment effects from changes across groups and time.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Pooled OLS</li>
-                    <li class="module-topic-tag">Fixed Effects (Within)</li>
-                    <li class="module-topic-tag">Random Effects</li>
-                    <li class="module-topic-tag">Hausman Test</li>
+                    <li class="module-topic-tag">OVB Derivation &amp; Conditions</li>
+                    <li class="module-topic-tag">Variance &amp; Precision Trade-Off</li>
+                    <li class="module-topic-tag">Randomized Experiments &amp; Controls</li>
+                    <li class="module-topic-tag">Difference-in-Differences (DD)</li>
+                    <li class="module-topic-tag">Parallel Trends &amp; Identification</li>
+                    <li class="module-topic-tag">Group Trends &amp; No Anticipation</li>
+                    <li class="module-topic-tag">Triple Differences (DDD)</li>
                   </ul>
                 </div>
 
@@ -771,14 +780,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-06" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 06"
-                    data-mod-group="Data Structures"
-                    data-mod-title="Panel Data Models"
-                    data-mod-desc="Harness longitudinal datasets where entities are tracked over time. Understand individual time-invariant unobserved heterogeneity (α_i), First Differencing, the Within Transformation, and Random Effects GLS."
-                    data-mod-topics="Structure of Panel Data (N × T Dimensions)|Unobserved Heterogeneity & Endogeneity Bias|Fixed Effects (FE) Within Estimator|First Differences (FD) vs FE Comparison|Random Effects (RE) Model & Quasi-Demeaning|Hausman Specification Test for FE vs RE">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-06/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 6</a>
                 </div>
               </article>
             </div>
@@ -799,42 +801,50 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">07</span>
-                  <span class="module-group-tag">Causal ID</span>
+                  <span class="module-group-tag">Triple Differences</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: IV DAG -->
+                <!-- Topic-Specific Micro Visual: 3-Layer DDD (State × Time × Subgroup) -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <!-- Nodes -->
-                    <circle cx="20" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <text x="20" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">Z</text>
-                    <circle cx="60" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <text x="60" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">X</text>
-                    <circle cx="100" cy="22" r="7" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <text x="100" y="25" font-size="7.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">Y</text>
-                    <!-- Confounder U -->
-                    <circle cx="80" cy="8" r="5" fill="var(--surface-raised)" stroke="var(--text-muted)" stroke-dasharray="1.5 1.5" stroke-width="1" />
-                    <text x="80" y="10.5" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">U</text>
-                    <!-- Arrows -->
-                    <line x1="28" y1="22" x2="52" y2="22" stroke="var(--accent-primary)" stroke-width="1.5" marker-end="url(#arrow)" />
-                    <line x1="68" y1="22" x2="92" y2="22" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <line x1="77" y1="12" x2="65" y2="18" stroke="var(--text-muted)" stroke-dasharray="2 2" stroke-width="1" />
-                    <line x1="83" y1="12" x2="95" y2="18" stroke="var(--text-muted)" stroke-dasharray="2 2" stroke-width="1" />
-                    <text x="40" y="32" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)">Relevance</text>
-                    <text x="60" y="40" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-secondary)">Exclusion Z⊥u</text>
+                    <!-- Layer 1: Placebo Subgroup DD (Dashed) -->
+                    <line x1="15" y1="34" x2="55" y2="30" stroke="var(--text-muted)" stroke-width="1.2" />
+                    <line x1="55" y1="30" x2="95" y2="26" stroke="var(--text-muted)" stroke-width="1.2" />
+                    <circle cx="15" cy="34" r="1.5" fill="var(--text-muted)" />
+                    <circle cx="55" cy="30" r="1.5" fill="var(--text-muted)" />
+                    <circle cx="95" cy="26" r="1.5" fill="var(--text-muted)" />
+                    <text x="100" y="28" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">DD_placebo</text>
+
+                    <!-- Layer 2: Treated Subgroup DD (Solid with Jump) -->
+                    <line x1="15" y1="22" x2="55" y2="18" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <line x1="55" y1="18" x2="95" y2="6" stroke="var(--accent-primary)" stroke-width="1.8" />
+                    <circle cx="15" cy="22" r="1.8" fill="var(--accent-primary)" />
+                    <circle cx="55" cy="18" r="1.8" fill="var(--accent-primary)" />
+                    <circle cx="95" cy="6" r="2" fill="var(--accent-primary)" />
+                    
+                    <!-- DDD Bracket β7 -->
+                    <line x1="95" y1="6" x2="95" y2="14" stroke="#059669" stroke-width="1.5" />
+                    <text x="99" y="11" font-size="5.5" font-family="var(--font-mono)" fill="#059669" font-weight="bold">β₇</text>
+
+                    <!-- Labels -->
+                    <text x="35" y="40" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">Pre</text>
+                    <text x="75" y="40" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">Post</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">07 Endogeneity & Instrumental Variables</h3>
-                <p class="module-desc">Omitted variable bias, simultaneity, instrument relevance and exogeneity, and Two-Stage Least Squares (2SLS).</p>
+                <h3 class="module-title">07 Advanced Difference-in-Differences: DDD, Triple Interactions &amp; Controlled Comparisons</h3>
+                <p class="module-desc">Extend Difference-in-Differences using a third comparison dimension. Learn how Difference-in-Difference-in-Differences isolates treatment effects using a placebo subgroup, derive the triple-interaction estimator, compare levels and changes specifications, and understand how controls change interpretation and precision.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Omitted Variable Bias</li>
-                    <li class="module-topic-tag">Simultaneity</li>
-                    <li class="module-topic-tag">Instrument Exogeneity</li>
-                    <li class="module-topic-tag">2SLS Estimation</li>
+                    <li class="module-topic-tag">Triple Differences (DDD)</li>
+                    <li class="module-topic-tag">Placebo Subgroups</li>
+                    <li class="module-topic-tag">Saturated 8-Cell Model</li>
+                    <li class="module-topic-tag">Triple Interaction β7</li>
+                    <li class="module-topic-tag">Changes Specification</li>
+                    <li class="module-topic-tag">Controlled DDD &amp; Precision</li>
+                    <li class="module-topic-tag">Identifying Assumptions</li>
                   </ul>
                 </div>
 
@@ -848,14 +858,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-07" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 07"
-                    data-mod-group="Causal Identification"
-                    data-mod-title="Endogeneity & Instrumental Variables"
-                    data-mod-desc="Address endogeneity when Cov(X, u) ≠ 0. Master the Two-Stage Least Squares (2SLS) algebraic estimator, exclusion restrictions, and classical empirical applications like the returns to schooling."
-                    data-mod-topics="Mechanisms of Endogeneity (OVB, Reverse Causality, Measurement Error)|Instrumental Variables (IV) Core Conditions|Two-Stage Least Squares (2SLS) Mechanics|Local Average Treatment Effect (LATE)|Natural Experiments & Policy Shifts|Standard Error Adjustments in 2SLS">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-07/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 7</a>
                 </div>
               </article>
 

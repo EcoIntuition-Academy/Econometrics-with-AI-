@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6.1: Omitted Variable Bias — Formal Derivation &amp; Intuition — EcoIntuition Academy</title>
+  <meta name="description" content="Discover why regression coefficients absorb the influence of omitted variables, formally derive the matrix OVB formula, explore the correlation and relevance conditions, and investigate Sanaz and Mike’s cookie jar story.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-06" data-lesson="01">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+            <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations & Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra & Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties & Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory & Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing & Dummies</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 6: OVB, Experiments & DD</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 6</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 06</a>
+          <span class="module-nav-title">Omitted Variable Bias, Experiments &amp; DD</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 8 &middot; OVB — Formal Derivation &amp; Intuition</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 6 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">6.1 OVB — Formal Derivation &amp; Intuition</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.2 Omitted Variables, Variance &amp; Standard Errors</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.3 Controls &amp; OVB in Randomized Experiments</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.4 Difference-in-Differences Fundamentals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.5 Parallel Trends &amp; DD Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.6 Testing Trends &amp; No-Anticipation</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.7 Difference-in-Difference-in-Differences (DDD)</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.8 DDD Worked Example &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">12.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 12.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 6.1</span>
+        <span class="badge">OVB Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Omitted Variable Bias — Formal Derivation &amp; Intuition
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        What happens when an econometrician omits an important variable from a regression model? Discover how included regressors accidentally absorb the influence of missing covariates, prove the canonical matrix bias formula, and explore the two essential conditions required for bias to exist.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the two necessary and sufficient conditions for Omitted Variable Bias (Correlation and Relevance).</li>
+        <li>Distinguish between the true data-generating process and the restricted estimated OLS model.</li>
+        <li>Follow the 6-step algebraic derivation of the conditional expectation \(\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2]\).</li>
+        <li>Decompose the bias term into the linear association \((X_1'X_1)^{-1}X_1'X_2\) multiplied by the omitted effect \(\beta_2\).</li>
+        <li>Apply the Sanaz and Mike cookie jar story to build physical intuition for the direction and magnitude of OLS bias.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Intuition First - Two Conditions for OVB -->
+    <section class="lesson-section" id="intuitionSection">
+      <h2>1. Intuition First: Why Regressors Absorb Omitted Variables</h2>
+      <p>
+        In multiple regression, the Ordinary Least Squares (OLS) estimator attributes changes in the dependent variable \(y\) to the variables present in the model. If a relevant factor is left out of the regression, OLS does not simply ignore it—instead, any included regressor that is correlated with the omitted variable will <strong>accidentally absorb</strong> its influence.
+      </p>
+      <p>
+        For this bias to contaminate our estimates, two conditions must hold simultaneously:
+      </p>
+
+      <!-- Two Conditions Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.5rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 1rem; text-align: center;">
+          OVB REQUIRES BOTH CONDITIONS TO HOLD
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-sm);">
+          
+          <div style="background: var(--color-bg); padding: 14px; border-radius: var(--radius-sm); border-left: 4px solid var(--color-primary);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">CONDITION 1: CORRELATION</div>
+            <div style="font-size: 1.25rem; font-family: var(--font-mono); font-weight: 700; margin: 6px 0; color: var(--color-text);">\(X_1'X_2 \neq 0\)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text-secondary); margin: 0;">
+              The omitted regressor(s) \(X_2\) must be linearly correlated with the included regressor(s) \(X_1\). If they are completely uncorrelated, \(X_1\) cannot absorb \(X_2\)’s movements.
+            </p>
+          </div>
+
+          <div style="background: var(--color-bg); padding: 14px; border-radius: var(--radius-sm); border-left: 4px solid #7c3aed;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #7c3aed; text-transform: uppercase;">CONDITION 2: RELEVANCE</div>
+            <div style="font-size: 1.25rem; font-family: var(--font-mono); font-weight: 700; margin: 6px 0; color: var(--color-text);">\(\beta_2 \neq 0\)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text-secondary); margin: 0;">
+              The omitted variable must actually matter for the outcome \(y\). If \(\beta_2 = 0\), the omitted variable has no population effect to pass onto \(X_1\).
+            </p>
+          </div>
+
+        </div>
+        <div style="text-align: center; font-size: 0.9rem; font-weight: 600; color: #dc2626; padding-top: 8px;">
+          CORRELATION (\(X_1'X_2 \neq 0\)) &nbsp;&amp;&nbsp; RELEVANCE (\(\beta_2 \neq 0\)) &nbsp;\(\implies\)&nbsp; OMITTED VARIABLE BIAS
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Formal Model Setup -->
+    <section class="lesson-section" id="modelSection">
+      <h2>2. Formal Model Setup &amp; Notation</h2>
+      <p>
+        Following the primary source setup, let the true population relationship between outcome \(y\) and explanatory variables be partitioned into included regressors \(X_1\) and omitted regressors \(X_2\):
+      </p>
+
+      <!-- Key Equation Box: True Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">True Data-Generating Process</div>
+        <div class="equation-box-math">
+          \[y = X_1\beta_1 + X_2\beta_2 + \varepsilon\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(X_1\) is the \(n \times k_1\) matrix of included regressors (including the constant), \(X_2\) is the \(n \times k_2\) matrix of omitted regressors, \(\beta_1\) and \(\beta_2\) are true population parameter vectors, and \(\varepsilon\) satisfies \(\mathbb{E}[\varepsilon \mid X_1, X_2] = 0\).
+        </div>
+      </div>
+
+      <p>
+        The econometrician does not observe or mistakenly excludes \(X_2\), running OLS solely on \(X_1\). This yields the restricted estimator:
+      </p>
+
+      <!-- Equation Box: Restricted Estimator -->
+      <div class="equation-box">
+        <div class="equation-box-title">Restricted OLS Estimator</div>
+        <div class="equation-box-math">
+          \[\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'y\]
+        </div>
+        <div class="equation-box-sub">
+          <em>Notation Note:</em> The primary source writes this restricted OLS estimator as \(b_1\). This course website uses \(\hat{\beta}_1\) for consistency with previous modules.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Derivation Journey -->
+    <section class="lesson-section" id="derivationSection">
+      <h2>3. Connected Derivation Journey: Finding \(\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2]\)</h2>
+      <p>
+        To discover whether \(\hat{\beta}_1\) is unbiased, we compute its mathematical expectation conditional on both \(X_1\) and \(X_2\).
+      </p>
+
+      <div class="derivation-journey">
+        <div class="derivation-goal-card">
+          <div class="derivation-goal-badge">Derivation Goal</div>
+          <h3 class="derivation-goal-title">Evaluate the Conditional Expectation of the Restricted Estimator</h3>
+          <p class="derivation-goal-desc">
+            Find \(\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2]\) when the true data-generating process contains \(X_2\), and isolate the exact mathematical bias term.
+          </p>
+        </div>
+
+        <div class="derivation-steps-rail">
+          
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Start with the Restricted OLS Formula</h4>
+                <span class="derivation-result-badge">\(\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'y\)</span>
+              </div>
+              <p class="derivation-step-desc">Write down the formula computed by the regression software that omits \(X_2\):</p>
+              <div class="derivation-step-math">
+                \[\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'y\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>Because the econometrician omitted \(X_2\), the estimator is computed purely using the normal equations for \(X_1\).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Substitute the True Model for y</h4>
+                <span class="derivation-result-badge">Insert DGP</span>
+              </div>
+              <p class="derivation-step-desc">Replace \(y\) with its true population expression \(y = X_1\beta_1 + X_2\beta_2 + \varepsilon\):</p>
+              <div class="derivation-step-math">
+                \[\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'\Big(X_1\beta_1 + X_2\beta_2 + \varepsilon\Big)\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>This allows us to link the sample estimator directly to the true underlying parameters \(\beta_1\) and \(\beta_2\).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Distribute \((X_1'X_1)^{-1}X_1'\) Across Terms</h4>
+                <span class="derivation-result-badge">Three Additive Terms</span>
+              </div>
+              <p class="derivation-step-desc">Expand the matrix multiplication across all three components:</p>
+              <div class="derivation-step-math">
+                \[\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'X_1\beta_1 + (X_1'X_1)^{-1}X_1'X_2\beta_2 + (X_1'X_1)^{-1}X_1'\varepsilon\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>Matrix multiplication is distributive over matrix addition: \(A(B + C + D) = AB + AC + AD\).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Simplify the First Term via the Identity Matrix</h4>
+                <span class="derivation-result-badge">\((X_1'X_1)^{-1}X_1'X_1 = I\)</span>
+              </div>
+              <p class="derivation-step-desc">Notice that the matrix inverse multiplies the original gram matrix:</p>
+              <div class="derivation-step-math">
+                \[(X_1'X_1)^{-1}X_1'X_1 = I \implies I\beta_1 = \beta_1\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>Any non-singular square matrix multiplied by its inverse yields the identity matrix \(I\).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Take the Conditional Expectation</h4>
+                <span class="derivation-result-badge">\(\mathbb{E}[\varepsilon \mid X_1, X_2] = 0\)</span>
+              </div>
+              <p class="derivation-step-desc">Take expectation conditional on all regressors \(X_1\) and \(X_2\):</p>
+              <div class="derivation-step-math">
+                \[\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2\beta_2 + (X_1'X_1)^{-1}X_1'\underbrace{\mathbb{E}[\varepsilon \mid X_1, X_2]}_{= 0}\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>Under the standard strict exogeneity assumption of the true DGP, the expected error is zero given the regressors.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">6</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Final Result: The Canonical OVB Expression</h4>
+                <span class="derivation-result-badge" style="background: #dc2626; color: white;">Bias Isolated</span>
+              </div>
+              <p class="derivation-step-desc">The conditional expectation of \(\hat{\beta}_1\) equals the true parameter plus the bias term:</p>
+              <div class="derivation-step-math">
+                \[\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2] = \beta_1 + \underbrace{(X_1'X_1)^{-1}X_1'X_2 \beta_2}_{\text{Omitted Variable Bias}}\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                <p>Whenever \((X_1'X_1)^{-1}X_1'X_2 \beta_2 \neq 0\), the estimator is systematically biased away from \(\beta_1\).</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="derivation-big-picture" style="background: var(--color-bg); border-left: 4px solid var(--color-primary); padding: 1rem 1.25rem; border-radius: var(--radius-sm); margin-top: 1.5rem;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--color-primary);">THE BIG PICTURE DECOMPOSITION</h4>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+            Notice what the term \((X_1'X_1)^{-1}X_1'X_2\) actually represents: it is the <strong>OLS coefficient matrix from regressing the omitted regressors \(X_2\) on the included regressors \(X_1\)</strong>! Hence, the bias loaded onto \(\hat{\beta}_1\) equals:
+            <br><br>
+            <span style="font-family: var(--font-mono); font-weight: 700; color: #1e3a8a;">
+              Bias = [Relationship between Included and Omitted] \(\times\) [True Effect of Omitted on Outcome]
+            </span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The Cookie Story (Sanaz & Mike) -->
+    <section class="lesson-section" id="cookieSection">
+      <h2>4. The Cookie Story: Sanaz and Mike</h2>
+      <p>
+        To build intuition, page 2 of the primary source introduces the vivid classroom example of <strong>Sanaz and Mike</strong> raiding a shared jar of 100 cookies.
+      </p>
+
+      <!-- Story Setup Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.5rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="academic-badge" style="background: #fef3c7; color: #92400e; font-weight: 700;">PRIMARY SOURCE CASE</span>
+          <h3 style="margin: 0; font-size: 1.1rem; color: #92400e;">The Cookie Jar Data-Generating Process</h3>
+        </div>
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text); margin-bottom: 0.75rem;">
+          There are 100 cookies in the kitchen jar. Two roommates visit the jar:
+        </p>
+        <ul style="margin: 0 0 1rem; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.6;">
+          <li><strong>Sanaz:</strong> takes exactly <strong>2 cookies</strong> on each trip (\(\beta_1 = -2\)).</li>
+          <li><strong>Mike:</strong> takes exactly <strong>5 cookies</strong> on each trip (\(\beta_2 = -5\)).</li>
+        </ul>
+        <div class="equation-box" style="margin-bottom: 0.75rem;">
+          <div class="equation-box-title">True Jar Model</div>
+          <div class="equation-box-math">
+            \[\text{Cookies Remaining} = 100 - 2 \cdot \text{SanazTrips} - 5 \cdot \text{MikeTrips} + \varepsilon\]
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text-secondary); margin: 0;">
+          Now suppose the econometrics professor places a camera that only tracks Sanaz, leaving Mike unobserved. The estimated regression is:
+          <br>
+          \(\text{Cookies Remaining} = \alpha + \beta_1 \cdot \text{SanazTrips} + \omega\), where \(\omega = -5 \cdot \text{MikeTrips} + \varepsilon\).
+        </p>
+      </div>
+
+      <!-- Interactive Cookie Lab -->
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-lg);">
+        <div class="lab-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <span class="academic-badge badge-lab">INTERACTIVE LAB</span>
+            <h3 style="margin: 0.25rem 0 0; font-size: 1.15rem;">Sanaz &amp; Mike Correlation Explorer</h3>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--color-text-secondary); font-family: var(--font-mono);">
+            Source Illustration
+          </div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 1rem;">
+          Select how Sanaz and Mike coordinate their trips to the kitchen to see how the OLS estimate \(\hat{\beta}_1\) moves:
+        </p>
+
+        <!-- Scenario Buttons -->
+        <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap; margin-bottom: 1.25rem;">
+          <button id="cookieBtnTogether" class="btn btn-primary btn-sm active" type="button">Always Together</button>
+          <button id="cookieBtnPartial" class="btn btn-outline btn-sm" type="button">Sometimes Together</button>
+          <button id="cookieBtnUncorr" class="btn btn-outline btn-sm" type="button">Uncorrelated</button>
+          <button id="cookieBtnAvoid" class="btn btn-outline btn-sm" type="button">Avoid Each Other</button>
+        </div>
+
+        <!-- Readout Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--space-xs); margin-bottom: 1.25rem;">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Trips Correlation</div>
+            <div id="cookieReadoutCorr" style="font-size: 1.05rem; font-weight: 700; color: #2563eb; font-family: var(--font-mono);">+1.0</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Sanaz True Slope</div>
+            <div id="cookieReadoutSanaz" style="font-size: 1.05rem; font-weight: 700; color: #059669; font-family: var(--font-mono);">-2.0 cookies</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Implied Bias</div>
+            <div id="cookieReadoutBias" style="font-size: 1.05rem; font-weight: 800; color: #dc2626; font-family: var(--font-mono);">-5.0</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Estimated β̂₁</div>
+            <div id="cookieReadoutBeta1Hat" style="font-size: 1.05rem; font-weight: 800; color: #dc2626; font-family: var(--font-mono);">-7.0 cookies</div>
+          </div>
+        </div>
+
+        <!-- Canonical Outside Chart Legend -->
+        <div class="visual-legend" aria-label="Cookie Lab Legend">
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--dashed" style="border-color: #059669;" aria-hidden="true"></span>
+            <span class="visual-legend-label">True Sanaz Slope (\(\beta_1 = -2.0\))</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--line" id="cookieLegendEstLine" style="background: #dc2626;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Estimated Slope (\(\hat{\beta}_1\))</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--point" style="background: #3b82f6;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Observed Jar Samples</span>
+          </span>
+        </div>
+
+        <!-- SVG Container -->
+        <div class="chart-svg-shell">
+          <svg id="cookieLabSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive cookie regression graph"></svg>
+        </div>
+
+        <!-- Dynamic Interpretation Banner -->
+        <div style="margin-top: 1rem; padding: 10px 14px; background: var(--color-bg); border-radius: var(--radius-sm); border-left: 3px solid #2563eb; font-size: 0.88rem; line-height: 1.5; color: var(--color-text);">
+          <strong>Scenario Insight:</strong> <span id="cookieReadoutInterp">Loading scenario explanation...</span>
+        </div>
+      </div>
+
+      <!-- 5-Box Visual Explanation Grid -->
+      <div class="visual-explanation-grid">
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+          <p>A scatter plot of remaining cookies versus Sanaz's trips to the jar. The green dashed line is Sanaz's true individual consumption (\(-2\) cookies/trip), while the solid line is the OLS slope estimated without observing Mike.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT TO NOTICE</div>
+          <p>When Sanaz and Mike are <em>Always Together</em>, every time Sanaz takes 2 cookies, Mike also takes 5. The regression attributes all 7 missing cookies to Sanaz, causing \(\hat{\beta}_1\) to plunge to \(-7.0\)!</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHY IT MATTERS</div>
+          <p>OLS cannot determine <em>who</em> ate the cookies. It only minimizes squared residuals based on the data it has. An omitted variable's effect is seamlessly transferred to any regressor that tags along with it.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+          <p>The mathematical bias \((X_1'X_1)^{-1}X_1'X_2 \beta_2\) translates here to: \([+1.0 \text{ Mike trip per Sanaz trip}] \times [-5 \text{ cookies per Mike trip}] = -5 \text{ cookies of bias}\). Adding this to \(-2\) yields \(-7\).</p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-tag">TRY THIS</div>
+          <p>Click <strong>Uncorrelated</strong>. Notice that when their trips are independent (\(X_1'X_2 = 0\)), the estimated slope aligns perfectly with the true green dashed line (\(\hat{\beta}_1 = -2.00\)) even though Mike remains completely unobserved!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Common Mistake -->
+    <section class="lesson-section" id="mistakeSection">
+      <h2>5. Common Methodological Pitfall</h2>
+
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">METHODOLOGICAL CAUTION</span>
+          <span class="callout-title">Common Mistake: "Every Omitted Variable Causes Bias"</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>"Because our regression omits hundreds of real-world variables, our OLS estimates are automatically biased."</strong><br><br>
+            <em>Correction:</em> In real life, econometrics models ALWAYS leave out countless variables. However, an omitted variable causes <strong>bias</strong> ONLY IF it is both relevant (\(\beta_2 \neq 0\)) AND correlated with an included variable (\(X_1'X_2 \neq 0\)).<br><br>
+            If an omitted variable is completely independent of \(X_1\), it merely becomes part of the error term \(\varepsilon\). It inflates the error variance \(\sigma^2\) (affecting standard errors), but it induces <strong>ZERO BIAS</strong> into \(\hat{\beta}_1\)!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> What Determines the Direction of OVB?
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a wage equation, suppose we estimate \(\ln(\text{wage}) = \beta_0 + \beta_1 \text{educ} + \varepsilon\), omitting individual ability. If ability positively impacts wages (\(\beta_2 > 0\)) and is positively correlated with education (\(\operatorname{Cov}(\text{educ}, \text{ability}) > 0\)), what is the sign of the OVB, and will \(\hat{\beta}_1\) overestimate or underestimate the true return to schooling?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> The bias is POSITIVE, causing \(\hat{\beta}_1\) to OVERESTIMATE the true causal effect of education.<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>The formula for omitted variable bias is: \(\text{Bias} = \frac{\operatorname{Cov}(\text{educ}, \text{ability})}{\operatorname{Var}(\text{educ})} \times \beta_{\text{ability}}\).</li>
+            <li>Since \(\operatorname{Cov}(\text{educ}, \text{ability}) > 0\) and \(\beta_{\text{ability}} > 0\), the product is: \((+) \times (+) = (+)\).</li>
+            <li>Therefore, \(\mathbb{E}[\hat{\beta}_1] = \beta_1 + \text{Positive Bias} > \beta_1\). Education appears more lucrative than it actually is because it receives credit for the omitted native ability of the student!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>OVB occurs when an included regressor absorbs the causal effect of an omitted variable with which it is correlated.</li>
+        <li>Two conditions are strictly necessary for bias: Correlation between included and omitted (\(X_1'X_2 \neq 0\)) AND Relevance of the omitted in the true DGP (\(\beta_2 \neq 0\)).</li>
+        <li>The expectation of the restricted estimator is \(\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2 \beta_2\).</li>
+        <li>The term \((X_1'X_1)^{-1}X_1'X_2\) is the regression of omitted regressors on included regressors.</li>
+        <li>If an omitted variable is uncorrelated with included regressors, OLS remains completely unbiased.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 6 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: Variance &amp; Standard Errors →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-06-interactions.js"></script>
+</body>
+</html>

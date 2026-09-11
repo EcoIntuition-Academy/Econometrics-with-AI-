@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6.2: Omitted Variables, Variance &amp; Standard Errors — EcoIntuition Academy</title>
+  <meta name="description" content="Explore how omitting or including variables affects estimator variance and standard errors, analyze partitioned regression matrix variance formulas, and master the 4-case system from primary source page 5.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-06" data-lesson="02">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+            <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations & Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra & Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties & Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory & Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing & Dummies</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 6: OVB, Experiments & DD</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 6</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 06</a>
+          <span class="module-nav-title">Omitted Variable Bias, Experiments &amp; DD</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 8 &middot; Variance &amp; Standard Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 6 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">6.1 OVB — Formal Derivation &amp; Intuition</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">6.2 Omitted Variables, Variance &amp; Standard Errors</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.3 Controls &amp; OVB in Randomized Experiments</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.4 Difference-in-Differences Fundamentals</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.5 Parallel Trends &amp; DD Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.6 Testing Trends &amp; No-Anticipation</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.7 Difference-in-Difference-in-Differences (DDD)</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">6.8 DDD Worked Example &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">25.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 25.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 6.2</span>
+        <span class="badge">Precision &amp; Variance</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Omitted Variables, Variance &amp; Standard Errors
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Lesson 6.1 examined bias: <em>"Is \(\hat{\beta}_1\) centered on \(\beta_1\)?"</em> Now we examine precision: <em>"How variable is \(\hat{\beta}_1\) across samples?"</em> Discover how omitting or including regressors affects sampling uncertainty, explore the competing forces of residual variance versus multicollinearity, and examine the canonical standard-error summary table from page 5 of the source.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Strictly distinguish between estimator <strong>bias</strong> (centering) and <strong>standard error</strong> (precision).</li>
+        <li>Inspect the partitioned regression matrix variance formulas for omitting versus including \(X_2\).</li>
+        <li>Identify the two competing forces that affect standard errors when adding regressors: residual variance reduction vs. collinearity penalty.</li>
+        <li>Master the 4-case system classifying relevance (\(\beta_2 = 0\) vs. \(\beta_2 \neq 0\)) and correlation (\(X_1'X_2 = 0\) vs. \(X_1'X_2 \neq 0\)).</li>
+        <li>Recognize that Case 2 (\(X_1'X_2 \neq 0, \beta_2 = 0\)) is the single scenario where omitting a variable unambiguously improves precision.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Bias vs Precision -->
+    <section class="lesson-section" id="distinctionSection">
+      <h2>1. The Fundamental Distinction: Bias vs. Precision</h2>
+      <p>
+        In econometric specification, students frequently confuse an estimator’s expected location with its spread. A model can have small standard errors but be wildly biased, or it can be perfectly unbiased but suffer from large sampling uncertainty.
+      </p>
+
+      <!-- Comparison Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); border-top: 4px solid #2563eb;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #2563eb; display: flex; align-items: center; gap: 0.5rem;">
+            BIAS (Location / Centering)
+          </h4>
+          <p style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text); margin: 0;">
+            Defined as \(\operatorname{Bias}(\hat{\beta}_1) = \mathbb{E}[\hat{\beta}_1] - \beta_1\). It measures whether the estimator is centered on the true population parameter across hypothetical repeated samples. Unbiasedness guarantees that our procedure does not systematically overshoot or undershoot truth.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); border-top: 4px solid #059669;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #059669; display: flex; align-items: center; gap: 0.5rem;">
+            PRECISION (Spread / Standard Error)
+          </h4>
+          <p style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text); margin: 0;">
+            Measured by the sampling variance \(\operatorname{Var}(\hat{\beta}_1)\) and its square root, the Standard Error (\(\operatorname{SE}\)). It dictates how tightly estimates cluster around their mean. High precision means little noise between individual realized samples.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Source Variance Expressions -->
+    <section class="lesson-section" id="varianceSection">
+      <h2>2. Source Variance Expressions: Omitting vs. Including Regressors</h2>
+      <p>
+        From pages 3–4 of the primary source, consider how the conditional variance of the estimated coefficient on \(X_1\) differs between the restricted model (omitting \(X_2\)) and the unrestricted model (including \(X_2\)).
+      </p>
+
+      <!-- Equation: Omitting X2 -->
+      <div class="equation-box">
+        <div class="equation-box-title">Theoretical Variance When Omitting X₂ (Restricted)</div>
+        <div class="equation-box-math">
+          \[\operatorname{Var}(\hat{\beta}_1^{\text{omit}} \mid X_1) = \sigma_{\text{omit}}^2 (X_1'X_1)^{-1}\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(\sigma_{\text{omit}}^2 = \operatorname{Var}(\omega_i)\) is the variance of the composite error term that absorbs \(X_2\beta_2\).
+        </div>
+      </div>
+
+      <!-- Equation: Including X2 -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Theoretical Variance When Including X₂ (Unrestricted Partitioned Regression)</div>
+        <div class="equation-box-math">
+          \[\operatorname{Var}(\hat{\beta}_1^{\text{incl}} \mid X_1, X_2) = \sigma_{\text{incl}}^2 \Big[ X_1' \big(I - X_2(X_2'X_2)^{-1}X_2'\big) X_1 \Big]^{-1} = \sigma_{\text{incl}}^2 (X_1' M_2 X_1)^{-1}\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(M_2 = I - X_2(X_2'X_2)^{-1}X_2'\) is the orthogonal projection matrix that partials out \(X_2\) from \(X_1\).
+        </div>
+      </div>
+
+      <p>
+        By matrix algebra, the matrix \((X_1' M_2 X_1)^{-1} - (X_1'X_1)^{-1}\) is <strong>positive semi-definite</strong>! This means that partialing out \(X_2\) removes independent variation in \(X_1\), which mechanically increases the matrix factor. However, this is only half the story.
+      </p>
+
+      <!-- Competing Forces Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <h4 style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.75rem;">
+          The Two Competing Forces Operating on Standard Errors
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; line-height: 1.6;">
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="background: #dcfce7; color: #166534; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; white-space: nowrap;">FORCE 1 (Good)</span>
+            <div>
+              <strong>Residual Variance Reduction (\(\sigma^2 \downarrow\)):</strong> If \(X_2\) explains variation in \(y\) (\(\beta_2 \neq 0\)), adding it to the regression removes that variation from the residual. A lower residual variance tends to <em>decrease</em> standard errors.
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="background: #fee2e2; color: #991b1b; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; white-space: nowrap;">FORCE 2 (Bad)</span>
+            <div>
+              <strong>Collinearity Penalty (\((X_1'M_2 X_1)^{-1} \uparrow\)):</strong> If \(X_2\) is correlated with \(X_1\) (\(X_1'X_2 \neq 0\)), adding it means \(X_1\) and \(X_2\) compete to explain the same variance. Less unique variation remains in \(X_1\), which tends to <em>inflate</em> standard errors.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The 4-Case System & Summary Table -->
+    <section class="lesson-section" id="tableSection">
+      <h2>3. The 4-Case System: Effect on Standard Errors When Omitting X₂</h2>
+      <p>
+        On page 5 of the primary source, the interaction between <strong>Correlation</strong> (\(X_1'X_2\)) and <strong>Relevance</strong> (\(\beta_2\)) is synthesized into a rigorous 2×2 classification.
+      </p>
+
+      <!-- Desktop Responsive HTML Table -->
+      <div style="overflow-x: auto; margin-bottom: var(--space-lg);">
+        <table class="table" style="width: 100%; border-collapse: collapse; background: var(--color-surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 0.9rem;">
+          <thead>
+            <tr style="background: var(--color-bg); border-bottom: 2px solid var(--border-subtle);">
+              <th style="padding: 12px 16px; text-align: left; font-weight: 700; color: var(--color-text);">Correlation with \(X_1\)</th>
+              <th style="padding: 12px 16px; text-align: left; font-weight: 700; color: var(--color-text);">\(X_2\) Irrelevant (\(\beta_2 = 0\))</th>
+              <th style="padding: 12px 16px; text-align: left; font-weight: 700; color: var(--color-text);">\(X_2\) Relevant (\(\beta_2 \neq 0\))</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 14px 16px; font-weight: 700; background: var(--color-bg); color: var(--color-text);">
+                Uncorrelated<br>
+                <span style="font-family: var(--font-mono); font-weight: normal; font-size: 0.82rem; color: var(--color-text-secondary);">\(X_1'X_2 = 0\)</span>
+              </td>
+              <td style="padding: 14px 16px; vertical-align: top;">
+                <span class="badge" style="background: #dcfce7; color: #166534; margin-bottom: 6px;">Unbiased</span><br>
+                <strong>Omitting \(X_2\) slightly helps precision.</strong><br>
+                <span style="font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+                  Because \(\beta_2 = 0\), residual variance doesn't change. Omitting \(X_2\) saves 1 degree of freedom, yielding marginally smaller estimated standard errors.
+                </span>
+              </td>
+              <td style="padding: 14px 16px; vertical-align: top;">
+                <span class="badge" style="background: #dcfce7; color: #166534; margin-bottom: 6px;">Unbiased</span><br>
+                <strong style="color: #dc2626;">Omitting \(X_2\) hurts precision.</strong><br>
+                <span style="font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+                  Because \(X_1'X_2 = 0\), there is no OVB. However, leaving \(X_2\) out inflates the error variance \(\sigma^2\), making the SE on \(\hat{\beta}_1\) strictly larger than necessary.
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 14px 16px; font-weight: 700; background: var(--color-bg); color: var(--color-text);">
+                Correlated<br>
+                <span style="font-family: var(--font-mono); font-weight: normal; font-size: 0.82rem; color: var(--color-text-secondary);">\(X_1'X_2 \neq 0\)</span>
+              </td>
+              <td style="padding: 14px 16px; vertical-align: top; background: rgba(37, 99, 235, 0.04);">
+                <span class="badge" style="background: #dcfce7; color: #166534; margin-bottom: 6px;">Unbiased</span><br>
+                <strong style="color: #2563eb;">Omitting \(X_2\) definitely helps precision!</strong><br>
+                <span style="font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+                  <strong>KEY RESULT:</strong> This is the ONLY case where dropping a variable substantially improves precision without penalty! Including irrelevant collinear \(X_2\) inflates variance via multicollinearity without reducing residual variance.
+                </span>
+              </td>
+              <td style="padding: 14px 16px; vertical-align: top; background: rgba(220, 38, 38, 0.04);">
+                <span class="badge" style="background: #fee2e2; color: #991b1b; margin-bottom: 6px;">BIASED!</span><br>
+                <strong style="color: #d97706;">Ambiguous effect on precision.</strong><br>
+                <span style="font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+                  The estimator is severely biased! Furthermore, omitting \(X_2\) increases \(\sigma^2\) (hurting precision) while eliminating multicollinearity (helping precision). The net SE change depends on which force dominates.
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Precision & Bias Lab -->
+    <section class="lesson-section" id="labSection">
+      <h2>4. Interactive Precision &amp; Bias Trade-Off Explorer</h2>
+      <p>
+        Explore the four cases dynamically to see how the sampling distribution of \(\hat{\beta}_1\) responds when omitting vs. including \(X_2\):
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-lg);">
+        <div class="lab-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <span class="academic-badge badge-lab">INTERACTIVE LAB</span>
+            <h3 style="margin: 0.25rem 0 0; font-size: 1.15rem;">Sampling Distribution &amp; Precision Simulator</h3>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--color-text-secondary); font-family: var(--font-mono);">
+            Page 5 Matrix Model
+          </div>
+        </div>
+
+        <!-- Case Toggle Buttons -->
+        <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap; margin-bottom: 1.25rem;">
+          <button id="precBtnCase1" class="btn btn-outline btn-sm" type="button">Case 1: Uncorr &amp; Irrelevant</button>
+          <button id="precBtnCase2" class="btn btn-primary btn-sm active" type="button">Case 2: Collinear &amp; Irrelevant</button>
+          <button id="precBtnCase3" class="btn btn-outline btn-sm" type="button">Case 3: Uncorr &amp; Relevant</button>
+          <button id="precBtnCase4" class="btn btn-outline btn-sm" type="button">Case 4: Collinear &amp; Relevant</button>
+        </div>
+
+        <!-- Readout Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs); margin-bottom: 1.25rem;">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Bias Status</div>
+            <div id="precReadoutBias" style="font-size: 0.95rem; font-weight: 700; color: #059669; font-family: var(--font-mono);">Unbiased</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Standard Error Impact</div>
+            <div id="precReadoutSe" style="font-size: 0.95rem; font-weight: 700; color: #059669; font-family: var(--font-mono);">STRONGLY HELPS PRECISION</div>
+          </div>
+        </div>
+
+        <!-- Canonical Outside Chart Legend with Dynamic SE Values -->
+        <div class="visual-legend" aria-label="Sampling Distribution Legend">
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--line" id="precLegendSwatchOmit" style="background: #2563eb;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Omitting \(X_2\) (Restricted)</span>
+            <span class="visual-legend-value" id="precLegendSeOmit">SE: 0.28</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--dashed" style="border-color: #7c3aed;" aria-hidden="true"></span>
+            <span class="visual-legend-label">Including \(X_2\) (Unrestricted)</span>
+            <span class="visual-legend-value" id="precLegendSeIncl">SE: 0.58</span>
+          </span>
+          <span class="visual-legend-item">
+            <span class="visual-legend-swatch--ref" style="border-color: #059669;" aria-hidden="true"></span>
+            <span class="visual-legend-label">True Parameter (\(\beta_1 = 0.0\))</span>
+          </span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="precisionTradeoffSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive sampling distribution comparison"></svg>
+        </div>
+
+        <!-- Case Explanation Banner -->
+        <div style="margin-top: 1rem; padding: 10px 14px; background: var(--color-bg); border-radius: var(--radius-sm); border-left: 3px solid #2563eb; font-size: 0.88rem; line-height: 1.5; color: var(--color-text);">
+          <strong id="precReadoutTitle">Case 2: Correlated &amp; Irrelevant</strong><br>
+          <span id="precReadoutImpact">Loading impact...</span>
+        </div>
+      </div>
+
+      <!-- 5-Box Visual Explanation Grid -->
+      <div class="visual-explanation-grid">
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+          <p>The sampling distributions of the restricted estimator \(\hat{\beta}_1^{\text{omit}}\) (solid curve) and the unrestricted estimator \(\hat{\beta}_1^{\text{incl}}\) (dashed purple curve) centered around the true parameter value \(\beta_1 = 0.0\).</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT TO NOTICE</div>
+          <p>In <strong>Case 2</strong>, both curves are centered on 0 (unbiased). But notice how much wider the dashed purple curve is! Including irrelevant collinear \(X_2\) causes severe multicollinearity, exploding the estimator's standard error from \(0.28\) to \(0.58\).</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHY IT MATTERS</div>
+          <p>Beginners often believe that "more controls are always better." Case 2 proves this false: throwing irrelevant variables that correlate with your regressors destroys statistical precision without any bias-reduction benefit.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+          <p>Omitting \(X_2\) helps precision when \(X_1'X_2 \neq 0\) and \(\beta_2 = 0\) because it eliminates the collinearity penalty \((X_1'M_2 X_1)^{-1}\) while losing zero explanatory power (\(\sigma^2\) unchanged).</p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-tag">TRY THIS</div>
+          <p>Click <strong>Case 4</strong>. Notice the solid curve shifting away from zero: the estimator is now <em>BIASED</em>! Even if standard errors were small, an estimator that converges to the wrong number is unacceptable for causal inference.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Common Mistake -->
+    <section class="lesson-section" id="mistakeSection">
+      <h2>5. Common Methodological Pitfall</h2>
+
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">METHODOLOGICAL CAUTION</span>
+          <span class="callout-title">Common Mistake: Choosing Models Solely by Standard Errors</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>"When I dropped variable \(X_2\), the standard error on my main treatment variable dropped by 30%. Therefore, omitting \(X_2\) improved my specification."</strong><br><br>
+            <em>Correction:</em> A lower standard error does <strong>NOT</strong> indicate an unbiased or valid specification! If \(X_2\) is relevant and correlated with treatment, dropping it will create severe omitted variable bias. A precisely estimated lie is far worse than an honest estimate with wider confidence intervals.<br><br>
+            Unbiasedness and causal identification must always take precedence over superficial precision gains.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> When Does Omitting a Regressor Unambiguously Improve Precision?
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        Under which specific combination of correlation and relevance does omitting \(X_2\) definitely help precision without introducing omitted variable bias into \(\hat{\beta}_1\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Case 2: When \(X_2\) is CORRELATED with \(X_1\) (\(X_1'X_2 \neq 0\)) and IRRELEVANT to the outcome (\(\beta_2 = 0\)).<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>Because \(\beta_2 = 0\), omitting \(X_2\) causes zero OVB: \(\mathbb{E}[\hat{\beta}_1 \mid X_1, X_2] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2 (0) = \beta_1\).</li>
+            <li>Because \(\beta_2 = 0\), including \(X_2\) would not reduce the residual variance \(\sigma^2\).</li>
+            <li>However, because \(X_1'X_2 \neq 0\), including \(X_2\) forces \(X_1\) to share variation with \(X_2\), inflating \((X_1' M_2 X_1)^{-1}\). Omitting \(X_2\) eliminates this multicollinearity, shrinking \(\operatorname{SE}(\hat{\beta}_1)\)!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Bias refers to the expected centering of an estimator; standard error refers to its sampling variability.</li>
+        <li>Including regressors triggers two competing forces: it can reduce residual variance \(\sigma^2\) (shrinking SE) or induce multicollinearity (inflating SE).</li>
+        <li>In the 4-case system, omitting an irrelevant correlated regressor (Case 2) is the only scenario where dropping a variable unambiguously improves precision.</li>
+        <li>Omitting a relevant uncorrelated regressor (Case 3) remains unbiased but inflates standard errors because residual variance \(\sigma^2\) is unnecessarily large.</li>
+        <li>Never drop a relevant regressor simply to lower standard errors: a small standard error around a biased estimate invalidates causal inference.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Lesson 6.1: OVB Foundations
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: Controls in Experiments →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-06-interactions.js"></script>
+</body>
+</html>

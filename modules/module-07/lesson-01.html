@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7.1: Why Difference-in-Difference-in-Differences? — EcoIntuition Academy</title>
+  <meta name="description" content="Discover why standard Difference-in-Differences may fail when concurrent shocks occur, and learn how introducing a placebo subgroup constructs the Difference-in-Difference-in-Differences (DDD) design.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-07" data-lesson="01">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 7: Advanced DD &amp; Triple Differences</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 7</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 07</a>
+          <span class="module-nav-title">Advanced Difference-in-Differences</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 5 &middot; Why Difference-in-Difference-in-Differences?</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 7 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">7.1 Why Difference-in-Difference-in-Differences?</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.2 The DDD Regression &amp; Coefficient Interpretation</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.3 Deriving the Triple-Interaction Effect</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.4 DDD in Changes &amp; the Role of Controls</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">7.5 DDD Assumptions, Interpretation &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">20%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 7.1</span>
+        <span class="badge">Motivation &amp; Placebos</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Why Difference-in-Difference-in-Differences?
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        As established in Module 6, standard Difference-in-Differences compares the over-time change for a treated group against that of a control group. But what happens when another policy or shock hits the treatment environment at the exact same time?
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand why standard \(2 \times 2\) DD fails when concurrent local shocks contaminate the treatment environment.</li>
+        <li>Deconstruct the classic Medicaid expansion case study with simultaneous physical education requirements.</li>
+        <li>Master the three-layer comparison structure: State \(\times\) Time \(\times\) Subgroup.</li>
+        <li>Define Difference-in-Difference-in-Differences (DDD) conceptually as the difference between two DD estimates.</li>
+        <li>Recognize the vital empirical requirement and limitation of finding a substantively defensible placebo group.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Vulnerability of Standard DD -->
+    <section class="study-section" id="vulnerabilitySection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Why Standard DD May Still Be Contaminated</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Recall from Module 6 that Difference-in-Differences (DD) isolates a causal effect by netting out time-invariant group differences and common macroeconomic time trends:
+        </p>
+
+        <div class="equation-surface equation-surface--accent">
+          <div class="equation-surface-header">
+            <span class="equation-surface-badge badge-accent">STANDARD 2 &times; 2 DD ESTIMATOR</span>
+            <span class="equation-surface-title">Standard Two-Group, Two-Period Difference-in-Differences</span>
+          </div>
+          <div class="equation-surface-math">
+            \[\begin{aligned}
+            \widehat{\delta}_{\text{DD}} &= \left(\bar{Y}_{\text{Treated, Post}} - \bar{Y}_{\text{Treated, Pre}}\right) - \left(\bar{Y}_{\text{Control, Post}} - \bar{Y}_{\text{Control, Pre}}\right) \\[6pt]
+            &= \Delta \bar{Y}_{\text{Treated}} - \Delta \bar{Y}_{\text{Control}}
+            \end{aligned}\]
+          </div>
+        </div>
+
+        <p>
+          Under the <em>parallel trends assumption</em>, the change in the control group serves as the counterfactual trajectory for the treated group absent the policy. However, this identification strategy breaks down if the treated jurisdiction experiences a <strong>concurrent local shock</strong> or another policy reform at the same time as the treatment of interest.
+        </p>
+
+        <div class="callout callout-warning">
+          <div class="callout-header">
+            <span class="callout-badge">WARNING</span>
+            <span class="callout-title">The Fundamental Threat: Simultaneous Local Policies</span>
+          </div>
+          <div class="callout-body">
+            <p>
+              If any other event occurs in the treated environment during the post-treatment period that also influences the outcome, the standard DD estimator lumps that concurrent shock together with the true treatment effect. The counterfactual is no longer clean.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Motivating Case Study -->
+    <section class="study-section" id="medicaidSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Motivating Case Study: Medicaid Expansion</h2>
+      </div>
+      <div class="study-section-body">
+        <div class="study-card" style="margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; margin-bottom: 4px;">SCENARIO</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 8px;">Evaluating Child Health Improvements</h3>
+          <p style="margin-bottom: 10px;">
+            Suppose an economist wishes to evaluate the causal impact of a state-level <strong>Medicaid expansion</strong> on child health outcomes. Because Medicaid eligibility is means-tested, the policy primarily expands health insurance coverage for <strong>poor children</strong>.
+          </p>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.6;">
+            <li><strong>Treatment of Interest:</strong> State Medicaid expansion policy.</li>
+            <li><strong>Target Subgroup:</strong> Poor children eligible for the expanded coverage.</li>
+            <li><strong>Treated State:</strong> State expanding Medicaid.</li>
+            <li><strong>Control State:</strong> Neighboring state with no Medicaid expansion.</li>
+          </ul>
+        </div>
+
+        <div class="study-card" style="margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626; text-transform: uppercase; margin-bottom: 4px;">THE PROBLEM</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 8px;">A Simultaneous Environmental Reform</h3>
+          <p>
+            Suppose that concurrently with the Medicaid expansion, the treated state legislature also enacts mandatory <strong>school physical-education (PE) requirements</strong> to promote child wellness.
+          </p>
+          <p>
+            Consider what happens if we estimate a standard Difference-in-Differences comparing poor children in the expansion state against poor children in the control state:
+          </p>
+          <div class="equation-surface equation-surface--warning">
+            <div class="equation-surface-header">
+              <span class="equation-surface-badge badge-warning">OBSERVED POOR-CHILDREN DD</span>
+              <span class="equation-surface-title">Medicaid Expansion State &middot; Poor Children</span>
+            </div>
+            <div class="equation-surface-math">
+              \[\begin{aligned}
+              \text{DD}_{\text{poor}} &= \Delta \bar{Y}_{\text{Expansion, Poor}} - \Delta \bar{Y}_{\text{Control, Poor}} \\[6pt]
+              &= \text{True Medicaid Effect} + \text{State PE Requirement Shock}
+              \end{aligned}\]
+            </div>
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #dc2626; margin-top: 10px; margin-bottom: 4px;">
+              WHAT DOES THIS ESTIMATE CONTAIN?
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(220, 38, 38, 0.2);">
+              <div style="flex: 1 1 180px; background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(220,38,38,0.2); font-size: 0.82rem; text-align: left;">
+                <strong style="color: #dc2626;">Target Policy of Interest:</strong><br>True Medicaid Treatment Effect
+              </div>
+              <div style="display: flex; align-items: center; font-weight: 700; font-size: 1.1rem; color: #dc2626;">+</div>
+              <div style="flex: 1 1 180px; background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(220,38,38,0.2); font-size: 0.82rem; text-align: left;">
+                <strong style="color: #dc2626;">Confounding Simultaneous Policy:</strong><br>State-Specific PE Requirement Shock
+              </div>
+            </div>
+          </div>
+          <p>
+            Because the PE mandate also improves child health and occurred in the same state at the same time, \(\text{DD}_{\text{poor}}\) cannot disentangle whether health improved because of doctor visits funded by Medicaid or because children exercised more in gym class.
+          </p>
+        </div>
+
+        <div class="study-card">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; margin-bottom: 4px;">THE KEY IDEA</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 8px;">Introducing a Placebo Subgroup</h3>
+          <p>
+            To solve this identification challenge, notice that within the expansion state, <strong>rich children</strong> attend the same public schools and are equally exposed to the new physical-education mandate. However, rich children were already privately insured or ineligible for Medicaid, so they receive <em>zero</em> health benefits from the Medicaid expansion itself.
+          </p>
+          <p>
+            Rich children constitute an ideal <strong>placebo subgroup</strong>:
+          </p>
+          <div class="equation-surface equation-surface--accent">
+            <div class="equation-surface-header">
+              <span class="equation-surface-badge badge-accent">PLACEBO RICH-CHILDREN DD</span>
+              <span class="equation-surface-title">Medicaid Expansion State &middot; Rich Children (Ineligible)</span>
+            </div>
+            <div class="equation-surface-math">
+              \[\begin{aligned}
+              \text{DD}_{\text{rich}} &= \Delta \bar{Y}_{\text{Expansion, Rich}} - \Delta \bar{Y}_{\text{Control, Rich}} \\[6pt]
+              &= 0 + \text{State PE Requirement Shock}
+              \end{aligned}\]
+            </div>
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #2563eb; margin-top: 10px; margin-bottom: 4px;">
+              WHAT DOES THIS ESTIMATE CONTAIN?
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(37, 99, 235, 0.2);">
+              <div style="flex: 1 1 180px; background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(37,99,235,0.2); font-size: 0.82rem; text-align: left;">
+                <strong style="color: #2563eb;">Medicaid Gain for Rich Children:</strong><br>\(0\) (Ineligible for subsidized coverage)
+              </div>
+              <div style="display: flex; align-items: center; font-weight: 700; font-size: 1.1rem; color: #2563eb;">+</div>
+              <div style="flex: 1 1 180px; background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(37,99,235,0.2); font-size: 0.82rem; text-align: left;">
+                <strong style="color: #2563eb;">Common State Shock:</strong><br>State PE Requirement Shock (Equal Exposure)
+              </div>
+            </div>
+          </div>
+          <p>
+            By taking the difference between these two Difference-in-Differences estimates, the common state-level PE shock differences out completely:
+          </p>
+          <div class="equation-surface equation-surface--success">
+            <div class="equation-surface-header">
+              <span class="equation-surface-badge badge-success">CLEAN TRIPLE DIFFERENCE (DDD)</span>
+              <span class="equation-surface-title">Subgroup Differencing Cancels Common State Shock</span>
+            </div>
+            <div class="equation-surface-math">
+              \[\begin{aligned}
+              \text{DDD} &= \text{DD}_{\text{poor}} - \text{DD}_{\text{rich}} \\[6pt]
+              &= \Big(\text{Medicaid} + \text{PE Shock}\Big) - \Big(0 + \text{PE Shock}\Big) \\[6pt]
+              &= \mathbf{\text{True Medicaid Treatment Effect}}
+              \end{aligned}\]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The Three-Layer Conceptual Visual -->
+    <section class="study-section" id="dimensionsSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. The Three-Layer DDD Structure</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Difference-in-Difference-in-Differences introduces a third dimension of comparison to insulate the causal estimate from confounding shocks. This creates an elegant three-layer experimental architecture:
+        </p>
+
+        <!-- Three-Layer Visual Component -->
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-md) 0;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); text-align: center;">
+            
+            <!-- Dimension 1 -->
+            <div style="background: var(--surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md);">
+              <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-primary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Dimension 1</div>
+              <h4 style="margin: 0 0 6px 0; font-size: 1.05rem;">GEOGRAPHY / STATE</h4>
+              <div style="font-size: 0.88rem; color: var(--color-text-secondary);">
+                <strong>Expansion State</strong><br>
+                <em>vs.</em><br>
+                <strong>Control State</strong>
+              </div>
+              <div style="margin-top: 8px; font-size: 0.78rem; color: var(--color-text-muted);">Nets out national trends</div>
+            </div>
+
+            <!-- Multiplier 1 -->
+            <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--color-text-muted); font-weight: 300;">
+              &times;
+            </div>
+
+            <!-- Dimension 2 -->
+            <div style="background: var(--surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md);">
+              <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-primary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Dimension 2</div>
+              <h4 style="margin: 0 0 6px 0; font-size: 1.05rem;">TIME HORIZON</h4>
+              <div style="font-size: 0.88rem; color: var(--color-text-secondary);">
+                <strong>Post-Expansion</strong><br>
+                <em>vs.</em><br>
+                <strong>Pre-Expansion</strong>
+              </div>
+              <div style="margin-top: 8px; font-size: 0.78rem; color: var(--color-text-muted);">Nets out permanent baselines</div>
+            </div>
+
+            <!-- Multiplier 2 -->
+            <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--color-text-muted); font-weight: 300;">
+              &times;
+            </div>
+
+            <!-- Dimension 3 -->
+            <div style="background: var(--surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md);">
+              <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-accent, #059669); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Dimension 3 (Placebo)</div>
+              <h4 style="margin: 0 0 6px 0; font-size: 1.05rem;">ELIGIBILITY SUBGROUP</h4>
+              <div style="font-size: 0.88rem; color: var(--color-text-secondary);">
+                <strong>Treated: Poor Children</strong><br>
+                <em>vs.</em><br>
+                <strong>Placebo: Rich Children</strong>
+              </div>
+              <div style="margin-top: 8px; font-size: 0.78rem; color: var(--color-text-muted);">Nets out state-specific shocks</div>
+            </div>
+
+          </div>
+
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px dashed var(--color-border); text-align: center;">
+            <div style="display: inline-block; background: var(--color-primary-light); color: var(--color-primary); font-weight: 700; padding: 6px 18px; border-radius: 20px; font-size: 0.92rem;">
+              = TRIPLE DIFFERENCE (DDD) ESTIMATE
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Idea Card -->
+        <div class="key-idea-card">
+          <div class="key-idea-title">KEY INTUITION</div>
+          <p class="key-idea-text">
+            A Difference-in-Difference-in-Differences estimate is simply a <strong>difference between two Difference-in-Differences estimates</strong>: one computed on the targeted subgroup, and the other computed on an unaffected placebo subgroup.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Why DDD Helps & Critical Limitations -->
+    <section class="study-section" id="limitationsSection">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Why DDD Helps and Where It Falls Short</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Consider an environmental change such as state-mandated physical-education classes that affects both rich and poor children in the treatment state: the second DD subtraction removes that common state-specific change.
+        </p>
+        <p>
+          By benchmarking the treated subgroup against a group in the same geographical and political environment that is <em>ineligible</em> or <em>unaffected</em> by the policy, we gain a defense against arbitrary local confounders that violate standard parallel trends.
+        </p>
+
+        <div class="callout callout-warning">
+          <div class="callout-header">
+            <span class="callout-badge">LIMITATION</span>
+            <span class="callout-title">Finding Defensible Placebo Groups</span>
+          </div>
+          <div class="callout-body">
+            <p>
+              <strong>It is not always possible to find a suitable placebo group.</strong> To serve as a valid third difference, the placebo subgroup must satisfy two demanding criteria:
+            </p>
+            <ul style="margin: 8px 0; padding-left: 1.25rem;">
+              <li><strong>Equal Exposure to Confounders:</strong> It must be genuinely exposed to the same environmental shocks, local policies, and macroeconomic forces as the treated subgroup.</li>
+              <li><strong>Zero Treatment Contamination:</strong> It must strictly experience zero direct or indirect spillover effects from the treatment under study.</li>
+            </ul>
+            <p style="margin-bottom: 0;">
+              DDD does not automatically solve all identification problems. A credible third comparison dimension must exist and be substantively defensible within the economic context.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Why does DDD require a third comparison dimension?
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        Suppose you estimate the effect of a city-level tax incentive on small manufacturing businesses using a standard DD against a neighboring city. When would this standard DD fail, and why would examining large retail corporations in both cities rescue your identification?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> The standard DD fails if the treated city simultaneously experienced an infrastructure upgrade or local boom that boosted manufacturing independent of the tax incentive.<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>Examining large retail businesses (which do not qualify for the manufacturing tax break but operate in the same municipal economy) provides a second DD that measures and nets out the city-wide economic shock, leaving only the tax incentive effect (\(\text{DDD} = \text{DD}_{\text{manufacturers}} - \text{DD}_{\text{retail}}\)).</li>
+            <li>Subtracting two differences isolates the specific treatment parameter while controlling for concurrent geographic confounders.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Standard \(2 \times 2\) DD can be contaminated by a simultaneous shock affecting the treated environment.</li>
+        <li>A placebo subgroup provides another comparison exposed to the same broader environment but not the treatment of interest.</li>
+        <li>DDD subtracts one DD estimate from another: \(\text{DDD} = \text{DD}_{\text{Target}} - \text{DD}_{\text{Placebo}}\).</li>
+        <li>The third comparison dimension helps remove common shocks affecting both targeted and placebo subgroups.</li>
+        <li>Identification still requires the third comparison group to be credible and free from policy spillovers.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 7 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: 7.2 The DDD Regression &amp; Interpretation →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+</body>
+</html>

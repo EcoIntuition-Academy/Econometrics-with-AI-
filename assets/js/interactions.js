@@ -307,16 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <text x="${W - padR}" y="${mapY(yMin) - 10}" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">x₂ (Regressor)</text>
         <text x="${padL + 10}" y="${padT + 12}" font-size="12" font-weight="700" fill="#0f172a">y (Outcome)</text>
 
-        <!-- In-Plot Compact Legend -->
-        <g transform="translate(${W - padR - 180}, ${padT + 4})">
-          <rect width="180" height="52" rx="6" fill="#ffffff" fill-opacity="0.92" stroke="#cbd5e1" stroke-width="1"/>
-          <line x1="12" y1="16" x2="34" y2="16" stroke="#1d4ed8" stroke-width="2.5"/>
-          <text x="42" y="20" font-size="10.5" font-weight="600" fill="#1e293b">E[y|x] = β₁ + β₂x</text>
-          
-          <line x1="12" y1="36" x2="34" y2="36" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <circle cx="23" cy="36" r="3.5" fill="#1e3a8a" stroke="#ffffff" stroke-width="1"/>
-          <text x="42" y="40" font-size="10.5" font-weight="600" fill="#475569">Disturbance (εᵢ)</text>
-        </g>
+        <!-- Format Lock: In-plot compact legend removed. Clean canvas with dedicated external visual-legend. -->
       `;
 
       // True systematic regression line
