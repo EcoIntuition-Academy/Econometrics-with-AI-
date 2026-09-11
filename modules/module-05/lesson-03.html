@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.3: Testing Linear Restrictions: Rβ = q — EcoIntuition Academy</title>
+  <meta name="description" content="Formulate linear hypothesis tests in matrix form Rβ = q, understand restriction dimensions J × K, and inspect single and simultaneous restriction matrices.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="03">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 7 &middot; Testing Linear Restrictions: Rβ = q</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">42.9%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 42.9%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.3</span>
+        <span class="badge">Matrix Hypothesis Testing</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Testing Linear Restrictions: \(R\beta = q\)
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        A single test such as \(\beta_2 = 0\) is just one specific linear restriction. In empirical economics, hypotheses often involve sums of coefficients, equality across parameters, or multiple simultaneous constraints. Discover how matrix notation unifies all linear hypotheses under \(H_0: R\beta = q\).
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Express linear parameter restrictions in matrix notation as \(H_0: R\beta = q\) versus \(H_1: R\beta \neq q\).</li>
+        <li>Identify the exact mathematical dimensions of \(R\) (\(J \times K\)), \(\beta\) (\(K \times 1\)), \(q\) (\(J \times 1\)), and the discrepancy vector \(R\beta - q\) (\(J \times 1\)).</li>
+        <li>Explain why \(J\) counts the number of restrictions being tested rather than the number of regressors \(K\).</li>
+        <li>Construct restriction matrices \(R\) and vectors \(q\) for single zero coefficients, parameter sums, and simultaneous equality conditions.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Why Rβ = q? -->
+    <section class="lesson-section" id="sectionFramework">
+      <h2>1. The \(R\beta = q\) Framework</h2>
+      <p>
+        In Lessons 5.1 and 5.2, we focused on testing single regression parameters, such as \(H_0: \beta_2 = 0\). However, economic theories frequently yield more intricate predictions:
+      </p>
+      <ul>
+        <li><strong>Constant Returns to Scale:</strong> In a Cobb-Douglas production function, testing whether the capital and labor elasticities sum to one (\(\beta_2 + \beta_3 = 1\)).</li>
+        <li><strong>Equal Response Across Groups:</strong> Testing whether the return to schooling is identical in two sectors (\(\beta_3 = \beta_4\), or \(\beta_3 - \beta_4 = 0\)).</li>
+        <li><strong>Joint Insignificance:</strong> Testing whether an entire block of policy indicators has zero combined effect (\(\beta_2 = 0 \text{ and } \beta_3 = 0\)).</li>
+      </ul>
+
+      <!-- Key Equation Box: General Linear Restriction -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">KEY DEFINITION</span>
+          <span class="equation-title">General Linear Restriction in Matrix Form</span>
+        </div>
+        <div class="equation-main">
+          \[ H_0: R\beta = q \quad \text{versus} \quad H_1: R\beta \neq q \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(R\)</span>
+              <span class="symbol-desc">\(J \times K\) restriction matrix specifying linear combinations of parameters</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta\)</span>
+              <span class="symbol-desc">\(K \times 1\) vector containing all unknown population regression parameters</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(q\)</span>
+              <span class="symbol-desc">\(J \times 1\) vector of hypothesized constants under the null</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(R\beta - q\)</span>
+              <span class="symbol-desc">\(J \times 1\) restriction discrepancy vector; equals \(\mathbf{0}\) if \(H_0\) holds true</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Dimension Explanation -->
+    <section class="lesson-section" id="sectionDimensions">
+      <h2>2. Matrix Dimensions and Precision</h2>
+      <p>
+        Dimensional precision prevents indexing errors and clarifies the algebra. Every element of the restriction equation has an exact mathematical dimension:
+      </p>
+
+      <div class="definition-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); font-size: 1.1rem;">\(R\) : \(J \times K\)</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 4px;">Restriction Matrix</div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+            Rows = \(J\) restrictions<br>Columns = \(K\) parameters
+          </p>
+        </div>
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-weight: 700; color: #475569; font-family: var(--font-mono); font-size: 1.1rem;">\(\beta\) : \(K \times 1\)</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 4px;">Parameter Vector</div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+            All \(K\) coefficients (including the intercept \(\beta_1\))
+          </p>
+        </div>
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-weight: 700; color: #059669; font-family: var(--font-mono); font-size: 1.1rem;">\(q\) : \(J \times 1\)</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 4px;">Hypothesized Constants</div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+            Hypothesized values for each restriction (often \(\mathbf{0}\))
+          </p>
+        </div>
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-weight: 700; color: #dc2626; font-family: var(--font-mono); font-size: 1.1rem;">\(R\beta - q\) : \(J \times 1\)</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 4px;">Discrepancy Vector</div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+            \((J \times K)(K \times 1) - (J \times 1) = J \times 1\)
+          </p>
+        </div>
+      </div>
+
+      <!-- Common Mistake Callout -->
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="callout-badge">Crucial Distinction</span>
+          <h4 class="callout-title" style="margin: 0;">Do Not Confuse \(J\) with \(K\)</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0;">
+            <strong>Common Mistake:</strong> Confusing the number of regressors \(K\) with the number of restrictions \(J\).<br>
+            <strong>Correction:</strong> \(K\) is the total number of parameters in the model. <strong>\(J\) is the number of linear hypotheses being tested</strong>. \(J\) equals the number of rows in \(R\) and \(q\). For valid tests, we require \(J \le K\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Three Classic Restriction Examples -->
+    <section class="lesson-section" id="sectionExamples">
+      <h2>3. Three Classic Worked Examples (\(K = 5\))</h2>
+      <p>
+        Consider a multiple regression model with \(K = 5\) coefficients:
+        \[ y = \beta_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 + \beta_5 x_5 + \varepsilon \]
+        where \(\beta = \begin{bmatrix} \beta_1 & \beta_2 & \beta_3 & \beta_4 & \beta_5 \end{bmatrix}'\). Here is how \(R\) and \(q\) are constructed for three canonical econometric tests:
+      </p>
+
+      <!-- Worked Example 1 -->
+      <div class="worked-example-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: 0.5rem;">
+          <span class="academic-badge" style="background: #e0e7ff; color: #3730a3;">WORKED EXAMPLE 1</span>
+          <strong style="color: var(--color-text);">Single Parameter Test: \(H_0: \beta_2 = 0\)</strong>
+        </div>
+        <div style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+          <p><strong>Goal:</strong> Formulate the classic single-parameter null hypothesis in matrix form with \(K = 5\) and \(J = 1\).</p>
+          <div style="background: var(--color-bg); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); font-family: var(--font-mono); margin: var(--space-xs) 0;">
+            \[ R = \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix}_{1 \times 5}, \quad q = [0]_{1 \times 1} \]
+          </div>
+          <p><strong>Apply \(R\):</strong> Matrix multiplication isolates \(\beta_2\):
+            \[ R\beta = 0\cdot\beta_1 + 1\cdot\beta_2 + 0\cdot\beta_3 + 0\cdot\beta_4 + 0\cdot\beta_5 = \beta_2 \]
+          </p>
+          <p><strong>Restriction Discrepancy:</strong>
+            \[ R\beta - q = \beta_2 - 0 = \beta_2 \]
+            Under \(H_0\), the discrepancy must equal zero: \(R\beta - q = 0\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Worked Example 2 -->
+      <div class="worked-example-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: 0.5rem;">
+          <span class="academic-badge" style="background: #e0e7ff; color: #3730a3;">WORKED EXAMPLE 2</span>
+          <strong style="color: var(--color-text);">Sum of Parameters: \(H_0: \beta_2 + \beta_3 = 1\)</strong>
+        </div>
+        <div style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+          <p><strong>Goal:</strong> Test whether two coefficients sum to a specified constant (e.g., constant returns to scale).</p>
+          <div style="background: var(--color-bg); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); font-family: var(--font-mono); margin: var(--space-xs) 0;">
+            \[ R = \begin{bmatrix} 0 & 1 & 1 & 0 & 0 \end{bmatrix}_{1 \times 5}, \quad q = [1]_{1 \times 1} \]
+          </div>
+          <p><strong>Apply \(R\):</strong> Weights \(1\) on \(\beta_2\) and \(1\) on \(\beta_3\), with \(0\) elsewhere:
+            \[ R\beta = 1\cdot\beta_2 + 1\cdot\beta_3 = \beta_2 + \beta_3 \]
+          </p>
+          <p><strong>Restriction Discrepancy:</strong>
+            \[ R\beta - q = (\beta_2 + \beta_3) - 1 \]
+            Under \(H_0\), \(R\beta - q = 0\). Notice that here \(q\) is a non-zero constant vector!
+          </p>
+        </div>
+      </div>
+
+      <!-- Worked Example 3 -->
+      <div class="worked-example-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: 0.5rem;">
+          <span class="academic-badge" style="background: #e0e7ff; color: #3730a3;">WORKED EXAMPLE 3</span>
+          <strong style="color: var(--color-text);">Simultaneous Restrictions: \(H_0: \beta_2 = 0 \text{ and } \beta_3 = \beta_4\)</strong>
+        </div>
+        <div style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+          <p><strong>Goal:</strong> Simultaneously test that \(\beta_2 = 0\) AND that \(\beta_3 = \beta_4\) (rewritten as \(\beta_3 - \beta_4 = 0\)). Here \(J = 2\).</p>
+          <div style="background: var(--color-bg); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); font-family: var(--font-mono); margin: var(--space-xs) 0;">
+            \[ R = \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & -1 & 0 \end{bmatrix}_{2 \times 5}, \quad q = \begin{bmatrix} 0 \\ 0 \end{bmatrix}_{2 \times 1} \]
+          </div>
+          <p><strong>Apply \(R\):</strong> Row 1 isolates \(\beta_2\); Row 2 calculates \(\beta_3 - \beta_4\):
+            \[ R\beta = \begin{bmatrix} \beta_2 \\ \beta_3 - \beta_4 \end{bmatrix}_{2 \times 1} \]
+          </p>
+          <p><strong>Restriction Discrepancy:</strong>
+            \[ R\beta - q = \begin{bmatrix} \beta_2 - 0 \\ (\beta_3 - \beta_4) - 0 \end{bmatrix} = \begin{bmatrix} \beta_2 \\ \beta_3 - \beta_4 \end{bmatrix}_{2 \times 1} \]
+            Both restrictions must hold simultaneously under the null hypothesis.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Matrix Lab -->
+    <section class="lesson-section" id="sectionInteractiveLab">
+      <h2>4. Dynamic \(R\beta - q\) Matrix Visualizer</h2>
+      <p>
+        Toggle between the three canonical examples below to inspect how the restriction matrix \(R\), the coefficient vector \(\beta\), the hypothesized vector \(q\), and the discrepancy vector \(R\beta - q\) adjust dynamically.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">Interactive Matrix Lab</div>
+          <h3 class="lab-title">Dynamic \(R\beta - q\) Matrix Visualizer</h3>
+        </div>
+
+        <div class="lab-controls-bar">
+          <div class="btn-group-segmented" role="group" aria-label="Select Example Hypothesis">
+            <button id="restrBtnEx1" class="btn btn-sm btn-outline" type="button">Ex 1: β₂ = 0</button>
+            <button id="restrBtnEx2" class="btn btn-sm btn-outline" type="button">Ex 2: β₂ + β₃ = 1</button>
+            <button id="restrBtnEx3" class="btn btn-sm btn-outline active" type="button">Ex 3: β₂ = 0 &amp; β₃ = β₄</button>
+          </div>
+          <div class="lab-readout-group">
+            <span class="readout-item">Selected: <strong id="restrReadoutHyp">H₀: β₂ = 0 and β₃ = β₄</strong></span>
+            <span class="readout-item">Dimension: <strong id="restrReadoutJ">J = 2 restrictions</strong></span>
+          </div>
+        </div>
+
+        <!-- Inline Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Restriction Matrix \(R\) (\(J \times K\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: #475569;"></span> Parameter Vector \(\beta\) (\(K \times 1\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: #059669;"></span> Hypothesized Constants \(q\) (\(J \times 1\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: #dc2626;"></span> Discrepancy Vector \(R\beta - q\) (\(J \times 1\))</span>
+        </div>
+
+        <div class="lab-visual-container">
+          <div class="chart-svg-shell">
+            <svg id="restrictionBuilderSvg" viewBox="0 0 540 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Restriction Matrix Builder Visualizer"></svg>
+          </div>
+        </div>
+
+        <!-- Structured 5-Box Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>The explicit matrix multiplication \(R \cdot \beta\) and vector subtraction of \(q\), producing the exact algebraic discrepancy vector for each chosen hypothesis.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>In Example 3, Row 2 places a \(+1\) on \(\beta_3\) and a \(-1\) on \(\beta_4\). This directly computes the difference \(\beta_3 - \beta_4\), evaluating equality of slopes.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>The matrix formulation \(R\beta = q\) unifies all linear tests, enabling software algorithms to test arbitrarily complex econometric restrictions with one standardized formula.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>The sample estimate \(R\hat{\beta} - q\) is the empirical discrepancy. If this discrepancy is near zero, the sample data support the restriction; if far from zero, the restriction is rejected.</p>
+          </div>
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>Click <strong>Ex 2</strong> to see how a non-zero \(q\) vector (\(q = [1]\)) handles restrictions involving constants other than zero.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check & Takeaways -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Constructing Linear Restriction Matrices
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        Consider the model with \(K = 4\) parameters: \(y = \beta_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 + \varepsilon\). Suppose economic theory predicts that <em>both</em> \(\beta_2 = 0\) and \(\beta_3 + \beta_4 = 2\). What are the dimensions of \(R\) and \(q\), and what is the second row of \(R\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(R\) is \(2 \times 4\), \(q\) is \(2 \times 1\), and the second row of \(R\) is \(\begin{bmatrix} 0 & 0 & 1 & 1 \end{bmatrix}\).<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>There are \(J = 2\) simultaneous restrictions and \(K = 4\) parameters. Therefore, \(R\) is \(J \times K = 2 \times 4\) and \(q\) is \(J \times 1 = 2 \times 1\).</li>
+            <li>Row 1 tests \(\beta_2 = 0 \implies \begin{bmatrix} 0 & 1 & 0 & 0 \end{bmatrix}\) with constant \(0\).</li>
+            <li>Row 2 tests \(\beta_3 + \beta_4 = 2 \implies \begin{bmatrix} 0 & 0 & 1 & 1 \end{bmatrix}\) with constant \(2\).</li>
+            <li>Vector \(q = \begin{bmatrix} 0 \\ 2 \end{bmatrix}\). The resulting discrepancy is \(\begin{bmatrix} \beta_2 \\ \beta_3 + \beta_4 - 2 \end{bmatrix}_{2 \times 1}\).</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Summary Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The matrix equation \(H_0: R\beta = q\) unifies single \(t\)-tests, parameter sums, slope equality, and joint insignificance into one general framework.</li>
+        <li>The restriction matrix \(R\) is \(J \times K\), where \(J\) is the number of restrictions and \(K\) is the total number of parameters.</li>
+        <li>The parameter vector \(\beta\) is \(K \times 1\) and the hypothesized constants vector \(q\) is \(J \times 1\).</li>
+        <li>The discrepancy vector \(R\beta - q\) has dimension \(J \times 1\). Under \(H_0\), its true population value is \(\mathbf{0}\).</li>
+        <li>In finite samples, the estimated discrepancy \(R\hat{\beta} - q\) rarely equals zero exactly. In Lesson 5.4, we will learn how to scale this discrepancy by its covariance matrix using Wald and \(F\) tests.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-02.html" class="btn btn-outline">
+        ← Previous: One-Sided Tests, Type II Error &amp; Power
+      </a>
+      <a href="lesson-04.html" class="btn btn-primary">
+        Next: Wald &amp; F Tests for Joint Restrictions →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

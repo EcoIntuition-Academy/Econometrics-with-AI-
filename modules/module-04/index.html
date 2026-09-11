@@ -3,18 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 4: Statistical Inference — Econometrics with AI</title>
+  <title>Module 04: Large-Sample Theory, Asymptotic Inference &amp; Nonlinear Functions — EcoIntuition Academy</title>
+  <meta name="description" content="Study what happens to econometric estimators as sample size grows—from convergence and consistency to asymptotic normality, confidence intervals, hypothesis testing, nonlinear transformations, the Delta Method, Wald tests, and robust large-sample inference.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="../../assets/css/variables.css">
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/course.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
 </head>
-<body>
+<body data-module="module-04">
+  <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
       <a href="../../index.html" class="brand">
@@ -24,53 +34,301 @@
           <span class="brand-title">Econometrics with AI</span>
         </div>
       </a>
+
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
           <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="../module-01/index.html" class="nav-item-link">Module 1</a></li>
+          <li><a href="../module-02/index.html" class="nav-item-link">Module 2</a></li>
+          <li><a href="../module-03/index.html" class="nav-item-link">Module 3</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
-          <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
         </ul>
       </nav>
+
       <div class="nav-right-actions">
         <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
           <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
           <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
         </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="container section-wrapper" style="max-width: 960px;">
-    <div style="margin-bottom: var(--space-2xl);">
-      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
-        <span class="badge">Module 4</span>
-        <span class="badge badge-amber">In Preparation</span>
+  <!-- Centered Landing Content (Strictly NO Sidebar) -->
+  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+    
+    <!-- Hero Header -->
+    <div style="margin-bottom: var(--space-xl);">
+      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 04</span>
+        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Large-Sample Theory &amp; Asymptotic Inference</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">8 Lessons</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Core Curriculum</span>
       </div>
-      <h1 style="font-size: var(--text-hero); margin-bottom: var(--space-xs);">Statistical Inference</h1>
-      <p class="section-subtitle">Formulate hypotheses, test single and joint restrictions, and calculate standard errors and p-values.</p>
+
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
+        Large-Sample Theory, Asymptotic Inference &amp; Nonlinear Functions
+      </h1>
+      
+      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 860px;">
+        Study what happens to econometric estimators as sample size grows—from convergence and consistency to asymptotic normality, confidence intervals, hypothesis testing, nonlinear transformations, the Delta Method, Wald tests, and robust large-sample inference.
+      </p>
+
+      <!-- Action Buttons & Progress -->
+      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+        <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
+          Start Module 4 →
+        </a>
+        <a href="../../index.html#modules" class="btn btn-outline btn-lg">
+          Explore All Modules
+        </a>
+      </div>
+
+      <!-- Module Progress Card -->
+      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+          <span>Module 4 Completion</span>
+          <span id="progress-text-module-04" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+        </div>
+        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
+          <div class="progress-bar-fill" id="progress-fill-module-04" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="why-matters-card" style="margin-bottom: var(--space-xl);">
-      <h3 style="margin-bottom: var(--space-xs);">Architecture Ready for Content Addition</h3>
-      <p>This module folder is structured and ready for lessons. Detailed lesson pages following the 17-section template will be added progressively.</p>
-      <a href="../module-01/lesson-01.html" class="btn btn-primary btn-sm" style="margin-top: var(--space-sm);">Explore Module 1 Demonstration Lesson</a>
+    <!-- Structured Learning Path -->
+    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
+      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
+        Curriculum Learning Flow
+      </h3>
+      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Convergence in Probability</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Consistency</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OLS Large-Sample Conditions (\(X'X/n \to Q\))</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Asymptotic Normality</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Efficiency (CAN)</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Confidence Intervals</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Hypothesis Testing</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Delta Method</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Slutsky’s Theorem</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Wald Test</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Robust SE Preview</span>
+      </div>
     </div>
 
-    <div>
-      <a href="../../index.html#modules" class="btn btn-outline">← Return to Course Modules</a>
+    <!-- Lesson Cards Grid -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: var(--space-2xl);">
+      
+      <!-- Lesson 4.1 -->
+      <a href="lesson-01.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.1</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Page 1</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Convergence in Probability &amp; Consistency
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Understand sequence behavior as \(n \to \infty\), master the formal definition \(\lim_{n \to \infty} \Pr(|x_n - c| > \varepsilon) = 0\), clarify the critical notation distinction for \(\varepsilon\), and define consistent estimation (\(\hat{\theta}_n \xrightarrow{p} \theta\)).
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.2 -->
+      <a href="lesson-02.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.2</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Pages 1–2</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Consistency of OLS &amp; Large-Sample Conditions
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Explore the large-sample OLS setup with independent pairs \((x_i, \varepsilon_i)\), unpack the Grenander regularity conditions and the limit matrix \(X'X/n \to Q\), and follow the proof that \(\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\).
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.3 -->
+      <a href="lesson-03.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.3</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Page 2</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Asymptotic Normality of OLS
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Distinguish consistency (where \(\hat{\beta}\) goes) from asymptotic normality (what its shape looks like), analyze \(\operatorname{AsyVar}(\hat{\beta}_{\text{OLS}}) = s^2(X'X)^{-1}\), contrast variance vs standard error, and discover why disturbance normality is not required.
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.4 -->
+      <a href="lesson-04.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.4</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Page 3</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Asymptotic Efficiency
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Define Consistent and Asymptotically Normal (CAN) estimators, evaluate large-sample efficiency via minimum asymptotic variance, and examine the nuanced comparison between OLS and Maximum Likelihood Estimation (MLE) under non-normality.
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.5 -->
+      <a href="lesson-05.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.5</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Pages 3–5</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Confidence Intervals &amp; Large-Sample Hypothesis Testing
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Form standardized \(z_k\) and feasible \(t_k\) statistics, construct large-sample 99% confidence intervals using \(\pm 2.576\), contrast heavy-tailed finite-sample \(t\) vs normal approximations, and test \(H_0: \beta_k = 0\) with critical values \(\pm 1.96\).
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.6 -->
+      <a href="lesson-06.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.6</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Page 6</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              The Delta Method
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Derive the distribution of nonlinear functions \(g(\hat{\theta})\) (e.g., \(\theta^2\), \(\exp(\theta)\)) through first-order Taylor series tangent-line approximations, and visualize how the first derivative scales and amplifies parameter uncertainty.
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.7 -->
+      <a href="lesson-07.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.7</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Pages 7–8</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Slutsky’s Theorem &amp; Delta Method Applications
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Combine convergence in distribution with convergence in probability via Slutsky’s sum, product, and ratio rules, and follow a complete Derivation Journey for \(\hat{\beta}_2 = 2, \operatorname{SE} = 0.5 \implies g(\beta_2) = \beta_2^2 = 4, \operatorname{SE} = 2.0\).
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lesson 4.8 -->
+      <a href="lesson-08.html" class="module-card" style="display: block; text-decoration: none; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1.5px solid var(--color-border); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs);">
+              <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.8</span>
+              <span style="font-size: var(--text-xs); color: var(--color-text-secondary);">Primary Source: Pages 9–11</span>
+            </div>
+            <h2 style="font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-xs);">
+              Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE Preview
+            </h2>
+            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+              Construct the Wald statistic \(W \xrightarrow{d} \chi^2_1\), observe the \(t^2 = W\) equivalence, master the comprehensive Finite vs Large Sample comparative framework, preview White heteroskedasticity-robust covariance, and review all 15 core concepts.
+            </p>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs);">
+            <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+          </div>
+        </div>
+      </a>
+
     </div>
+
+    <!-- Quick Navigation Back -->
+    <div style="text-align: center;">
+      <a href="../../index.html#modules" class="btn btn-outline">
+        ← Return to All Course Modules
+      </a>
+    </div>
+
   </main>
 
+  <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-bottom">
         <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
-        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
       </div>
     </div>
   </footer>
 
+  <script src="../../assets/js/progress.js"></script>
   <script src="../../assets/js/main.js"></script>
 </body>
 </html>

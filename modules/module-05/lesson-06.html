@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.6: Controls, Categories &amp; Reference Groups — EcoIntuition Academy</title>
+  <meta name="description" content="Combine dummy indicators with continuous controls, explore the geometry of parallel regression lines, master the m - 1 rule, and avoid the Dummy Variable Trap.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="06">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 7 &middot; Controls, Categories &amp; Reference Groups</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">85.7%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 85.7%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.6</span>
+        <span class="badge">Multiple Regressors &amp; Geometry</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Controls, Categories &amp; Reference Groups
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Combining binary indicators with continuous controls shifts regression lines in parallel. Explore the geometry of parallel regression lines, the \(m-1\) rule for categorical variables, the omitted reference group, and how to avoid the lethal Dummy Variable Trap.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand the parallel-lines geometry created by adding an additive dummy variable to a continuous regressor.</li>
+        <li>Correctly state that \(\beta_2\) is the model-implied group difference <em>holding education fixed</em> (ceteris paribus).</li>
+        <li>Implement sets of dummy indicators for \(m\) mutually exclusive categories by omitting exactly one reference group.</li>
+        <li>Diagnose and avoid the Dummy Variable Trap caused by perfect multicollinearity between all category dummies and the intercept.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Adding Continuous Controls -->
+    <section class="lesson-section" id="sectionParallel">
+      <h2>1. Continuous Controls &amp; Parallel Regression Lines</h2>
+      <p>
+        In Lesson 5.5, the bivariate dummy regression captured only the unadjusted difference between two group averages. To control for observable confounders, consider adding a continuous covariate such as years of education (\(x_i\)):
+        \[ \ln(\text{wage}_i) = \beta_1 + \beta_2 D_i + \beta_3 x_i + \varepsilon_i \]
+        Evaluating the population conditional expectation function for both groups reveals two distinct regression lines:
+      </p>
+
+      <!-- Key Equation Box: Parallel Regression Lines -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">GEOMETRIC FORMULATION</span>
+          <span class="equation-title">Two Parallel Regression Lines</span>
+        </div>
+        <div class="equation-main">
+          \[\begin{aligned}
+            \text{For } D_i = 0: \quad &\mathbb{E}[y \mid D=0, x] = \beta_1 + \beta_3 x \\
+            \text{For } D_i = 1: \quad &\mathbb{E}[y \mid D=1, x] = (\beta_1 + \beta_2) + \beta_3 x
+          \end{aligned}\]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">KEY PROPERTIES:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">Same Slope (\(\beta_3\))</span>
+              <span class="symbol-desc">Because no interaction term (\(D_i \cdot x_i\)) is included, both lines have identical slope \(\beta_3\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">Vertical Shift (\(\beta_2\))</span>
+              <span class="symbol-desc">The dummy variable creates a parallel vertical shift of \(\beta_2\) at every value of \(x\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="callout-badge">Strict Phrasing Requirement</span>
+          <h4 class="callout-title" style="margin: 0;">Ceteris Paribus Interpretation</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0;">
+            <strong>Do NOT say:</strong> <em>“\(\beta_2\) is simply the raw wage gap.”</em><br>
+            <strong>Correct Phrasing:</strong> <strong>\(\beta_2\) is the model-implied difference between the groups holding the continuous covariate \(x\) fixed</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Parallel Lines Lab -->
+    <section class="lesson-section" id="sectionInteractiveParallel">
+      <h2>2. Interactive Parallel Lines Lab</h2>
+      <p>
+        Adjust the education return slope \(\beta_3\) and the vertical separation \(\beta_2\) below. Notice how both regression trajectories remain strictly parallel, shifting up or down together without changing relative distance.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">Interactive Geometry Lab</div>
+          <h3 class="lab-title">Parallel Regression Lines Visualizer</h3>
+        </div>
+
+        <div class="lab-controls-bar f-test-controls">
+          <div class="slider-control-item">
+            <label for="parSliderSlope" class="control-label">Education Slope (\(\beta_3\)): <span id="parReadoutSlope" class="readout-val">0.08</span></label>
+            <input type="range" id="parSliderSlope" min="0.02" max="0.15" step="0.01" value="0.08" class="control-slider">
+          </div>
+          <div class="slider-control-item">
+            <label for="parSliderGap" class="control-label">Vertical Shift (\(\beta_2\)): <span id="parReadoutGap" class="readout-val">+0.30</span></label>
+            <input type="range" id="parSliderGap" min="0.05" max="0.60" step="0.01" value="0.30" class="control-slider">
+          </div>
+        </div>
+
+        <!-- Inline Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #2563eb;"></span> Base Group Line (\(D=0\))</span>
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #059669;"></span> Coded Group Line (\(D=1\))</span>
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #dc2626;"></span> Vertical Group Gap (\(\beta_2\))</span>
+        </div>
+
+        <div class="lab-visual-container">
+          <div class="chart-svg-shell">
+            <svg id="parallelLinesSvg" viewBox="0 0 540 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Parallel Regression Lines Visualizer"></svg>
+          </div>
+        </div>
+
+        <!-- Structured 5-Box Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>Two linear regression trajectories plotted against education: the blue line represents \(D=0\); the green line represents \(D=1\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>The two lines never cross or converge; they are strictly parallel. The red vertical dashed bracket shows that the vertical gap is always exactly \(\beta_2\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>An additive dummy variable shifts the regression intercept without tilting the slope. It models level differences between groups while assuming common responsiveness to \(x\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>At any given education level, workers in group 1 are predicted to earn \(\beta_2\) log units more than workers in group 0 with identical schooling.</p>
+          </div>
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>Move the <strong>Education Slope</strong> slider up and down. Notice how both lines tilt together at the exact same angle, confirming the shared slope parameter \(\beta_3\).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The m - 1 Rule for Categories -->
+    <section class="lesson-section" id="sectionMMinus1">
+      <h2>3. Categorical Attributes and the \(m - 1\) Rule</h2>
+      <p>
+        Many economic variables have more than two qualitative outcomes—such as regions, industries, or education levels. Suppose a categorical variable has \(m\) mutually exclusive and exhaustive categories:
+      </p>
+
+      <!-- Key Equation Box: m - 1 Rule -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">STRUCTURAL RULE</span>
+          <span class="equation-title">The \(m - 1\) Dummy Rule with Intercept</span>
+        </div>
+        <div class="equation-main">
+          \[ y_i = \beta_1 + \beta_2 D_{2i} + \beta_3 D_{3i} + \dots + \beta_m D_{mi} + \varepsilon_i \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">INTERPRETATION:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">Reference Group (\(D_1\))</span>
+              <span class="symbol-desc">Omitted category whose expected outcome is captured entirely by the intercept \(\beta_1\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">Dummy Coefficients (\(\beta_j\))</span>
+              <span class="symbol-desc">Each \(\beta_j\) measures the expected outcome difference between category \(j\) and the reference group</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clean Category-Reference Visual -->
+      <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; color: var(--color-primary); font-size: 0.95rem;">Empirical Example: Regional Housing (\(m = 3\) Categories)</h4>
+        <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: var(--space-xs);">
+          Consider 3 regions: <em>North</em>, <em>Central</em>, and <em>South</em>. Choose <strong>North</strong> as the omitted reference group:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 0.88rem;">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm);">
+            <strong>North (Reference):</strong><br>\(\mathbb{E}[y \mid \text{North}] = \beta_1\)
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm);">
+            <strong>Central:</strong><br>\(\mathbb{E}[y \mid \text{Central}] = \beta_1 + \beta_2\)
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm);">
+            <strong>South:</strong><br>\(\mathbb{E}[y \mid \text{South}] = \beta_1 + \beta_3\)
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 8px 0 0 0;">
+          Changing the omitted reference category changes the numerical values and interpretation of individual dummy coefficients, but leaves the fitted values \(\hat{y}_i\) and overall \(R^2\) identical!
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: The Dummy Variable Trap -->
+    <section class="lesson-section" id="sectionTrap">
+      <h2>4. The Dummy Variable Trap vs. No-Intercept Model</h2>
+      <p>
+        What happens if a researcher includes an intercept \(\beta_1\) <em>and</em> all \(m\) category dummies simultaneously?
+      </p>
+
+      <div class="callout callout-danger">
+        <div class="callout-header">
+          <span class="callout-badge">Severe Pitfall</span>
+          <h4 class="callout-title" style="margin: 0;">The Dummy Variable Trap: Perfect Multicollinearity</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0 0 8px 0;">
+            Because every observation belongs to exactly one category:
+            \[ \sum_{j=1}^m D_{ji} = D_{1i} + D_{2i} + \dots + D_{mi} = 1 = x_{1i} \quad \text{for all } i \]
+            The sum of all \(m\) indicator columns is an exact linear replica of the constant vector \(\mathbf{1}\).
+          </p>
+          <p style="margin: 0;">
+            This creates <strong>perfect multicollinearity</strong>: the data matrix \(X\) lacks full column rank (\(\operatorname{rank}(X) < K\)), \(X'X\) is non-invertible, and OLS software cannot compute unique estimates.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout callout-subtle" style="margin-top: var(--space-md);">
+        <div class="callout-header">
+          <span class="callout-badge">Alternative Parameterization</span>
+          <h4 class="callout-title" style="margin: 0;">The No-Intercept Model</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0;">
+            If the intercept is deliberately omitted, all \(m\) dummies can be included:
+            \[ y_i = \gamma_1 D_{1i} + \gamma_2 D_{2i} + \dots + \gamma_m D_{mi} + \varepsilon_i \]
+            Here, each coefficient \(\gamma_j\) directly estimates the sample mean of group \(j\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check & Takeaways -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> The \(m - 1\) Rule &amp; Multicollinearity
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        A researcher estimates household expenditure across four education tiers: High School, Bachelor's, Master's, and Doctorate. The regression includes an intercept and all 4 education dummy variables. Why does the regression fail, and how should it be fixed?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> The regression fails due to the Dummy Variable Trap (perfect multicollinearity).<br><br>
+          <strong>EXPLANATION &amp; REMEDY:</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>Because categories are exhaustive, \(D_1 + D_2 + D_3 + D_4 = 1\) for every observation, duplicating the constant intercept column and making \(X'X\) singular.</li>
+            <li><strong>Standard Fix:</strong> Keep the intercept and omit one reference category (e.g., High School), leaving \(4 - 1 = 3\) dummies.</li>
+            <li><strong>Alternative Fix:</strong> Drop the intercept and include all 4 dummies, where each coefficient directly estimates the average expenditure of that education tier.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Summary Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Adding an indicator variable to a continuous regressor shifts the regression line vertically by \(\beta_2\) while preserving a common slope \(\beta_3\).</li>
+        <li>The dummy coefficient \(\beta_2\) is the difference between group conditional expectations <em>holding continuous covariates constant</em>.</li>
+        <li>For \(m\) exhaustive qualitative categories with an intercept, exactly \(m - 1\) dummy variables must be included.</li>
+        <li>Including all \(m\) indicators alongside an intercept triggers the Dummy Variable Trap (perfect multicollinearity).</li>
+        <li>The reference category choice determines the baseline, but does not alter fitted values or model goodness-of-fit.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-05.html" class="btn btn-outline">
+        ← Previous: Binary Dummy Variables
+      </a>
+      <a href="lesson-07.html" class="btn btn-primary">
+        Next: Dummy Variables in Log-Linear Models &amp; Review →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

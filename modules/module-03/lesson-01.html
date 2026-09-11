@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.1: Goodness of Fit & R-Squared — EcoIntuition Academy</title>
+  <meta name="description" content="Understand goodness of fit, derive the total sum of squares decomposition (SST = SSR + SSE) using summations and the demeaning matrix M₀, and explore why R² does not imply causality.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="01">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 7 &middot; Goodness of Fit &amp; R-Squared</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">14%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 14.3%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.1</span>
+        <span class="badge">Explained vs Residual Variation</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Goodness of Fit &amp; R-Squared
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Discover how the total variation in an economic outcome is partitioned into explained and residual components, derive \(R^2\) through summations and projection matrix \(M_0\), and understand why strong in-sample fit never implies causal identification.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define goodness of fit in linear regression as the predictive power of regressor deviations.</li>
+        <li>Follow the step-by-step summation derivation of the sum-of-squares decomposition \(\text{SST} = \text{SSR} + \text{SSE}\).</li>
+        <li>Derive the matrix formulation of \(R^2\) using the demeaning residual-maker matrix \(M_0\).</li>
+        <li>Distinguish total, explained, and residual sum of squares geometrically and algebraically.</li>
+        <li>Explain why a high \(R^2\) measures predictive association within sample but does not prove causality.</li>
+      </ul>
+    </div>
+
+    <!-- Notation Note -->
+    <div class="callout callout-note" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+      <div class="callout-header">
+        <span class="callout-icon">📌</span>
+        <span class="callout-title">Notation Note</span>
+      </div>
+      <div class="callout-body">
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+          The source notes sometimes denote the OLS estimate by \(b\). Throughout this website, we write the OLS estimate as \(\hat{\beta}\) and reserve \(b\) for a generic candidate coefficient vector. We write \(\beta\) for the true population coefficient, \(\hat{y} = X\hat{\beta}\) for fitted values, \(e = y - \hat{y}\) for sample residuals, and \(\varepsilon\) for population disturbances.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 1: Intuition & Definition -->
+    <section class="lesson-section" id="definitionSection">
+      <h2>1. The Fundamental Question of Goodness of Fit</h2>
+      <p>
+        Goodness of fit evaluates how effectively variation in the explanatory variables \(X\) accounts for variation in the dependent outcome \(y\) around its sample mean.
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">📌</span>
+          <span class="callout-title">Source Definition: Goodness of Fit</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            <strong>Goodness of Fit:</strong> How good is variation in \(X\) at predicting variation in \(y\)?
+          </p>
+        </div>
+      </div>
+
+      <p>
+        The most widespread metric is the <strong>coefficient of determination</strong>, denoted \(R^2\). Intuitively, \(R^2\) measures how well deviations of the regressors \(x_i\) from their sample means predict deviations of the dependent variable \(y_i\) from its sample mean \(\bar{y}\).
+      </p>
+
+      <!-- Visual Intuition Before Algebra: Suppose a Student's Score Differs -->
+      <div class="decomp-visual-container">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.4rem 0;">
+          Intuition Before Algebra: Partitioning an Individual Deviation
+        </h3>
+        <p style="font-size: 0.9rem; color: #475569; line-height: 1.55; margin: 0 0 0.75rem 0;">
+          Suppose a student's test score \(y_i\) differs from the class average \(\bar{y}\). Why does this difference occur? Part of that difference may be captured by the regression model (study hours, attendance), while the rest remains unexplained (individual mood, exam idiosyncrasies).
+        </p>
+
+        <div class="decomp-visual-grid">
+          <div class="decomp-box decomp-box--total">
+            <div class="decomp-box-tag">Total Deviation</div>
+            <div class="decomp-box-formula">\(y_i - \bar{y}\)</div>
+            <div class="decomp-box-desc">Distance from observation to sample mean</div>
+          </div>
+          <div class="decomp-symbol">=</div>
+          <div class="decomp-box decomp-box--explained">
+            <div class="decomp-box-tag">Explained Deviation</div>
+            <div class="decomp-box-formula">\(\hat{y}_i - \bar{y}\)</div>
+            <div class="decomp-box-desc">Distance from fitted value to sample mean</div>
+          </div>
+          <div class="decomp-symbol">+</div>
+          <div class="decomp-box decomp-box--unexplained">
+            <div class="decomp-box-tag">Unexplained Residual</div>
+            <div class="decomp-box-formula">\(e_i\)</div>
+            <div class="decomp-box-desc">Distance from observation to fitted value</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Summation Derivation of SST = SSR + SSE -->
+    <section class="lesson-section" id="summationSection">
+      <h2>2. Sum-of-Squares Decomposition: Summation Approach</h2>
+      <p>
+        To determine how total variation partitions across the full sample of \(n\) observations, we square and aggregate the individual deviation identity using OLS residual properties.
+      </p>
+
+      <!-- REUSABLE DERIVATION JOURNEY -->
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">Mathematical Derivation</span>
+          <h3 class="derivation-journey-title">Sum-of-Squares Variance Decomposition</h3>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">What are we trying to show?</span>
+            <p class="derivation-goal-text">
+              Prove that under OLS with an intercept, total centered sample variation (\(\text{SST}\)) cleanly splits into explained variation (\(\text{SSR}\)) plus residual variation (\(\text{SSE}\)), with zero cross-term.
+            </p>
+          </div>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Start with the OLS fitted-value decomposition</h4>
+              </div>
+              <p class="derivation-step-desc">Express each individual observation in terms of its OLS fitted value \(\hat{y}_i = x_i'\hat{\beta}\) and sample residual \(e_i\):</p>
+              <div class="derivation-step-math">\(y_i = \hat{y}_i + e_i = x_i'\hat{\beta} + e_i\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                By definition of the OLS residual, every observation equals its fitted value plus its residual: \(e_i \equiv y_i - \hat{y}_i\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Center around the sample mean</h4>
+              </div>
+              <p class="derivation-step-desc">Subtract the sample mean \(\bar{y}\) from both sides of the identity:</p>
+              <div class="derivation-step-math">\(y_i - \bar{y} = (\hat{y}_i - \bar{y}) + e_i\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                With an intercept included in \(X\), the sample mean of OLS residuals is zero (\(\bar{e} = 0\)), which guarantees that the average fitted value equals the average outcome: \(\bar{\hat{y}} = \bar{y}\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Square both sides and sum across all observations</h4>
+              </div>
+              <p class="derivation-step-desc">Aggregate squared centered deviations across the entire sample \(i = 1, \dots, n\):</p>
+              <div class="derivation-step-math">\(\sum_{i=1}^n (y_i - \bar{y})^2 = \sum_{i=1}^n \left[(\hat{y}_i - \bar{y}) + e_i\right]^2\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Summing squared deviations measures total sample dispersion (proportional to sample variance) of \(y\) around its mean.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Expand the binomial expression</h4>
+              </div>
+              <p class="derivation-step-desc">Expand \((a + b)^2 = a^2 + 2ab + b^2\) for each summand:</p>
+              <div class="derivation-step-math">\(\sum_{i=1}^n (y_i - \bar{y})^2 = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2 + 2\sum_{i=1}^n (\hat{y}_i - \bar{y})e_i + \sum_{i=1}^n e_i^2\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Algebraic expansion creates three distinct components: explained squared deviations, unexplained squared residuals, and a cross-product interaction term.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Eliminate the cross-product term via OLS orthogonality</h4>
+                <span class="derivation-result-badge">Key Result</span>
+              </div>
+              <p class="derivation-step-desc">Analyze the interaction summation using \(\hat{y}_i = x_i'\hat{\beta}\):</p>
+              <div class="derivation-step-math">\(2\sum_{i=1}^n (\hat{y}_i - \bar{y})e_i = 2\hat{\beta}'\sum_{i=1}^n x_i e_i - 2\bar{y}\sum_{i=1}^n e_i = 2\hat{\beta}'\mathbf{0} - 2\bar{y}(0) = 0\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                OLS normal equations enforce regressor-residual orthogonality (\(X'e = \mathbf{0} \implies \sum x_i e_i = \mathbf{0}\)). Furthermore, when an intercept is included, \(\sum e_i = 0\). Thus the cross-product vanishes identically.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">6</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Conclude the fundamental sum-of-squares identity</h4>
+                <span class="derivation-result-badge">Fundamental Theorem</span>
+              </div>
+              <p class="derivation-step-desc">With the cross-term eliminated, total variation equals explained plus unexplained variation:</p>
+              <div class="derivation-step-math">\(\sum_{i=1}^n (y_i - \bar{y})^2 = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n e_i^2 \iff \text{SST} = \text{SSR} + \text{SSE}\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The orthogonality of the OLS projection guarantees that the fitted variation and residual variation do not overlap.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIG PICTURE CARD -->
+      <div class="big-picture-card">
+        <div class="big-picture-header">
+          <span class="big-picture-icon">💡</span>
+          <h4 class="big-picture-title">Big Picture: What Did We Actually Learn?</h4>
+        </div>
+        <p class="big-picture-body">
+          The variation of \(y\) around its sample mean separates into two mutually orthogonal pieces: <strong>explained variation (\(\text{SSR}\))</strong> captured by the regressors, and <strong>residual variation (\(\text{SSE}\))</strong> left untouched. The coefficient of determination \(R^2\) simply measures the fraction of total centered variation accounted for by the fitted model.
+        </p>
+      </div>
+
+      <!-- Reusable Key Equation Box: R² -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY EQUATION</span>
+          <h3 class="equation-title" style="margin:0; font-size:1.05rem;">Coefficient of Determination (R²)</h3>
+        </div>
+        <div class="equation-main">
+          $$R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = \frac{\text{SSR}}{\text{SST}}$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\text{SST} = \sum_{i=1}^n (y_i - \bar{y})^2\)</div>
+              <div class="def-desc"><strong>Total Sum of Squares:</strong> Total sample variation of observed outcomes \(y_i\) around sample mean \(\bar{y}\).</div>
+              <div class="def-term">\(\text{SSR} = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2\)</div>
+              <div class="def-desc"><strong>Regression Sum of Squares:</strong> Variation of fitted values \(\hat{y}_i = x_i'\hat{\beta}\) explained by regressors around \(\bar{y}\).</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(\text{SSE} = \sum_{i=1}^n e_i^2 = \sum_{i=1}^n (y_i - \hat{y}_i)^2\)</div>
+              <div class="def-desc"><strong>Sum of Squared Residuals:</strong> Unexplained variation remaining in the sample residuals.</div>
+              <div class="def-term">\(R^2 \in [0, 1]\)</div>
+              <div class="def-desc"><strong>Proportion of Variance Explained:</strong> Fraction of total outcome variation accounted for by the regression model with intercept.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Fraction Bar: Total Variation = 100% -->
+      <div class="fraction-visual-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 700; color: #0f172a;">
+          <span>TOTAL VARIATION (SST) = 100%</span>
+          <span>\(R^2 + (1 - R^2) = 1\)</span>
+        </div>
+        <div class="fraction-bar-outer">
+          <div class="fraction-bar-explained" style="width: 68%;">EXPLAINED (R² = 68%)</div>
+          <div class="fraction-bar-residual" style="width: 32%;">RESIDUAL (1 − R² = 32%)</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #64748b; margin-top: 4px;">
+          <span>\(\text{SSR} = \text{Variation captured by regressors}\)</span>
+          <span>\(\text{SSE} = \text{Variation left in residuals}\)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Matrix Version of R² -->
+    <section class="lesson-section" id="matrixSection">
+      <h2>3. Matrix Version using the Demeaning Matrix M₀</h2>
+      <p>
+        The matrix formulation provides an elegant, coordinate-free perspective on goodness of fit. Instead of evaluating observations individually, we represent sample centering through an orthogonal projection operator.
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">💡</span>
+          <span class="callout-title">Concept: M₀ is the Demeaning Operator</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            Let \(\iota = [1, 1, \dots, 1]'\) be an \(n \times 1\) column vector of ones. The projection matrix onto \(\iota\) is \(P_0 = \iota(\iota'\iota)^{-1}\iota' = \frac{1}{n}\iota\iota'\). Its orthogonal complement, the <strong>demeaning operator</strong> \(M_0\), is defined as:
+          </p>
+          <div style="text-align: center; margin: 0.5rem 0; font-size: 1rem; font-weight: 700; color: #1e3a8a;">
+            \(M_0 = I - P_0 = I - \iota(\iota'\iota)^{-1}\iota' = I - \frac{1}{n}\iota\iota'\)
+          </div>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            For any \(n \times 1\) vector \(z\), multiplying by \(M_0\) removes the sample mean \(\bar{z}\) from every observation: \(M_0 z = z - \bar{z}\iota\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Concrete Visual Example: Vector Demeaning -->
+      <div class="decomp-visual-container" style="background: #f8fafc; border-left: 4px solid #3b82f6;">
+        <h4 style="font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #1e40af; margin: 0 0 0.5rem 0;">
+          Concrete Vector Intuition: How M₀ Works
+        </h4>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 0.75rem 0;">
+          <div style="background: #ffffff; padding: 0.6rem 1rem; border-radius: 6px; border: 1px solid #cbd5e1; text-align: center;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Original Vector \(z\)</div>
+            <div style="font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: #0f172a;">\([7,\; 9,\; 11]'\)</div>
+            <div style="font-size: 0.78rem; color: #2563eb; margin-top: 2px;">\(\text{mean } \bar{z} = 9\)</div>
+          </div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">\(\xrightarrow{M_0}\)</div>
+          <div style="background: #ffffff; padding: 0.6rem 1rem; border-radius: 6px; border: 1.5px solid #3b82f6; text-align: center;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">Demeaned Vector \(M_0 z\)</div>
+            <div style="font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: #1d4ed8;">\([-2,\; 0,\; 2]'\)</div>
+            <div style="font-size: 0.78rem; color: #059669; font-weight: 600; margin-top: 2px;">\(\text{mean } = 0\)</div>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: #475569; margin: 0; text-align: center;">
+          The transformed vector has sample mean zero. Notice that \(M_0 y = y - \bar{y}\iota\) subtracts the scalar mean \(\bar{y}\) from every row of \(y\).
+        </p>
+      </div>
+
+      <!-- Matrix Variance Decomposition Derivation -->
+      <div class="derivation-journey" style="margin-top: 1.5rem;">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">Matrix Derivation</span>
+          <h3 class="derivation-journey-title">Matrix Formulation of R² via M₀</h3>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">What are we trying to show?</span>
+            <p class="derivation-goal-text">
+              Demonstrate that pre-multiplying the sample equation by \(M_0\) isolates centered quadratic forms, yielding \(R^2 = 1 - \frac{e'e}{y'M_0 y}\).
+            </p>
+          </div>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Pre-multiply the OLS regression equation by M₀</h4>
+              </div>
+              <p class="derivation-step-desc">Apply the demeaning operator to both sides of \(y = X\hat{\beta} + e\):</p>
+              <div class="derivation-step-math">\(M_0 y = M_0 X\hat{\beta} + M_0 e \iff y - \bar{y}\iota = (X\hat{\beta} - \bar{y}\iota) + e\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                With an intercept, OLS residuals sum to zero (\(\iota'e = 0\)), which means \(P_0 e = \frac{1}{n}\iota(\iota'e) = \mathbf{0}\). Therefore, \(M_0 e = (I - P_0)e = e\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Compute the inner product of centered outcomes</h4>
+              </div>
+              <p class="derivation-step-desc">Square both sides in \(\mathbb{R}^n\) using the symmetric, idempotent property \(M_0'M_0 = M_0\):</p>
+              <div class="derivation-step-math">\(y'M_0 y = \hat{\beta}'X'M_0 X\hat{\beta} + 2e'M_0 X\hat{\beta} + e'M_0 e\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                For any vector \(v\), \(v'M_0 v = (M_0 v)'(M_0 v)\) computes the sum of squared deviations from the sample mean.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Apply normal equations orthogonality</h4>
+                <span class="derivation-result-badge">Cross Term = 0</span>
+              </div>
+              <p class="derivation-step-desc">Evaluate the cross-product term using OLS orthogonality \(X'e = \mathbf{0}\):</p>
+              <div class="derivation-step-math">\(e'M_0 X\hat{\beta} = e'(I - P_0)X\hat{\beta} = e'X\hat{\beta} - (e'P_0)X\hat{\beta} = 0 - 0 = 0\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                OLS sample residuals are orthogonal to every column of \(X\) (\(X'e = \mathbf{0}\)) and orthogonal to the constant vector (\(\iota'e = 0\)).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">State the compact matrix R² formula</h4>
+              </div>
+              <p class="derivation-step-desc">Combine the quadratic forms to produce the slick matrix formulation from the source:</p>
+              <div class="derivation-step-math">\(y'M_0 y = \hat{\beta}'X'M_0 X\hat{\beta} + e'e \implies R^2 = 1 - \frac{e'e}{y'M_0 y} = \frac{\hat{\beta}'X'M_0 X\hat{\beta}}{y'M_0 y}\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                \(y'M_0 y = \text{SST}\) is total centered variation, \(\hat{\beta}'X'M_0 X\hat{\beta} = \text{SSR}\) is explained centered variation, and \(e'e = \text{SSE}\) is the unexplained residual sum of squares.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Visualization -->
+    <section class="lesson-section" id="visualSection">
+      <h2>4. Interactive Lab: Decomposing Variations &amp; Fit Strength</h2>
+      <p>
+        Explore how sample points move relative to the constant mean \(\bar{y}\) and the fitted regression line \(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i\) as \(R^2\) increases. Toggle the deviation mode to visualize Total Deviations \((y_i - \bar{y})\), Explained Deviations \((\hat{y}_i - \bar{y})\), or Residual Deviations \((y_i - \hat{y}_i)\).
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Fit Strength Preset</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="r2BtnLow" class="btn btn-sm btn-outline">Low R² (~0.23)</button>
+              <button type="button" id="r2BtnMed" class="btn btn-sm btn-outline active">Medium R² (~0.68)</button>
+              <button type="button" id="r2BtnHigh" class="btn btn-sm btn-outline">High R² (~0.95)</button>
+            </div>
+          </div>
+
+          <div>
+            <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Deviation View</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="r2DevTotal" class="btn btn-sm btn-outline">Total (y - ȳ)</button>
+              <button type="button" id="r2DevExplained" class="btn btn-sm btn-outline">Explained (ŷ - ȳ)</button>
+              <button type="button" id="r2DevResidual" class="btn btn-sm btn-outline active">Residual (y - ŷ)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">SST (Total)</div>
+            <div id="r2ReadoutSst" style="font-size: 1.05rem; font-weight: 700; color: #1e293b; font-family: var(--font-mono);">236.4</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #059669; font-weight: 600;">SSR (Explained)</div>
+            <div id="r2ReadoutSsr" style="font-size: 1.05rem; font-weight: 700; color: #059669; font-family: var(--font-mono);">160.8</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #dc2626; font-weight: 600;">SSE (Residual)</div>
+            <div id="r2ReadoutSse" style="font-size: 1.05rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">75.6</div>
+          </div>
+          <div style="background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #2563eb; text-align: center;">
+            <div style="font-size: 0.72rem; color: #2563eb; font-weight: 700;">R² (SSR / SST)</div>
+            <div id="r2ReadoutR2" style="font-size: 1.15rem; font-weight: 800; color: #1d4ed8; font-family: var(--font-mono);">0.680</div>
+          </div>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="r2LabSvg" viewBox="0 0 540 320" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive R-squared scatterplot"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            10 deterministic sample observations plotted against their regressor \(x_i\). The horizontal gray dashed line represents the constant sample mean \(\bar{y} = 20.0\), and the blue line represents the fitted OLS regression \(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            When you switch from Low \(R^2\) to High \(R^2\), the residual deviations (red bars connecting observations to the blue line) dramatically shrink. At High \(R^2 = 0.95\), the regression line captures almost all deviation from \(\bar{y}\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            Because OLS residual orthogonality ensures \(\sum (\hat{y}_i - \bar{y})e_i = 0\), total variation separates cleanly: \(\text{SST} = \text{SSR} + \text{SSE}\). There is no overlapping cross-term when an intercept is included.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            An \(R^2 = 0.68\) means that 68% of the sample variation in \(y\) around its mean is statistically associated with linear movements in \(x\). The remaining 32% reflects unobserved idiosyncratic disturbances.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Select <em>Total (y - ȳ)</em>, observe the purple spread, and then click <em>Explained (ŷ - ȳ)</em> to see how much of that total distance is successfully traced along the blue regression slope.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Caution - R² and Causality -->
+    <section class="lesson-section" id="causalitySection">
+      <h2>5. Crucial Econometric Caution: R² Does Not Imply Causality</h2>
+      <p>
+        A central theme from <code>Econometrics (3).pdf</code> is that goodness of fit measures predictive linear association within a specific sample, not causal structure.
+      </p>
+
+      <!-- PROMINENT DUAL SCOPE CARD -->
+      <div class="r2-scope-grid">
+        <div class="r2-scope-card r2-scope-card--yes">
+          <h3 class="r2-scope-title">✓ What R² Tells You</h3>
+          <p class="r2-scope-text">
+            How well deviations in the fitted linear combination of regressors \(x_i'\hat{\beta}\) account for sample movements in \(y_i\) around the sample mean \(\bar{y}\).
+          </p>
+        </div>
+
+        <div class="r2-scope-card r2-scope-card--no">
+          <h3 class="r2-scope-title">✗ What R² Does Not Tell You</h3>
+          <p class="r2-scope-text">
+            Whether intervening to alter \(X\) causes a change in \(Y\). Even with \(R^2 = 0.99\) and \(\hat{\beta} > 0\), exogenous changes to \(x\) may produce zero causal response in \(y\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Source Examples from PDF -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-sm); margin: 1.25rem 0;">
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: 8px;">
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.4rem;">
+            Source Example 1: Financial Indices &amp; Dining
+          </h4>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #475569;">
+            When the S&amp;P 500 rises, high-end steakhouse visits increase sharply (\(R^2\) is high). But the stock market does not rise <em>because</em> fund managers eat more steak. Both are driven by common macroeconomic liquidity.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: 8px;">
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.4rem;">
+            Source Example 2: Hospital Size &amp; Pricing
+          </h4>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #475569;">
+            Smaller rural hospitals frequently exhibit higher per-procedure medical prices. However, this correlation reflects regional lack of competition (local monopoly power) rather than bed capacity causing price hikes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="callout callout-warning">
+      <div class="callout-header">
+        <span class="callout-icon">⚠️</span>
+        <span class="callout-title">Common Mistake</span>
+      </div>
+      <div class="callout-body">
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+          <strong>"A model with R² = 0.85 is a better economic model than one with R² = 0.35."</strong><br>
+          <em>Correction:</em> Not necessarily. An atheoretical model packed with lagged values or endogenous proxies can produce an \(R^2\) near 1.0 while providing zero causal insight or policy guidance. Econometric validity depends on identification, exogeneity, and research design—not purely variance accounted for.
+        </p>
+      </div>
+    </div>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.35rem 1.5rem; margin: 1.5rem 0;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.1rem;">🧠</span>
+        <h4 style="font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0f172a; margin: 0;">
+          Can You Explain It? Conceptual Check
+        </h4>
+      </div>
+      <p style="font-size: 0.92rem; color: #334155; line-height: 1.55; margin: 0 0 0.75rem 0;">
+        <strong>Question:</strong> If an empirical wage regression reports \(R^2 = 0.85\), what exactly can you claim—and what can you NOT claim?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #2563eb;">Show Explanation</summary>
+        <div style="margin-top: 0.5rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; color: #1e293b;">
+          <strong>What you CAN say:</strong> 85% of the sample variation in wages around the sample mean is statistically captured by the linear combination of included regressors.<br><br>
+          <strong>What you CANNOT say:</strong> You cannot claim that the regressors caused 85% of an individual's wage, nor that manipulating any single regressor (e.g. increasing schooling by 1 year) will automatically produce the predicted wage increase unless exogeneity (\(\mathbb{E}[\varepsilon \mid X] = 0\)) is convincingly established.
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.25rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Sum of Squares
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a sample of 100 observations with an intercept, the total sum of squares is \(\text{SST} = 500\) and the sum of squared residuals is \(\text{SSE} = 125\). What is \(\text{SSR}\) and what is \(R^2\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(\text{SSR} = 375\) and \(R^2 = 0.75\).<br><br>
+          <strong>WHY?</strong> With an intercept included, the variance decomposition holds exactly: \(\text{SSR} = \text{SST} - \text{SSE} = 500 - 125 = 375\). Then \(R^2 = \frac{\text{SSR}}{\text{SST}} = \frac{375}{500} = 0.75\), indicating that 75% of the sample variation in \(y\) around its mean is accounted for by the fitted regression model.
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Total centered variation decomposes cleanly into explained and residual variation (\(\text{SST} = \text{SSR} + \text{SSE}\)) under OLS with an intercept because residuals are orthogonal to regressors and sum to zero.</li>
+        <li>\(R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}\) represents the proportion of sample variance in \(y\) captured by the fitted regression line.</li>
+        <li>The demeaning operator \(M_0 = I - \frac{1}{n}\iota\iota'\) subtracts the sample mean from any vector, expressing \(R^2\) in compact coordinate-free matrix notation as \(1 - \frac{e'e}{y'M_0 y}\).</li>
+        <li>A high \(R^2\) indicates strong predictive in-sample correlation, but never establishes causal identification or policy effectiveness.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 3 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: Adjusted R² &amp; Model Comparison →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

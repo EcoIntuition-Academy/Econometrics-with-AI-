@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4.5: Confidence Intervals &amp; Large-Sample Hypothesis Testing — EcoIntuition Academy</title>
+  <meta name="description" content="Construct large-sample confidence intervals, formulate standardized z and feasible t statistics, examine critical values (±2.576 for 99% CI, ±1.96 for 5% test), and master asymptotic hypothesis testing.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-04" data-lesson="05">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 04</a>
+          <span class="module-nav-title">Large-Sample Theory &amp; Asymptotic Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 8 &middot; Confidence Intervals &amp; Large-Sample Hypothesis Testing</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 4 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.1 Convergence in Probability &amp; Consistency</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.2 Consistency of OLS &amp; Large-Sample Conditions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.3 Asymptotic Normality of OLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.4 Asymptotic Efficiency</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">4.5 Confidence Intervals &amp; Large-Sample Hypothesis Testing</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.6 The Delta Method</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.7 Slutsky’s Theorem &amp; Delta Method Applications</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.8 Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">62.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 62.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.5</span>
+        <span class="badge">Primary Source: Pages 3–5</span>
+        <span class="badge">Asymptotic Inference</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Confidence Intervals &amp; Large-Sample Hypothesis Testing
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Because the OLS estimator is asymptotically normal, coefficient uncertainty can be standardized using estimated standard errors. Discover the large-sample 99% and 95% confidence intervals, understand why \(t\)-statistics converge to standard normal \(z\)-statistics, and conduct rigorous two-tailed hypothesis tests.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">OBJECTIVES</span> Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate the standardized test statistic \(z_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{\sigma^2 S_{kk}}}\) and inspect its denominator.</li>
+        <li>Derive the 99% large-sample confidence interval using critical values \(\pm 2.576\).</li>
+        <li>Follow the transition from theoretical \(\sigma^2\) to feasible \(s^2\), establishing why \(t_k \xrightarrow{d} z_k\).</li>
+        <li>Contrast heavy-tailed finite-sample \(t\) distributions with the standard normal distribution without inventing arbitrary sample-size thresholds.</li>
+        <li>Conduct large-sample two-sided hypothesis tests at \(\alpha = 0.05\) using critical values \(\pm 1.96\), strictly adhering to "Reject" vs. "Fail to Reject" language.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Standardized z Statistic & 99% CI -->
+    <section class="lesson-section" id="standardizedSection">
+      <h2>1. The Standardized z Statistic</h2>
+      <p>
+        Because \(\hat{\beta}_{\text{OLS}}\) is asymptotically normal, testing a hypothesis about any single coefficient \(\beta_k\) begins by standardizing the estimation error by its true standard deviation:
+      </p>
+
+      <!-- Key Equation Box: Standardized z -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Equation: Standardized z Statistic</div>
+        <div class="equation-box-math">
+          \[z_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{\sigma^2 S_{kk}}} \xrightarrow{d} \mathcal{N}(0, 1)\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(S_{kk}\) denotes the \(k\)-th diagonal element of \((X'X)^{-1}\). The denominator \(\sqrt{\sigma^2 S_{kk}}\) is the exact theoretical standard deviation of \(\hat{\beta}_k\).
+        </div>
+      </div>
+
+      <p>
+        For a <strong>99% confidence interval</strong> (two-tailed significance level \(\alpha = 0.01\)), the critical values from the standard normal cumulative distribution \(\Phi(z)\) are:
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">
+        \(\Phi^{-1}(0.005) = -2.576, \quad \Phi^{-1}(0.995) = +2.576\)
+      </div>
+
+      <!-- Key Equation Box: 99% CI -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Equation: 99% Confidence Interval</div>
+        <div class="equation-box-math">
+          \[\Pr\left( \hat{\beta}_k - 2.576 \sqrt{\sigma^2 S_{kk}} \;\le\; \beta_k \;\le\; \hat{\beta}_k + 2.576 \sqrt{\sigma^2 S_{kk}} \right) = 0.99\]
+        </div>
+        <div class="equation-box-sub">
+          General formula: \(\text{Point Estimate} \pm \text{Critical Value} \times \text{Standard Error}\).
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Unknown Sigma-Squared & Feasible t-Statistic -->
+    <section class="lesson-section" id="feasibleSection">
+      <h2>2. Feasible Inference: Replacing Unknown σ² with s²</h2>
+      <p>
+        In practice, the true disturbance variance \(\sigma^2\) is unknown. Large-sample theory makes inference operational by substituting consistent variance estimators:
+      </p>
+
+      <!-- Transition Journey Card -->
+      <div class="study-card" style="margin-bottom: var(--space-md);">
+        <h4 style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.75rem;">
+          The Three-Stage Transition to Feasible Inference
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--surface-secondary, #F7FAFF); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #64748b;">
+            <span style="font-weight: 700; color: #64748b; font-size: 0.9rem; min-width: 80px;">STAGE 1</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);">True disturbance variance \(\sigma^2\) is unobserved in empirical reality.</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--surface-secondary, #F7FAFF); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+            <span style="font-weight: 700; color: var(--color-primary); font-size: 0.9rem; min-width: 80px;">STAGE 2</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);">Estimate \(\sigma^2\) consistently using the sample residual variance: \(s^2 = \frac{e'e}{n-k}\).</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--surface-secondary, #F7FAFF); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #059669;">
+            <span style="font-weight: 700; color: #059669; font-size: 0.9rem; min-width: 80px;">STAGE 3</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);">Form the feasible test statistic: \(t_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 S_{kk}}}\).</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Because \(s^2 \xrightarrow{p} \sigma^2\) by consistency, Slutsky's theorem guarantees that for large \(n\):
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">
+        \(t_k \xrightarrow{d} z_k \sim \mathcal{N}(0, 1)\)
+      </div>
+      <p>
+        Therefore, in large samples, the exact same normal critical value \(\pm 2.576\) applies to the feasible confidence interval:
+      </p>
+      <div class="equation-box">
+        <div class="equation-box-math">
+          \[\Pr\left( \hat{\beta}_k - 2.576 \sqrt{s^2 S_{kk}} \;\le\; \beta_k \;\le\; \hat{\beta}_k + 2.576 \sqrt{s^2 S_{kk}} \right) = 0.99\]
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Finite-Sample t vs Large-Sample Normal -->
+    <section class="lesson-section" id="tVsNormalSection">
+      <h2>3. Finite-Sample t vs. Large-Sample Normal: The Degrees-of-Freedom Effect</h2>
+      <p>
+        How does the large-sample normal approximation compare to finite-sample Student's \(t\) distributions? Consider the classic comparative degrees-of-freedom illustration:
+      </p>
+
+      <div class="study-card" style="margin-bottom: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          Illustrative Example: Degrees of Freedom = 50
+        </h4>
+        <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+          If sample size is smaller—such as degrees of freedom \(n - k = 50\)—the critical value from the Student's \(t_{50}\) distribution is slightly higher: <strong>\(2.678\)</strong> instead of \(2.576\):
+        </p>
+        <div style="text-align: center; margin: 0.75rem 0; font-family: var(--font-mono); font-weight: 600; color: #0f172a;">
+          \(\Pr\left( \hat{\beta}_k - 2.678 \sqrt{s^2 S_{kk}} \;\le\; \beta_k \;\le\; \hat{\beta}_k + 2.678 \sqrt{s^2 S_{kk}} \right) = 0.99\)
+        </div>
+        <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+          <strong>Econometric Intuition:</strong> Smaller samples = thicker tails in the \(t\)-distribution = wider confidence intervals. The wider interval directly accounts for sampling uncertainty in estimating the unknown \(\sigma^2\) with \(s^2\).
+        </p>
+      </div>
+
+      <div class="callout callout-note" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-note">GUARDRAIL</span>
+          <span class="callout-title" style="margin-left: 0.5rem;">Methodological Guardrail: No Magic Thresholds</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            Treat \(n - k = 50\) strictly as an illustrative example. Econometricians do <strong>not</strong> use arbitrary rules like <em>"\(n < 30\) is small, \(n \ge 30\) is large"</em>. The convergence of \(t_{n-k}\) to \(\mathcal{N}(0, 1)\) is smooth and continuous as \(n \to \infty\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Testing the Null Hypothesis -->
+    <section class="lesson-section" id="testingSection">
+      <h2>4. Testing the Null Hypothesis: \(H_0: \beta_k = 0\)</h2>
+      <p>
+        Consider testing the standard null hypothesis that regressor \(k\) has zero population effect:
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.2rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">
+        \(H_0: \beta_k = 0 \quad \text{versus} \quad H_1: \beta_k \neq 0\)
+      </div>
+      <p>
+        Under the null hypothesis, the test statistic simplifies to:
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; color: #0f172a;">
+        \(t_k = \frac{\hat{\beta}_k - 0}{\sqrt{s^2 S_{kk}}} = \frac{\hat{\beta}_k}{\operatorname{SE}(\hat{\beta}_k)}\)
+      </div>
+      <p>
+        <strong>Intuitive Meaning:</strong> The test statistic asks: <em>"How many estimated standard errors away from zero is the sample estimate \(\hat{\beta}_k\)?"</em>
+      </p>
+
+      <!-- 5% Two-Tailed Rule -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Equation: Two-Tailed 5% Rejection Rule</div>
+        <div class="equation-box-math">
+          \[\Pr\left( \left| \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 S_{kk}}} \right| > 1.96 \right) = 0.05\]
+        </div>
+        <div class="equation-box-sub">
+          If the null hypothesis is true, there is only a 5% chance of observing a test statistic outside the range \([-1.96, +1.96]\).
+        </div>
+      </div>
+
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          Strict Decision Terminology
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-sm);">
+          <div style="background: rgba(239, 68, 68, 0.08); padding: 12px; border-radius: var(--radius-sm); border: 1px solid #ef4444;">
+            <div style="font-weight: 700; color: #dc2626; margin-bottom: 4px;">If \(|t_k| > 1.96\):</div>
+            <div style="font-weight: 800; font-size: 1rem; color: #b91c1c; margin-bottom: 4px;">REJECT \(H_0\)</div>
+            <p style="font-size: 0.85rem; line-height: 1.5; margin: 0; color: var(--color-text);">We reject the null hypothesis at the 5% significance level. The empirical evidence is inconsistent with \(\beta_k = 0\).</p>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.08); padding: 12px; border-radius: var(--radius-sm); border: 1px solid #10b981;">
+            <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">If \(|t_k| \le 1.96\):</div>
+            <div style="font-weight: 800; font-size: 1rem; color: #047857; margin-bottom: 4px;">FAIL TO REJECT \(H_0\)</div>
+            <p style="font-size: 0.85rem; line-height: 1.5; margin: 0; color: var(--color-text);">We fail to reject the null hypothesis. We <strong>NEVER say "Accept \(H_0\)"</strong>; we merely lack sufficient evidence to disprove zero.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Visualizer - Hypothesis Testing Bell Curve -->
+    <section class="lesson-section" id="visualSection">
+      <h2>5. Interactive Lab: Normal Curve &amp; Rejection Regions</h2>
+      <p>
+        Adjust the slider below to test any observed statistic \(z\) or \(t\). Observe how the test statistic moves relative to the critical threshold boundaries \(\pm 1.96\) (for \(\alpha = 0.05\)) or \(\pm 2.576\) (for \(\alpha = 0.01\)), and note the dynamic decision.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Significance Level (α)</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="hypAlpha05" class="btn btn-sm btn-outline active">α = 0.05 (±1.96)</button>
+              <button type="button" id="hypAlpha01" class="btn btn-sm btn-outline">α = 0.01 (±2.576)</button>
+            </div>
+          </div>
+
+          <div style="flex: 1; min-width: 200px; max-width: 260px;">
+            <label for="hypSliderStat" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Observed Test Statistic: <span id="hypReadoutStat" style="color: var(--color-primary); font-weight: 700;">+2.20</span>
+            </label>
+            <input type="range" id="hypSliderStat" min="-3.5" max="3.5" step="0.1" value="2.2" style="width: 100%; cursor: pointer;">
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Null Hypothesis</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a; font-family: var(--font-mono);">\(H_0: \beta_k = 0\)</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Test Statistic</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">t = (β̂ - 0) / SE</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 700;">Decision</div>
+            <div id="hypReadoutDecision" style="font-size: 1.05rem; font-weight: 800; color: #dc2626; font-family: var(--font-mono);">REJECT H₀</div>
+          </div>
+        </div>
+
+        <!-- Outside Legend above SVG (No overlap) -->
+        <div class="outside-chart-legend" style="margin-bottom: var(--space-xs);">
+          <div class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Standard Normal Curve \(\mathcal{N}(0, 1)\)</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: rgba(239, 68, 68, 0.35); border: 1px solid #dc2626;"></span> Rejection Region (\(\alpha\))</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: #94a3b8;"></span> Critical Thresholds (\(\pm z_c\))</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: #059669;"></span> Observed Statistic (\(z_{\text{obs}}\))</div>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="hypothesisTestSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive hypothesis testing normal distribution curve"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title"><span class="academic-badge badge-info">WHAT YOU ARE SEEING</span></div>
+          <div class="visual-explanation-body">
+            The sampling distribution of the standardized test statistic under the null hypothesis \(H_0: \beta_k = 0\). The red shaded tails represent the rejection region (\(\alpha = 0.05\) or \(\alpha = 0.01\)). The vertical cursor displays your observed test statistic.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title"><span class="academic-badge badge-primary">WHAT TO NOTICE</span></div>
+          <div class="visual-explanation-body">
+            When the slider is between \(-1.96\) and \(+1.96\), the cursor turns green and the decision reads <em>FAIL TO REJECT H₀</em>. As soon as \(|t| > 1.96\), the cursor turns red and the decision switches to <em>REJECT H₀</em>.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title"><span class="academic-badge badge-note">WHY IT MATTERS</span></div>
+          <div class="visual-explanation-body">
+            Under the null hypothesis, only 5% of random samples produce an estimate more than 1.96 standard errors away from zero. Observing such an extreme value makes the null hypothesis untenable.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title"><span class="academic-badge badge-takeaway">ECONOMETRIC INTERPRETATION</span></div>
+          <div class="visual-explanation-body">
+            Rejecting \(H_0: \beta_k = 0\) indicates statistical significance at the chosen level. However, statistical significance must always be paired with economic magnitude: a statistically significant coefficient can still be economically trivial.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <span class="academic-badge badge-primary">EXPERIMENT</span> Switch to \(\alpha = 0.01\), which pushes the critical thresholds to \(\pm 2.576\). Now drag the slider to \(t = 2.20\). Notice that while this rejected at 5%, it fails to reject at 1%!
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <div style="margin-bottom: var(--space-xs);"><span class="academic-badge badge-objectives">QUICK CHECK</span> <span style="font-weight: 700; color: var(--color-text); margin-left: 0.5rem;">Reject vs. Accept</span></div>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In an estimated regression with \(n = 1000\), an econometrician tests \(H_0: \beta_1 = 0\) and obtains a test statistic \(t = 1.15\). At the 5% level (\(\text{critical} = \pm 1.96\)), what is the proper conclusion? Can the econometrician claim: "We accept the null hypothesis that the true coefficient is zero"?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Fail to reject \(H_0\). No, one must NEVER claim to "accept" the null hypothesis!<br><br>
+          <strong>WHY?</strong> Failing to reject \(H_0\) simply means the data do not provide sufficiently strong statistical evidence to rule out zero. The true parameter could be \(0.05\) or \(-0.02\). In scientific hypothesis testing, absence of evidence is not evidence of absence; we conclude: <em>"We fail to reject \(H_0\) at the 5% significance level."</em>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="academic-badge badge-takeaway">SUMMARY</span>
+        <h3 class="summary-takeaways-title" style="margin-left: 0.5rem;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The standardized statistic is \(z_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{\sigma^2 S_{kk}}}\), where \(\sqrt{\sigma^2 S_{kk}}\) is the true standard error.</li>
+        <li>The large-sample 99% confidence interval uses normal critical values \(\pm 2.576\): \(\hat{\beta}_k \pm 2.576 \operatorname{SE}(\hat{\beta}_k)\).</li>
+        <li>Replacing unknown \(\sigma^2\) with sample estimate \(s^2\) yields the feasible statistic \(t_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 S_{kk}}}\). By Slutsky's theorem, \(t_k \xrightarrow{d} z_k\) as \(n \to \infty\).</li>
+        <li>In smaller samples (e.g., \(n - k = 50\)), Student's \(t\) distributions have heavier tails (\(t_{50, 0.005} = 2.678\)), requiring wider intervals to account for uncertainty in \(s^2\).</li>
+        <li>For a two-sided 5% test of \(H_0: \beta_k = 0\), the decision rule rejects when \(|t_k| > 1.96\). Always use "Reject" or "Fail to Reject"—never "Accept".</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-04.html" class="btn btn-outline">
+        ← Previous: Asymptotic Efficiency
+      </a>
+      <a href="lesson-06.html" class="btn btn-primary">
+        Next: The Delta Method →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-04-interactions.js"></script>
+</body>
+</html>

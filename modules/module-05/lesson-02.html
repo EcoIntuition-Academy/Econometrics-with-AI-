@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.2: One-Sided Tests, Type II Error &amp; Power — EcoIntuition Academy</title>
+  <meta name="description" content="Explore directional hypothesis testing with critical value 1.645, understand Type II error (false negative), and discover how statistical power is determined by effect size and precision.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="02">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 7 &middot; One-Sided Tests, Type II Error &amp; Power</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">28.6%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 28.6%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.2</span>
+        <span class="badge">Decision Theory</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        One-Sided Tests, Type II Error &amp; Power
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        What if economic theory predicts an unambiguous direction—such as schooling increasing wages? Discover one-sided right-tailed hypothesis testing, define Type II error (failing to detect a real effect), and explore how statistical power depends on effect magnitude and sample precision.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate a directional one-sided right-tailed hypothesis test: \(H_0: \beta_2 \le 0\) vs. \(H_1: \beta_2 > 0\).</li>
+        <li>Identify the standard 5% one-tailed critical value \(t = 1.645\) and compare it against the two-tailed threshold \(\pm 1.96\).</li>
+        <li>Define Type II Error as failing to reject the null when the alternative is true.</li>
+        <li>Define Statistical Power as \(1 - \text{Type II Error Rate}\) (the probability of detecting a real effect).</li>
+        <li>Analyze how effect size (\(\Delta\)) and standard error (\(\operatorname{SE}\)) govern the power of econometric tests.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: One-Sided Right-Tailed Testing -->
+    <section class="lesson-section" id="oneSidedSection">
+      <h2>1. Directional Testing: The One-Sided Right-Tailed Test</h2>
+      <p>
+        In Lesson 5.1, we tested whether \(\beta_2 \neq 0\) in either direction. But in many economic contexts, economic theory predicts a specific sign. For example, human capital theory asserts that schooling cannot diminish earnings.
+      </p>
+      <p>
+        We formulate a <strong>right-tailed test</strong> as follows:
+      </p>
+
+      <!-- Key Equation Box: Right-Tailed -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Right-Tailed Hypothesis Test</div>
+        <div class="equation-box-math">
+          \[H_0: \beta_2 \le 0 \quad \text{versus} \quad H_1: \beta_2 > 0\]
+        </div>
+        <div class="equation-box-sub">
+          The null hypothesis posits that the coefficient is non-positive; the alternative posits that it is strictly positive.
+        </div>
+      </div>
+
+      <p>
+        In a right-tailed test at the \(\alpha = 0.05\) significance level, the entire 5% rejection probability is concentrated in the <strong>upper tail</strong>:
+      </p>
+
+      <!-- Key Equation Box: Critical Value -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Equation: 5% One-Tailed Critical Value</div>
+        <div class="equation-box-math">
+          \[\text{Critical Value: } t_{0.95} = 1.645\]
+        </div>
+        <div class="equation-box-sub">
+          We reject \(H_0\) if the observed test statistic exceeds \(+1.645\). The upper tail contains the entire \(0.05\) probability area.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: One-Sided vs Two-Sided Comparison -->
+    <section class="lesson-section" id="comparisonSection">
+      <h2>2. Comparative Analysis: One-Sided vs. Two-Sided Tests</h2>
+      <p>
+        How does a one-sided test differ from a two-sided test? Let's compare their properties directly:
+      </p>
+
+      <!-- Comparison Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md);">
+          <div style="font-weight: 700; color: #1e3a8a; font-size: 0.95rem; margin-bottom: 6px;">Two-Sided Test (H₁: β₂ ≠ 0)</div>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+            <li><strong>Rejection Regions:</strong> Split into two tails (\(2.5\%\) each).</li>
+            <li><strong>Critical Values:</strong> \(\pm 1.96\).</li>
+            <li><strong>Detection:</strong> Detects both positive and negative unexpected deviations.</li>
+            <li><strong>Requirement:</strong> Default scientific standard in empirical work.</li>
+          </ul>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid #059669; border-radius: var(--radius-md);">
+          <div style="font-weight: 700; color: #059669; font-size: 0.95rem; margin-bottom: 6px;">Right-Tailed Test (H₁: β₂ > 0)</div>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+            <li><strong>Rejection Region:</strong> Concentrated entirely in the upper tail (\(5.0\%\)).</li>
+            <li><strong>Critical Value:</strong> \(+1.645\) (lower threshold to reject).</li>
+            <li><strong>Trade-off:</strong> Higher statistical power in the positive direction, but <strong>completely blind</strong> to negative effects.</li>
+            <li><strong>Requirement:</strong> Requires strong, pre-specified theoretical justification.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-warning" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">METHODOLOGICAL CAUTION</span>
+          <span class="callout-title">Methodological Warning</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>Never choose a one-sided test after inspecting the sample estimate!</strong><br>
+            If you run a regression, see that \(\hat{\beta}_2 = +1.75\) (which fails to reject two-sided at \(\pm 1.96\)), and then switch to a one-sided test to claim significance at \(1.645\), you are engaging in "p-hacking". Directional tests must be registered before examining the data.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Type II Error & Statistical Power -->
+    <section class="lesson-section" id="powerSection">
+      <h2>3. Type II Error &amp; Statistical Power</h2>
+      <p>
+        While Type I error is a "false alarm," the opposite failure is a "missed opportunity":
+      </p>
+
+      <!-- Key Equation Box: Type II Error -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Type II Error</div>
+        <div class="equation-box-math">
+          \[\text{Type II Error } (\beta_{\text{error}}): \text{Failing to reject } H_0 \text{ even though } H_1 \text{ is true}\]
+        </div>
+        <div class="equation-box-sub">
+          A "false negative": The policy or regressor genuinely affects outcome \(y\) in reality (\(\beta_2 > 0\)), but the sample estimate fails to cross the critical threshold. <em>Note:</em> We write \(\beta_{\text{error}}\) to prevent confusion with the regression coefficient \(\beta_k\).
+        </div>
+      </div>
+
+      <!-- Key Equation Box: Power -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Statistical Power</div>
+        <div class="equation-box-math">
+          \[\text{Power} = 1 - \beta_{\text{error}} = \Pr(\text{Reject } H_0 \mid H_1 \text{ is True})\]
+        </div>
+        <div class="equation-box-sub">
+          The probability that an econometric study correctly rejects the null hypothesis when a true effect exists.
+        </div>
+      </div>
+
+      <!-- 2x2 Hypothesis Decision Matrix Table -->
+      <div style="margin: 1.5rem 0; overflow-x: auto;">
+        <table class="responsive-table" style="width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.9rem;">
+          <thead>
+            <tr style="background: var(--surface-secondary, #F7FAFF); border-bottom: 2px solid var(--border-subtle); text-align: left;">
+              <th style="padding: 10px 14px; font-weight: 700; color: var(--text-primary);">True State of Reality</th>
+              <th style="padding: 10px 14px; font-weight: 700; color: #059669;">Decision: Fail to Reject \(H_0\)</th>
+              <th style="padding: 10px 14px; font-weight: 700; color: #dc2626;">Decision: Reject \(H_0\)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 12px 14px; font-weight: 700; color: var(--text-primary);">\(H_0\) is True</td>
+              <td style="padding: 12px 14px; background: rgba(16, 185, 129, 0.05);">
+                <strong style="color: #059669;">Correct Decision</strong><br>
+                Probability = \(1 - \alpha\) (\(0.95\) at 5% level)
+              </td>
+              <td style="padding: 12px 14px; background: rgba(239, 68, 68, 0.06);">
+                <strong style="color: #dc2626;">Type I Error (False Positive)</strong><br>
+                Probability = \(\alpha\) (\(0.05\) at 5% level)
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 14px; font-weight: 700; color: var(--text-primary);">\(H_0\) is False (\(H_1\) True)</td>
+              <td style="padding: 12px 14px; background: rgba(245, 158, 11, 0.07);">
+                <strong style="color: #d97706;">Type II Error (False Negative)</strong><br>
+                Probability = \(\beta_{\text{error}}\)
+              </td>
+              <td style="padding: 12px 14px; background: rgba(16, 185, 129, 0.08);">
+                <strong style="color: #059669;">Correct Detection (Power)</strong><br>
+                Probability = \(1 - \beta_{\text{error}}\)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Statistical power depends on two key empirical factors:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">1. Effect Size (\(\Delta\))</div>
+          <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+            Larger true population effects shift the \(H_1\) distribution further to the right, moving more probability mass past the critical boundary and increasing power.
+          </p>
+        </div>
+
+        <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">2. Estimation Precision (\(\operatorname{SE}\))</div>
+          <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+            Larger sample sizes (\(n\)) reduce the standard error \(\operatorname{SE} = \frac{\sigma}{\sqrt{n}}\), tightening both distributions and drastically shrinking the Type II error region.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab - Power & Type II Error -->
+    <section class="lesson-section" id="visualSection">
+      <h2>4. Interactive Lab: Power &amp; Type II Error Dual-Distribution Curve</h2>
+      <p>
+        Inspect the dual distributions below: the blue dashed curve represents the distribution under \(H_0: \beta_2 \le 0\), while the solid green curve represents the distribution under the true alternative \(H_1: \beta_2 = \Delta\).
+      </p>
+      <p>
+        The red vertical line is the 5% right-tailed threshold \(c = 1.645 \cdot \operatorname{SE}\). The green area to the right is <strong>Power</strong>; the amber area to the left is <strong>Type II Error</strong>.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="flex: 1; min-width: 200px;">
+            <label for="powerSliderDelta" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              True Effect Size (Δ): <span id="powerReadoutDelta" style="color: #059669; font-weight: 700;">2.50</span>
+            </label>
+            <input type="range" id="powerSliderDelta" min="0.5" max="4.5" step="0.25" value="2.5" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div style="flex: 1; min-width: 200px;">
+            <label for="powerSliderSe" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Standard Error (SE): <span id="powerReadoutSe" style="color: var(--color-primary); font-weight: 700;">1.00</span>
+            </label>
+            <input type="range" id="powerSliderSe" min="0.6" max="1.6" step="0.1" value="1.0" style="width: 100%; cursor: pointer;">
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Significance (α)</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">5.0%</div>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #10b981; text-align: center;">
+            <div style="font-size: 0.72rem; color: #059669; font-weight: 700;">Statistical Power</div>
+            <div id="powerReadoutPower" style="font-size: 1.15rem; font-weight: 800; color: #047857; font-family: var(--font-mono);">80.4%</div>
+          </div>
+          <div style="background: rgba(245, 158, 11, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #f59e0b; text-align: center;">
+            <div style="font-size: 0.72rem; color: #d97706; font-weight: 700;">Type II Error Rate (β)</div>
+            <div id="powerReadoutBeta" style="font-size: 1.15rem; font-weight: 800; color: #b45309; font-family: var(--font-mono);">19.6%</div>
+          </div>
+        </div>
+
+        <!-- Outside Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #2563eb;"></span> Null Distribution \(H_0 \sim \mathcal{N}(0, \text{SE}^2)\)</span>
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #059669;"></span> True Distribution \(H_1 \sim \mathcal{N}(\Delta, \text{SE}^2)\)</span>
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #dc2626;"></span> Critical Threshold \(c = 1.645 \cdot \text{SE}\)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(16, 185, 129, 0.6);"></span> Statistical Power (\(1 - \beta\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(245, 158, 11, 0.6);"></span> Type II Error (\(\beta\))</span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="powerLabSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive statistical power and type II error dual curve"></svg>
+        </div>
+      </div>
+
+      <!-- Structured 5-Box Visual Explanation Grid -->
+      <div class="visual-explanation-grid">
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+          <p>Two overlapping sampling distributions: \(H_0 \sim \mathcal{N}(0, \operatorname{SE}^2)\) (blue dashed) and \(H_1 \sim \mathcal{N}(\Delta, \operatorname{SE}^2)\) (green solid). The vertical red dashed line is the critical value threshold \(c = 1.645 \cdot \operatorname{SE}\).</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT TO NOTICE</div>
+          <p>Under the green \(H_1\) curve, the area to the right of the critical line is shaded green (Statistical Power). The area to the left of the critical line is shaded amber (Type II Error). Notice that Power and Type II error always sum to 100%!</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHY IT MATTERS</div>
+          <p>If an empirical study has low power (e.g. \(35\%\)), there is a \(65\%\) probability that the researcher will fail to detect an effective policy intervention purely due to noisy, underpowered data.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+          <p>Pre-analysis power calculations ensure that sample size \(n\) is large enough before spending millions on field experiments or survey data collection.</p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-tag">TRY THIS</div>
+          <p>Increase the effect size \(\Delta\) to \(3.50\) and decrease \(\operatorname{SE}\) to \(0.70\). Watch how the green distribution separates cleanly from \(H_0\), driving statistical power up to \(99.9\%\)!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Right-Tailed Critical Value
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a right-tailed test of \(H_0: \beta_2 \le 0\) vs \(H_1: \beta_2 > 0\) at the 5% level, an econometrician calculates \(t = 1.78\). What is the critical value from the source, and what is the test conclusion? What would the conclusion have been if a two-tailed test was used instead?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Critical value: \(1.645\). Right-tailed conclusion: REJECT \(H_0\). Two-tailed conclusion: FAIL TO REJECT \(H_0\).<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>For a right-tailed test at \(\alpha = 0.05\), the critical value is \(1.645\). Since \(1.78 > 1.645\), we reject \(H_0\) at the 5% level.</li>
+            <li>For a two-tailed test at \(\alpha = 0.05\), the critical values are \(\pm 1.96\). Because \(1.78 \le 1.96\), a two-tailed test fails to reject \(H_0\). This clearly shows how directional tests place all 5% probability in one tail, requiring a smaller positive estimate to achieve significance.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>A right-tailed test tests \(H_0: \beta_2 \le 0\) against \(H_1: \beta_2 > 0\), placing the entire 5% rejection region in the upper tail with critical value \(t_{0.95} = 1.645\).</li>
+        <li>One-sided tests have higher power in the hypothesized direction, but cannot detect unexpected reversals in the opposite direction.</li>
+        <li>Type II Error is failing to reject \(H_0\) when the alternative is true.</li>
+        <li>Statistical Power is \(1 - \text{Type II Error Rate}\): the probability of correctly identifying a real effect.</li>
+        <li>Power increases when the true effect size is larger and when standard errors are smaller (e.g., through larger sample sizes).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Previous: Hypothesis Testing &amp; Type I Error
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: Testing Linear Restrictions: Rβ = q →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

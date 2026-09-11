@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.4: OLS Unbiasedness & Omitted Variable Bias — EcoIntuition Academy</title>
+  <meta name="description" content="Derive the conditional unbiasedness of OLS under strict exogeneity, formulate the algebraic mechanics of omitted variable bias, and explore the classic 2×2 bias table.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="04">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 7 &middot; OLS Unbiasedness &amp; Omitted Variable Bias</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">57%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 57.1%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.4</span>
+        <span class="badge">Finite-Sample Properties</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        OLS Unbiasedness &amp; Omitted Variable Bias
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Move from in-sample goodness of fit to the finite-sample sampling distribution of the OLS estimator. Derive conditional unbiasedness under strict exogeneity and master the exact mathematics and diagnostic table of omitted-variable bias.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the finite-sample conditional unbiasedness property: \(\mathbb{E}[b \mid X] = \beta\).</li>
+        <li>Derive unbiasedness from the structural decomposition \(b = \beta + (X'X)^{-1}X'\varepsilon\).</li>
+        <li>Identify CLRM Assumption 3 (\(\mathbb{E}[X'\varepsilon \mid X] = \mathbf{0}\)) as the crucial exogeneity condition.</li>
+        <li>Derive the omitted variable bias (OVB) expression: \(\mathbb{E}[b_1 \mid X] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2\beta_2\).</li>
+        <li>Evaluate the source's 2×2 bias table and state the two precise conditions that eliminate bias.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: OLS Unbiasedness Derivation -->
+    <section class="lesson-section" id="unbiasedSection">
+      <h2>1. Finite-Sample Property 1: Unbiasedness</h2>
+      <p>
+        Conditional unbiasedness guarantees that across hypothetical repeated random samples conditioning on regressor matrix \(X\), the OLS estimator produces estimates that center squarely on the true population parameter \(\beta\).
+      </p>
+
+      <!-- Visual Decomposition Chain: Truth + Error -->
+      <div class="decomp-visual-container">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.45rem 0;">
+          The Core Decomposition: True Parameter + Random Estimation Error
+        </h3>
+        <p style="font-size: 0.9rem; color: #475569; line-height: 1.55; margin: 0 0 0.85rem 0;">
+          Before doing algebra, observe how the OLS estimator separates into an unvarying truth plus a sample-dependent error term:
+        </p>
+
+        <div class="decomp-visual-grid">
+          <div class="decomp-box decomp-box--total">
+            <div class="decomp-box-tag">OLS Estimate</div>
+            <div class="decomp-box-formula">\(\hat{\beta}\)</div>
+            <div class="decomp-box-desc">Realized estimate from sample</div>
+          </div>
+          <div class="decomp-symbol">=</div>
+          <div class="decomp-box decomp-box--explained">
+            <div class="decomp-box-tag">True Parameter</div>
+            <div class="decomp-box-formula">\(\beta\)</div>
+            <div class="decomp-box-desc">Fixed population parameter vector</div>
+          </div>
+          <div class="decomp-symbol">+</div>
+          <div class="decomp-box decomp-box--unexplained">
+            <div class="decomp-box-tag">Estimation Error</div>
+            <div class="decomp-box-formula">\((X'X)^{-1}X'\varepsilon\)</div>
+            <div class="decomp-box-desc">Random error from disturbance \(\varepsilon\)</div>
+          </div>
+        </div>
+
+        <div style="background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 4px; padding: 0.6rem 0.9rem; margin-top: 0.85rem; font-size: 0.88rem; color: #1e3a8a; line-height: 1.5;">
+          <strong>The Unbiasedness Mechanism:</strong> If \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\), the expected estimation error vanishes completely:
+          \(\mathbb{E}[(X'X)^{-1}X'\varepsilon \mid X] = (X'X)^{-1}X'\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\). Therefore, \(\mathbb{E}[\hat{\beta} \mid X] = \beta\).
+        </div>
+      </div>
+
+      <!-- DERIVATION JOURNEY: UNBIASEDNESS -->
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">Finite-Sample Derivation</span>
+          <h3 class="derivation-journey-title">Conditional Unbiasedness of the OLS Estimator</h3>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">What are we trying to show?</span>
+            <p class="derivation-goal-text">
+              Prove that under the strict exogeneity assumption \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\), the expected value of \(\hat{\beta}\) conditional on \(X\) equals the true population coefficient vector \(\beta\).
+            </p>
+          </div>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Write the OLS estimator closed-form solution</h4>
+              </div>
+              <p class="derivation-step-desc">Express the OLS coefficient vector \(\hat{\beta}\) in terms of data matrices \(X\) and \(y\):</p>
+              <div class="derivation-step-math">\(\hat{\beta} = (X'X)^{-1}X'y\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                This is the unique minimizer of the sum of squared residuals derived from the normal equations in Module 2.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Substitute the true data-generating process</h4>
+              </div>
+              <p class="derivation-step-desc">Insert the population equation \(y = X\beta + \varepsilon\) into the OLS formula:</p>
+              <div class="derivation-step-math">\(\hat{\beta} = (X'X)^{-1}X'(X\beta + \varepsilon)\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                We evaluate how the sample estimator behaves when outcomes are genuinely generated by parameter vector \(\beta\) and random disturbances \(\varepsilon\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Separate the true parameter from estimation error</h4>
+              </div>
+              <p class="derivation-step-desc">Distribute \((X'X)^{-1}X'\) across the sum and simplify \((X'X)^{-1}X'X = I_k\):</p>
+              <div class="derivation-step-math">\(\hat{\beta} = (X'X)^{-1}X'X\beta + (X'X)^{-1}X'\varepsilon = \beta + (X'X)^{-1}X'\varepsilon\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Matrix inversion simplifies the first term to identity \(I_k\), cleanly isolating the population truth \(\beta\) from the sample noise component.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Condition on the regressor matrix X</h4>
+              </div>
+              <p class="derivation-step-desc">Take the conditional expectation of both sides holding \(X\) fixed:</p>
+              <div class="derivation-step-math">\(\mathbb{E}[\hat{\beta} \mid X] = \beta + \mathbb{E}[(X'X)^{-1}X'\varepsilon \mid X] = \beta + (X'X)^{-1}X'\mathbb{E}[\varepsilon \mid X]\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Because we condition on \(X\), the matrix function \((X'X)^{-1}X'\) behaves as a non-random constant and factors outside the expectation operator.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Apply the exogeneity assumption</h4>
+                <span class="derivation-result-badge">CLRM Assumption 3</span>
+              </div>
+              <p class="derivation-step-desc">Apply strict exogeneity \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\) (or \(\mathbb{E}[X'\varepsilon \mid X] = \mathbf{0}\)):</p>
+              <div class="derivation-step-math">\(\mathbb{E}[\hat{\beta} \mid X] = \beta + (X'X)^{-1}X'\mathbf{0} = \beta + \mathbf{0} = \beta\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Under exogeneity, unobserved factors are on average uncorrelated with regressors; hence the expected sampling estimation error is zero.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIG PICTURE CARD -->
+      <div class="big-picture-card">
+        <div class="big-picture-header">
+          <span class="big-picture-icon">💡</span>
+          <h4 class="big-picture-title">Big Picture: What Does Unbiasedness Really Mean?</h4>
+        </div>
+        <p class="big-picture-body">
+          Unbiasedness does <em>not</em> guarantee that any single sample estimate \(\hat{\beta}\) will exactly equal \(\beta\). Rather, it guarantees that the OLS estimation rule does not systematically overshoot or undershoot: the average of estimates across thousands of hypothetical random samples drawn from the same population centers precisely on \(\beta\).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Omitted Variable Bias Derivation -->
+    <section class="lesson-section" id="ovbSection">
+      <h2>2. Omitted Variable Bias (OVB)</h2>
+      <p>
+        Omitted variable bias occurs when an investigator omits an important explanatory factor from the empirical regression.
+      </p>
+
+      <!-- TWO INGREDIENTS CARD BEFORE DERIVATION -->
+      <div class="study-card" style="background: #ffffff; border: 1.5px solid #bfdbfe; border-left: 5px solid #2563eb; border-radius: 8px; padding: 1.25rem 1.4rem; margin: 1.25rem 0;">
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.4rem;">
+          Intuition First: Omitted-Variable Bias Requires TWO Ingredients
+        </h3>
+        <p style="font-size: 0.9rem; color: #334155; line-height: 1.55; margin: 0 0 0.65rem 0;">
+          An omitted variable \(X_2\) causes bias in the included coefficient \(\hat{\beta}_1\) if and only if both ingredients occur simultaneously:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.85rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #2563eb;">Ingredient 1</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin: 0.2rem 0;">The omitted variable affects y (\(\beta_2 \neq 0\))</div>
+            <div style="font-size: 0.82rem; color: #64748b;">The omitted factor must be a true structural determinant of the outcome.</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.85rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #2563eb;">Ingredient 2</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin: 0.2rem 0;">The omitted variable is related to \(X_1\) (\(X_1'X_2 \neq 0\))</div>
+            <div style="font-size: 0.82rem; color: #64748b;">The omitted factor must not be orthogonal to the included regressors.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERIVATION JOURNEY: OVB -->
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">Matrix Derivation</span>
+          <h3 class="derivation-journey-title">Omitted Variable Bias Formula</h3>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">What are we trying to show?</span>
+            <p class="derivation-goal-text">
+              Quantify the estimation bias in \(\hat{\beta}_1\) when regressing \(y\) only on \(X_1\) while the true data-generating process contains both \(X_1\) and \(X_2\).
+            </p>
+          </div>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Specify the true model and estimated short regression</h4>
+              </div>
+              <p class="derivation-step-desc">Define the true relationship and the researcher's estimated model:</p>
+              <div class="derivation-step-math">
+                \(\text{True Model: } y = X_1\beta_1 + X_2\beta_2 + \varepsilon \quad \implies \quad \text{Short OLS: } \hat{\beta}_1 = (X_1'X_1)^{-1}X_1'y\)
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The researcher omits \(X_2\) and calculates standard OLS using only the included regressor matrix \(X_1\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Substitute the full data-generating equation into \(\hat{\beta}_1\)</h4>
+              </div>
+              <p class="derivation-step-desc">Insert the true \(y\) into the short regression estimator:</p>
+              <div class="derivation-step-math">
+                \(\hat{\beta}_1 = (X_1'X_1)^{-1}X_1'(X_1\beta_1 + X_2\beta_2 + \varepsilon)\)
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The realized data \(y\) genuinely contains responses to both \(X_1\) and \(X_2\), even though the researcher only conditions on \(X_1\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Distribute and evaluate conditional expectation</h4>
+                <span class="derivation-result-badge">Fundamental OVB Identity</span>
+              </div>
+              <p class="derivation-step-desc">Expand terms and take conditional expectation assuming \(\mathbb{E}[\varepsilon \mid X_1, X_2] = \mathbf{0}\):</p>
+              <div class="derivation-step-math">
+                \(\mathbb{E}[\hat{\beta}_1 \mid X] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2\beta_2 + (X_1'X_1)^{-1}X_1'\mathbb{E}[\varepsilon \mid X] = \beta_1 + (X_1'X_1)^{-1}X_1'X_2\beta_2\)
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                \((X_1'X_1)^{-1}X_1'X_1\beta_1 = \beta_1\). The disturbance term vanishes under exogeneity, leaving the omitted variable bias term \((X_1'X_1)^{-1}X_1'X_2\beta_2\).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIG PICTURE CARD -->
+      <div class="big-picture-card">
+        <div class="big-picture-header">
+          <span class="big-picture-icon">💡</span>
+          <h4 class="big-picture-title">Big Picture: Anatomy of the Bias Expression</h4>
+        </div>
+        <p class="big-picture-body">
+          The bias \(\mathbb{E}[\hat{\beta}_1 \mid X] - \beta_1 = (X_1'X_1)^{-1}X_1'X_2\beta_2\) equals the auxiliary regression coefficients of the omitted variable on the included regressors (\(\tilde{\delta}_{21} = (X_1'X_1)^{-1}X_1'X_2\)) multiplied by the structural effect of the omitted variable on the outcome (\(\beta_2\)).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: The Source Bias Table -->
+    <section class="lesson-section" id="tableSection">
+      <h2>3. The Classic 2×2 Bias Diagnostic Table</h2>
+      <p>
+        The source document (<code>Econometrics (3).pdf</code>, page 3) organizes the two-ingredient condition into a fundamental diagnostic table:
+      </p>
+
+      <!-- 2x2 Bias Grid Table Component -->
+      <div class="bias-table-wrapper">
+        <table class="bias-grid-table">
+          <thead>
+            <tr>
+              <th style="width: 34%;">Relationship to Included Regressors</th>
+              <th style="width: 33%;">\(\beta_2 = 0\) (Omitted \(X_2\) does not affect \(y\))</th>
+              <th style="width: 33%; color: #b91c1c;">\(\beta_2 \neq 0\) (Omitted \(X_2\) affects \(y\))</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; font-weight: 600;">
+                \(X_1'X_2 = \mathbf{0}\)<br>
+                <span style="font-size: 0.78rem; font-weight: 400; color: #64748b;">Orthogonal in sample</span>
+              </td>
+              <td id="biasCell11" class="bias-cell--unbiased">
+                ✓ UNBIASED<br>
+                <span style="font-size: 0.75rem; font-weight: 500;">No bias: \(\beta_2 = 0\) and \(X_1'X_2 = 0\)</span>
+              </td>
+              <td id="biasCell12" class="bias-cell--unbiased">
+                ✓ UNBIASED<br>
+                <span style="font-size: 0.75rem; font-weight: 500;">No bias: \(X_1'X_2 = 0\) eliminates transmission</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: left; font-weight: 600;">
+                \(X_1'X_2 \neq \mathbf{0}\)<br>
+                <span style="font-size: 0.78rem; font-weight: 400; color: #64748b;">Correlated with \(X_1\)</span>
+              </td>
+              <td id="biasCell21" class="bias-cell--unbiased">
+                ✓ UNBIASED<br>
+                <span style="font-size: 0.75rem; font-weight: 500;">No bias: \(\beta_2 = 0\) (omitted factor is irrelevant)</span>
+              </td>
+              <td id="biasCell22" class="bias-cell--biased">
+                ✗ BIASED<br>
+                <span style="font-size: 0.75rem; font-weight: 600;">\(\text{Bias} = (X_1'X_1)^{-1}X_1'X_2\beta_2 \neq \mathbf{0}\)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-note" style="margin-top: 1rem;">
+        <div class="callout-header">
+          <span class="callout-icon">📌</span>
+          <span class="callout-title">Academic Precision Note</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.55;">
+            In the source matrix expression, \(X_1'X_2 \neq 0\) represents sample non-orthogonality between included and excluded regressor columns. This bias expression demonstrates how the influence of omitted \(X_2\) leaks into the coefficient on \(X_1\) whenever \(X_2\) genuinely affects \(y\) and is non-orthogonal to \(X_1\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive OVB Visualizer -->
+    <section class="lesson-section" id="interactiveSection">
+      <h2>4. Interactive Lab: Causal Path &amp; Bias Mechanics</h2>
+      <p>
+        Toggle whether the omitted variable \(X_2\) affects \(y\) (\(\beta_2\)), and whether it is correlated with included \(X_1\). Watch how the active cell in the bias table highlights and how the expected coefficient \(\mathbb{E}[\hat{\beta}_1 \mid X]\) diverges from true \(\beta_1 = 2.0\).
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Strip -->
+        <div style="display: flex; gap: var(--space-xl); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="ovbToggleBeta2" checked style="width: 18px; height: 18px; accent-color: var(--color-primary);">
+            <label for="ovbToggleBeta2" style="font-size: 0.88rem; font-weight: 600; color: var(--color-text); cursor: pointer;">
+              Omitted Variable Matters: \(\beta_2 = 1.5\) (Uncheck for \(\beta_2 = 0\))
+            </label>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="ovbToggleCorr" checked style="width: 18px; height: 18px; accent-color: var(--color-primary);">
+            <label for="ovbToggleCorr" style="font-size: 0.88rem; font-weight: 600; color: var(--color-text); cursor: pointer;">
+              Correlated with \(X_1\): \(\delta_{21} = 0.8\) (Uncheck for Orthogonal)
+            </label>
+          </div>
+        </div>
+
+        <!-- Readout Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">True \(\beta_1\)</div>
+            <div id="ovbReadoutTrue" style="font-size: 1.05rem; font-weight: 700; color: #1e293b; font-family: var(--font-mono);">2.00</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #dc2626; font-weight: 600;">Bias Term</div>
+            <div id="ovbReadoutBias" style="font-size: 1.05rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">+1.20</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-primary); font-weight: 600;">\(\mathbb{E}[\hat{\beta}_1 \mid X]\)</div>
+            <div id="ovbReadoutExp" style="font-size: 1.05rem; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">3.20</div>
+          </div>
+          <div style="background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--color-border); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Diagnostic Result</div>
+            <div id="ovbReadoutStatus" style="font-size: 0.95rem; font-weight: 700; color: #dc2626;">Biased by +1.20</div>
+          </div>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="ovbLabSvg" viewBox="0 0 540 220" style="width: 100%; max-width: 540px; height: auto;" aria-label="Omitted variable bias causal diagram"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            A directed causal path model: \(X_1\) affects \(Y\) directly with true coefficient \(\beta_1 = 2.0\). The omitted factor \(X_2\) connects to \(X_1\) through correlation \(\delta_{21}\) and to \(Y\) through \(\beta_2\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            Bias only arises when <em>both</em> connections are active (the lower right quadrant of the bias table). If either the link from \(X_1\) to \(X_2\) is severed (\(\delta_{21} = 0\)) or the link to \(Y\) is zero (\(\beta_2 = 0\)), the bias vanishes completely.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            This explains why randomized controlled trials (RCTs) work: random treatment assignment forces \(X_1'X_2 = \mathbf{0}\) for all baseline covariates, guaranteeing unbiased treatment effect estimates even when confounders remain unmeasured.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            In an observational wage equation omitting ability (\(X_2\)), schooling (\(X_1\)) is positively correlated with ability (\(\delta_{21} > 0\)) and ability raises wages (\(\beta_2 > 0\)). Hence OLS on schooling overstates the true causal return to education.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Uncheck <em>Correlated with X₁</em> while keeping \(\beta_2 = 1.5\). Notice that the auxiliary slope collapses to zero and \(\mathbb{E}[\hat{\beta}_1 \mid X]\) snaps back to the unbiased value of 2.00!
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Mistake Card -->
+    <div class="callout callout-warning">
+      <div class="callout-header">
+        <span class="callout-icon">⚠️</span>
+        <span class="callout-title">Common Mistake</span>
+      </div>
+      <div class="callout-body">
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+          <strong>"Any omitted variable automatically causes bias in an OLS regression."</strong><br>
+          <em>Correction:</em> Millions of variables are omitted from every empirical regression. An omitted factor only produces bias if it simultaneously satisfies two conditions: (1) it affects \(y\) (\(\beta_2 \neq 0\)), and (2) it is non-orthogonal to the included regressors (\(X_1'X_2 \neq 0\)). Omitted noise or orthogonal factors do not cause bias.
+        </p>
+      </div>
+    </div>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.35rem 1.5rem; margin: 1.5rem 0;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.1rem;">🧠</span>
+        <h4 style="font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0f172a; margin: 0;">
+          Can You Explain It? Conceptual Check
+        </h4>
+      </div>
+      <p style="font-size: 0.92rem; color: #334155; line-height: 1.55; margin: 0 0 0.75rem 0;">
+        <strong>Question:</strong> What exact two conditions must occur simultaneously for an omitted variable to bias an included coefficient?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #2563eb;">Show Explanation</summary>
+        <div style="margin-top: 0.5rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; color: #1e293b;">
+          <strong>Two Conditions:</strong><br>
+          1. <em>Impact on Outcome:</em> The omitted variable must be a true determinant of \(y\) in the population model (\(\beta_2 \neq 0\)).<br>
+          2. <em>Correlation with Regressor:</em> The omitted variable must be correlated / non-orthogonal to the included explanatory variable (\(X_1'X_2 \neq 0\)).<br>
+          If <em>either</em> condition fails, the bias term \((X_1'X_1)^{-1}X_1'X_2\beta_2 = \mathbf{0}\) and the included coefficient remains unbiased.
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.25rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Direction of Bias
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a health outcome regression, cigarette smoking (\(X_1\)) is negatively correlated with physical exercise (\(X_2\), \(\delta_{21} < 0\)). Exercise has a positive true effect on health (\(\beta_2 > 0\)). If exercise is omitted, what is the direction of the bias on smoking?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Derivation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Negative bias (downward).<br><br>
+          <strong>WHY?</strong> \(\text{Bias} = \delta_{21} \cdot \beta_2 = (\text{negative}) \times (\text{positive}) = \text{negative}\). The OLS coefficient on smoking will be biased downward (appearing more harmful than its true direct pharmacological effect), because it picks up the omitted health detriment of sedentary behavior among smokers.
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>OLS is conditionally unbiased (\(\mathbb{E}[\hat{\beta} \mid X] = \beta\)) under the exogeneity assumption \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\) because the estimation error \((X'X)^{-1}X'\varepsilon\) has mean zero.</li>
+        <li>Unbiasedness is a property of the estimator across repeated random sampling, not a guarantee for any single sample realization.</li>
+        <li>Omitted variable bias occurs if and only if the omitted variable is both a true determinant of the outcome (\(\beta_2 \neq 0\)) and non-orthogonal to the included regressors (\(X_1'X_2 \neq 0\)).</li>
+        <li>The OVB formula \(\text{Bias} = (X_1'X_1)^{-1}X_1'X_2\beta_2\) reveals that random assignment in experiments eliminates bias by ensuring \(X_1'X_2 = \mathbf{0}\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-03.html" class="btn btn-outline">
+        ← Previous: R² &amp; F Tests
+      </a>
+      <a href="lesson-05.html" class="btn btn-primary">
+        Next: Variance of the OLS Estimator →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

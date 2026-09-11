@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4.2: Consistency of OLS &amp; Large-Sample Conditions — EcoIntuition Academy</title>
+  <meta name="description" content="Master the large-sample setup of OLS, unpack the limit condition X'X/n -> Q, examine Grenander regularity conditions, and follow the step-by-step proof of OLS consistency.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-04" data-lesson="02">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 04</a>
+          <span class="module-nav-title">Large-Sample Theory &amp; Asymptotic Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 8 &middot; Consistency of OLS &amp; Large-Sample Conditions</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 4 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.1 Convergence in Probability &amp; Consistency</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">4.2 Consistency of OLS &amp; Large-Sample Conditions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.3 Asymptotic Normality of OLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.4 Asymptotic Efficiency</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.5 Confidence Intervals &amp; Large-Sample Hypothesis Testing</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.6 The Delta Method</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.7 Slutsky’s Theorem &amp; Delta Method Applications</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.8 Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">25.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 25.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.2</span>
+        <span class="badge">Primary Source: Pages 1–2</span>
+        <span class="badge">Large-Sample Regularity</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Consistency of OLS &amp; Large-Sample Conditions
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        How does the Classical Linear Regression Model adapt when sample size grows without bound? Unpack the large-sample limit condition \(\lim \frac{X'X}{n} = Q\), inspect the Grenander regularity conditions, and follow the rigorous proof that \(\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\).
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">OBJECTIVES</span> Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the modified CLRM assumptions for asymptotic analysis with independent observations of \((x_i, \varepsilon_i)\).</li>
+        <li>Explain intuitively why \(\frac{X'X}{n}\) stabilizes to a positive definite limit matrix \(Q\).</li>
+        <li>Understand the Grenander conditions for well-behaved data and why they protect asymptotic identification.</li>
+        <li>Follow the connected step-by-step proof establishing that \(\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\).</li>
+        <li>Visualize how the sampling distribution of \(\hat{\beta}_{\text{OLS}}\) collapses around the true parameter as \(n\) increases.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Large-Sample OLS Setup -->
+    <section class="lesson-section" id="setupSection">
+      <h2>1. The Large-Sample OLS Setup</h2>
+      <p>
+        In finite-sample theory, we held the regressor matrix \(X\) fixed or conditioned upon it. But as \(n \to \infty\), rows are continuously added to \(X\) and \(\varepsilon\). In asymptotic analysis, we maintain Assumptions 1–4 of the Classical Linear Regression Model (linearity, full column rank, and mean-zero disturbances) and modify the sampling assumption:
+      </p>
+
+      <div class="study-card" style="margin-bottom: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          Modified Assumption 5: Independent Data Generation
+        </h4>
+        <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+          For each observation \(i = 1, \dots, n\), the pair \((x_i, \varepsilon_i)\) is drawn as a sequence of independent observations. Exogeneity holds such that \(\mathbb{E}[\varepsilon_i \mid x_i] = 0\) and \(\mathbb{E}[x_i \varepsilon_i] = \mathbf{0}\).
+        </p>
+      </div>
+
+      <p>
+        Next, we require a crucial mathematical condition on the regressors as sample size accumulates:
+      </p>
+
+      <!-- Key Equation Box: Limit Condition -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Large-Sample Condition: Stabilizing Regressor Moments</div>
+        <div class="equation-box-math">
+          \[\lim_{n \to \infty} \frac{X'X}{n} = Q \quad \text{where } Q \text{ is a finite, positive definite matrix}\]
+        </div>
+        <div class="equation-box-sub">
+          The sample average of regressor cross-products converges to a non-singular limit matrix \(Q\), ensuring \(Q^{-1}\) exists.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Explaining Q Intuitively -->
+    <section class="lesson-section" id="explainQSection">
+      <h2>2. What Does the Matrix Q Mean Intuitively?</h2>
+      <p>
+        Why do we divide \(X'X\) by \(n\)?
+      </p>
+      <p>
+        Notice that \(X'X = \sum_{i=1}^n x_i x_i'\). Each time a new observation is added, another positive semi-definite term is added to the sum. If we did not divide by \(n\), the entries of \(X'X\) would grow infinitely large as \(n \to \infty\)!
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.92rem; margin-bottom: 6px;">Average Cross-Product Sample Moment</div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            \(\frac{X'X}{n} = \frac{1}{n}\sum_{i=1}^n x_i x_i'\) calculates the sample average of regressor cross-products (second moments). By the Law of Large Numbers, this sample average converges to its population expectation: \(\mathbb{E}[x_i x_i'] = Q\).
+          </p>
+        </div>
+
+        <div class="study-card">
+          <div style="font-weight: 700; color: #059669; font-size: 0.92rem; margin-bottom: 6px;">Positive Definiteness &amp; Identification</div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            Requiring \(Q\) to be <strong>positive definite</strong> means \(Q\) has full rank \(k\) and is strictly invertible (\(Q^{-1}\) exists). The regressors retain genuine independent variation and do not become collinear even in the infinite limit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Grenander Conditions Card -->
+    <section class="lesson-section" id="grenanderSection">
+      <h2>3. Grenander Regularity Conditions for Well-Behaved Data</h2>
+      <p>
+        In modern econometric practice (citing Greene, 7th ed., Table 4.2), researchers often specify the somewhat less restrictive <strong>Grenander conditions</strong> to guarantee that the data are well-behaved:
+      </p>
+
+      <!-- Clean Regularity Card -->
+      <div class="study-card" style="background: var(--surface-secondary, #F7FAFF); border: 1px solid #bfdbfe; border-left: 4px solid var(--color-primary); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-lg);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem;">
+          <span class="academic-badge badge-note">REGULARITY</span>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--color-primary); margin: 0;">
+            Grenander Regularity Conditions (Informal Summary)
+          </h3>
+        </div>
+        <ul style="margin: 0; padding-left: 1.4rem; font-size: 0.92rem; line-height: 1.7; color: var(--color-text);">
+          <li><strong>No collapsing regressors:</strong> None of the \(x\)'s go to a series of zeros. Regressors must continue to provide empirical variation as the sample expands.</li>
+          <li><strong>No dominant observations:</strong> No single observation of any \(x\) is too large relative to the sum. That is, \(\lim_{n \to \infty} \frac{\max_{i} x_{ik}^2}{\sum_{i=1}^n x_{ik}^2} = 0\). No single outlier dominates the entire dataset.</li>
+          <li><strong>Full rank preservation:</strong> The matrix \(X\) remains full column rank (\(\operatorname{rank}(X) = k\)) for all sufficiently large \(n\), preventing asymptotic multicollinearity.</li>
+        </ul>
+        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #475569; font-style: italic;">
+          These regularity conditions are virtually always satisfied in well-designed empirical economic datasets.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Derivation Journey - OLS Consistency -->
+    <section class="lesson-section" id="derivationSection">
+      <h2>4. Connected Derivation: Proof of OLS Consistency</h2>
+      <p>
+        We now prove that under these regularity conditions, the OLS estimator converges in probability to the true parameter vector: \(\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\).
+      </p>
+
+      <!-- Derivation Journey Container (Reusing Approved Module 3 Rail Architecture) -->
+      <div class="derivation-journey">
+        <div class="derivation-goal-card">
+          <div class="derivation-goal-badge">Derivation Goal</div>
+          <h3 class="derivation-goal-title">Prove that \(\operatorname{plim}_{n \to \infty} \hat{\beta}_{\text{OLS}} = \beta\)</h3>
+          <p class="derivation-goal-desc">
+            Demonstrate that the sampling error \(\hat{\beta}_{\text{OLS}} - \beta\) collapses to \(\mathbf{0}\) in probability as \(n \to \infty\).
+          </p>
+        </div>
+
+        <div class="derivation-steps-rail">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Express the OLS estimation error</h4>
+              </div>
+              <p class="derivation-step-desc">Substitute the data generation process \(y = X\beta + \varepsilon\) into the OLS estimator \(\hat{\beta} = (X'X)^{-1}X'y\):</p>
+              <div class="derivation-step-math">
+                \[\hat{\beta}_{\text{OLS}} - \beta = (X'X)^{-1}X'\varepsilon\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Because \(y = X\beta + \varepsilon\), expanding gives \((X'X)^{-1}X'(X\beta + \varepsilon) = \beta + (X'X)^{-1}X'\varepsilon\). Subtracting \(\beta\) isolates the estimation error.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Scale both factors by sample size n</h4>
+              </div>
+              <p class="derivation-step-desc">Multiply and divide by \(n\) to convert the matrix sums into sample averages:</p>
+              <div class="derivation-step-math">
+                \[\hat{\beta}_{\text{OLS}} - \beta = \left(\frac{X'X}{n}\right)^{-1} \left(\frac{X'\varepsilon}{n}\right)\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                \((X'X)^{-1} = \frac{1}{n} \left(\frac{X'X}{n}\right)^{-1}\). The factor of \(\frac{1}{n}\) is grouped with \(X'\varepsilon\), forming the sample average vector \(\frac{1}{n}\sum_{i=1}^n x_i \varepsilon_i\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Evaluate the limit of the inverse moment matrix</h4>
+                <span class="derivation-result-badge">Limit = Q⁻¹</span>
+              </div>
+              <p class="derivation-step-desc">Apply the large-sample regularity condition \(\lim_{n \to \infty} \frac{X'X}{n} = Q\):</p>
+              <div class="derivation-step-math">
+                \[\operatorname{plim}_{n \to \infty} \left(\frac{X'X}{n}\right)^{-1} = Q^{-1}\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                By the continuous mapping theorem (Slutsky's theorem for continuous matrix inversion), the probability limit of an inverse equals the inverse of the probability limit, provided \(Q\) is non-singular.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Apply the Law of Large Numbers to disturbance cross-products</h4>
+                <span class="derivation-result-badge">Limit = 0</span>
+              </div>
+              <p class="derivation-step-desc">Apply Khinchine's Law of Large Numbers to the sample average of independent cross-products \(x_i \varepsilon_i\):</p>
+              <div class="derivation-step-math">
+                \[\operatorname{plim}_{n \to \infty} \left(\frac{X'\varepsilon}{n}\right) = \operatorname{plim}_{n \to \infty} \left(\frac{1}{n}\sum_{i=1}^n x_i \varepsilon_i\right) = \mathbb{E}[x_i \varepsilon_i] = \mathbf{0}\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Under exogeneity, \(\mathbb{E}[\varepsilon_i \mid x_i] = 0\), so \(\mathbb{E}[x_i \varepsilon_i] = \mathbb{E}[x_i \mathbb{E}[\varepsilon_i \mid x_i]] = \mathbf{0}\). The sample average converges in probability to its population zero mean.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Combine probability limits (Consistency Result)</h4>
+                <span class="derivation-result-badge">Q⁻¹ &middot; 0 = 0</span>
+              </div>
+              <p class="derivation-step-desc">Multiply the limits using Slutsky's theorem:</p>
+              <div class="derivation-step-math">
+                \[\operatorname{plim}_{n \to \infty} (\hat{\beta}_{\text{OLS}} - \beta) = Q^{-1} \cdot \mathbf{0} = \mathbf{0} \implies \hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\]
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The probability limit of a product of matrices equals the product of their probability limits. Multiplying a finite matrix \(Q^{-1}\) by the zero vector produces \(\mathbf{0}\).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Big Picture Card -->
+        <div class="big-picture-card" style="margin-top: var(--space-md); padding: 1.35rem; background: var(--surface-secondary, #F7FAFF); border-radius: var(--radius-md); border-left: 4px solid var(--color-primary); border: 1px solid #cbd5e1; border-left-width: 4px;">
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.95rem; margin-bottom: 4px;">The Big Picture: Asymptotic Concentration</div>
+          <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+            Formally, the asymptotic concentration result is stated as:
+            \[\lim_{n \to \infty} \Pr(\beta - \varepsilon < \hat{\beta}_{\text{OLS}} < \beta + \varepsilon) = 1\]
+            As sample size \(n \to \infty\), the probability that \(\hat{\beta}_{\text{OLS}}\) lies within any arbitrarily small interval around the true \(\beta\) approaches 1. OLS is a strictly <strong>consistent estimator</strong> of \(\beta\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Sampling Distribution Collapse -->
+    <section class="lesson-section" id="interactiveCollapseSection">
+      <h2>5. Interactive Lab: Sampling Distribution Collapse</h2>
+      <p>
+        Explore how the sampling distribution of \(\hat{\beta}_{\text{OLS}}\) contracts around the true parameter \(\beta = 2.5\) as sample size expands from small (\(n = 30\)) to medium (\(n = 150\)) and large (\(n = 1000\)).
+      </p>
+
+      <div class="interactive-lab-card">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Sample Size Preset</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="consistN30" class="btn btn-sm btn-outline">Small (n = 30)</button>
+              <button type="button" id="consistN150" class="btn btn-sm btn-outline active">Medium (n = 150)</button>
+              <button type="button" id="consistN1000" class="btn btn-sm btn-outline">Large (n = 1000)</button>
+            </div>
+          </div>
+
+          <div style="text-align: right;">
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">True Parameter</span>
+            <span style="font-size: 1.05rem; font-family: var(--font-mono); font-weight: 700; color: #0f172a;">β = 2.500</span>
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Sample Size (n)</div>
+            <div id="consistReadoutN" style="font-size: 1.1rem; font-weight: 700; color: #0f172a; font-family: var(--font-mono);">150</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #dc2626; font-weight: 600;">Sampling Variance Var(β̂)</div>
+            <div id="consistReadoutVar" style="font-size: 1.1rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">0.0333</div>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #10b981; text-align: center;">
+            <div style="font-size: 0.72rem; color: #059669; font-weight: 700;">95% Spread Band</div>
+            <div id="consistReadoutBand" style="font-size: 1.05rem; font-weight: 800; color: #047857; font-family: var(--font-mono);">[2.142, 2.858]</div>
+          </div>
+        </div>
+
+        <!-- Outside Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #0f172a; height: 3px;"></span> True Parameter \(\beta = 2.50\)</span>
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #2563eb;"></span> Sampling Distribution \(\hat{\beta}_{\text{OLS}}\)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981;"></span> 95% Concentration Band</span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="consistencySvg" viewBox="0 0 540 300" aria-label="Interactive OLS consistency distribution collapse"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">WHAT YOU ARE SEEING</div>
+          <div class="visual-explanation-body">
+            The sampling distribution of \(\hat{\beta}_{\text{OLS}}\) plotted across repeated hypothetical samples centered at true \(\beta = 2.5\). The green shaded band represents the 95% sampling interval \([\beta \pm 1.96 \operatorname{SE}]\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">WHAT TO NOTICE</div>
+          <div class="visual-explanation-body">
+            At \(n = 30\), the bell curve is wide (spread \([1.71, 3.29]\)). At \(n = 150\), it narrows substantially. At \(n = 1000\), the distribution becomes a sharp spike tightly hugging \(\beta = 2.5\) with variance near 0.005.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">WHY IT MATTERS</div>
+          <div class="visual-explanation-body">
+            Because \(\operatorname{Var}(\hat{\beta}_{\text{OLS}}) = \frac{\sigma^2}{n} Q^{-1}\), the variance is strictly inversely proportional to \(n\). As \(n \to \infty\), the variance vanishes, mathematically enforcing consistency.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">ECONOMETRIC INTERPRETATION</div>
+          <div class="visual-explanation-body">
+            In microeconometric datasets with thousands of individuals (e.g., census or tax records), sampling noise in linear regression shrinks to near-imperceptible levels, allowing sharp parameter estimation.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>TRY THIS:</strong> Click <em>Small (n = 30)</em> to see the wide dispersion, then immediately switch to <em>Large (n = 1000)</em>. Notice how the 95% band compresses by more than 5.7 times (\(\sqrt{1000/30} \approx 5.77\))!
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card">
+      <div class="quick-check-header">
+        <span class="academic-badge badge-note">QUICK CHECK</span>
+        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">The Role of Matrix Q</span>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm); color: var(--text-secondary);">
+        What would happen to the consistency of the OLS estimator if as \(n \to \infty\), two regressors become perfectly correlated, causing the limit matrix \(Q = \lim \frac{X'X}{n}\) to have determinant 0 (singular)?
+      </p>
+      <details style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary); padding: 6px 0;">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 12px 14px; background: var(--surface-secondary, #F7FAFF); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: var(--accent-primary);">ANSWER:</strong> The OLS estimator would fail to be consistent for the individual coefficients.<br><br>
+          <strong>WHY?</strong> If \(Q\) is singular, \(Q^{-1}\) does not exist. In Step 3 of our derivation, \(\operatorname{plim}\left(\frac{X'X}{n}\right)^{-1}\) blows up or cannot be defined. Without positive definiteness of \(Q\), the data fail to provide independent variation to distinguish the two regressors, and identification breaks down asymptotically.
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">SUMMARY</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The large-sample OLS framework assumes independent observation pairs \((x_i, \varepsilon_i)\) with exogeneity \(\mathbb{E}[x_i \varepsilon_i] = \mathbf{0}\).</li>
+        <li>\(\frac{X'X}{n}\) averages the regressor cross-products; as \(n \to \infty\), it stabilizes to the finite positive definite matrix \(Q\).</li>
+        <li>Grenander regularity conditions ensure regressors do not collapse to zero, no single observation dominates, and \(X\) retains full rank.</li>
+        <li>The proof of consistency scales \(\hat{\beta} - \beta = \left(\frac{X'X}{n}\right)^{-1}\left(\frac{X'\varepsilon}{n}\right)\); by the LLN, \(\frac{X'\varepsilon}{n} \xrightarrow{p} \mathbf{0}\), proving \(\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta\).</li>
+        <li>Consistency means \(\Pr(|\hat{\beta}_{\text{OLS}} - \beta| > \varepsilon) \to 0\): the sampling distribution contracts to a single point at the true parameter vector.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Previous: Convergence in Probability &amp; Consistency
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: Asymptotic Normality of OLS →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-04-interactions.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.2: Adjusted R-Squared & Model Comparison — EcoIntuition Academy</title>
+  <meta name="description" content="Explore the degree-of-freedom penalty in adjusted R-squared, understand why adding regressors mechanically inflates ordinary R², and master the strict rules for comparing econometric models.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="02">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 7 &middot; Adjusted R-Squared &amp; Model Comparison</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">28%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 28.6%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.2</span>
+        <span class="badge">Model Diagnostics</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Adjusted R-Squared &amp; Model Comparison
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Explore why ordinary \(R^2\) mechanically rewards the addition of uninformative variables, see how adjusted \(\bar{R}^2\) penalizes loss of degrees of freedom, and master the rules for comparing competing specifications.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Explain geometrically why adding regressors can never decrease ordinary \(R^2\).</li>
+        <li>State and compute the adjusted \(R^2\) formula: \(\bar{R}^2 = 1 - \frac{\text{SSE}}{\text{SST}}\left(\frac{n-1}{n-K}\right)\).</li>
+        <li>Analyze how the degrees-of-freedom penalty can cause \(\bar{R}^2\) to fall when adding useless regressors.</li>
+        <li>Apply the model comparison rule: models must have identical dependent variables \(y\).</li>
+        <li>Identify why comparing \(R^2\) between level \(y = f(x)\) and log \(\log y = f(x)\) is completely invalid.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Problem with Ordinary R² -->
+    <section class="lesson-section" id="problemSection">
+      <h2>1. The Mechanical Defect of Ordinary R²</h2>
+      <p>
+        Adjusted \(R^2\) solves a critical weakness of ordinary \(R^2\): adding regressors can never reduce \(R^2\), even when those additional variables provide zero genuine explanatory power.
+      </p>
+
+      <!-- Structured Study Card: Why Ordinary R² Can Mislead -->
+      <div class="study-card" style="background: #ffffff; border: 1.5px solid #fcd34d; border-left: 5px solid #f59e0b; border-radius: 8px; padding: 1.25rem 1.4rem; margin: 1.25rem 0;">
+        <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.45rem;">
+          <span style="font-size: 1.1rem;">⚠️</span>
+          <h3 style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #b45309; margin: 0;">
+            Why Ordinary R² Can Mislead
+          </h3>
+        </div>
+        <p style="font-size: 0.92rem; color: #1e293b; line-height: 1.6; margin: 0 0 0.5rem 0;">
+          Adding regressors cannot reduce \(R^2\). Therefore, an irrelevant regressor can make \(R^2\) look slightly better even when the model has not meaningfully improved.
+        </p>
+        <div style="background: #fffbeb; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.88rem; color: #92400e; line-height: 1.55;">
+          <strong>Geometric Proof:</strong> OLS minimizes the sum of squared residuals \(\text{SSE} = e'e\) by projecting \(y\) onto the column space \(\operatorname{Col}(X)\). When new regressor columns are appended, the subspace expands: \(\operatorname{Col}(X_{\text{old}}) \subseteq \operatorname{Col}(X_{\text{new}})\). Because OLS searches over a strictly larger parameter space, the optimal residual length can never increase:
+          <div style="text-align: center; margin: 0.4rem 0; font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; color: #b45309;">
+            \(\text{SSE}_{\text{new}} \le \text{SSE}_{\text{old}} \implies R^2_{\text{new}} \ge R^2_{\text{old}}\)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Adjusted R² Formulation -->
+    <section class="lesson-section" id="adjustedSection">
+      <h2>2. Adjusted R-Squared: The Degrees-of-Freedom Penalty</h2>
+      <p>
+        To counteract this artificial inflation, <strong>adjusted \(R^2\)</strong> (denoted \(\bar{R}^2\)) scales the residual and total sums of squares by their respective degrees of freedom rather than simple observation counts.
+      </p>
+
+      <!-- Reusable Key Equation Box: Adjusted R² -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY EQUATION</span>
+          <h3 class="equation-title" style="margin:0; font-size:1.05rem;">Adjusted Coefficient of Determination (\(\bar{R}^2\))</h3>
+        </div>
+        <div class="equation-main">
+          $$\bar{R}^2 = 1 - \frac{\text{SSE}}{\text{SST}} \cdot \frac{n - 1}{n - K} = 1 - (1 - R^2)\left(\frac{n - 1}{n - K}\right)$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\bar{R}^2\)</div>
+              <div class="def-desc"><strong>Adjusted \(R^2\):</strong> Goodness-of-fit metric penalized for model complexity and loss of degrees of freedom.</div>
+              <div class="def-term">\(n - 1\)</div>
+              <div class="def-desc"><strong>SST Degrees of Freedom:</strong> Sample size minus 1 used to calculate the benchmark sample mean \(\bar{y}\).</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(n - K\)</div>
+              <div class="def-desc"><strong>SSE Degrees of Freedom:</strong> Residual degrees of freedom after estimating \(K\) parameters (including intercept).</div>
+              <div class="def-term">\(\frac{n - 1}{n - K} > 1\)</div>
+              <div class="def-desc"><strong>Complexity Penalty Multiplier:</strong> Inflates the unexplained variance ratio as regressors are added.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Structured Study Card: What the Penalty Does -->
+      <div class="study-card" style="background: #ffffff; border: 1.5px solid #bfdbfe; border-left: 5px solid #2563eb; border-radius: 8px; padding: 1.25rem 1.4rem; margin: 1.25rem 0;">
+        <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.45rem;">
+          <span style="font-size: 1.1rem;">⚖️</span>
+          <h3 style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #1d4ed8; margin: 0;">
+            What the Penalty Multiplier Does
+          </h3>
+        </div>
+        <p style="font-size: 0.92rem; color: #1e293b; line-height: 1.6; margin: 0 0 0.5rem 0;">
+          The fraction \(\frac{n - 1}{n - K}\) penalizes model complexity. When you add another regressor, \(K\) increases by 1, which reduces \(n - K\) and makes the penalty multiplier strictly larger.
+        </p>
+        <p style="font-size: 0.88rem; color: #475569; line-height: 1.55; margin: 0;">
+          • If the new regressor improves \(\text{SSE}\) only marginally, the increase in \(\frac{n - 1}{n - K}\) dominates and \(\bar{R}^2\) <strong>falls</strong>.<br>
+          • In a single-variable addition, \(\bar{R}^2\) rises if and only if the absolute \(t\)-statistic on that regressor exceeds \(1\) (\(|t| > 1\)).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Model Comparison Lab -->
+    <section class="lesson-section" id="labSection">
+      <h2>3. Interactive Lab: Comparing Parsimonious vs Overfitted Models</h2>
+      <p>
+        Compare a compact baseline model against an overfitted specification that appends uninformative noise regressors. See how the complexity penalty prevents artificial inflation.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Model Specification</span>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="compBtnModelA" class="btn btn-sm btn-outline active">Base Model (K = 2)</button>
+              <button type="button" id="compBtnModelB" class="btn btn-sm btn-outline">Add Weak Regressors (K = 5)</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="compSampleSize" style="font-size: 0.85rem; font-weight: 600; color: var(--color-text);">Sample Size (n):</label>
+            <input type="range" id="compSampleSize" min="15" max="80" value="30" step="5" style="width: 120px;">
+            <span id="compSampleSizeVal" style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); min-width: 25px;">30</span>
+          </div>
+        </div>
+
+        <!-- Metric Cards Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #1d4ed8; font-weight: 600;">Model A: R²</div>
+            <div id="compReadoutR2A" style="font-size: 1.05rem; font-weight: 700; color: #1d4ed8; font-family: var(--font-mono);">0.600</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #047857; font-weight: 600;">Model A: Adjusted R̄²</div>
+            <div id="compReadoutAdjA" style="font-size: 1.05rem; font-weight: 700; color: #047857; font-family: var(--font-mono);">0.586</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #1d4ed8; font-weight: 600;">Model B: R²</div>
+            <div id="compReadoutR2B" style="font-size: 1.05rem; font-weight: 700; color: #1d4ed8; font-family: var(--font-mono);">0.612</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #b45309; font-weight: 600;">Model B: Adjusted R̄²</div>
+            <div id="compReadoutAdjB" style="font-size: 1.05rem; font-weight: 700; color: #b45309; font-family: var(--font-mono);">0.550</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Notice Message -->
+        <div id="compAlertMsg" style="padding: 10px 14px; border-radius: var(--radius-sm); border-left: 4px solid #3b82f6; background: #eff6ff; font-size: 0.88rem; line-height: 1.5; margin-bottom: var(--space-md);">
+          <strong>Parsimonious Baseline:</strong> Model A includes only the true economic regressor (K = 2). Both R² and R̄² are balanced. Click "Add Weak Regressors" to observe the penalty mechanism.
+        </div>
+
+        <!-- SVG Bar Comparison Visual -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="modelCompSvg" viewBox="0 0 540 220" style="width: 100%; max-width: 540px; height: auto;" aria-label="Model comparison bar chart"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            A side-by-side comparison between Base Model A (\(K = 2\)) and Overfitted Model B (\(K = 5\)). Blue bars represent ordinary \(R^2\); green and amber bars display adjusted \(\bar{R}^2\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            Adding 3 weak regressors nudges ordinary \(R^2\) slightly upward (\(0.600 \to 0.612\)). However, adjusted \(\bar{R}^2\) falls noticeably (\(0.586 \to 0.550\)) because the complexity penalty outweighs the marginal decrease in SSE.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            Without \(\bar{R}^2\), automated selection procedures that maximize ordinary \(R^2\) would perpetually choose the kitchen-sink model, over-fitting sample noise at the expense of true out-of-sample accuracy.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            The penalty multiplier \(\frac{n-1}{n-K}\) is particularly severe in small samples. At \(n = 20\), moving from \(K = 2\) to \(K = 5\) increases the penalty multiplier from 1.05 to 1.27.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Move sample size \(n\) down to 15, then click <em>Add Weak Regressors</em> to observe how severely adjusted \(\bar{R}^2\) plunges when degrees of freedom are depleted in smaller samples.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Rules for Model Comparison -->
+    <section class="lesson-section" id="rulesSection">
+      <h2>4. The Fundamental Rules of Model Comparison</h2>
+      <p>
+        The source document (<code>Econometrics (3).pdf</code>, page 2) specifies strict boundaries on when \(R^2\) and \(\bar{R}^2\) can be validly compared across candidate specifications.
+      </p>
+
+      <!-- Rule Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem 1.4rem; border: 1.5px solid var(--border-subtle); border-radius: 8px; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.4rem;">
+          Rule: Identical Dependent Variable Scale and Sample
+        </h3>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: #334155;">
+          You may compare \(R^2\) or \(\bar{R}^2\) values <strong>only when the dependent variable is defined on the exact same scale for the exact same observations</strong>.
+        </p>
+      </div>
+
+      <!-- FORMAL COMMON MISTAKE CARD: LEVELS VS LOGS -->
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="callout-icon">⚠️</span>
+          <span class="callout-title">Common Mistake: Comparing R² Across Levels vs. Logs</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0 0 0.5rem 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>Never compare \(R^2\) between a level model and a log-transformed model:</strong>
+          </p>
+          <div style="background: #fffbeb; padding: 0.6rem 0.85rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.9rem; text-align: center; color: #92400e; margin-bottom: 0.5rem;">
+            \(\text{Level Model: } y = \beta_0 + \beta_1 x + \varepsilon \quad \text{vs.} \quad \text{Log Model: } \log(y) = \alpha_0 + \alpha_1 x + u\)
+          </div>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.55; color: #334155;">
+            In the level model, \(\text{SST} = \sum (y_i - \bar{y})^2\) measures squared physical dollars (or units). In the log model, \(\text{SST} = \sum (\log y_i - \overline{\log y})^2\) measures squared proportional movements. Because the total variation denominators (\(\text{SST}\)) are fundamentally on different mathematical scales, an \(R^2 = 0.82\) in the log model does <em>not</em> imply a better fit than an \(R^2 = 0.70\) in the level model!
+          </p>
+        </div>
+      </div>
+
+      <!-- Negative Adjusted R² Card: Explained relative to mean-only benchmark -->
+      <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-left: 5px solid #64748b; border-radius: 8px; padding: 1.25rem 1.4rem; margin: 1.25rem 0;">
+        <h4 style="font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #475569; margin: 0 0 0.4rem 0;">
+          Understanding Negative Adjusted R²: The Sample-Mean Benchmark
+        </h4>
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: #334155;">
+          While ordinary \(R^2 \in [0, 1]\) with an intercept, <strong>adjusted \(\bar{R}^2\) can be negative</strong>. A negative \(\bar{R}^2\) does not just mean "the model is bad"—specifically, it means the model's complexity penalty outweighs its marginal improvement in SSE relative to the <strong>sample-mean benchmark</strong> (predicting the flat average \(\bar{y}\) for every observation, which has \(\text{SSE} = \text{SST}\) and zero estimated slopes).
+        </p>
+      </div>
+    </section>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.35rem 1.5rem; margin: 1.5rem 0;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.1rem;">🧠</span>
+        <h4 style="font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0f172a; margin: 0;">
+          Can You Explain It? Conceptual Check
+        </h4>
+      </div>
+      <p style="font-size: 0.92rem; color: #334155; line-height: 1.55; margin: 0 0 0.75rem 0;">
+        <strong>Question:</strong> An empirical researcher adds 10 random variables to a wage regression of 50 workers. Ordinary \(R^2\) rises from 0.45 to 0.49, but \(\bar{R}^2\) drops from 0.43 to 0.36. Why did these two metrics move in opposite directions?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #2563eb;">Show Explanation</summary>
+        <div style="margin-top: 0.5rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; color: #1e293b;">
+          <strong>Explanation:</strong> Ordinary \(R^2\) mechanically rose because expanding the column space of regressors allows OLS to fit idiosyncratic sample noise, reducing SSE from the larger parameter space. In contrast, adjusted \(\bar{R}^2\) fell because the penalty factor \(\frac{n-1}{n-K}\) rose dramatically (from \(\frac{49}{48} \approx 1.02\) to \(\frac{49}{38} \approx 1.29\)), severely penalizing the loss of 10 residual degrees of freedom for regressors with \(|t| < 1\).
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.25rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Computing Adjusted R²
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        A regression with \(n = 31\) observations and \(K = 6\) estimated parameters yields \(R^2 = 0.50\). What is the adjusted \(\bar{R}^2\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Calculation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(\bar{R}^2 = 0.40\).<br><br>
+          <strong>WHY?</strong> Apply the formula: \(\bar{R}^2 = 1 - (1 - R^2)\left(\frac{n - 1}{n - K}\right) = 1 - (1 - 0.50)\left(\frac{31 - 1}{31 - 6}\right) = 1 - 0.50\left(\frac{30}{25}\right) = 1 - 0.50(1.20) = 1 - 0.60 = 0.40\). The complexity penalty multiplier (1.20) reduces the goodness-of-fit measure from 0.50 to 0.40.
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Adding regressors can never decrease ordinary \(R^2\) because OLS minimizes SSE over an expanded subspace (\(\text{SSE}_{\text{new}} \le \text{SSE}_{\text{old}}\)).</li>
+        <li>Adjusted \(R^2\) penalizes model complexity via the factor \(\frac{n - 1}{n - K}\), increasing if and only if added regressors improve fit by more than the loss of degrees of freedom (for 1 regressor, \(|t| > 1\)).</li>
+        <li>A negative \(\bar{R}^2\) indicates that the regression model performs worse than the simple sample-mean benchmark (\(\bar{y}\)).</li>
+        <li>\(R^2\) and \(\bar{R}^2\) can only be compared across models sharing the exact same dependent variable scale; comparing levels \(y\) to logs \(\log(y)\) is invalid because their \(\text{SST}\) denominators are fundamentally different.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Previous: Goodness of Fit &amp; R²
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: R² &amp; F Tests →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.6: Gauss–Markov, BLUE & Estimating Error Variance — EcoIntuition Academy</title>
+  <meta name="description" content="Prove the Gauss–Markov theorem showing that OLS is BLUE via non-negative definite matrix DD', and derive the unbiased residual error variance estimator s² = e'e / (n - k).">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="06">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 7 &middot; Gauss–Markov, BLUE &amp; Estimating σ²</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">86%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 85.7%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.6</span>
+        <span class="badge">Efficiency &amp; Estimation</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Gauss–Markov, BLUE &amp; Estimating Error Variance
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Discover why OLS achieves the minimum variance among all linear unbiased estimators, trace the matrix decomposition of an arbitrary competitor \(\tilde{\beta} = Cy\), and see why \(\mathbb{E}[e'e \mid X] = \sigma^2(n - k)\) demands the degrees-of-freedom divisor \(n - k\) to obtain the unbiased error variance estimator \(s^2\).
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the Gauss–Markov theorem and define each letter of the B-L-U-E acronym.</li>
+        <li>Set up an arbitrary alternative linear estimator \(\tilde{\beta} = Cy\) and prove that unbiasedness requires \(CX = I_k\).</li>
+        <li>Follow the step-by-step Gauss–Markov variance decomposition: \(\operatorname{Var}(\tilde{\beta} \mid X) = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'\).</li>
+        <li>Explain why the positive semi-definiteness of \(DD'\) proves that OLS has minimal sampling variance among all linear unbiased competitors.</li>
+        <li>Prove why the naive residual variance estimator \(\frac{1}{n}e'e\) is downward biased and derive the unbiased estimator \(s^2 = \frac{e'e}{n - k}\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Gauss–Markov Theorem & BLUE -->
+    <section class="lesson-section" id="blueSection">
+      <h2>1. The Gauss–Markov Theorem: BLUE</h2>
+      <p>
+        Under the Classical Linear Regression Model assumptions (linearity, strict exogeneity, full rank, and spherical homoskedastic errors), the <strong>Gauss–Markov theorem</strong> provides the primary theoretical justification for selecting OLS:
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">👑</span>
+          <span class="callout-title">The Gauss–Markov Theorem</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            Under Assumptions A1–A4, the Ordinary Least Squares estimator \(\hat{\beta} = (X'X)^{-1}X'y\) is the <strong>Best Linear Unbiased Estimator (BLUE)</strong> of \(\beta\).
+          </p>
+        </div>
+      </div>
+
+      <!-- 2x2 BLUE Grid -->
+      <div class="blue-grid" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="blue-card">
+          <span class="blue-letter">B</span>
+          <div class="blue-title">BEST</div>
+          <p class="blue-desc">
+            Achieves the minimum sampling variance (maximum precision) among all unbiased competitors in the linear class. For any linear combination \(c'\hat{\beta}\), its variance is strictly no larger than \(c'\tilde{\beta}\).
+          </p>
+        </div>
+        <div class="blue-card">
+          <span class="blue-letter">L</span>
+          <div class="blue-title">LINEAR</div>
+          <p class="blue-desc">
+            The estimator is a linear function of the dependent variable vector: \(\hat{\beta} = Ay\) where the weighting matrix is \(A = (X'X)^{-1}X'\).
+          </p>
+        </div>
+        <div class="blue-card">
+          <span class="blue-letter">U</span>
+          <div class="blue-title">UNBIASED</div>
+          <p class="blue-desc">
+            Centered exactly on the true population parameter: \(\mathbb{E}[\hat{\beta} \mid X] = \beta\). On average across hypothetical repeated samples, it produces zero systematic estimation error.
+          </p>
+        </div>
+        <div class="blue-card">
+          <span class="blue-letter">E</span>
+          <div class="blue-title">ESTIMATOR</div>
+          <p class="blue-desc">
+            A deterministic mathematical rule and function that maps any observable sample data \((y, X)\) into a parameter estimate vector.
+          </p>
+        </div>
+      </div>
+
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border: 1px solid var(--border-subtle); padding: 14px 18px; margin-bottom: var(--space-md); border-radius: var(--radius-sm);">
+        <div style="font-weight: 700; font-size: 0.88rem; color: var(--color-primary); margin-bottom: 4px;">
+          📌 NOTATION NOTE: OLS ESTIMATE \(\hat{\beta}\) VS COMPETITOR \(\tilde{\beta}\)
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+          The source notes write the competitor estimator as \(b_0\) and OLS as \(b\). For website consistency across all modules, we denote the OLS estimator as \(\hat{\beta}\) and the alternative linear competitor as \(\tilde{\beta}\). We reserve \(b\) strictly for generic candidate coefficient vectors in optimization objectives.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Step-by-Step Derivation Journey -->
+    <section class="lesson-section" id="proofSection">
+      <h2>2. Matrix Proof: Comparing OLS with Competitor \(\tilde{\beta} = Cy\)</h2>
+      <p>
+        What is this section about? We prove that any alternative linear estimator that achieves unbiasedness must have a sampling variance-covariance matrix equal to the OLS variance <em>plus</em> a positive semi-definite matrix, meaning its variance cannot be smaller than OLS.
+      </p>
+
+      <!-- Derivation Journey -->
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <div class="derivation-journey-badge">DERIVATION JOURNEY</div>
+          <h3 class="derivation-journey-title">Gauss–Markov Variance Minimality Proof</h3>
+        </div>
+
+        <div class="derivation-goal">
+          <div class="derivation-goal-label">WHAT ARE WE TRYING TO SHOW?</div>
+          <p class="derivation-goal-text">
+            Prove that for any arbitrary linear unbiased estimator \(\tilde{\beta} = Cy\), its variance-covariance matrix decomposes into \(\operatorname{Var}(\tilde{\beta} \mid X) = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'\), where \(\sigma^2 DD'\) is non-negative definite. This establishes that OLS has the minimum variance in the linear unbiased class.
+          </p>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Define the Alternative Linear Estimator</h4>
+              <p class="derivation-step-desc">
+                Let \(C\) be an arbitrary \(k \times n\) constant matrix (conditional on \(X\)). Write the alternative estimator as a linear combination of outcomes \(y\):
+              </p>
+              <div class="derivation-step-math">
+                $$\tilde{\beta} = Cy = C(X\beta + \varepsilon) = CX\beta + C\varepsilon$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Any estimator that is linear in \(y\) can be represented by a weighting matrix \(C\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Impose the Unbiasedness Condition</h4>
+              <p class="derivation-step-desc">
+                Take the expectation conditional on \(X\), using strict exogeneity \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\):
+              </p>
+              <div class="derivation-step-math">
+                $$\mathbb{E}[\tilde{\beta} \mid X] = \mathbb{E}[CX\beta + C\varepsilon \mid X] = CX\beta + C\mathbf{0} = CX\beta$$
+              </div>
+              <p class="derivation-step-desc">
+                For \(\tilde{\beta}\) to be unbiased (\(\mathbb{E}[\tilde{\beta} \mid X] = \beta\)) for <em>any</em> true vector \(\beta\), the weighting matrix must satisfy:
+              </p>
+              <div class="derivation-step-math">
+                $$CX = I_k$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Without \(CX = I_k\), the estimator would suffer from systematic estimation bias.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Compute the Variance-Covariance Matrix of \(\tilde{\beta}\)</h4>
+              <p class="derivation-step-desc">
+                Since \(\tilde{\beta} - \beta = C\varepsilon\), the variance conditional on \(X\) under spherical errors \(\operatorname{Var}(\varepsilon \mid X) = \sigma^2 I_n\) is:
+              </p>
+              <div class="derivation-step-math">
+                $$\operatorname{Var}(\tilde{\beta} \mid X) = C \operatorname{Var}(\varepsilon \mid X) C' = C(\sigma^2 I_n)C' = \sigma^2 CC'$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Applies the standard variance-of-linear-transformation rule \(\operatorname{Var}(Ay) = A\operatorname{Var}(y)A'\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Decompose \(C\) into OLS Weights Plus a Departure Matrix \(D\)</h4>
+              <p class="derivation-step-desc">
+                Define the difference matrix \(D = C - (X'X)^{-1}X'\), so that \(C = (X'X)^{-1}X' + D\). Multiply both sides on the right by \(X\):
+              </p>
+              <div class="derivation-step-math">
+                $$DX = \left[C - (X'X)^{-1}X'\right]X = CX - (X'X)^{-1}(X'X) = I_k - I_k = \mathbf{0}$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                This orthogonality property \(DX = \mathbf{0}\) is the mathematical fulcrum of the proof: any departure from OLS must be orthogonal to the regressor matrix \(X\) to preserve unbiasedness.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Expand the Matrix Product \(CC'\)</h4>
+              <p class="derivation-step-desc">
+                Substitute \(C = (X'X)^{-1}X' + D\) into \(CC'\):
+              </p>
+              <div class="derivation-step-math">
+                $$CC' = \left[(X'X)^{-1}X' + D\right]\left[(X'X)^{-1}X' + D\right]' = (X'X)^{-1}X'X(X'X)^{-1} + (X'X)^{-1}X'D' + DX(X'X)^{-1} + DD'$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                FOIL expansion of the matrix product reveals the OLS kernel, the departure kernel, and the cross-product terms.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">6</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Cross-Product Terms Vanish Identically</h4>
+              <p class="derivation-step-desc">
+                Because \(DX = \mathbf{0}\), taking transposes gives \(X'D' = (DX)' = \mathbf{0}' = \mathbf{0}\). Thus the cross-product terms drop out:
+              </p>
+              <div class="derivation-step-math">
+                $$(X'X)^{-1}X'D' = \mathbf{0} \quad \text{and} \quad DX(X'X)^{-1} = \mathbf{0}$$
+              </div>
+              <p class="derivation-step-desc">
+                The product simplifies cleanly to:
+              </p>
+              <div class="derivation-step-math">
+                $$CC' = (X'X)^{-1} + DD'$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Unbiasedness eliminates any covariance between the OLS estimator and the departure component \(Dy\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 7 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">7</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Conclude Gauss–Markov Optimality</h4>
+              <p class="derivation-step-desc">
+                Multiply by \(\sigma^2\) to obtain the fundamental variance comparison:
+              </p>
+              <div class="derivation-step-math">
+                $$\operatorname{Var}(\tilde{\beta} \mid X) = \sigma^2(X'X)^{-1} + \sigma^2 DD' = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'$$
+              </div>
+              <p class="derivation-step-desc">
+                For any non-zero vector \(a \in \mathbb{R}^k\), the quadratic form satisfies \(a'(DD')a = (D'a)'(D'a) = \|D'a\|^2 \ge 0\). Thus:
+              </p>
+              <div class="derivation-step-math">
+                $$\operatorname{Var}(a'\tilde{\beta} \mid X) \ge \operatorname{Var}(a'\hat{\beta} \mid X)$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Because \(DD'\) is positive semi-definite, no linear unbiased competitor can achieve a lower sampling variance than OLS for any linear combination of coefficients.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Big Picture Card -->
+      <div class="big-picture-card">
+        <div class="big-picture-header">
+          <span class="big-picture-icon">💡</span>
+          <span class="big-picture-title">BIG PICTURE: WHAT DID WE ACTUALLY PROVE?</span>
+        </div>
+        <p class="big-picture-text">
+          The Gauss–Markov theorem does <strong>NOT</strong> claim that OLS is the best estimator among every conceivable estimator in the universe. Nonlinear estimators (or biased shrinkage estimators like Ridge regression) may achieve lower mean squared error. What Gauss–Markov proves is that <strong>within the class of linear unbiased estimators</strong>, OLS achieves the theoretical minimum sampling variance. Any linear unbiased alternative has variance equal to OLS variance plus an unavoidable penalty \(\sigma^2 DD' \ge \mathbf{0}\).
+        </p>
+      </div>
+
+      <!-- Reusable Key Equation Box: DD' Decomposition -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY EQUATION</span>
+          <span class="equation-title">Gauss–Markov Variance Decomposition</span>
+        </div>
+        <div class="equation-main">
+          $$\operatorname{Var}(\tilde{\beta} \mid X) = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\sigma^2 DD'\)</div>
+              <div class="def-desc"><strong>Variance Penalty Matrix:</strong> Additional sampling variance incurred by choosing any linear weighting matrix \(C\) other than OLS.</div>
+              <div class="def-term">\(DD' \ge \mathbf{0}\)</div>
+              <div class="def-desc"><strong>Positive Semi-Definite:</strong> For any vector \(a\), \(a'(DD')a = \|D'a\|^2 \ge 0\).</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(\operatorname{Var}(\tilde{\beta}) \ge \operatorname{Var}(\hat{\beta})\)</div>
+              <div class="def-desc"><strong>Loewner Matrix Order:</strong> Every linear combination of \(\tilde{\beta}\) has variance at least as large as the OLS combination.</div>
+              <div class="def-term">\(D = \mathbf{0} \iff \tilde{\beta} = \hat{\beta}\)</div>
+              <div class="def-desc"><strong>Uniqueness:</strong> OLS is the unique linear unbiased estimator achieving the minimum variance bound.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">📚</span>
+          <span class="callout-title">Source Academic Reference</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.90rem; line-height: 1.5;">
+            Hansen, Bruce E. (2022). <em>"A Modern Gauss–Markov Theorem."</em> <strong>Econometrica</strong>, 90(3), 1283–1294. Hansen demonstrates that the Gauss–Markov theorem holds under weaker conditions than historically assumed, reinforcing the optimality of OLS across broad functional classes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Estimating Error Variance s² -->
+    <section class="lesson-section" id="estimateSection">
+      <h2>3. Estimating Error Variance: Why (1/n) e'e is Downward Biased</h2>
+      <p>
+        In practice, the population disturbance variance \(\sigma^2\) is unknown. A natural candidate would be the average of squared sample residuals: \(\frac{1}{n}\sum_{i=1}^n e_i^2 = \frac{1}{n}e'e\). However, that naive estimator is systematically biased.
+      </p>
+
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="callout-icon">⚠️</span>
+          <span class="callout-title">The Downward Bias of Naive Residual Variance</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            <strong>The naive estimator \(\frac{1}{n}e'e\) is downward biased:</strong>
+            $$\mathbb{E}\left[\frac{1}{n}e'e \;\middle|\; X\right] = \frac{n - k}{n}\sigma^2 < \sigma^2 \quad (\text{for } k > 0)$$
+            Because OLS specifically minimizes the sum of squared residuals over the sample, the residuals \(e_i\) are mechanically tighter around the regression plane than the true population disturbances \(\varepsilon_i\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Derivation Journey: Unbiased s² -->
+      <div class="derivation-journey" style="margin-top: var(--space-md);">
+        <div class="derivation-journey-header">
+          <div class="derivation-journey-badge">DERIVATION JOURNEY</div>
+          <h3 class="derivation-journey-title">Expectation of Residual Sum of Squares \(\mathbb{E}[e'e \mid X]\)</h3>
+        </div>
+
+        <div class="derivation-goal">
+          <div class="derivation-goal-label">WHAT ARE WE TRYING TO SHOW?</div>
+          <p class="derivation-goal-text">
+            Derive the exact mathematical expectation \(\mathbb{E}[e'e \mid X] = \sigma^2(n - k)\) using the residual-maker matrix \(M\), demonstrating why dividing by \(n - k\) yields an unbiased estimator \(s^2\) of \(\sigma^2\).
+          </p>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Express Residuals via the Residual-Maker Matrix \(M\)</h4>
+              <p class="derivation-step-desc">
+                Recall the symmetric, idempotent projection matrix \(M = I_n - X(X'X)^{-1}X'\) from Module 2:
+              </p>
+              <div class="derivation-step-math">
+                $$e = My = M(X\beta + \varepsilon) = MX\beta + M\varepsilon = M\varepsilon$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Because \(MX = \mathbf{0}\), the systematic parameter vector \(\beta\) drops out, isolating the pure disturbance vector \(\varepsilon\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Form the Quadratic Expression for \(e'e\)</h4>
+              <p class="derivation-step-desc">
+                Using symmetry (\(M' = M\)) and idempotence (\(M^2 = M\)):
+              </p>
+              <div class="derivation-step-math">
+                $$e'e = (M\varepsilon)'(M\varepsilon) = \varepsilon' M' M \varepsilon = \varepsilon' M \varepsilon$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Reduces the sum of squared residuals to a scalar quadratic form in the random disturbance vector \(\varepsilon\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Apply the Trace Expectation Lemma</h4>
+              <p class="derivation-step-desc">
+                Since \(\varepsilon' M \varepsilon\) is a \(1 \times 1\) scalar, it equals its trace. Using the cyclic property of trace \(\operatorname{tr}(AB) = \operatorname{tr}(BA)\):
+              </p>
+              <div class="derivation-step-math">
+                $$\mathbb{E}[e'e \mid X] = \mathbb{E}[\operatorname{tr}(\varepsilon' M \varepsilon) \mid X] = \mathbb{E}[\operatorname{tr}(M \varepsilon \varepsilon') \mid X] = \operatorname{tr}(M \mathbb{E}[\varepsilon\varepsilon' \mid X])$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Moving expectation inside the trace operator allows us to substitute \(\mathbb{E}[\varepsilon\varepsilon' \mid X] = \sigma^2 I_n\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Calculate \(\operatorname{tr}(M)\)</h4>
+              <p class="derivation-step-desc">
+                Evaluate the trace of the residual-maker matrix:
+              </p>
+              <div class="derivation-step-math">
+                $$\operatorname{tr}(M) = \operatorname{tr}(I_n) - \operatorname{tr}\left(X(X'X)^{-1}X'\right) = n - \operatorname{tr}\left((X'X)^{-1}X'X\right) = n - \operatorname{tr}(I_k) = n - k$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                The cyclic trace property \(\operatorname{tr}(AB) = \operatorname{tr}(BA)\) reveals that projecting onto \(k\) regressors consumes exactly \(k\) degrees of freedom.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <h4 class="derivation-step-title">Obtain the Unbiased Estimator \(s^2\)</h4>
+              <p class="derivation-step-desc">
+                Combining steps 3 and 4 yields the exact expectation:
+              </p>
+              <div class="derivation-step-math">
+                $$\mathbb{E}[e'e \mid X] = \sigma^2 \operatorname{tr}(M) = \sigma^2 (n - k)$$
+              </div>
+              <p class="derivation-step-desc">
+                Dividing both sides by \(n - k\) demonstrates that \(s^2 = \frac{e'e}{n - k}\) is strictly unbiased:
+              </p>
+              <div class="derivation-step-math">
+                $$\mathbb{E}[s^2 \mid X] = \mathbb{E}\left[\frac{e'e}{n - k} \;\middle|\; X\right] = \frac{\sigma^2(n - k)}{n - k} = \sigma^2$$
+              </div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">WHY THIS STEP?</span>
+                Dividing by \(n - k\) cancels the shrinkage factor \(\frac{n - k}{n}\), yielding an unbiased estimator of \(\sigma^2\).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Degrees of Freedom Intuition Card -->
+      <div class="study-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); padding: var(--space-md); margin-top: var(--space-md); margin-bottom: var(--space-md); border-radius: var(--radius-sm);">
+        <div style="font-weight: 700; font-size: 0.95rem; color: var(--color-primary); margin-bottom: 8px;">
+          ⚖️ DEGREES OF FREEDOM INTUITION: WHY DIVIDE BY \(n - k\)?
+        </div>
+        <p style="margin: 0 0 8px 0; font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+          Think of degrees of freedom as independent pieces of outcome information:
+        </p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); flex-wrap: wrap; margin: 12px 0; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm); font-weight: 600; font-size: 0.92rem;">
+          <span style="color: var(--color-primary); font-family: var(--font-mono);">n</span> observations of y
+          <span style="color: var(--color-text-secondary);">&minus;</span>
+          <span style="color: #dc2626; font-family: var(--font-mono);">k</span> estimated coefficients
+          <span style="color: var(--color-text-secondary);">=</span>
+          <span style="color: #059669; font-family: var(--font-mono);">n &minus; k</span> residual degrees of freedom
+        </div>
+        <p style="margin: 0; font-size: 0.85rem; line-height: 1.55; color: var(--color-text-secondary);">
+          <em>Academic Caution:</em> This is an intuitive geometric summary: the OLS normal equations \(X'e = \mathbf{0}\) impose \(k\) exact linear restrictions on the \(n\) residuals, forcing \(e\) to lie in an \((n - k)\)-dimensional subspace. Residuals are not literally mutually independent random variables, but their sum of squares behaves in expectation as \((n - k)\) independent variance units.
+        </p>
+      </div>
+
+      <!-- Reusable Key Equation Box: s² -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY EQUATION</span>
+          <span class="equation-title">Unbiased Error Variance Estimator (s²)</span>
+        </div>
+        <div class="equation-main">
+          $$s^2 = \frac{e'e}{n - k} \implies \widehat{\operatorname{Var}}(\hat{\beta} \mid X) = s^2(X'X)^{-1}$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(s^2\)</div>
+              <div class="def-desc"><strong>Regression Mean Squared Error:</strong> Feasible sample estimator of disturbance variance \(\sigma^2\). Unbiased: \(\mathbb{E}[s^2 \mid X] = \sigma^2\).</div>
+              <div class="def-term">\(e'e = \sum_{i=1}^n e_i^2\)</div>
+              <div class="def-desc"><strong>Sum of Squared Residuals:</strong> Total squared residual length minimized by OLS.</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(n - k\)</div>
+              <div class="def-desc"><strong>Residual Degrees of Freedom:</strong> \(n\) observations minus \(k\) constraints imposed by the normal equations \(X'e = \mathbf{0}\).</div>
+              <div class="def-term">\(\widehat{\operatorname{Var}}(\hat{\beta} \mid X)\)</div>
+              <div class="def-desc"><strong>Estimated Variance Matrix:</strong> Population \(\sigma^2\) replaced by feasible sample estimator \(s^2\).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive BLUE Lab -->
+    <section class="lesson-section" id="interactiveSection">
+      <h2>4. Interactive Lab: Sampling Efficiency &amp; Degrees of Freedom</h2>
+      <p>
+        Compare the sampling distribution of OLS (blue solid curve) against an alternative linear unbiased estimator \(\tilde{\beta}\) with variance penalty \(\sigma^2 DD'\) (purple dashed curve). Adjust degrees of freedom to observe how \(s^2\) compensates for the mechanical shrinkage of sample residuals.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <label for="blueSliderPenalty" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Competitor Variance Penalty (\(\sigma^2 DD'\))</span>
+              <span id="blueReadoutPenalty" style="font-family: var(--font-mono); color: #9333ea;">+0.60</span>
+            </label>
+            <input type="range" id="blueSliderPenalty" min="0.0" max="1.50" step="0.05" value="0.60" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="blueSliderDf" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Residual Degrees of Freedom (\(n - k\))</span>
+              <span id="blueReadoutDf" style="font-family: var(--font-mono); color: var(--color-primary);">25</span>
+            </label>
+            <input type="range" id="blueSliderDf" min="5" max="80" step="5" value="25" style="width: 100%;">
+          </div>
+        </div>
+
+        <!-- Readout Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--color-primary); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-primary); font-weight: 700;">OLS Variance (Minimum)</div>
+            <div id="blueReadoutVarOls" style="font-size: 1.15rem; font-weight: 800; color: #1d4ed8; font-family: var(--font-mono);">0.25</div>
+          </div>
+          <div style="background: rgba(147, 51, 234, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #9333ea; text-align: center;">
+            <div style="font-size: 0.72rem; color: #9333ea; font-weight: 700;">Competitor \(\tilde{\beta}\) Variance</div>
+            <div id="blueReadoutVarAlt" style="font-size: 1.15rem; font-weight: 800; color: #7e22ce; font-family: var(--font-mono);">0.85</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #059669; font-weight: 600;">Unbiased \(s^2 = e'e / (n - k)\)</div>
+            <div id="blueReadoutS2" style="font-size: 1.05rem; font-weight: 700; color: #047857; font-family: var(--font-mono);">2.00 (unbiased)</div>
+          </div>
+        </div>
+
+        <!-- SVG Gauss-Markov Curve Comparison -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="blueLabSvg" viewBox="0 0 540 240" style="width: 100%; max-width: 540px; height: auto;" aria-label="Gauss-Markov sampling distribution comparison"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            Two unbiased sampling distributions centered at the true parameter \(\beta\). The blue distribution represents OLS; the purple distribution represents an alternative linear unbiased estimator \(\tilde{\beta} = Cy\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            The OLS curve is always taller and narrower around the true parameter than the competitor curve. Any non-zero departure matrix \(D \neq \mathbf{0}\) spreads and flattens the sampling distribution via \(\sigma^2 DD'\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            Because \(DD'\) is non-negative definite, you cannot construct any linear weighting of \(y\) that is unbiased and achieves lower variance than OLS. OLS extracts the maximum statistical efficiency possible in the linear class.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            The degrees-of-freedom divisor \(n - k\) compensates for the fact that estimating \(k\) parameters constrains \(e\) into an \((n - k)\)-dimensional subspace, preventing downward bias in estimated standard errors.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Move the <em>Competitor Penalty</em> down to 0.00. Notice the purple curve merges with the blue OLS curve, demonstrating that \(D = \mathbf{0}\) uniquely characterizes OLS.
+        </div>
+      </div>
+    </section>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: rgba(37, 99, 235, 0.03); border: 1.5px solid var(--color-primary); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: var(--space-lg); margin-bottom: var(--space-md);">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-xs);">
+        <span style="font-size: 1.2rem;">🧠</span>
+        <h3 style="font-size: var(--text-base); font-weight: 700; margin: 0; color: var(--color-primary);">
+          Can You Explain It? The Meaning of "Best"
+        </h3>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text); margin-bottom: var(--space-sm);">
+        A researcher argues: <em>"The Gauss–Markov theorem proves that OLS is the best possible estimator of \(\beta\) under all circumstances, so there is never any justification for using Ridge regression, Lasso, or nonlinear estimation."</em> How would you critique this statement based on what we actually proved?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Conceptual Explanation</summary>
+        <div style="margin-top: 10px; padding: 12px; background: var(--color-bg); border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+          <strong>Answer:</strong> The researcher's claim overstates the scope of Gauss–Markov in two critical ways:
+          <ol style="margin: 8px 0 0 0; padding-left: 1.25rem;">
+            <li><strong>Class Restriction:</strong> Gauss–Markov only proves optimality within the restricted class of <em>linear unbiased</em> estimators. It says nothing about nonlinear estimators (e.g., Maximum Likelihood in non-normal settings or neural networks).</li>
+            <li><strong>The Bias-Variance Tradeoff:</strong> Shrinkage estimators like Ridge or Lasso intentionally introduce a small amount of bias in exchange for a massive reduction in variance when regressors are collinear. As a result, Ridge regression can easily achieve a lower <em>Mean Squared Error</em> (\(\text{MSE} = \text{Bias}^2 + \text{Variance}\)) than OLS.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: var(--space-md);">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Degrees of Freedom in \(s^2\)
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        An empirical model with \(n = 25\) observations and \(k = 5\) estimated parameters produces \(\sum e_i^2 = 80\). What is the naive variance estimate \(\frac{1}{n}e'e\), and what is the unbiased estimate \(s^2\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Calculation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>Naive estimate:</strong> \(\frac{80}{25} = 3.20\).<br>
+          <strong>Unbiased estimate:</strong> \(s^2 = \frac{e'e}{n - k} = \frac{80}{25 - 5} = \frac{80}{20} = 4.00\).<br><br>
+          <strong>WHY?</strong> Because OLS minimizes \(\sum e_i^2\), sample residuals mechanically hug the sample data tighter than true errors \(\varepsilon\). The naive estimate underestimates \(\sigma^2\) by 20% because it ignores the 5 parameter constraints.
+        </div>
+      </details>
+    </div>
+
+    <!-- What You Should Now Understand -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-title">
+        <span>📖</span> WHAT YOU SHOULD NOW UNDERSTAND (LESSON 3.6 REVISION)
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Gauss–Markov Definition:</strong> OLS is the Best Linear Unbiased Estimator (BLUE) under spherical homoskedastic errors \(\operatorname{Var}(\varepsilon \mid X) = \sigma^2 I_n\).</li>
+        <li><strong>Variance Decomposition:</strong> Any alternative linear unbiased estimator \(\tilde{\beta} = Cy\) has variance \(\operatorname{Var}(\tilde{\beta} \mid X) = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'\). Because \(DD' \ge \mathbf{0}\), OLS variance is minimal.</li>
+        <li><strong>Scope of BLUE:</strong> Gauss–Markov does not say OLS is superior to all possible estimators; biased shrinkage estimators (like Ridge) or nonlinear estimators may achieve lower Mean Squared Error.</li>
+        <li><strong>Residual Variance Expectation:</strong> \(\mathbb{E}[e'e \mid X] = \sigma^2(n - k)\). The naive estimator \(\frac{1}{n}e'e\) is downward biased by a factor of \(\frac{n - k}{n}\).</li>
+        <li><strong>Unbiased Variance Estimator:</strong> Dividing by residual degrees of freedom \(n - k\) yields \(s^2 = \frac{e'e}{n - k}\), leading to the estimated covariance matrix \(\widehat{\operatorname{Var}}(\hat{\beta} \mid X) = s^2(X'X)^{-1}\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-05.html" class="btn btn-outline">
+        ← Previous: Variance of the OLS Estimator
+      </a>
+      <a href="lesson-07.html" class="btn btn-primary">
+        Next: Normality, t Statistics &amp; CLTs →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

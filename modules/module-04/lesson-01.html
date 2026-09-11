@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4.1: Convergence in Probability &amp; Consistency — EcoIntuition Academy</title>
+  <meta name="description" content="Explore what happens to sequences of random variables as sample size grows to infinity, define convergence in probability (plim), distinguish epsilon tolerance from error disturbances, and define consistency.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-04" data-lesson="01">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 04</a>
+          <span class="module-nav-title">Large-Sample Theory &amp; Asymptotic Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 8 &middot; Convergence in Probability &amp; Consistency</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 4 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">4.1 Convergence in Probability &amp; Consistency</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.2 Consistency of OLS &amp; Large-Sample Conditions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.3 Asymptotic Normality of OLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.4 Asymptotic Efficiency</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.5 Confidence Intervals &amp; Large-Sample Hypothesis Testing</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.6 The Delta Method</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.7 Slutsky’s Theorem &amp; Delta Method Applications</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.8 Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">12.5%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 12.5%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.1</span>
+        <span class="badge">Primary Source: Page 1</span>
+        <span class="badge">Asymptotic Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Convergence in Probability &amp; Consistency
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Suppose we repeatedly estimate an unknown economic quantity using larger and larger samples. For every finite \(n\), the estimate is a random variable. But as \(n \to \infty\), does the distribution collapse tightly onto the true constant?
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">OBJECTIVES</span> Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Develop intuition for how sequences of estimators behave as sample size \(n\) approaches infinity.</li>
+        <li>State and unpack the formal mathematical definition of convergence in probability (\(\operatorname{plim}\)).</li>
+        <li>Distinguish the positive tolerance parameter \(\varepsilon\) from the regression error disturbance \(\varepsilon_i\).</li>
+        <li>Define an estimator's consistency (\(\hat{\theta}_n \xrightarrow{p} \theta\)) as an asymptotic probability property.</li>
+        <li>Differentiate consistency from finite-sample unbiasedness and avoid common misconceptions.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Intuition -->
+    <section class="lesson-section" id="intuitionSection">
+      <h2>1. Intuition: What Happens When Sample Size Grows?</h2>
+      <p>
+        In finite-sample econometrics (Module 3), we analyzed the exact sampling distribution of an estimator for a fixed sample size \(n\). We asked: <em>Is the estimator unbiased on average across all possible samples of size \(n\)? What is its exact variance?</em>
+      </p>
+      <p>
+        In many real-world economic settings, however, exact finite-sample properties cannot be established. For example:
+      </p>
+      <ul style="line-height: 1.7; margin-bottom: var(--space-md);">
+        <li>The error terms \(\varepsilon_i\) may follow a skewed, heavy-tailed, or discrete distribution rather than an exact Gaussian bell curve.</li>
+        <li>The estimator might involve nonlinear combinations, ratios, or matrix inverses where expectations \(\mathbb{E}[\hat{\theta}]\) cannot be computed analytically.</li>
+      </ul>
+      <p>
+        This motivates <strong>large-sample (asymptotic) theory</strong>. Rather than fixing \(n\), we imagine a thought experiment where the econometrician collects progressively larger datasets: \(n = 25, 50, 100, 500, 1000, \dots, \infty\). At each sample size, we compute an estimate \(x_n\). We obtain a <em>sequence of random variables</em>:
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.15rem; font-weight: 600; color: var(--color-primary);">
+        \[\{ x_{25}, x_{50}, x_{100}, x_{250}, x_{500}, \dots, x_n \}\]
+      </div>
+      <p>
+        Each element in this sequence is random. Yet, under well-behaved conditions, the random variation compresses toward zero, and the probability mass concentrates entirely around a single non-random constant \(c\).
+      </p>
+    </section>
+
+    <!-- Section 2: Formal Definition -->
+    <section class="lesson-section" id="definitionSection">
+      <h2>2. Formal Definition: Convergence in Probability</h2>
+      <p>
+        The mathematical definition of convergence in probability is formally stated as follows:
+      </p>
+
+      <!-- Key Equation Box -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Convergence in Probability (Probability Limit / plim)</div>
+        <div class="equation-box-math">
+          \[\lim_{n \to \infty} \Pr(|x_n - c| > \varepsilon) = 0 \quad \text{for every positive } \varepsilon > 0\]
+        </div>
+        <div class="equation-box-sub">
+          Equivalently, as sample size goes to infinity: \(\lim_{n \to \infty} \Pr(|x_n - c| \le \varepsilon) = 1\).
+        </div>
+      </div>
+
+      <p>
+        If this condition holds, we write:
+      </p>
+      <div style="text-align: center; margin: var(--space-md) 0; font-size: 1.2rem; font-family: var(--font-mono); color: var(--color-primary); font-weight: 700;">
+        \(x_n \xrightarrow{p} c\) &emsp;or&emsp; \(\operatorname{plim}_{n \to \infty} x_n = c\)
+      </div>
+
+      <!-- What each symbol means -->
+      <div class="study-card" style="margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          What Each Symbol Means in the Definition
+        </h4>
+        <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.7; color: var(--color-text);">
+          <li><strong>\(x_n\)</strong>: The random estimate calculated from a sample of size \(n\).</li>
+          <li><strong>\(c\)</strong>: A fixed, non-random target parameter (the true value).</li>
+          <li><strong>\(|x_n - c|\)</strong>: The absolute deviation (distance) between the sample estimate and the true parameter.</li>
+          <li><strong>\(\varepsilon\)</strong>: An arbitrarily small positive tolerance radius (e.g., \(0.01, 0.001\)).</li>
+          <li><strong>\(\Pr(|x_n - c| > \varepsilon)\)</strong>: The probability that our estimate strays outside the tolerance envelope \([c - \varepsilon, c + \varepsilon]\).</li>
+          <li><strong>\(\lim_{n \to \infty} = 0\)</strong>: As the sample grows infinitely large, the likelihood of straying outside that microscopic window shrinks to zero.</li>
+        </ul>
+      </div>
+
+      <!-- CRITICAL EPSILON NOTATION NOTE -->
+      <div class="callout callout-note" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-note">NOTE</span>
+          <span class="callout-title" style="margin-left: 0.5rem;">Critical Notation: The Dual Meaning of Epsilon (&epsilon;)</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            Notice the Greek letter \(\varepsilon\) in \(\Pr(|x_n - c| > \varepsilon)\). Here, \(\varepsilon\) represents an <strong>arbitrarily small positive tolerance distance</strong> (just as in classical calculus \(\varepsilon\)-\(\delta\) limit definitions).<br><br>
+            It is <strong>NOT</strong> the unobserved regression error disturbance \(\varepsilon_i\) from the model \(y_i = x_i'\beta + \varepsilon_i\). Econometricians use \(\varepsilon\) for both concepts by convention, but their mathematical roles are completely distinct!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive SVG Lab -->
+    <section class="lesson-section" id="visualSection">
+      <h2>3. Interactive Lab: Visualizing Probability Limit Concentration</h2>
+      <p>
+        Observe how the sampling distribution of an estimator \(x_n\) contracts around the true constant \(c = 5.0\) as sample size increases from \(n = 25\) to \(n = 1000\). The red shaded tails represent the violation probability \(\Pr(|x_n - c| > \varepsilon)\).
+      </p>
+
+      <div class="interactive-lab-card">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="flex: 1; min-width: 240px;">
+            <label for="convSliderN" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Sample Size Sequence (n): <span id="convReadoutN" style="color: var(--color-primary); font-weight: 700;">100</span>
+            </label>
+            <input type="range" id="convSliderN" min="0" max="5" step="1" value="2" style="width: 100%; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #64748b; font-family: var(--font-mono); margin-top: 2px;">
+              <span>n=25</span>
+              <span>n=50</span>
+              <span>n=100</span>
+              <span>n=250</span>
+              <span>n=500</span>
+              <span>n=1000</span>
+            </div>
+          </div>
+
+          <div>
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Tolerance Radius (ε)</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="convEps05" class="btn btn-sm btn-outline active">ε = 0.5</button>
+              <button type="button" id="convEps10" class="btn btn-sm btn-outline">ε = 1.0</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Target Constant (c)</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a; font-family: var(--font-mono);">5.00</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-primary); font-weight: 600;">Tolerance Band</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">[4.5, 5.5]</div>
+          </div>
+          <div style="background: rgba(239, 68, 68, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #ef4444; text-align: center;">
+            <div style="font-size: 0.72rem; color: #dc2626; font-weight: 700;">Tail Violation \(\Pr(|x_n - c| > \varepsilon)\)</div>
+            <div id="convReadoutProb" style="font-size: 1.15rem; font-weight: 800; color: #b91c1c; font-family: var(--font-mono);">0.046</div>
+          </div>
+        </div>
+
+        <!-- Outside Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(37, 99, 235, 0.15); border: 1px dashed #2563eb;"></span> Tolerance Band \([c - \varepsilon, c + \varepsilon]\)</span>
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #2563eb;"></span> Sampling Distribution \(x_n\)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(239, 68, 68, 0.45); border: 1px solid #dc2626;"></span> Violation Tails \(\Pr(|x_n - c| > \varepsilon)\)</span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="convergenceSvg" viewBox="0 0 540 300" aria-label="Interactive convergence in probability distribution"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">WHAT YOU ARE SEEING</div>
+          <div class="visual-explanation-body">
+            The sampling distribution of \(x_n\) centered at the target constant \(c = 5.0\). The shaded blue rectangle represents the tolerance band \([c - \varepsilon, c + \varepsilon]\), and the red shaded tails represent the probability that the estimate misses the tolerance window.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">WHAT TO NOTICE</div>
+          <div class="visual-explanation-body">
+            As you drag the slider from \(n = 25\) up to \(n = 1000\), the distribution becomes increasingly narrow and tall. The red probability mass outside the tolerance band rapidly vanishes toward zero: \(\Pr(|x_n - c| > \varepsilon) \to 0\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">WHY IT MATTERS</div>
+          <div class="visual-explanation-body">
+            In finite samples, an estimate is guaranteed to be noisy. Convergence in probability proves that with sufficient sample size, that noise becomes arbitrarily small with probability approaching certainty.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">ECONOMETRIC INTERPRETATION</div>
+          <div class="visual-explanation-body">
+            Collecting more survey or market data does not just increase statistical power; it fundamentally locks the estimator onto the truth. If an estimator does not converge in probability, collecting more data will not fix its errors.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>TRY THIS:</strong> Set the tolerance to the tighter \(\varepsilon = 0.5\), then drag the slider from \(n=25\) to \(n=1000\). Notice how at \(n=25\), over 11% of samples miss the interval, but by \(n=1000\), the miss probability drops to practically 0.000!
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Definition of Consistency -->
+    <section class="lesson-section" id="consistencySection">
+      <h2>4. Definition: Consistency of an Estimator</h2>
+      <p>
+        With convergence in probability established, we define the foundational large-sample property of an estimator:
+      </p>
+
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Consistency of an Estimator</div>
+        <div class="equation-box-math">
+          \[\hat{\theta}_n \xrightarrow{p} \theta \quad \iff \quad \operatorname{plim}_{n \to \infty} \hat{\theta}_n = \theta\]
+        </div>
+        <div class="equation-box-sub">
+          An estimator \(\hat{\theta}_n\) is consistent for \(\theta\) if and only if its probability limit equals the true parameter \(\theta\).
+        </div>
+      </div>
+
+      <p>
+        In plain language: <strong>As sample size grows infinitely large, the estimator becomes arbitrarily close to the true parameter with probability approaching one.</strong>
+      </p>
+
+      <!-- Common Mistake Card -->
+      <div class="callout callout-warning" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">CAUTION</span>
+          <span class="callout-title" style="margin-left: 0.5rem;">Common Mistake</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>"A consistent estimator is guaranteed to give the exact correct answer in my sample."</strong><br>
+            <em>Correction:</em> Consistency is an <strong>asymptotic</strong> property that describes sequence behavior as \(n \to \infty\). In any actual finite sample (\(n = 150\) or even \(n = 5000\)), the estimate \(\hat{\theta}\) is a single random draw that almost certainly differs from \(\theta\). Consistency tells us that larger samples reduce uncertainty, not that a given finite estimate is error-free.
+          </p>
+        </div>
+      </div>
+
+      <!-- Comparison: Unbiasedness vs Consistency -->
+      <div class="study-card" style="margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          Unbiasedness vs Consistency: A Critical Comparison
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: 0.5rem;">
+          <div style="background: var(--surface-secondary, #F7FAFF); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Unbiasedness (Finite Sample)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              \(\mathbb{E}[\hat{\theta}_n] = \theta\) for <em>any fixed</em> \(n\). The sampling distribution is centered on the true value across repeated samples of size \(n\), but its spread may remain wide.
+            </p>
+          </div>
+          <div style="background: var(--surface-secondary, #F7FAFF); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #059669; margin-bottom: 4px;">Consistency (Large Sample)</div>
+            <p style="font-size: 0.88rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              \(\operatorname{plim}_{n \to \infty} \hat{\theta}_n = \theta\). As \(n \to \infty\), the variance collapses to zero and the entire probability distribution contracts to a single point at \(\theta\).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card">
+      <div class="quick-check-header">
+        <span class="academic-badge badge-note">QUICK CHECK</span>
+        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">Convergence &amp; Consistency</span>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm); color: var(--text-secondary);">
+        Suppose an estimator has a finite-sample bias of \(\frac{1}{n}\), so \(\mathbb{E}[\hat{\theta}_n] = \theta + \frac{1}{n}\), and its variance is \(\operatorname{Var}(\hat{\theta}_n) = \frac{2}{n}\). Is \(\hat{\theta}_n\) unbiased? Is \(\hat{\theta}_n\) consistent?
+      </p>
+      <details style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary); padding: 6px 0;">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 12px 14px; background: var(--surface-secondary, #F7FAFF); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: var(--accent-primary);">ANSWER:</strong> It is <em>biased</em> in finite samples, but <em>consistent</em> as \(n \to \infty\).<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem; line-height: 1.65;">
+            <li>For any finite \(n\) (say \(n = 50\)), \(\mathbb{E}[\hat{\theta}_{50}] = \theta + 0.02 \neq \theta\), so it is biased.</li>
+            <li>As \(n \to \infty\), the bias \(\frac{1}{n} \to 0\) and the variance \(\frac{2}{n} \to 0\). Because both the mean squared error and variance vanish, the estimator converges in probability to \(\theta\): \(\operatorname{plim}_{n \to \infty} \hat{\theta}_n = \theta\). Thus, it is consistent!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">SUMMARY</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>A sequence of estimators \(x_n\) converges in probability to a constant \(c\) if for any arbitrarily small positive tolerance \(\varepsilon > 0\), \(\lim_{n \to \infty} \Pr(|x_n - c| > \varepsilon) = 0\).</li>
+        <li>The \(\varepsilon\) in the convergence definition is a positive distance threshold, not the regression disturbance \(\varepsilon_i\).</li>
+        <li>An estimator is consistent (\(\hat{\theta}_n \xrightarrow{p} \theta\)) if its probability limit equals the true population parameter.</li>
+        <li>Consistency is an asymptotic property: it guarantees that estimation error contracts to zero as \(n \to \infty\), but does not mean any specific finite-sample estimate is exact.</li>
+        <li>An estimator can be biased in finite samples yet still be fully consistent if its bias and variance shrink to zero as \(n \to \infty\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 4 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: Consistency of OLS &amp; Large-Sample Conditions →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-04-interactions.js"></script>
+</body>
+</html>

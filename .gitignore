@@ -14,3 +14,10 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Primary source documents & extraction scratch files
+*.docx
+*.pdf
+*extracted*.txt
+docx2_*.txt
+pdf_extracted.txt

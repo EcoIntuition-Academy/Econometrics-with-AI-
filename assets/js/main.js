@@ -10,6 +10,9 @@
   const THEME_STORAGE_KEY = 'ecointuition_theme';
 
   function getPreferredTheme() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const themeParam = urlParams.get('theme');
+    if (themeParam === 'light' || themeParam === 'dark') return themeParam;
     const stored = localStorage.getItem(THEME_STORAGE_KEY);
     if (stored) return stored;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

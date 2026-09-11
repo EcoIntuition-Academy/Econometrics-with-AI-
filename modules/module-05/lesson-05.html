@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.5: Binary Dummy Variables — EcoIntuition Academy</title>
+  <meta name="description" content="Understand binary indicator variables, derive conditional group expectations, connect dummy coefficients to group mean differences, and test mean equality.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="05">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 7 &middot; Binary Dummy Variables</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">71.4%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 71.4%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.5</span>
+        <span class="badge">Indicator Variables</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Binary Dummy Variables
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Economic data frequently incorporate qualitative attributes: treatment status, union membership, or geographic locations. Learn how binary indicator variables (\(D_i \in \{0, 1\}\)) allow linear models to capture group-level differences and conditional expectations.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define a binary indicator variable taking values \(0\) or \(1\) to partition observations into mutually exclusive states.</li>
+        <li>Derive conditional expectations for the base group (\(\mathbb{E}[y \mid D=0] = \beta_1\)) and coded group (\(\mathbb{E}[y \mid D=1] = \beta_1 + \beta_2\)).</li>
+        <li>Interpret the dummy coefficient \(\beta_2\) as the difference in conditional expectations between the two groups.</li>
+        <li>Test the null hypothesis of group mean equality (\(H_0: \beta_2 = 0\)) while avoiding premature causal interpretations without controls.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Binary Indicator Concept -->
+    <section class="lesson-section" id="sectionDefinition">
+      <h2>1. The Indicator Variable Concept</h2>
+      <p>
+        A <strong>dummy variable</strong> (also termed an <em>indicator variable</em>) is an artificial binary variable created to represent qualitative or categorical attributes. It partitions observations into two distinct subsets:
+      </p>
+
+      <!-- Key Equation Box: Dummy Definition -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">FORMAL DEFINITION</span>
+          <span class="equation-title">Binary Indicator Variable</span>
+        </div>
+        <div class="equation-main">
+          \[ D_i = \begin{cases} 1 & \text{if observation } i \text{ possesses the attribute} \\ 0 & \text{otherwise} \end{cases} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">COMMON EXAMPLES:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\text{union}_i = 1\)</span>
+              <span class="symbol-desc">Worker belongs to a union; \(0\) if non-union</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\text{treated}_i = 1\)</span>
+              <span class="symbol-desc">Subject received a job-training voucher; \(0\) if control</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\text{male}_i = 1\)</span>
+              <span class="symbol-desc">Worker is male; \(0\) if female (canonical labor market example)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Conditional Expectations & Group Means -->
+    <section class="lesson-section" id="sectionModel">
+      <h2>2. Conditional Expectations and Group Means</h2>
+      <p>
+        Consider the classical benchmark bivariate regression of log wages on a binary indicator \(D_i\):
+        \[ \ln(\text{wage}_i) = \beta_1 + \beta_2 D_i + \varepsilon_i, \quad \mathbb{E}[\varepsilon_i \mid D_i] = 0 \]
+        To uncover the substantive meaning of parameters \(\beta_1\) and \(\beta_2\), evaluate the conditional expectation function for both values of \(D_i\):
+      </p>
+
+      <!-- Group Comparison Component -->
+      <div class="definition-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.9rem; margin-bottom: 4px;">BASE / REFERENCE GROUP (\(D = 0\))</div>
+          <div style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: var(--color-text); margin: 6px 0;">
+            \(\mathbb{E}[\ln w \mid D=0] = \beta_1\)
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+            When \(D = 0\), the dummy term vanishes: \(\beta_1 + \beta_2(0) = \beta_1\). The intercept represents the average outcome of the reference group.
+          </p>
+        </div>
+
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+          <div style="font-weight: 700; color: #059669; font-size: 0.9rem; margin-bottom: 4px;">CODED GROUP (\(D = 1\))</div>
+          <div style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: var(--color-text); margin: 6px 0;">
+            \(\mathbb{E}[\ln w \mid D=1] = \beta_1 + \beta_2\)
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+            When \(D = 1\), the dummy is active: \(\beta_1 + \beta_2(1) = \beta_1 + \beta_2\). The average outcome is shifted by \(\beta_2\).
+          </p>
+        </div>
+
+        <div class="def-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+          <div style="font-weight: 700; color: #dc2626; font-size: 0.9rem; margin-bottom: 4px;">GROUP DIFFERENCE</div>
+          <div style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: var(--color-text); margin: 6px 0;">
+            \(\Delta \mathbb{E} = \beta_2\)
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+            Subtracting base from coded: \((\beta_1 + \beta_2) - \beta_1 = \beta_2\). The coefficient \(\beta_2\) is the gap in conditional means!
+          </p>
+        </div>
+      </div>
+
+      <!-- Methodological Caution Callout -->
+      <div class="callout callout-warning">
+        <div class="callout-header">
+          <span class="callout-badge">Methodological Caution</span>
+          <h4 class="callout-title" style="margin: 0;">Descriptive Difference vs. Causal Effect</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0;">
+            In this simple bivariate regression without controls, \(\hat{\beta}_2\) measures the <em>raw descriptive difference</em> in sample averages. It must <strong>not</strong> be interpreted as a causal effect. In observational data, groups often differ systematically in education, experience, occupation, or location. In Lesson 5.6, we will control for continuous confounders to address omitted variable bias.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Testing Group Equality -->
+    <section class="lesson-section" id="sectionTesting">
+      <h2>3. Testing the Equality of Group Means</h2>
+      <p>
+        To test whether the two groups have identical expected outcomes in the population, we test whether the difference \(\beta_2\) is zero:
+        \[ H_0: \beta_2 = 0 \quad \text{versus} \quad H_1: \beta_2 \neq 0 \]
+      </p>
+      <p>
+        Under \(H_0\), the classical \(t\)-statistic is:
+        \[ t = \frac{\hat{\beta}_2}{\operatorname{SE}(\hat{\beta}_2)} \]
+        Remarkably, estimating this simple OLS regression with an intercept and a single dummy regressor yields a \(t\)-statistic mathematically identical to the classical two-sample independent \(t\)-test with pooled variance.
+      </p>
+    </section>
+
+    <!-- Section 4: Interactive Group Means Lab -->
+    <section class="lesson-section" id="sectionInteractiveGroup">
+      <h2>4. Interactive Group Means Lab</h2>
+      <p>
+        Inspect how OLS partitions data into two discrete columns and calculates group conditional expectations. Use the filter buttons to isolate the base category, the coded category, or examine the vertical separation \(\beta_2\) between them.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">Interactive Group Lab</div>
+          <h3 class="lab-title">Discrete Group Means &amp; Separation \(\beta_2\)</h3>
+        </div>
+
+        <div class="lab-controls-bar">
+          <div class="btn-group-segmented" role="group" aria-label="Filter Group View">
+            <button id="dummyBtnBoth" class="btn btn-sm btn-outline active" type="button">Both Groups</button>
+            <button id="dummyBtnGroup0" class="btn btn-sm btn-outline" type="button">Base (D = 0)</button>
+            <button id="dummyBtnGroup1" class="btn btn-sm btn-outline" type="button">Coded (D = 1)</button>
+          </div>
+          <div class="lab-readout-group">
+            <span class="readout-item">Base Mean (\(\beta_1\)): <strong>2.10</strong></span>
+            <span class="readout-item">Group Gap (\(\beta_2\)): <strong id="dummyReadoutDiff">+0.35 (Gap)</strong></span>
+          </div>
+        </div>
+
+        <!-- Inline Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Base Group Mean (\(\mathbb{E}[y \mid D=0] = \beta_1\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: #059669;"></span> Coded Group Mean (\(\mathbb{E}[y \mid D=1] = \beta_1 + \beta_2\))</span>
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #dc2626;"></span> Group Separation Gap (\(\beta_2\))</span>
+        </div>
+
+        <div class="lab-visual-container">
+          <div class="chart-svg-shell">
+            <svg id="dummyGroupSvg" viewBox="0 0 540 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Binary Dummy Group Expectations Visualizer"></svg>
+          </div>
+        </div>
+
+        <!-- Structured 5-Box Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>Two vertical columns representing sample observations partitioned by the binary variable: \(D_i=0\) on the left and \(D_i=1\) on the right.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>The blue solid dot is \(\beta_1 = 2.10\). The green solid dot is \(\beta_1 + \beta_2 = 2.45\). The red dashed vertical segment illustrates the parameter difference \(\beta_2 = +0.35\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>With only a dummy regressor, OLS does not fit a continuous line across arbitrary \(x\); it calculates the exact arithmetic sample mean within each discrete group.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>The estimated coefficient \(\hat{\beta}_2\) is the sample average difference: \(\bar{y}_1 - \bar{y}_0\). The \(t\)-test on \(\hat{\beta}_2\) tests whether this gap is statistically distinguishable from zero.</p>
+          </div>
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>Click <strong>Base (D = 0)</strong> to isolate the intercept benchmark, then switch back to <strong>Both Groups</strong> to visualize the vertical separation gap.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check & Takeaways -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Interpreting Binary Indicator Coefficients
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        An analyst estimates the regression \(\ln(\text{wage}) = 2.40 + 0.25 \cdot \text{union} + e\), where \(\text{union}_i = 1\) if the worker belongs to a labor union and \(0\) otherwise. What is the estimated expected log wage for a non-union worker, and what does the value \(0.25\) represent?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Non-union worker expected log wage is \(2.40\). The value \(0.25\) is the estimated difference in average log wage between union and non-union workers in this sample.<br><br>
+          <strong>DETAILS:</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>For non-union workers (\(\text{union} = 0\)): \(\mathbb{E}[\ln w \mid \text{union}=0] = 2.40 + 0.25(0) = \mathbf{2.40}\).</li>
+            <li>For union workers (\(\text{union} = 1\)): \(\mathbb{E}[\ln w \mid \text{union}=1] = 2.40 + 0.25(1) = \mathbf{2.65}\).</li>
+            <li>The coefficient \(0.25\) shifts the expectation for the coded group: \(2.65 - 2.40 = 0.25\).</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Summary Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>A binary indicator variable takes values in \(\{0, 1\}\) to encode qualitative group membership into regression models.</li>
+        <li>In the model \(y = \beta_1 + \beta_2 D + \varepsilon\), the intercept \(\beta_1\) is the conditional expectation of the base group (\(D = 0\)).</li>
+        <li>The coefficient \(\beta_2\) equals the difference in conditional expectations: \(\mathbb{E}[y \mid D=1] - \mathbb{E}[y \mid D=0]\).</li>
+        <li>Testing \(H_0: \beta_2 = 0\) tests whether group means are equal in the population and is equivalent to a two-sample \(t\)-test.</li>
+        <li>Bivariate dummy coefficients measure raw sample differences; they do not establish causality without controlling for confounding factors.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-04.html" class="btn btn-outline">
+        ← Previous: Wald &amp; F Tests for Joint Restrictions
+      </a>
+      <a href="lesson-06.html" class="btn btn-primary">
+        Next: Controls, Categories &amp; Reference Groups →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

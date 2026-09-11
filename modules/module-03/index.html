@@ -3,18 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 3: Multiple Linear Regression — Econometrics with AI</title>
+  <title>Module 03: Goodness of Fit & Finite-Sample OLS Properties — EcoIntuition Academy</title>
+  <meta name="description" content="Learn how well OLS fits observed data, how R² and adjusted R² are interpreted, and why OLS has important finite-sample properties such as unbiasedness, variance efficiency, and exact inference under normality.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="../../assets/css/variables.css">
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/course.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
-<body>
+<body data-module="module-03">
+  <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
       <a href="../../index.html" class="brand">
@@ -24,53 +34,232 @@
           <span class="brand-title">Econometrics with AI</span>
         </div>
       </a>
+
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="../../index.html" class="nav-item-link">Home</a></li>
           <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="../module-01/index.html" class="nav-item-link">Module 1</a></li>
+          <li><a href="../module-02/index.html" class="nav-item-link">Module 2</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
-          <li><a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
         </ul>
       </nav>
+
       <div class="nav-right-actions">
         <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
           <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
           <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
         </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="container section-wrapper" style="max-width: 960px;">
-    <div style="margin-bottom: var(--space-2xl);">
-      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
-        <span class="badge">Module 3</span>
-        <span class="badge badge-amber">In Preparation</span>
+  <!-- Centered Landing Content (Strictly NO Sidebar) -->
+  <main class="lesson-content-area" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+    
+    <!-- Hero Header -->
+    <div style="margin-bottom: var(--space-xl);">
+      <div style="display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 03</span>
+        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Finite-Sample Theory &amp; Inference</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">7 Lessons</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Primary Source: Econometrics (3).pdf</span>
       </div>
-      <h1 style="font-size: var(--text-hero); margin-bottom: var(--space-xs);">Multiple Linear Regression</h1>
-      <p class="section-subtitle">Control for confounding factors, interpret ceteris paribus effects, and evaluate model fit with R².</p>
+
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-sm); color: var(--color-text);">
+        Goodness of Fit &amp; Finite-Sample OLS Properties
+      </h1>
+      
+      <p style="font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-lg); max-width: 860px;">
+        Learn how well OLS fits observed data, how \(R^2\) and adjusted \(R^2\) are interpreted, and why OLS possesses critical finite-sample properties such as unbiasedness, variance efficiency (Gauss–Markov / BLUE), degrees-of-freedom variance correction, and exact normal and \(t\) inference.
+      </p>
+
+      <!-- Action Buttons & Progress -->
+      <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-xl);">
+        <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
+          Start Module 3 →
+        </a>
+        <a href="../../index.html#modules" class="btn btn-outline btn-lg">
+          Explore All Modules
+        </a>
+      </div>
+
+      <!-- Module Progress Card -->
+      <div class="sidebar-progress-box" style="padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div class="sidebar-progress-labels" style="font-size: var(--text-sm); font-weight: 500; display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+          <span>Module 3 Completion</span>
+          <span id="progress-text-module-03" style="color: var(--color-primary); font-weight: 600;">0% Complete</span>
+        </div>
+        <div class="progress-bar-track" style="height: 10px; border-radius: 999px; background: var(--color-border); overflow: hidden;">
+          <div class="progress-bar-fill" id="progress-fill-module-03" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 999px; transition: width 0.4s ease;"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="why-matters-card" style="margin-bottom: var(--space-xl);">
-      <h3 style="margin-bottom: var(--space-xs);">Architecture Ready for Content Addition</h3>
-      <p>This module folder is structured and ready for lessons. Detailed lesson pages following the 17-section template will be added progressively.</p>
-      <a href="../module-01/lesson-01.html" class="btn btn-primary btn-sm" style="margin-top: var(--space-sm);">Explore Module 1 Demonstration Lesson</a>
+    <!-- Structured Learning Path -->
+    <div style="margin-bottom: var(--space-2xl); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg);">
+      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: var(--space-md); font-weight: 600;">
+        Curriculum Learning Flow
+      </h3>
+      <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; font-size: var(--text-sm); font-weight: 500;">
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Goodness of Fit</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">\(R^2\)</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Adjusted \(\bar{R}^2\)</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">\(F\) Tests</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Unbiasedness</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OVB</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">OLS Variance</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Gauss–Markov / BLUE</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Estimating \(\sigma^2\)</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-bg); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">Normality &amp; \(t\)</span>
+        <span style="color: var(--color-text-secondary);">→</span>
+        <span style="background: var(--color-primary-light); color: var(--color-primary); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600;">CLT Asymptotics</span>
+      </div>
     </div>
 
-    <div>
-      <a href="../../index.html#modules" class="btn btn-outline">← Return to Course Modules</a>
+    <!-- Lesson Rows -->
+    <div style="margin-bottom: var(--space-2xl);">
+      <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text);">
+        Lessons in this Module
+      </h2>
+
+      <div class="module-lesson-list">
+        
+        <!-- Lesson 01 -->
+        <a href="lesson-01.html" class="module-lesson-row">
+          <div class="lesson-row-num">01</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.1 Goodness of Fit &amp; R-Squared</h3>
+            <p class="lesson-row-desc">Understand how variation in regressors predicts variation in \(y\), derive the SST = SSR + SSE decomposition via summation and demeaning matrix \(M_0\), and evaluate the predictive limits of \(R^2\).</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Variance Decomposition</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-01">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 02 -->
+        <a href="lesson-02.html" class="module-lesson-row">
+          <div class="lesson-row-num">02</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.2 Adjusted R-Squared &amp; Model Comparison</h3>
+            <p class="lesson-row-desc">Examine why adding regressors mechanically inflates ordinary \(R^2\), explore the degrees-of-freedom penalty in adjusted \(\bar{R}^2\), and learn rigorous rules for comparing non-nested models.</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Model Selection</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-02">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 03 -->
+        <a href="lesson-03.html" class="module-lesson-row">
+          <div class="lesson-row-num">03</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.3 R-Squared &amp; F Tests</h3>
+            <p class="lesson-row-desc">Construct hypothesis tests for multiple parameter restrictions by comparing unrestricted vs restricted \(R^2\), and understand the geometry of joint statistical significance.</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Hypothesis Testing</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-03">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 04 -->
+        <a href="lesson-04.html" class="module-lesson-row">
+          <div class="lesson-row-num">04</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</h3>
+            <p class="lesson-row-desc">Derive finite-sample conditional unbiasedness under strict exogeneity, and analyze the exact mathematical formula and 2×2 diagnostic table for omitted-variable bias.</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Identification &amp; Bias</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-04">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 05 -->
+        <a href="lesson-05.html" class="module-lesson-row">
+          <div class="lesson-row-num">05</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.5 Variance of the OLS Estimator</h3>
+            <p class="lesson-row-desc">Derive the variance-covariance matrix \(\operatorname{Var}(b \mid X) = \sigma^2(X'X)^{-1}\) under spherical errors, evaluate the diagonal 2-regressor matrix, and inspect standard error precision drivers.</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Precision &amp; Sampling</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-05">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 06 -->
+        <a href="lesson-06.html" class="module-lesson-row">
+          <div class="lesson-row-num">06</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</h3>
+            <p class="lesson-row-desc">Prove that OLS is the Best Linear Unbiased Estimator (BLUE) via non-negative definite matrix \(DD'\), and derive the unbiased residual variance estimator \(s^2 = e'e / (n - k)\).</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Efficiency &amp; Estimation</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-06">Not Started</span>
+          </div>
+        </a>
+
+        <!-- Lesson 07 -->
+        <a href="lesson-07.html" class="module-lesson-row">
+          <div class="lesson-row-num">07</div>
+          <div class="lesson-row-info">
+            <h3 class="lesson-row-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</h3>
+            <p class="lesson-row-desc">Connect exact normal error distributions to the Student's \(t_{n-k}\) statistic, contrast the Lindeberg–Lévy and Lindeberg–Feller central limit theorems, and master the full 15-topic Module 3 review.</p>
+          </div>
+          <div class="lesson-row-meta">
+            <span class="badge" style="background: var(--color-bg); border: 1px solid var(--color-border);">Asymptotics &amp; Review</span>
+            <span class="lesson-status-tag" data-lesson-id="module-03-lesson-07">Not Started</span>
+          </div>
+        </a>
+
+      </div>
     </div>
+
+    <!-- Source Reference Banner -->
+    <div class="study-card" style="background: var(--surface); padding: var(--space-lg); border: 1.5px solid var(--border-subtle);">
+      <h3 style="font-size: var(--text-base); font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">
+        Primary Academic Source
+      </h3>
+      <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+        This module is constructed directly from <code>Econometrics (3).pdf</code>, preserving all mathematical derivations, summation and matrix expansions of \(R^2\), the 2×2 OVB bias table, spherical error variance structures, the modern Gauss–Markov proof (Hansen 2022), exact Student's \(t\) distribution mechanics, and the Lindeberg–Lévy and Lindeberg–Feller central limit theorems.
+      </p>
+    </div>
+
   </main>
 
+  <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-bottom">
         <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
-        <p>Built for modern learners with mathematical rigor & intuitive clarity.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
       </div>
     </div>
   </footer>
 
+  <script src="../../assets/js/progress.js"></script>
   <script src="../../assets/js/main.js"></script>
 </body>
 </html>

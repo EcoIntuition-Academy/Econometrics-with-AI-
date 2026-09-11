@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.3: R-Squared & F Tests — EcoIntuition Academy</title>
+  <meta name="description" content="Test multiple hypothesis restrictions jointly by comparing unrestricted and restricted R², understand the F-statistic formula, and explore overall model significance.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="03">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 7 &middot; R-Squared &amp; F Tests</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">42%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 42.8%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.3</span>
+        <span class="badge">Joint Hypothesis Testing</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        R-Squared &amp; F Tests
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Learn how econometricians test linear restrictions on regression models by measuring the drop in explanatory power between unrestricted and restricted specifications using the \(F\)-statistic.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate the unrestricted and restricted regression specifications for linear hypothesis testing.</li>
+        <li>Derive and interpret the \(R^2\)-based \(F\)-statistic formula: \(F[J, n - k] = \frac{(R^2 - R_r^2) / J}{(1 - R^2) / (n - k)}\).</li>
+        <li>Identify numerator degrees of freedom (\(J\) restrictions) and denominator degrees of freedom (\(n - k\)).</li>
+        <li>Explain the intuition: comparing normalized fit lost to remaining normalized residual variance.</li>
+        <li>Demonstrate that testing all slopes simultaneously yields a restricted \(R_r^2 = 0\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Unrestricted vs Restricted Models -->
+    <section class="lesson-section" id="modelsSection">
+      <h2>1. The Unrestricted and Restricted Framework</h2>
+      <p>
+        The \(F\)-test provides a formal statistical framework for testing joint linear restrictions: we compare the fit of an unconstrained model to a simpler model where hypothesized constraints are imposed.
+      </p>
+
+      <!-- VISUAL TWO-MODEL STORY & LOSS OF FIT -->
+      <div class="decomp-visual-container">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.5rem 0;">
+          The Hypothesis Testing Story: Did Fit Deteriorate Substantially?
+        </h3>
+        <p style="font-size: 0.9rem; color: #475569; line-height: 1.55; margin: 0 0 0.85rem 0;">
+          Start with the full model containing all candidate regressors. Next, impose \(J\) linear restrictions (such as setting coefficients to zero). Did the explanatory power plunge, or did it drop by only a negligible amount consistent with sampling chance?
+        </p>
+
+        <div class="f-models-grid">
+          <!-- Full Model Card -->
+          <div class="f-model-card f-model-card--unrestricted">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #2563eb; margin-bottom: 0.25rem;">
+              Full / Unrestricted Model
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">
+              \(y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon\)
+            </div>
+            <div style="font-size: 0.85rem; color: #334155; line-height: 1.45;">
+              All regressors included.<br>
+              <strong>Goodness of fit: \(R^2\)</strong>
+            </div>
+          </div>
+
+          <!-- Between: Loss of Fit -->
+          <div class="f-loss-card">
+            <div class="f-loss-title">Loss of Fit</div>
+            <div class="f-loss-val">\(R^2 - R_r^2\)</div>
+            <div style="font-size: 0.78rem; color: #9a3412; margin-top: 0.25rem;">
+              Drop when imposing \(J\) restrictions
+            </div>
+          </div>
+
+          <!-- Restricted Model Card -->
+          <div class="f-model-card f-model-card--restricted">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; margin-bottom: 0.25rem;">
+              Restricted Model (\(H_0: \beta_2 = 0\))
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">
+              \(y = \beta_0 + \beta_1 x_1 + \varepsilon\)
+            </div>
+            <div style="font-size: 0.85rem; color: #334155; line-height: 1.45;">
+              Restrictions imposed (\(R_r^2 \le R^2\)).<br>
+              <strong>Goodness of fit: \(R_r^2\)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The F-Statistic Formula -->
+    <section class="lesson-section" id="formulaSection">
+      <h2>2. The F-Statistic via R-Squared: Tall Fraction Architecture</h2>
+      <p>
+        The \(F\)-statistic normalizes the loss of explanatory power per restriction by the remaining unexplained residual variation per residual degree of freedom.
+      </p>
+
+      <!-- TALL FRACTION LAYOUT BOX -->
+      <div class="f-fraction-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="equation-badge" style="background:#eff6ff; color:#2563eb; font-weight:700; font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">KEY EQUATION</span>
+          <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Degrees of Freedom: \(F \sim F[J, n - k]\) under \(H_0\)</span>
+        </div>
+
+        <div style="text-align: center; margin: 1.25rem 0; font-size: 1.35rem; color: #0f172a; overflow-x: auto;">
+          $$F = \frac{\dfrac{R^2 - R_r^2}{J}}{\dfrac{1 - R^2}{n - k}}$$
+        </div>
+
+        <!-- Explanatory Split: Numerator vs Denominator -->
+        <div class="f-decomp-labels">
+          <div class="f-label-card">
+            <div class="f-label-tag">Numerator: Signal (Fit Lost)</div>
+            <p class="f-label-text">
+              <strong>Average loss of fit per restriction:</strong> \(\frac{R^2 - R_r^2}{J}\) measures how much explanatory power was sacrificed per parameter constraint imposed on the model.
+            </p>
+          </div>
+
+          <div class="f-label-card">
+            <div class="f-label-tag">Denominator: Noise (Residual Variance)</div>
+            <p class="f-label-text">
+              <strong>Residual variation per residual degree of freedom:</strong> \(\frac{1 - R^2}{n - k}\) scales the signal by the baseline noise remaining in the unrestricted specification.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equivalence with Sum of Squares -->
+      <div class="study-card" style="background: var(--surface); padding: 1rem 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: 8px; margin-top: 1.25rem;">
+        <p style="margin: 0; font-size: 0.9rem; color: #475569; line-height: 1.55;">
+          <strong>Sum of Squares Equivalence:</strong> Because total sum of squares \(\text{SST}\) cancels from both the numerator and denominator, the \(R^2\)-based \(F\) is mathematically identical to the sum-of-squared-residuals formulation:
+          <span style="display: block; text-align: center; margin-top: 0.4rem; font-family: var(--font-mono); font-size: 0.95rem; color: #1e293b; font-weight: 600;">
+            \(F = \frac{(\text{SSE}_r - \text{SSE}_u) / J}{\text{SSE}_u / (n - k)}\)
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Visualizer -->
+    <section class="lesson-section" id="visualizerSection">
+      <h2>3. Interactive Lab: Visualizing Fit Loss and the F-Statistic</h2>
+      <p>
+        Adjust the unrestricted fit \(R^2\), restricted fit \(R_r^2\), number of restrictions \(J\), and sample size \(n\). See how fit lost in the numerator is scaled against residual variance in the denominator.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <label for="fSliderR2" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Unrestricted R²</span>
+              <span id="fReadoutR2" style="font-family: var(--font-mono); color: var(--color-primary);">0.65</span>
+            </label>
+            <input type="range" id="fSliderR2" min="0.30" max="0.90" step="0.01" value="0.65" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="fSliderR2r" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Restricted R²_r</span>
+              <span id="fReadoutR2r" style="font-family: var(--font-mono); color: #b45309;">0.45</span>
+            </label>
+            <input type="range" id="fSliderR2r" min="0.10" max="0.80" step="0.01" value="0.45" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="fSliderJ" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Restrictions (J)</span>
+              <span id="fReadoutJ" style="font-family: var(--font-mono); color: var(--color-primary);">2</span>
+            </label>
+            <input type="range" id="fSliderJ" min="1" max="5" step="1" value="2" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="fSliderN" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Sample Size (n)</span>
+              <span id="fReadoutN" style="font-family: var(--font-mono); color: var(--color-primary);">60</span>
+            </label>
+            <input type="range" id="fSliderN" min="25" max="150" step="5" value="60" style="width: 100%;">
+          </div>
+        </div>
+
+        <!-- Calculated F-Stat Banner -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-bg); padding: 12px 18px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-subtle); margin-bottom: var(--space-md); flex-wrap: wrap; gap: 10px;">
+          <div>
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Computed F-Statistic</span>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #1d4ed8; font-family: var(--font-mono);">
+              F = <span id="fReadoutF">16.00</span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Inference Decision</span>
+            <div id="fReadoutPval" style="font-size: 1rem; font-weight: 700; color: #059669;">
+              Highly Significant (p &lt; 0.01)
+            </div>
+          </div>
+        </div>
+
+        <!-- SVG Decomposition Bar -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="fTestSvg" viewBox="0 0 540 220" style="width: 100%; max-width: 540px; height: auto;" aria-label="F-test variance decomposition diagram"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            Two horizontal bars breaking down outcome variance: the top bar shows the full unrestricted model fit (\(R^2\)), while the lower bar shows fit after imposing \(J\) restrictions (\(R_r^2\)). The amber segment represents lost fit.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            If \(R_r^2\) is close to \(R^2\), the amber segment is tiny, driving the \(F\)-statistic toward zero (cannot reject \(H_0\)). As the gap \((R^2 - R_r^2)\) widens, \(F\) surges upward.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            Individual \(t\)-tests can be misleading when regressors are collinear: each separate \(t\)-test may fail to reject zero, yet the joint \(F\)-test emphatically rejects the hypothesis that all coefficients are zero.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            The \(F\)-statistic is an omnibus test of linear restrictions. It answers whether the variables in question collectively provide explanatory power that exceeds what chance sampling error could produce.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Drag <em>Restricted R²_r</em> up until it matches <em>Unrestricted R²</em> (0.65). Notice the amber bar disappears, \(F\) drops to 0.00, and the test reports <em>Not Significant</em>.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Testing Overall Model Significance -->
+    <section class="lesson-section" id="overallSection">
+      <h2>4. Special Case: Overall Model Significance (\(R_r^2 = 0\))</h2>
+      <p>
+        A frequent application is testing whether <em>all slope coefficients in the regression are jointly zero</em>:
+      </p>
+
+      <div class="study-card" style="background: var(--surface); padding: var(--space-md); border: 1.5px solid var(--border-subtle); margin-bottom: var(--space-md);">
+        <p style="margin: 0; font-size: 0.95rem; font-family: var(--font-mono); font-weight: 600; color: var(--color-primary);">
+          \(H_0: \beta_1 = \beta_2 = \dots = \beta_{k-1} = 0\)
+        </p>
+      </div>
+
+      <p>
+        Under this null hypothesis, the restricted model contains <strong>only the constant intercept</strong>: \(y_i = \beta_0 + \varepsilon_i\). The OLS estimator of a model with only an intercept is simply the sample mean: \(\hat{\beta}_0 = \bar{y}\).
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">📌</span>
+          <span class="callout-title">Source Result: R²_r = 0</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            When all slope coefficients are zero, the fitted values equal the sample mean: \(\hat{y}_i = \bar{y}\). Thus the restricted regression sum of squares is zero:
+            \[
+            \text{SSR}_r = \sum_{i=1}^n (\bar{y} - \bar{y})^2 = 0 \implies R_r^2 = \frac{\text{SSR}_r}{\text{SST}} = 0
+            \]
+            The overall model \(F\)-statistic simplifies directly to:
+            \[
+            F[k - 1, n - k] = \frac{R^2 / (k - 1)}{(1 - R^2) / (n - k)}
+            \]
+            This is the standard overall \(F\)-statistic reported at the bottom of every econometric regression output table.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.35rem 1.5rem; margin: 1.5rem 0;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.1rem;">🧠</span>
+        <h4 style="font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0f172a; margin: 0;">
+          Can You Explain It? Conceptual Check
+        </h4>
+      </div>
+      <p style="font-size: 0.92rem; color: #334155; line-height: 1.55; margin: 0 0 0.75rem 0;">
+        <strong>Question:</strong> Why can an \(F\)-test reject the joint null hypothesis \(H_0: \beta_1 = \beta_2 = 0\) even when both individual \(t\)-tests fail to reject \(\beta_1 = 0\) and \(\beta_2 = 0\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #2563eb;">Show Explanation</summary>
+        <div style="margin-top: 0.5rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; color: #1e293b;">
+          <strong>Explanation:</strong> High multicollinearity between \(x_1\) and \(x_2\) inflates their individual coefficient standard errors, driving individual \(t\)-statistics toward zero. However, omitting <em>both</em> regressors simultaneously creates a large loss of fit \((R^2 - R_r^2)\). The \(F\)-test accounts for the joint covariance structure and detects that the regressors collectively explain significant outcome variation.
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.25rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Calculating F from R²
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        An unrestricted model with \(n = 64\) and \(k = 4\) parameters yields \(R^2 = 0.50\). Imposing \(J = 2\) exclusions drops the fit to \(R_r^2 = 0.40\). What is the \(F\)-statistic?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Calculation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(F = 6.00\).<br><br>
+          <strong>WHY?</strong><br>
+          Numerator: \((R^2 - R_r^2) / J = (0.50 - 0.40) / 2 = 0.10 / 2 = 0.05\).<br>
+          Denominator: \((1 - R^2) / (n - k) = (1 - 0.50) / (64 - 4) = 0.50 / 60 = 0.008333\).<br>
+          \(F = \frac{0.05}{0.008333} = 6.00\). With \(F[2, 60]\), this exceeds standard critical values (~3.15), rejecting \(H_0\).
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The \(F\)-test evaluates whether imposing \(J\) linear restrictions causes a statistically significant drop in explanatory power (\(R^2 - R_r^2\)).</li>
+        <li>The \(F\)-statistic formula \(F = \frac{(R^2 - R_r^2)/J}{(1 - R^2)/(n - k)}\) balances the average loss of fit per restriction against the unexplained residual variance per degree of freedom.</li>
+        <li>Testing all slope parameters simultaneously yields a restricted fit of \(R_r^2 = 0\) because a model with only an intercept predicts \(\bar{y}\) for all observations.</li>
+        <li>Joint \(F\)-testing overcomes multicollinearity where individual \(t\)-tests fail to reject coefficients separately.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-02.html" class="btn btn-outline">
+        ← Previous: Adjusted R² &amp; Model Comparison
+      </a>
+      <a href="lesson-04.html" class="btn btn-primary">
+        Next: OLS Unbiasedness &amp; Omitted Variable Bias →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

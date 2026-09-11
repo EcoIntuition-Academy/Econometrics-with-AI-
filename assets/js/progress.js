@@ -12,8 +12,8 @@ const ProgressTracker = (function () {
   const MODULE_LESSON_COUNTS = {
     'module-01': 9,
     'module-02': 8,
-    'module-03': 6,
-    'module-04': 7,
+    'module-03': 7,
+    'module-04': 8,
     'module-05': 7,
     'module-06': 8,
     'module-07': 7,

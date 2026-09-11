@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4.4: Asymptotic Efficiency — EcoIntuition Academy</title>
+  <meta name="description" content="Explore CAN (Consistent and Asymptotically Normal) estimators, define asymptotic efficiency as minimum asymptotic covariance, and examine the nuanced comparison between OLS and MLE.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-04" data-lesson="04">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 04</a>
+          <span class="module-nav-title">Large-Sample Theory &amp; Asymptotic Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 8 &middot; Asymptotic Efficiency</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 4 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.1 Convergence in Probability &amp; Consistency</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.2 Consistency of OLS &amp; Large-Sample Conditions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.3 Asymptotic Normality of OLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">4.4 Asymptotic Efficiency</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.5 Confidence Intervals &amp; Large-Sample Hypothesis Testing</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.6 The Delta Method</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.7 Slutsky’s Theorem &amp; Delta Method Applications</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.8 Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">50.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 50.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.4</span>
+        <span class="badge">Primary Source: Page 3</span>
+        <span class="badge">Optimality in Large Samples</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Asymptotic Efficiency
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Multiple estimators can be consistent and asymptotically normal for the same economic parameter. Which one should we prefer? Explore the gold standard of large-sample estimation—CAN estimators—and examine the rigorous comparison between OLS and Maximum Likelihood.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">OBJECTIVES</span> Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define CAN (Consistent and Asymptotically Normal) estimators as the benchmark class for large-sample inference.</li>
+        <li>State the formal criterion for asymptotic efficiency: achieving the minimum asymptotic covariance matrix.</li>
+        <li>Visualize how two consistent estimators can differ substantially in their large-sample precision.</li>
+        <li>Analyze the OLS vs. Maximum Likelihood Estimation (MLE) trade-off under normal vs. non-normal error distributions.</li>
+        <li>Avoid oversimplified claims like "MLE is always superior to OLS" by identifying the role of distributional misspecification.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: CAN Estimators -->
+    <section class="lesson-section" id="canSection">
+      <h2>1. The Benchmark Class: CAN Estimators</h2>
+      <p>
+        In finite samples (Module 3), Gauss–Markov established that OLS is BLUE: the Best (minimum variance) <em>Linear Unbiased</em> Estimator. But in large samples, we drop the requirement of strict finite-sample unbiasedness.
+      </p>
+      <p>
+        Instead, econometricians evaluate estimators within the class of <strong>CAN Estimators</strong>:
+      </p>
+
+      <div class="study-card" style="margin-bottom: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          What is a CAN Estimator?
+        </h4>
+        <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+          An estimator \(\hat{\theta}_n\) is a <strong>CAN Estimator</strong> if it satisfies two simultaneous properties:
+        </p>
+        <ol style="margin: 0.5rem 0 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+          <li><strong>C (Consistent):</strong> \(\hat{\theta}_n \xrightarrow{p} \theta\) as \(n \to \infty\).</li>
+          <li><strong>AN (Asymptotically Normal):</strong> \(\sqrt{n}(\hat{\theta}_n - \theta) \xrightarrow{d} \mathcal{N}(\mathbf{0}, V)\) for some finite covariance matrix \(V\).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 2: Formal Definition of Asymptotic Efficiency -->
+    <section class="lesson-section" id="definitionSection">
+      <h2>2. Formal Definition: Asymptotic Efficiency</h2>
+      <p>
+        Asymptotic efficiency is formally defined as follows:
+      </p>
+
+      <!-- Key Equation Box -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Asymptotic Efficiency</div>
+        <div class="equation-box-math">
+          \[\operatorname{AsyVar}(\hat{\theta}_{\text{eff}}) \le \operatorname{AsyVar}(\tilde{\theta}) \quad \text{for any alternative CAN estimator } \tilde{\theta}\]
+        </div>
+        <div class="equation-box-sub">
+          Matrix criterion: The difference \(\operatorname{AsyVar}(\tilde{\theta}) - \operatorname{AsyVar}(\hat{\theta}_{\text{eff}})\) is a positive semi-definite matrix.
+        </div>
+      </div>
+
+      <p>
+        Three conditions must be met simultaneously for an estimator to be asymptotically efficient:
+      </p>
+      <ul style="line-height: 1.7; font-size: 0.92rem; color: var(--color-text); margin-bottom: var(--space-md);">
+        <li><strong>It is consistent:</strong> It converges to the true parameter.</li>
+        <li><strong>It is asymptotically normally distributed (CAN):</strong> Standardized errors follow a normal distribution.</li>
+        <li><strong>It has the smallest asymptotic covariance matrix:</strong> No other CAN estimator has a tighter limiting dispersion around the truth.</li>
+      </ul>
+
+      <div class="study-card" style="background: var(--surface-secondary, #F7FAFF); border: 1px solid #bfdbfe; border-left: 4px solid var(--color-primary); border-radius: var(--radius-md); padding: 1.25rem; margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary); margin-top: 0; margin-bottom: 0.4rem;">
+          Core Intuition
+        </h4>
+        <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+          <em>"Asymptotic efficiency means: among all estimators that are well-behaved in large samples, the efficient one achieves the minimum asymptotic dispersion."</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Visualizer - Estimator A vs Estimator B -->
+    <section class="lesson-section" id="visualSection">
+      <h2>3. Interactive Lab: Comparing Large-Sample Precision</h2>
+      <p>
+        Consider two competing CAN estimators for a policy impact \(\theta = 3.0\). Both are correctly centered at \(\theta\). However, <strong>Estimator B (blue)</strong> is asymptotically efficient with normalized variance \(1.00\), whereas <strong>Estimator A (amber)</strong> is inefficient with a wider dispersion.
+      </p>
+
+      <div class="interactive-lab-card">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="flex: 1; min-width: 240px;">
+            <label for="effSliderVarA" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Estimator A Variance: <span id="effReadoutVarA" style="color: #f59e0b; font-weight: 700;">2.25</span>
+            </label>
+            <input type="range" id="effSliderVarA" min="1.0" max="4.0" step="0.25" value="2.25" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div style="text-align: right;">
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Asymptotic Relative Efficiency (ARE)</span>
+            <span id="effReadoutAre" style="font-size: 1.15rem; font-family: var(--font-mono); font-weight: 800; color: #059669;">44.4%</span>
+          </div>
+        </div>
+
+        <!-- Outside Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #2563eb;"></span> Estimator B — Efficient (\(\operatorname{AsyVar} = 1.00\))</span>
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #f59e0b;"></span> Estimator A — Inefficient (<span id="effLegendVarA">AsyVar = 2.25</span>)</span>
+          <span class="legend-item"><span class="legend-swatch legend-swatch--line" style="color: #0f172a; height: 3px;"></span> Target \(\theta = 3.0\)</span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="efficiencySvg" viewBox="0 0 540 300" aria-label="Interactive asymptotic efficiency comparison"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">WHAT YOU ARE SEEING</div>
+          <div class="visual-explanation-body">
+            Two large-sample estimator distributions centered at true \(\theta = 3.0\). Estimator B (blue) has minimal asymptotic variance (\(1.00\)). Estimator A (amber) is consistent but inefficient with larger variance.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">WHAT TO NOTICE</div>
+          <div class="visual-explanation-body">
+            Both curves are centered at \(\theta = 3.0\). But Estimator B is much more concentrated near the truth. The area under Estimator A is dispersed across a wider range of values, leading to wider confidence intervals.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">WHY IT MATTERS</div>
+          <div class="visual-explanation-body">
+            An Asymptotic Relative Efficiency of \(44.4\%\) means that using Estimator A requires more than <strong>double the sample size</strong> (\(1 / 0.444 \approx 2.25 \times\)) to achieve the same precision as Estimator B!
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">ECONOMETRIC INTERPRETATION</div>
+          <div class="visual-explanation-body">
+            In costly research environments (such as randomized clinical trials or international field surveys), choosing an asymptotically efficient estimator saves substantial data collection costs without sacrificing accuracy.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>TRY THIS:</strong> Slide Estimator A variance up to \(4.00\). Notice how the amber distribution flattens out, and the relative efficiency plunges to \(25.0\%\)—meaning Estimator A is 4 times noisier!
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: OLS vs MLE Discussion -->
+    <section class="lesson-section" id="olsVsMleSection">
+      <h2>4. OLS vs. MLE: The Greene (7th ed.) Theorem</h2>
+      <p>
+        In asymptotic theory, how does Ordinary Least Squares (OLS) compare against Maximum Likelihood Estimation (MLE)? Under normality, William Greene (7th ed., p. 110) notes the classic theorem:
+      </p>
+
+      <!-- Dual Comparison Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.95rem; margin-bottom: 6px;">Case 1: Normally Distributed Errors</div>
+          <div style="font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: var(--color-primary); margin-bottom: 8px;">
+            \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2) \implies \hat{\beta}_{\text{OLS}} = \hat{\beta}_{\text{MLE}}\)
+          </div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            When the disturbance is normal, maximizing the log-likelihood function is mathematically equivalent to minimizing the sum of squared residuals. OLS is identically MLE, achieving the Cramér–Rao Lower Bound asymptotically.
+          </p>
+        </div>
+
+        <div class="study-card">
+          <div style="font-weight: 700; color: #059669; font-size: 0.95rem; margin-bottom: 6px;">Case 2: Non-Normal Distributed Errors</div>
+          <div style="font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: #059669; margin-bottom: 8px;">
+            \(\hat{\beta}_{\text{MLE}}\) is More Efficient than \(\hat{\beta}_{\text{OLS}}\)
+          </div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            If errors follow a known non-normal distribution (e.g., Student's \(t\), Laplace, or Logistic), MLE exploits the explicit functional form of the density, extracting higher Fisher information. OLS only uses second moments and is less efficient.
+          </p>
+        </div>
+      </div>
+
+      <!-- Critical Caution on MLE -->
+      <div class="callout callout-warning" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">CAUTION</span>
+          <span class="callout-title" style="margin-left: 0.5rem;">Econometric Nuance: Never Say "MLE is Always Better"</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>Why isn't MLE always used?</strong><br>
+            MLE's efficiency advantage relies entirely on <strong>correct specification of the error distribution</strong>. If you specify a Laplace error density when the truth is Cauchy or skewed, MLE can become severely inconsistent!<br><br>
+            OLS, by contrast, requires <em>no distributional assumption whatsoever</em> to remain consistent and asymptotically normal. Econometricians often accept the modest efficiency penalty of OLS in exchange for its extraordinary robustness against distributional misspecification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card">
+      <div class="quick-check-header">
+        <span class="academic-badge badge-note">QUICK CHECK</span>
+        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">Asymptotic Efficiency</span>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm); color: var(--text-secondary);">
+        Estimator 1 has asymptotic variance \(\operatorname{AsyVar}(\hat{\theta}_1) = \frac{4}{n}\). Estimator 2 has asymptotic variance \(\operatorname{AsyVar}(\hat{\theta}_2) = \frac{9}{n}\). Both are consistent and asymptotically normal. Which estimator is more asymptotically efficient, and how many observations must Estimator 2 use to match the precision of Estimator 1 with \(n = 100\)?
+      </p>
+      <details style="font-size: 0.9rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary); padding: 6px 0;">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 12px 14px; background: var(--surface-secondary, #F7FAFF); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: var(--accent-primary);">ANSWER:</strong> Estimator 1 is more efficient. Estimator 2 requires \(n = 225\) observations.<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem; line-height: 1.65;">
+            <li>Estimator 1 has the smaller asymptotic variance (\(\frac{4}{n} < \frac{9}{n}\)), so it achieves higher large-sample precision.</li>
+            <li>To achieve the same variance as Estimator 1 at \(n = 100\) (variance \(= 4/100 = 0.04\)), Estimator 2 must solve: \(\frac{9}{n_2} = 0.04 \implies n_2 = \frac{9}{0.04} = 225\). Estimator 2 requires \(2.25\) times as much data!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">SUMMARY</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>A CAN estimator is both Consistent and Asymptotically Normal: \(\sqrt{n}(\hat{\theta}_n - \theta) \xrightarrow{d} \mathcal{N}(\mathbf{0}, V)\).</li>
+        <li>An estimator is asymptotically efficient if its asymptotic covariance matrix is smaller than or equal to that of any other CAN estimator.</li>
+        <li>Under Gaussian error disturbances, OLS is identical to MLE: \(\hat{\beta}_{\text{OLS}} = \hat{\beta}_{\text{MLE}}\), and OLS is asymptotically efficient.</li>
+        <li>Under non-normal errors, correctly specified MLE is more efficient than OLS because it exploits full distributional information.</li>
+        <li>However, MLE is sensitive to distributional misspecification, whereas OLS remains consistent and asymptotically normal regardless of error distribution shape.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-03.html" class="btn btn-outline">
+        ← Previous: Asymptotic Normality of OLS
+      </a>
+      <a href="lesson-05.html" class="btn btn-primary">
+        Next: Confidence Intervals &amp; Large-Sample Hypothesis Testing →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-04-interactions.js"></script>
+</body>
+</html>

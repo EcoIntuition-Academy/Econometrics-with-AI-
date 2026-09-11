@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.1: Hypothesis Testing &amp; Type I Error — EcoIntuition Academy</title>
+  <meta name="description" content="Master the fundamentals of econometric hypothesis testing, formulate null and alternative hypotheses, understand Type I error controlled by significance level alpha, and explore two-tailed critical thresholds.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="01">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 7 &middot; Hypothesis Testing &amp; Type I Error</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">14.3%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 14.3%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.1</span>
+        <span class="badge">Inference Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Hypothesis Testing &amp; Type I Error
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        How do economists decide whether an empirical coefficient reflects a genuine real-world relationship or merely random sampling noise? Discover how hypothesis tests are formulated as coefficient restrictions, understand how Type I error is controlled by significance level \(\alpha\), and explore two-tailed critical rejection regions.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Set up null and alternative hypotheses in a multiple regression model (\(H_0: \beta_2 = 0\) vs. \(H_1: \beta_2 \neq 0\)).</li>
+        <li>Follow the step-by-step logic of hypothesis testing: from provisional assumption to decision.</li>
+        <li>Define Type I Error as the false rejection of a true null hypothesis, controlled by significance level \(\alpha\).</li>
+        <li>Partition the rejection probability in a two-tailed test at \(\alpha = 0.05\) (\(2.5\%\) in each tail with critical values \(\pm 1.96\)).</li>
+        <li>Adhere strictly to professional econometric terminology: "Reject \(H_0\)" vs. "Fail to Reject \(H_0\)" (never "Accept \(H_0\)").</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Context Regression & Hypotheses -->
+    <section class="lesson-section" id="contextSection">
+      <h2>1. The Multiple Regression Framework</h2>
+      <p>
+        Consider the classical multiple linear regression model with five explanatory variables:
+      </p>
+
+      <!-- Key Equation Box: Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Context Regression Model</div>
+        <div class="equation-box-math">
+          \[y = \beta_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 + \beta_5 x_5 + \varepsilon\]
+        </div>
+        <div class="equation-box-sub">
+          Where \(\beta_1\) is the intercept and \(\beta_2, \dots, \beta_5\) are the partial regression slopes.
+        </div>
+      </div>
+
+      <p>
+        In applied economics, the most frequent statistical question is whether a specific regressor \(x_2\) has any true population effect on outcome \(y\), holding other regressors constant. We formulate this as a restriction on the coefficient:
+      </p>
+
+      <!-- Key Equation Box: Hypotheses -->
+      <div class="equation-box">
+        <div class="equation-box-title">Null &amp; Alternative Hypotheses for β₂</div>
+        <div class="equation-box-math">
+          \[H_0: \beta_2 = 0 \quad \text{versus} \quad H_1: \beta_2 \neq 0\]
+        </div>
+        <div class="equation-box-sub">
+          <strong>Null Hypothesis (\(H_0\)):</strong> The regressor \(x_2\) has zero population effect.<br>
+          <strong>Alternative Hypothesis (\(H_1\)):</strong> The regressor \(x_2\) has a nonzero population effect (two-sided).
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Intuition First - The Testing Journey -->
+    <section class="lesson-section" id="intuitionSection">
+      <h2>2. Intuition First: The 5-Step Logic of a Hypothesis Test</h2>
+      <p>
+        A hypothesis test is an evidentiary trial. We do not set out to "prove" the null hypothesis; we temporarily assume it is true and evaluate whether the empirical evidence is sufficiently contradictory to warrant its rejection.
+      </p>
+
+      <!-- Visual Flow Journey Card -->
+      <div class="study-card" style="background: var(--surface); padding: 1.5rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+        <h4 style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.75rem;">
+          The Universal Hypothesis Testing Workflow
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+          
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #64748b;">
+            <span style="font-weight: 700; color: #64748b; font-size: 0.85rem; min-width: 75px;">STEP 1</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);"><strong>PROVISIONALLY ASSUME \(H_0\)</strong>: Assume the null restriction \(\beta_2 = 0\) holds in the population.</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+            <span style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem; min-width: 75px;">STEP 2</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);"><strong>DERIVE NULL DISTRIBUTION</strong>: Determine the probability distribution of the estimator \(\hat{\beta}_2\) under \(H_0\).</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #3b82f6;">
+            <span style="font-weight: 700; color: #3b82f6; font-size: 0.85rem; min-width: 75px;">STEP 3</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);"><strong>OBSERVE TEST STATISTIC</strong>: Calculate the standardized distance \(t = \frac{\hat{\beta}_2 - 0}{\operatorname{SE}(\hat{\beta}_2)}\) from sample data.</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #f59e0b;">
+            <span style="font-weight: 700; color: #d97706; font-size: 0.85rem; min-width: 75px;">STEP 4</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);"><strong>COMPARE WITH CRITICAL REGION</strong>: Check whether the test statistic falls into the extreme rejection tails (\(|t| > 1.96\)).</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid #059669;">
+            <span style="font-weight: 700; color: #059669; font-size: 0.85rem; min-width: 75px;">STEP 5</span>
+            <span style="font-size: 0.9rem; color: var(--color-text);"><strong>DRAW DECISION</strong>: Conclude either <em>REJECT \(H_0\)</em> or <em>FAIL TO REJECT \(H_0\)</em>.</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Type I Error & Significance Level -->
+    <section class="lesson-section" id="type1Section">
+      <h2>3. Type I Error: Controlling the False Alarm Rate</h2>
+      <p>
+        Because sample estimators fluctuate randomly from dataset to dataset, we could mistakenly observe a large estimate \(\hat{\beta}_2\) purely by random chance, even when the true population coefficient is exactly zero.
+      </p>
+
+      <!-- Definition Box -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: Type I Error</div>
+        <div class="equation-box-math">
+          \[\Pr(\text{Type I Error}) = \Pr(\text{Reject } H_0 \mid H_0 \text{ is True}) = \alpha\]
+        </div>
+        <div class="equation-box-sub">
+          A <strong>Type I Error</strong> occurs when we reject the null hypothesis when it is actually true (a "false positive" or "false alarm"). It is directly controlled by the significance level \(\alpha\).
+        </div>
+      </div>
+
+      <p>
+        The most common convention in economics is <strong>\(\alpha = 0.05\) (5% significance level)</strong>. This guarantees that:
+      </p>
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.03); border: 1.5px solid var(--color-primary); border-radius: var(--radius-md); padding: 1.25rem; margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary); margin-top: 0; margin-bottom: 0.4rem;">
+          Intuitive Interpretation
+        </h4>
+        <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+          <em>"If \(\beta_2\) truly equals 0, then we should only reject \(H_0\) 5% of the time. This is controlled by selecting appropriate critical values."</em>
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin-top: var(--space-lg); margin-bottom: var(--space-xs);">
+        The Two-Tailed Partition at α = 0.05
+      </h3>
+      <p>
+        Because the alternative hypothesis \(H_1: \beta_2 \neq 0\) is two-sided (the coefficient could be either positive or negative), the 5% error probability is split symmetrically across both tails:
+      </p>
+      <ul style="line-height: 1.7; font-size: 0.92rem; color: var(--color-text); margin-bottom: var(--space-md);">
+        <li><strong>Lower Critical Value:</strong> \(-1.96\) (cuts off the lower \(2.5\%\) area, \(\alpha / 2 = 0.025\)).</li>
+        <li><strong>Upper Critical Value:</strong> \(+1.96\) (cuts off the upper \(2.5\%\) area, \(\alpha / 2 = 0.025\)).</li>
+        <li><strong>Non-Rejection Region:</strong> The central \(95\%\) interval \([-1.96, +1.96]\) where observed estimates are statistically consistent with \(H_0\).</li>
+      </ul>
+    </section>
+
+    <!-- Section 4: Interactive Lab - Two-Tailed Hypothesis Testing -->
+    <section class="lesson-section" id="visualSection">
+      <h2>4. Interactive Lab: Two-Tailed Hypothesis Testing Curve</h2>
+      <p>
+        Explore the null distribution curve below. Drag the slider to observe how test statistics fall either within the central non-rejection region or into the red critical tails (\(\pm 1.96\)), and observe the dynamic decision.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="flex: 1; min-width: 240px;">
+            <label for="hyp51SliderStat" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Observed Test Statistic (t): <span id="hyp51ReadoutStat" style="color: var(--color-primary); font-weight: 700;">+2.10</span>
+            </label>
+            <input type="range" id="hyp51SliderStat" min="-3.5" max="3.5" step="0.1" value="2.1" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div style="text-align: right;">
+            <span style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">Two-Sided p-value</span>
+            <span id="hyp51ReadoutPval" style="font-size: 1.15rem; font-family: var(--font-mono); font-weight: 800; color: #1e3a8a;">0.036</span>
+          </div>
+        </div>
+
+        <!-- Readout Metric Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Significance Level</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #0f172a; font-family: var(--font-mono);">α = 0.05</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Critical Thresholds</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">± 1.960</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Decision Rule</div>
+            <div id="hyp51ReadoutDecision" style="font-size: 1.05rem; font-weight: 800; color: #dc2626; font-family: var(--font-mono);">REJECT H₀ (|t| > 1.96)</div>
+          </div>
+        </div>
+
+        <!-- Outside Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #2563eb;"></span> Null Distribution \(\mathcal{N}(0, 1)\)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(239, 68, 68, 0.5);"></span> Rejection Region (\(\alpha = 0.05, |t| > 1.96\))</span>
+          <span class="legend-item"><span class="legend-swatch--dashed"></span> Critical Thresholds (\(\pm 1.96\))</span>
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #059669; height: 4px;"></span> Observed Statistic (\(t\))</span>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="hypTwoTailedSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive two-tailed hypothesis testing bell curve"></svg>
+        </div>
+      </div>
+
+      <!-- Structured 5-Box Visual Explanation Grid -->
+      <div class="visual-explanation-grid">
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+          <p>The sampling distribution of the test statistic under the assumption that \(H_0: \beta_2 = 0\) is true. The red shaded areas in the left and right tails each represent \(2.5\%\) of the total area (\(\alpha = 0.05\) combined).</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHAT TO NOTICE</div>
+          <p>When you slide the test statistic between \(-1.96\) and \(+1.96\), the cursor turns green and the decision reads <em>FAIL TO REJECT H₀</em>. When it exceeds \(\pm 1.96\), the cursor turns red and switches to <em>REJECT H₀</em>.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">WHY IT MATTERS</div>
+          <p>By fixing the critical boundaries at \(\pm 1.96\), we ensure that if the null hypothesis is truly correct, we will falsely reject it no more than 5 times out of 100 repeated samples.</p>
+        </div>
+
+        <div class="grid-card">
+          <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+          <p>Observing a \(t\)-statistic of \(+2.10\) yields a \(p\)-value of \(0.036\). Because \(0.036 < 0.05\), observing such an extreme estimate purely by sampling fluke is too unlikely, so we conclude that \(\beta_2\) is statistically significantly different from zero.</p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-tag">TRY THIS</div>
+          <p>Move the slider to \(t = 1.80\). Notice that even though \(1.80\) is visibly away from zero, it still falls inside the non-rejection region (\(p = 0.072 > 0.05\)), resulting in <em>FAIL TO REJECT H₀</em>!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Strict Econometric Terminology -->
+    <section class="lesson-section" id="terminologySection">
+      <h2>5. Crucial Econometric Caution: Reject vs. Fail to Reject</h2>
+      <p>
+        In scientific econometrics, language precision is paramount. We NEVER conclude that we "accept" the null hypothesis.
+      </p>
+
+      <div class="callout callout-warning" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="academic-badge badge-warning">METHODOLOGICAL CAUTION</span>
+          <span class="callout-title">Common Mistake: "Accepting" the Null</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>"Because |t| ≤ 1.96, we accept H₀ and conclude that the true coefficient is definitely zero."</strong><br>
+            <em>Correction:</em> Failing to reject \(H_0\) does <strong>NOT</strong> prove that \(\beta_2 = 0\). It simply means that our sample did not provide strong enough empirical evidence to rule out zero. The true parameter could be \(0.04\) or \(-0.02\), but our dataset had too small a sample size or too high a variance to detect it.<br><br>
+            Always state: <strong>"We fail to reject \(H_0\) at the 5% significance level."</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Type I Error Rate
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        If a researcher conducts a two-tailed test using \(\alpha = 0.05\) on 100 independent regressions where the null hypothesis \(H_0: \beta_k = 0\) is strictly true in every single case, on average how many of these regressions will falsely report a "statistically significant" result?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> Exactly 5 regressions on average.<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>By definition, the significance level \(\alpha = 0.05\) sets the exact probability of committing a Type I error under the null: \(\Pr(\text{Reject } H_0 \mid H_0 \text{ true}) = 0.05\).</li>
+            <li>Out of 100 true null hypotheses, the expected number of false rejections is: \(100 \times 0.05 = 5\).</li>
+            <li>This illustrates why testing dozens of variables simultaneously without adjusting for multiple testing leads to spurious discoveries!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>A hypothesis test examines whether sample estimates are statistically incompatible with a restriction imposed under \(H_0: \beta_2 = 0\).</li>
+        <li>The testing sequence follows five steps: provisionally assume \(H_0 \to\) derive the null distribution \(\to\) compute the test statistic \(\to\) compare with critical values \(\to\) decide.</li>
+        <li>Type I error is the probability of falsely rejecting a true null hypothesis, which is controlled directly by the significance level \(\alpha\).</li>
+        <li>For a two-tailed test at \(\alpha = 0.05\), the critical values are \(\pm 1.96\), with \(0.025\) probability area in each tail.</li>
+        <li>Failing to reject \(H_0\) reflects an absence of conclusive evidence against zero, not proof that the parameter is exactly zero. We never "accept" \(H_0\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 5 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: One-Sided Tests, Type II Error &amp; Power →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

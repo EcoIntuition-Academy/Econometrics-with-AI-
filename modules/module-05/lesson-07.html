@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.7: Dummy Variables in Log-Linear Models &amp; Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Derive the exact exponential transformation for dummy variables in semi-log models, compare exact vs approximate percentages, and review the Module 5 curriculum.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="07">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 7 of 7 &middot; Dummy Variables in Log-Linear Models &amp; Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.7</span>
+        <span class="badge">Nonlinear Effects &amp; Synthesis</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Dummy Variables in Log-Linear Models &amp; Module Review
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        When the dependent variable is in logarithmic form, a dummy coefficient cannot be read directly as an exact percentage change. Derive the exact exponential transformation \(100[\exp(\beta_2) - 1]\%\), inspect the benchmark example, and synthesize all core concepts across the Module 5 curriculum.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Distinguish between log differences, multiplicative outcome ratios, relative changes, and exact percentage changes.</li>
+        <li>Apply the exact formula \(100[\exp(\beta_2) - 1]\%\) to convert semi-elastic dummy coefficients into exact percentage impacts.</li>
+        <li>Verify that when \(\beta_2 = 0.10\), the exact percentage effect is \(\approx 10.5\%\), exceeding the naive \(10\%\) approximation.</li>
+        <li>Synthesize the complete Module 5 curriculum: from hypothesis testing foundations through Wald/F restrictions to indicator variables.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Exact Multiplicative Sequence -->
+    <section class="lesson-section" id="sectionTransformation">
+      <h2>1. The Four-Stage Sequence: From Log Difference to Percentage</h2>
+      <p>
+        Consider the canonical semi-log specification with an indicator variable:
+        \[ \ln(y_i) = \beta_1 + \beta_2 D_i + \varepsilon_i \]
+        Evaluating group expectations in terms of \(\ln(y)\):
+        \[ \mathbb{E}[\ln y \mid D=1] - \mathbb{E}[\ln y \mid D=0] = (\beta_1 + \beta_2) - \beta_1 = \beta_2 \]
+        While \(\beta_2\) is the exact difference in <em>logarithmic units</em>, practical economic analysis requires the impact on original outcome levels \(y\) (wages, prices, output). To find this effect, follow this structured four-stage conceptual sequence:
+      </p>
+
+      <!-- Four Stage Sequence Component -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Stage 1</div>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 1.05rem; margin: 4px 0;">LOG DIFFERENCE</div>
+          <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text);">\(\Delta \ln y = \beta_2\)</div>
+          <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 6px 0 0 0;">Additive difference in log scale</p>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Stage 2</div>
+          <div style="font-weight: 700; color: #475569; font-size: 1.05rem; margin: 4px 0;">OUTCOME RATIO</div>
+          <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text);">\(\frac{y_1}{y_0} = \exp(\beta_2)\)</div>
+          <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 6px 0 0 0;">Multiplicative level multiplier</p>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Stage 3</div>
+          <div style="font-weight: 700; color: #059669; font-size: 1.05rem; margin: 4px 0;">RELATIVE CHANGE</div>
+          <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text);">\(\frac{y_1 - y_0}{y_0} = \exp(\beta_2) - 1\)</div>
+          <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 6px 0 0 0;">Fractional departure from base</p>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-sm);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase;">Stage 4</div>
+          <div style="font-weight: 700; color: #2563eb; font-size: 1.05rem; margin: 4px 0;">PERCENT CHANGE</div>
+          <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text);">\(100[\exp(\beta_2) - 1]\%\)</div>
+          <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 6px 0 0 0;">Exact percentage impact in units of \(y\)</p>
+        </div>
+      </div>
+
+      <!-- Key Equation Box: Exact Formula -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">EXACT FORMULA</span>
+          <span class="equation-title">Semi-Logarithmic Indicator Transformation</span>
+        </div>
+        <div class="equation-main">
+          \[ \%\Delta y = 100 \left[ \exp(\beta_2) - 1 \right]\% \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">VS. NAIVE APPROXIMATION:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">Naive Approximation</span>
+              <span class="symbol-desc">\(100 \beta_2\%\) (first-order Taylor expansion \(\exp(\beta_2) - 1 \approx \beta_2\))</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">Exact Calculation</span>
+              <span class="symbol-desc">\(100 [\exp(\beta_2) - 1]\%\) accounts for continuous compounding curvature</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Source Benchmark Example -->
+      <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; color: var(--color-primary); font-size: 0.95rem;">Primary Source Numerical Benchmark: \(\beta_2 = 0.10\)</h4>
+        <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: var(--space-xs);">
+          Suppose OLS estimation of \(\ln(\text{wage})\) yields \(\hat{\beta}_2 = 0.10\):
+        </p>
+        <ul style="font-size: 0.88rem; margin: 0; padding-left: 1.25rem; line-height: 1.7;">
+          <li><strong>Naive Approximation:</strong> \(100 \cdot (0.10) = 10.0\%\).</li>
+          <li><strong>Exact Exponential:</strong> \(\exp(0.10) \approx 1.10517\).</li>
+          <li><strong>Exact Percentage:</strong> \(100 \cdot [1.10517 - 1]\% = \mathbf{10.5\%}\).</li>
+        </ul>
+        <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 8px 0 0 0;">
+          The true percentage effect is \(10.5\%\), which exceeds the naive approximation by half a percentage point. For larger coefficients (e.g. \(\beta_2 = 0.40\)), the exact increase is \(\exp(0.40) - 1 \approx 49.2\%\)—meaning the naive \(40\%\) rule misses the mark by over 9 percentage points!
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Exact vs Approximation Lab -->
+    <section class="lesson-section" id="sectionInteractiveExact">
+      <h2>2. Interactive Exact vs. Approximate Percentage Lab</h2>
+      <p>
+        Drag the coefficient slider \(\beta_2\) below from \(-0.50\) to \(+0.50\) to observe how the exact exponential curve diverges from the linear approximation line, or click the benchmark button to load \(\beta_2 = 0.10\).
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">Interactive Nonlinear Lab</div>
+          <h3 class="lab-title">Exact Exponential Curve vs. Linear Approximation</h3>
+        </div>
+
+        <div class="lab-controls-bar f-test-controls">
+          <div class="slider-control-item">
+            <label for="exactSliderBeta" class="control-label">Dummy Coefficient (\(\beta_2\)): <span id="exactReadoutBeta" class="readout-val">+0.10</span></label>
+            <input type="range" id="exactSliderBeta" min="-0.50" max="0.50" step="0.02" value="0.10" class="control-slider">
+          </div>
+          <div class="btn-group-single" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button id="exactBtnSource10" class="btn btn-sm btn-outline" type="button">Benchmark (β₂ = +0.10)</button>
+            <button id="exactBtnLarge40" class="btn btn-sm btn-outline" type="button">Large Effect (β₂ = +0.40)</button>
+            <button id="exactBtnNegative" class="btn btn-sm btn-outline" type="button">Negative Effect (β₂ = -0.30)</button>
+          </div>
+          <div class="lab-readout-group">
+            <span class="readout-item">Approx: <strong id="exactReadoutApprox">+10.0%</strong></span>
+            <span class="readout-item">Exact: <strong id="exactReadoutExact" style="color: #2563eb;">+10.5%</strong></span>
+            <span class="readout-item">Divergence: <strong id="exactReadoutDivergence" style="color: #dc2626;">+0.52 pts</strong></span>
+          </div>
+        </div>
+
+        <!-- Inline Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch--line" style="background: #2563eb;"></span> Exact Percentage Curve: \(100[\exp(\beta_2) - 1]\%\)</span>
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #64748b;"></span> Linear Approximation: \(100\beta_2\%\)</span>
+          <span class="legend-item"><span class="legend-swatch--dashed" style="border-top-color: #dc2626;"></span> Operating Parameter Value (\(\beta_2\))</span>
+        </div>
+
+        <div class="lab-visual-container">
+          <div class="chart-svg-shell">
+            <svg id="exactVsApproxSvg" viewBox="0 0 580 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Exact vs Approximate Percentage Visualizer"></svg>
+          </div>
+        </div>
+
+        <!-- Structured 5-Box Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>The dashed gray line shows the linear approximation \(100\beta_2\%\); the solid blue curve shows the exact nonlinear transformation \(100[\exp(\beta_2) - 1]\%\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>Near zero, both curves align closely. As \(\beta_2\) increases positively, the exact curve bends upward convexly; for negative \(\beta_2\), the exact drop is bounded above \(-100\%\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>Logarithms are strictly nonlinear. Relying on \(100\beta_2\%\) for large wage premiums systematically underestimates positive effects and overstates negative effects.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>At \(\beta_2 = 0.10\), the exact effect is \(10.5\%\). At \(\beta_2 = 0.40\), the exact effect is \(49.2\%\)—an enormous 9.2 percentage point difference from naive intuition!</p>
+          </div>
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>Slide \(\beta_2\) to \(+0.40\). Compare the naive \(40\%\) estimate with the true \(49.2\%\) effect to witness the rapid breakdown of the linear approximation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Quick Check -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Exact Percentage Calculation for \(\beta_2 = 0.20\)
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        In a housing regression, \(\ln(\text{price}) = 12.5 + 0.20 \cdot \text{pool} + \dots\) where \(\text{pool} = 1\) if a home has a swimming pool. Compare the naive approximation to the exact percentage price premium associated with a pool.
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> The naive approximation is \(20.0\%\); the exact percentage premium is \(22.14\%\).<br><br>
+          <strong>CALCULATION:</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>Naive: \(100 \cdot (0.20) = 20.0\%\).</li>
+            <li>Exact factor: \(\exp(0.20) \approx 1.22140\).</li>
+            <li>Exact percentage: \(100 \cdot (1.22140 - 1)\% = 22.14\%\).</li>
+            <li>The naive rule underestimates the price effect by over \(2.14\) percentage points!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Section 4: Module 5 Synthesis: Complete Knowledge Flow -->
+    <section class="lesson-section" id="sectionSynthesis">
+      <h2>3. Module 5 Synthesis: The Curricular Knowledge Flow</h2>
+      <p>
+        Congratulations on completing Module 5! Below is the integrated conceptual journey linking all seven lessons:
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin: var(--space-md) 0;">
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.1</span>
+          <div><strong>Hypothesis Foundations:</strong> Null \(H_0: \beta_2 = 0\) vs. two-sided alternative \(H_1: \beta_2 \neq 0\); Type I error controlled by \(\alpha = 0.05\) (\(\pm 1.96\)).</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.2</span>
+          <div><strong>Directional Testing &amp; Power:</strong> One-sided 1.645 critical threshold; Type II error rate \(\beta_{\text{err}}\); statistical power \(1 - \beta_{\text{err}}\).</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.3</span>
+          <div><strong>Linear Restrictions:</strong> Matrix unification \(H_0: R\beta = q\); \(R\) is \(J \times K\); \(J\) counts restrictions, \(K\) counts regressors.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.4</span>
+          <div><strong>Wald &amp; F Statistics:</strong> Scale discrepancy by covariance; \(W \sim \chi^2_J\); finite-sample \(F(J, n-k) = W/J\); loss-of-fit \(R^2\) formulation.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.5</span>
+          <div><strong>Binary Indicators:</strong> Partition samples with \(D \in \{0, 1\}\); base mean \(\beta_1\); coded mean \(\beta_1 + \beta_2\); \(\beta_2\) is group expectation gap.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">5.6</span>
+          <div><strong>Controls &amp; Categories:</strong> Parallel regression lines; \(m - 1\) dummy rule; reference categories; avoiding the Dummy Variable Trap.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+          <span class="badge" style="background: #2563eb; color: #ffffff; font-weight: 700;">5.7</span>
+          <div><strong>Log-Dummy Transformation:</strong> Log difference \(\to\) outcome ratio \(\to\) exact percentage \(100[\exp(\beta_2) - 1]\%\) vs. approximation \(100\beta_2\%\).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>In semi-log models \(\ln(y) = \beta_1 + \beta_2 D + \varepsilon\), the coefficient \(\beta_2\) is the difference in logs, not the exact percentage change.</li>
+        <li>The exact percentage change in the level of \(y\) is \(100[\exp(\beta_2) - 1]\%\).</li>
+        <li>For small coefficients (\(|\beta_2| \le 0.10\)), the approximation \(100\beta_2\%\) is acceptable for quick intuition, but for \(\beta_2 = 0.10\), the exact effect is \(10.5\%\).</li>
+        <li>For larger coefficients, using the naive linear approximation causes severe reporting errors. Always apply the exact exponential formula in empirical research!</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-06.html" class="btn btn-outline">
+        ← Previous: Controls, Categories &amp; Reference Groups
+      </a>
+      <a href="index.html" class="btn btn-primary">
+        ✓ Complete Module 5: Return to Overview →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

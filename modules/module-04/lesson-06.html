@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4.6: The Delta Method — EcoIntuition Academy</title>
+  <meta name="description" content="Master the Delta Method for nonlinear transformations of econometric estimators, explore first-order Taylor approximations, and understand how derivatives scale and amplify parameter uncertainty.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-04" data-lesson="06">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 4</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 04</a>
+          <span class="module-nav-title">Large-Sample Theory &amp; Asymptotic Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 8 &middot; The Delta Method</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 4 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.1 Convergence in Probability &amp; Consistency</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.2 Consistency of OLS &amp; Large-Sample Conditions</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.3 Asymptotic Normality of OLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.4 Asymptotic Efficiency</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.5 Confidence Intervals &amp; Large-Sample Hypothesis Testing</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">4.6 The Delta Method</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.7 Slutsky’s Theorem &amp; Delta Method Applications</span>
+            </a>
+            <a href="lesson-08.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">4.8 Wald Testing, Classical vs Asymptotic Inference &amp; Robust SE</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">75.0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 75.0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 4.6</span>
+        <span class="badge">Asymptotic Methods</span>
+        <span class="badge">Nonlinear Transformations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        The Delta Method
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        In empirical research, we frequently care not about an original regression parameter \(\theta\), but about a nonlinear function of it: \(g(\theta)\)—such as an elasticity \(\exp(\theta)\), a quadratic turning point, or a ratio of coefficients. How do we conduct statistical inference on nonlinear functions? Enter the Delta Method.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="academic-badge badge-objectives">OBJECTIVES</span>
+        <h3 class="objectives-title" style="margin-left: 0.5rem;">Learning Objectives</h3>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Motivate why nonlinear functions of estimators arise in applied econometrics (\(\theta^2\), \(\exp(\theta)\), ratios).</li>
+        <li>Understand tangent-line local linearization using first-order Taylor series approximations.</li>
+        <li>State and interpret the formal Delta Method theorem under standard regularity conditions.</li>
+        <li>Analyze how the first derivative \(g'(\theta)\) scales and amplifies parameter variance by \([g'(\theta)]^2\).</li>
+        <li>Visualize the relationship between curvature, tangent slopes, and uncertainty expansion.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Challenge of Nonlinear Transformations -->
+    <section class="lesson-section" id="challengeSection">
+      <h2>1. Motivation: Why Nonlinear Functions Matter</h2>
+      <p>
+        In linear regression, we obtain an estimate \(\hat{\theta} = \hat{\beta}_2\) with estimated variance \(\operatorname{Var}(\hat{\beta}_2)\). But theoretical economic hypotheses often involve nonlinear functions \(g(\theta)\):
+      </p>
+      <div class="example-grid">
+        <div class="example-card">
+          <div class="example-card-title">Example 1: Quadratic Functions</div>
+          <div class="example-card-math">\(g(\beta_2) = \beta_2^2\)</div>
+          <p class="example-card-desc">Used in cost function curvature, production returns, or variance parameterizations.</p>
+        </div>
+
+        <div class="example-card">
+          <div class="example-card-title">Example 2: Exponentials</div>
+          <div class="example-card-math">\(g(\beta_2) = \exp(\beta_2)\)</div>
+          <p class="example-card-desc">Translates semi-elasticities from log-level wage equations into percentage wage impacts.</p>
+        </div>
+
+        <div class="example-card">
+          <div class="example-card-title">Example 3: Coefficient Ratios</div>
+          <div class="example-card-math">\(g(\beta) = -\beta_1 / (2\beta_2)\)</div>
+          <p class="example-card-desc">Calculates the peak of a quadratic lifecycle wage or age-earnings curve.</p>
+        </div>
+      </div>
+
+      <p>
+        <strong>The Fundamental Challenge:</strong> Even though \(\hat{\theta}\) is approximately normally distributed, a nonlinear transformation \(g(\hat{\theta})\) is generally <em>not</em> normally distributed in finite samples, and its variance cannot be computed directly using simple linear algebra rules!
+      </p>
+    </section>
+
+    <!-- Section 2: Tangent-Line Local Linearization -->
+    <section class="lesson-section" id="taylorSection">
+      <h2>2. Tangent-Line Local Linearization: The Taylor Approximation</h2>
+      <p>
+        How does the Delta Method solve this? It replaces the nonlinear curve with its <strong>tangent line</strong> evaluated at the true parameter \(\theta\).
+      </p>
+      <p>
+        By Taylor's Theorem, any smooth, differentiable function \(g(\cdot)\) can be expanded around the true value \(\theta\) as:
+      </p>
+
+      <!-- Key Equation Box: Taylor Series -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Key Equation: First-Order Taylor Approximation</div>
+        <div class="equation-box-math">
+          \[g(\hat{\theta}) \approx g(\theta) + g'(\theta)(\hat{\theta} - \theta)\]
+        </div>
+        <div class="equation-box-sub">
+          We linearize the nonlinear function \(g(\hat{\theta})\) locally around the true population parameter \(\theta\).
+        </div>
+      </div>
+
+      <!-- Component breakdown -->
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-top: var(--space-md);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">
+          What Each Component Represents
+        </h4>
+        <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.7; color: var(--color-text);">
+          <li><strong>\(g(\hat{\theta})\)</strong>: The transformed sample estimate whose distribution and standard error we wish to compute.</li>
+          <li><strong>\(g(\theta)\)</strong>: The true, non-random population value of the transformed parameter.</li>
+          <li><strong>\(g'(\theta) = \frac{dg}{d\theta}\Big|_{\theta}\)</strong>: The first derivative (slope of the tangent line) evaluated at the truth.</li>
+          <li><strong>\((\hat{\theta} - \theta)\)</strong>: The estimation error in the original parameter, which we already know is asymptotically normal!</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 3: The Delta Method Statement -->
+    <section class="lesson-section" id="statementSection">
+      <h2>3. The Delta Method Theorem</h2>
+      <p>
+        Under standard regularity conditions, the Delta Method is formally stated as follows:
+      </p>
+
+      <!-- Key Equation Box: Delta Method -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-box-title">Definition: The Delta Method</div>
+        <div class="equation-box-math">
+          \[\sqrt{n}\left(g(\hat{\theta}_n) - g(\theta)\right) \xrightarrow{d} \mathcal{N}\left(0, \; [g'(\theta)]^2 \sigma^2\right)\]
+        </div>
+        <div class="equation-box-sub">
+          Consequently, in terms of the estimated asymptotic distribution:
+          \[g(\hat{\theta}_n) \xrightarrow{a} \mathcal{N}\left(g(\theta), \; \frac{1}{n}[g'(\theta)]^2 \sigma^2\right)\]
+        </div>
+      </div>
+
+      <!-- Derivative Scaling Card -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.03); border: 1.5px solid var(--color-primary); border-radius: var(--radius-md); padding: 1.5rem; margin-top: var(--space-md);">
+        <h4 style="font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-top: 0; margin-bottom: 0.5rem;">
+          How the Derivative Scales Uncertainty
+        </h4>
+        <p style="font-size: 0.92rem; line-height: 1.6; margin: 0 0 0.75rem 0; color: var(--color-text);">
+          Notice that the asymptotic variance of \(g(\hat{\theta}_n)\) is simply the original variance multiplied by the <strong>squared derivative</strong>: \([g'(\theta)]^2\).
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-sm);">
+          <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #dc2626; font-size: 0.88rem; margin-bottom: 4px;">Steep Slope: |g'(θ)| &gt; 1</div>
+            <p style="font-size: 0.85rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Uncertainty is <strong>amplified</strong>. Small estimation errors in \(\hat{\theta}\) are projected along a steep tangent line, creating huge dispersion in \(g(\hat{\theta})\).
+            </p>
+          </div>
+          <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #059669; font-size: 0.88rem; margin-bottom: 4px;">Gentle Slope: |g'(θ)| &lt; 1</div>
+            <p style="font-size: 0.85rem; line-height: 1.5; margin: 0; color: var(--color-text-secondary);">
+              Uncertainty is <strong>compressed</strong>. The flat slope dampens variation, producing a tighter distribution for \(g(\hat{\theta})\).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Visualizer - Tangent-Line Lab -->
+    <section class="lesson-section" id="visualSection">
+      <h2>4. Interactive Lab: Tangent-Line Local Linearization</h2>
+      <p>
+        Explore how the nonlinear curve \(g(\theta) = \theta^2\) is approximated by its red dashed tangent line at operating point \(\theta\). Notice how the tangent slope \(g'(\theta) = 2\theta\) scales the variance by \([g'(\theta)]^2\).
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div style="flex: 1; min-width: 240px;">
+            <label for="deltaSliderTheta" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 4px;">
+              Evaluation Point (θ): <span id="deltaReadoutTheta" style="color: var(--color-primary); font-weight: 700;">2.00</span>
+            </label>
+            <input type="range" id="deltaSliderTheta" min="1.0" max="3.0" step="0.1" value="2.0" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div style="display: flex; gap: var(--space-md);">
+            <div style="text-align: center;">
+              <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block;">g(θ) = θ²</span>
+              <span id="deltaReadoutG" style="font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; color: #0f172a;">4.00</span>
+            </div>
+            <div style="text-align: center;">
+              <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); display: block;">Slope g'(θ) = 2θ</span>
+              <span id="deltaReadoutSlope" style="font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; color: #dc2626;">4.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outside Legend above SVG (No overlap) -->
+        <div class="outside-chart-legend" style="margin-bottom: var(--space-xs);">
+          <div class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Nonlinear Curve \(g(\theta) = \theta^2\)</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: #dc2626; border-top: 2px dashed #dc2626; height: 0; width: 16px;"></span> Tangent Linearization at \(\theta\)</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: #0f172a; border-radius: 50%; width: 10px; height: 10px;"></span> Operating Point \((\theta, g(\theta))\)</div>
+        </div>
+
+        <!-- SVG Visual Container -->
+        <div class="chart-svg-shell">
+          <svg id="deltaMethodSvg" viewBox="0 0 540 300" style="width: 100%; max-width: 540px; height: auto;" aria-label="Interactive Delta Method tangent line approximation"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title"><span class="academic-badge badge-info">WHAT YOU ARE SEEING</span></div>
+          <div class="visual-explanation-body">
+            The nonlinear function \(g(\theta) = \theta^2\) (blue curve) with its red dashed tangent line at operating point \(\theta\). The black dot represents the parameter location \((\theta, g(\theta))\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title"><span class="academic-badge badge-primary">WHAT TO NOTICE</span></div>
+          <div class="visual-explanation-body">
+            At \(\theta = 1.0\), the slope is gentle (\(g' = 2.0\), variance scale \(4\times\)). But as you move the slider to \(\theta = 3.0\), the slope steepens to \(6.0\), causing the variance scale factor \([g'(\theta)]^2\) to surge to \(36\times\)!
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title"><span class="academic-badge badge-note">WHY IT MATTERS</span></div>
+          <div class="visual-explanation-body">
+            Nonlinear functions do not scale uncertainty uniformly across the parameter space. Where the curve is steeper, equal estimation uncertainty in \(\hat{\theta}\) creates massively larger uncertainty in \(g(\hat{\theta})\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title"><span class="academic-badge badge-takeaway">ECONOMETRIC INTERPRETATION</span></div>
+          <div class="visual-explanation-body">
+            In exponential policy models (\(\exp(\beta)\)), large estimated coefficients \(\hat{\beta}\) lead to explosive confidence intervals because the derivative \(\exp(\beta)\) grows exponentially.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <span class="academic-badge badge-primary">EXPERIMENT</span> Drag the slider from \(\theta = 1.0\) to \(\theta = 2.5\). Watch the slope double from \(2.0\) to \(5.0\), causing the variance multiplier to jump by over 6 times from \(4.0\) to \(25.0\)!
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <div style="margin-bottom: var(--space-xs);"><span class="academic-badge badge-objectives">QUICK CHECK</span> <span style="font-weight: 700; color: var(--color-text); margin-left: 0.5rem;">Derivative Scaling</span></div>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        Suppose an estimator has \(\operatorname{Var}(\hat{\theta}) = 0.01\). We are interested in the transformation \(g(\theta) = 3\theta + 5\). What is \(g'(\theta)\), and what is the exact asymptotic variance \(\operatorname{Var}(g(\hat{\theta}))\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(g'(\theta) = 3\), and \(\operatorname{Var}(g(\hat{\theta})) = 0.09\).<br><br>
+          <strong>WHY?</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>The derivative of \(g(\theta) = 3\theta + 5\) with respect to \(\theta\) is simply the constant \(g'(\theta) = 3\).</li>
+            <li>By the Delta Method formula: \(\operatorname{Var}(g(\hat{\theta})) \approx [g'(\theta)]^2 \operatorname{Var}(\hat{\theta}) = 3^2 \times 0.01 = 9 \times 0.01 = 0.09\). Because this transformation is linear, the Taylor approximation is exact!</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="academic-badge badge-takeaway">SUMMARY</span>
+        <h3 class="summary-takeaways-title" style="margin-left: 0.5rem;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The Delta Method provides the asymptotic distribution for smooth nonlinear transformations \(g(\hat{\theta})\) of CAN estimators.</li>
+        <li>It operates through a first-order Taylor series tangent-line approximation: \(g(\hat{\theta}) \approx g(\theta) + g'(\theta)(\hat{\theta} - \theta)\).</li>
+        <li>The asymptotic distribution is \(g(\hat{\theta}_n) \xrightarrow{a} \mathcal{N}\left(g(\theta), \frac{1}{n}[g'(\theta)]^2\sigma^2\right)\).</li>
+        <li>The first derivative \(g'(\theta)\) acts as a local scaling factor: the variance of the transformation is multiplied by \([g'(\theta)]^2\).</li>
+        <li>Nonlinear transformations expand variance wherever the curve is steep, resulting in substantially wider confidence intervals.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-05.html" class="btn btn-outline">
+        ← Previous: Confidence Intervals &amp; Large-Sample Hypothesis Testing
+      </a>
+      <a href="lesson-07.html" class="btn btn-primary">
+        Next: Slutsky’s Theorem &amp; Delta Method Applications →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-04-interactions.js"></script>
+</body>
+</html>

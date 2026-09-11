@@ -570,16 +570,18 @@
                   </svg>
                 </div>
 
-                <h3 class="module-title">03 Large-Sample Theory & Statistical Inference</h3>
-                <p class="module-desc">Law of large numbers, Central Limit Theorem, asymptotic distributions, and hypothesis testing.</p>
+                <h3 class="module-title">03 Goodness of Fit &amp; Finite-Sample OLS Properties</h3>
+                <p class="module-desc">Learn how well OLS fits observed data, how R² and adjusted R² are interpreted, and why OLS has important finite-sample properties such as unbiasedness, variance efficiency, and exact inference under normality.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">LLN & Consistency</li>
-                    <li class="module-topic-tag">CLT & Normality</li>
-                    <li class="module-topic-tag">t-tests & p-values</li>
-                    <li class="module-topic-tag">F-tests & Restrictions</li>
+                    <li class="module-topic-tag">Goodness of Fit &amp; R²</li>
+                    <li class="module-topic-tag">Adjusted R² &amp; F-Tests</li>
+                    <li class="module-topic-tag">Unbiasedness &amp; OVB</li>
+                    <li class="module-topic-tag">Gauss–Markov &amp; BLUE</li>
+                    <li class="module-topic-tag">Normality &amp; t-Tests</li>
+                    <li class="module-topic-tag">CLT Asymptotics</li>
                   </ul>
                 </div>
 
@@ -593,14 +595,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-03" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 03"
-                    data-mod-group="Foundations"
-                    data-mod-title="Large-Sample Theory & Statistical Inference"
-                    data-mod-desc="Master asymptotic theory in econometrics: probability limits (plim), convergence in distribution, robust standard errors, Delta method, and joint hypothesis testing via Wald and F statistics."
-                    data-mod-topics="Weak Law of Large Numbers (WLLN)|Lindeberg-Levy Central Limit Theorem|Consistency vs Unbiasedness|Asymptotic Variance Covariance Matrix|Wald, LM, and Likelihood Ratio Tests|Delta Method for Nonlinear Functions">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-03/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 3</a>
                 </div>
               </article>
             </div>
@@ -621,39 +616,37 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">04</span>
-                  <span class="module-group-tag">Diagnostics</span>
+                  <span class="module-group-tag">Asymptotics</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Heteroskedasticity Fan -->
+                <!-- Topic-Specific Micro Visual: Convergence & Limiting Distribution -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <line x1="12" y1="22" x2="108" y2="22" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
-                    <!-- Fan envelope -->
-                    <line x1="20" y1="22" x2="102" y2="8" stroke="var(--accent-secondary)" stroke-width="1" opacity="0.6" />
-                    <line x1="20" y1="22" x2="102" y2="36" stroke="var(--accent-secondary)" stroke-width="1" opacity="0.6" />
-                    <!-- Expanding residuals -->
-                    <circle cx="28" cy="21" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="36" cy="24" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="48" cy="19" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="58" cy="26" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="70" cy="16" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="82" cy="30" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="94" cy="11" r="2" fill="var(--accent-secondary)" />
-                    <circle cx="98" cy="33" r="2" fill="var(--accent-secondary)" />
-                    <text x="64" y="38" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-muted)">Var(u|X) ≠ σ²</text>
+                    <line x1="10" y1="36" x2="110" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Flatter wide finite distribution -->
+                    <path d="M 15 36 C 30 36, 45 22, 60 22 C 75 22, 90 36, 105 36" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="2 2" opacity="0.6" />
+                    <!-- Concentrated limiting distribution -->
+                    <path d="M 30 36 C 45 36, 52 8, 60 8 C 68 8, 75 36, 90 36" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Centering target theta -->
+                    <line x1="60" y1="8" x2="60" y2="36" stroke="var(--accent-primary)" stroke-dasharray="1 1" opacity="0.7" />
+                    <text x="60" y="6" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">plim θ̂ = θ</text>
+                    <text x="24" y="24" font-size="5.5" font-family="var(--font-mono)" fill="var(--text-muted)">small n</text>
+                    <text x="96" y="18" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)">n → ∞</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">04 Heteroskedasticity, Autocorrelation & GLS</h3>
-                <p class="module-desc">Non-spherical disturbances, White and Newey-West robust standard errors, WLS, and Generalized Least Squares.</p>
+                <h3 class="module-title">04 Large-Sample Theory, Asymptotic Inference &amp; Nonlinear Functions</h3>
+                <p class="module-desc">Study what happens to econometric estimators as sample size grows—from convergence and consistency to asymptotic normality, confidence intervals, hypothesis testing, nonlinear transformations, the Delta Method, Wald tests, and robust large-sample inference.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Heteroskedasticity Tests</li>
-                    <li class="module-topic-tag">White Robust SE</li>
-                    <li class="module-topic-tag">Newey-West HAC</li>
-                    <li class="module-topic-tag">GLS & Feasible GLS</li>
+                    <li class="module-topic-tag">Convergence &amp; Consistency</li>
+                    <li class="module-topic-tag">OLS Large-Sample Conditions</li>
+                    <li class="module-topic-tag">Asymptotic Normality &amp; CAN</li>
+                    <li class="module-topic-tag">Confidence Intervals &amp; z-Tests</li>
+                    <li class="module-topic-tag">The Delta Method</li>
+                    <li class="module-topic-tag">Slutsky &amp; Wald Tests</li>
                   </ul>
                 </div>
 
@@ -667,14 +660,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-04" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 04"
-                    data-mod-group="Regression Challenges"
-                    data-mod-title="Heteroskedasticity, Autocorrelation & GLS"
-                    data-mod-desc="Diagnose and resolve violations of spherical error assumptions: Breusch-Pagan and White tests, heteroskedasticity-consistent covariance matrices (HC0-HC3), serial correlation tests, and generalized least squares."
-                    data-mod-topics="Consequences of Non-Spherical Disturbances|Breusch-Pagan & White Tests for Heteroskedasticity|White (Eicker-Huber-White) Robust Standard Errors|Durbin-Watson & Breusch-Godfrey LM Tests|Newey-West HAC Standard Errors|Weighted Least Squares (WLS) & Feasible GLS">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-04/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 4</a>
                 </div>
               </article>
 
@@ -682,32 +668,38 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">05</span>
-                  <span class="module-group-tag">Time Series</span>
+                  <span class="module-group-tag">Inference</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Time Series Trajectory -->
+                <!-- Topic-Specific Micro Visual: Hypothesis Testing & Parallel Slopes -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
-                    <!-- Stochastic trajectory -->
-                    <polyline points="14,32 25,26 34,30 46,18 56,23 68,14 78,19 90,11 104,8" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
-                    <!-- Trend line -->
-                    <line x1="14" y1="32" x2="104" y2="10" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
-                    <text x="108" y="24" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="end">Y_t</text>
-                    <text x="60" y="42" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">AR(1) • Trend</text>
+                    <line x1="10" y1="36" x2="110" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Shaded rejection region in normal curve -->
+                    <path d="M 15 36 C 30 36, 45 10, 60 10 C 75 10, 90 36, 105 36" fill="none" stroke="var(--accent-primary)" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M 85 24 C 88 30, 95 36, 105 36 L 85 36 Z" fill="var(--accent-primary)" opacity="0.3" />
+                    <line x1="85" y1="24" x2="85" y2="36" stroke="var(--accent-primary)" stroke-dasharray="1 1" />
+                    <!-- Parallel dummy regression lines in upper left -->
+                    <line x1="16" y1="16" x2="44" y2="8" stroke="var(--accent-secondary)" stroke-width="1.5" />
+                    <line x1="16" y1="24" x2="44" y2="16" stroke="var(--accent-secondary)" stroke-width="1.5" stroke-dasharray="2 1" />
+                    <text x="60" y="8" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">Rβ = q</text>
+                    <text x="96" y="22" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">α = 0.05</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">05 Time-Series Regression</h3>
-                <p class="module-desc">Dynamic processes, stationarity, unit roots, ARMA specifications, cointegration, and macroeconomic forecasting.</p>
+                <h3 class="module-title">05 Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</h3>
+                <p class="module-desc">Learn how econometric hypotheses are formulated and tested, how Type I and Type II errors arise, how Wald and F tests evaluate joint restrictions, and how dummy variables represent groups, categories, and percentage differences in regression models.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Stationarity & Ergodicity</li>
-                    <li class="module-topic-tag">Dickey-Fuller Test</li>
-                    <li class="module-topic-tag">Spurious Regression</li>
-                    <li class="module-topic-tag">Distributed Lags</li>
+                    <li class="module-topic-tag">Hypothesis Testing &amp; α</li>
+                    <li class="module-topic-tag">Type I &amp; Type II Errors</li>
+                    <li class="module-topic-tag">Power &amp; Critical Regions</li>
+                    <li class="module-topic-tag">Linear Restrictions Rβ = q</li>
+                    <li class="module-topic-tag">Wald &amp; F Tests</li>
+                    <li class="module-topic-tag">Binary Dummy Variables</li>
+                    <li class="module-topic-tag">Log-Dummy Exact Percent</li>
                   </ul>
                 </div>
 
@@ -721,14 +713,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-05" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 05"
-                    data-mod-group="Data Structures"
-                    data-mod-title="Time-Series Regression"
-                    data-mod-desc="Investigate dynamic economic time series: Autoregressive (AR) and Moving Average (MA) models, unit root diagnostics, Granger causality, error-correction models, and forecasting methods."
-                    data-mod-topics="Weak Stationarity & Autocovariance Functions|Augmented Dickey-Fuller (ADF) & Phillips-Perron Tests|Spurious Regressions & Unit Root Consequences|Finite Distributed Lag Models & Multipliers|Engle-Granger Cointegration & Error Correction|Forecasting Evaluation & Information Criteria">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-05/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 5</a>
                 </div>
               </article>
 

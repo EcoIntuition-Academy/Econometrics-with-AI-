@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5.4: Wald &amp; F Tests for Joint Restrictions — EcoIntuition Academy</title>
+  <meta name="description" content="Derive the covariance matrix of linear restrictions, master the Wald quadratic form and F-statistic, and understand the R-squared loss-of-fit formulation.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="../../assets/vendor/mathjax/tex-chtml.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';"></script>
+</head>
+<body data-module="module-05" data-lesson="04">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 5</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 05</a>
+          <span class="module-nav-title">Hypothesis Testing, Linear Restrictions &amp; Dummy Variables</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 7 &middot; Wald &amp; F Tests for Joint Restrictions</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 5 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.1 Hypothesis Testing &amp; Type I Error</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.2 One-Sided Tests, Type II Error &amp; Power</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.3 Testing Linear Restrictions: Rβ = q</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">5.4 Wald &amp; F Tests for Joint Restrictions</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.5 Binary Dummy Variables</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.6 Controls, Categories &amp; Reference Groups</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">5.7 Dummy Variables in Log-Linear Models &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">57.1%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 57.1%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 5.4</span>
+        <span class="badge">Joint Hypothesis Testing</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Wald &amp; F Tests for Joint Restrictions
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        The vector \(R\hat{\beta} - q\) measures how far the estimated coefficients are from satisfying the restrictions. The Wald and F statistics determine whether that discrepancy is large relative to its sampling uncertainty.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the covariance matrix of \(R\hat{\beta} - q\).</li>
+        <li>Explain why the Wald statistic scales restriction discrepancies by their covariance.</li>
+        <li>Connect the Wald statistic to the F statistic for \(J\) restrictions.</li>
+        <li>Interpret the restricted-versus-unrestricted \(R^2\) formulation.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Intuition First — Scaling Distance by Uncertainty -->
+    <section class="lesson-section" id="sectionIntuition">
+      <h2>1. Intuition First: Distance Scaled by Uncertainty</h2>
+      <p>
+        In sample estimation, the raw discrepancy vector:
+        \[ d = R\hat{\beta} - q \]
+        measures how far our empirical estimates deviate from the restriction \(H_0: R\beta = q\).
+      </p>
+      <p>
+        However, <strong>raw discrepancy alone is meaningless</strong> without knowing how precisely the linear combination is estimated:
+      </p>
+      <ul>
+        <li>A discrepancy of \(0.5\) is <em>enormous</em> if the standard error of estimation is \(0.05\) (10 standard deviations away!).</li>
+        <li>That same discrepancy of \(0.5\) is <em>negligible</em> if the standard error is \(5.0\) (just 0.1 standard deviations away!).</li>
+      </ul>
+      <p>
+        Therefore, in econometrics:
+      </p>
+      <div style="text-align: center; font-size: 1.15rem; font-weight: 700; color: var(--color-primary); padding: var(--space-sm); background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin: var(--space-sm) 0;">
+        STATISTICAL DISTANCE = \(\frac{\text{EMPIRICAL DISCREPANCY}}{\text{SAMPLING UNCERTAINTY}}\)
+      </div>
+      <p>
+        When testing \(J > 1\) restrictions simultaneously, sampling uncertainty is captured by a \(J \times J\) covariance matrix.
+      </p>
+    </section>
+
+    <!-- Section 2: Covariance of the Restrictions -->
+    <section class="lesson-section" id="sectionCovariance">
+      <h2>2. Sampling Covariance of the Restriction Discrepancy</h2>
+      <p>
+        Under the null hypothesis \(H_0: R\beta = q\), the expected value of the sample discrepancy vector is zero:
+        \[ \mathbb{E}[R\hat{\beta} - q \mid X] = R\mathbb{E}[\hat{\beta} \mid X] - q = R\beta - q = \mathbf{0} \]
+        To measure sampling uncertainty around zero, we derive the variance-covariance matrix of \(R\hat{\beta} - q\). Because \(q\) is a non-stochastic constant vector, \(\operatorname{Var}(R\hat{\beta} - q \mid X) = \operatorname{Var}(R\hat{\beta} \mid X)\).
+      </p>
+
+      <!-- Key Equation Box: Covariance Matrix -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">DERIVATION RESULT</span>
+          <span class="equation-title">Covariance Matrix of Linear Restrictions</span>
+        </div>
+        <div class="equation-main">
+          \[ \operatorname{Var}(R\hat{\beta} - q \mid X) = R \operatorname{Var}(\hat{\beta} \mid X) R' = \sigma^2 R(X'X)^{-1} R' \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(R\)</span>
+              <span class="symbol-desc">\(J \times K\) restriction matrix of rank \(J \le K\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\sigma^2\)</span>
+              <span class="symbol-desc">Population disturbance variance under spherical errors</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\((X'X)^{-1}\)</span>
+              <span class="symbol-desc">\(K \times K\) inverse data matrix from OLS estimation</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(V_d = \sigma^2 R(X'X)^{-1} R'\)</span>
+              <span class="symbol-desc">\(J \times J\) symmetric, positive-definite covariance matrix of the restrictions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The Wald Statistic -->
+    <section class="lesson-section" id="sectionWald">
+      <h2>3. The Wald Statistic: Quadratic Form Standardization</h2>
+      <p>
+        For a single restriction (\(J = 1\)), we divide by the standard error and square: \(z^2 = \left(\frac{R\hat{\beta} - q}{\operatorname{SE}}\right)^2\). For \(J > 1\) simultaneous restrictions, vector division is impossible. Instead, we use the matrix inverse to form a <strong>quadratic form</strong>:
+      </p>
+
+      <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin: var(--space-sm) 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs);">
+          <span class="academic-badge" style="background: #e0e7ff; color: #3730a3;">CONCEPTUAL STEPS</span>
+          <span style="font-size: 0.85rem; color: var(--color-text-secondary);">From Discrepancy to Test Statistic</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem; line-height: 1.6;">
+          <div><strong>Step 1 (Discrepancy Vector):</strong> \(d = R\hat{\beta} - q \quad (J \times 1)\)</div>
+          <div><strong>Step 2 (Sampling Covariance):</strong> \(V_d = \sigma^2 R(X'X)^{-1} R' \quad (J \times J)\)</div>
+          <div><strong>Step 3 (Scale by Inverse Covariance):</strong> \(W = d' V_d^{-1} d\)</div>
+        </div>
+      </div>
+
+      <!-- Key Equation Box: Wald Statistic -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">TEST STATISTIC</span>
+          <span class="equation-title">The Wald Statistic</span>
+        </div>
+        <div class="equation-main">
+          \[ W = (R\hat{\beta} - q)' \left[ \sigma^2 R(X'X)^{-1} R' \right]^{-1} (R\hat{\beta} - q) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">UNDER \(H_0\):</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(W \sim \chi^2_J\)</span>
+              <span class="symbol-desc">Follows a Chi-Square distribution with \(J\) degrees of freedom</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(J\)</span>
+              <span class="symbol-desc">Number of restrictions being tested (equals rows of \(R\))</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p>
+        The quadratic form weights departures by precision: deviations along dimensions with large estimation variance are discounted, while deviations along precisely estimated dimensions are penalized heavily.
+      </p>
+    </section>
+
+    <!-- Section 4: The Finite-Sample F-Statistic -->
+    <section class="lesson-section" id="sectionFStat">
+      <h2>4. The Feasible Finite-Sample \(F\)-Statistic</h2>
+      <p>
+        In practice, the true population error variance \(\sigma^2\) is unknown. We replace it with the unbiased residual variance estimator:
+        \[ s^2 = \frac{e'e}{n - k} = \frac{\sum_{i=1}^n \hat{\varepsilon}_i^2}{n - k} \]
+        where \(n\) is the sample size and \(k\) is the number of estimated parameters. Dividing the estimated Wald quadratic form by the number of restrictions \(J\) yields the classical <strong>\(F\)-statistic</strong>:
+      </p>
+
+      <!-- Key Equation Box: Joint F-Statistic -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">EXACT TEST STATISTIC</span>
+          <span class="equation-title">Finite-Sample \(F\)-Statistic</span>
+        </div>
+        <div class="equation-main">
+          \[ F = \frac{W(s^2)}{J} = \frac{1}{J} (R\hat{\beta} - q)' \left[ s^2 R(X'X)^{-1} R' \right]^{-1} (R\hat{\beta} - q) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">DISTRIBUTION:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(F \sim F(J, n - k)\)</span>
+              <span class="symbol-desc">Exact \(F\)-distribution under normality of disturbances and true \(H_0\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(J\)</span>
+              <span class="symbol-desc">Numerator degrees of freedom (number of restrictions)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(n - k\)</span>
+              <span class="symbol-desc">Denominator degrees of freedom (residual degrees of freedom)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-subtle">
+        <div class="callout-header">
+          <span class="callout-badge">Large-Sample Asymptotics</span>
+          <h4 class="callout-title" style="margin: 0;">Validity Without Normality</h4>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0;">
+            Even if disturbances are not normally distributed, under standard regularity conditions the quantity \(J \cdot F \xrightarrow{d} \chi^2_J\) as \(n \to \infty\). Thus, \(F\)-tests remain asymptotically valid in large empirical samples.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: The R² Loss-of-Fit Formulation -->
+    <section class="lesson-section" id="sectionR2">
+      <h2>5. The \(R^2\) Loss-of-Fit Formulation</h2>
+      <p>
+        A deeply intuitive way to understand the \(F\)-test is by comparing how well two competing regressions fit the same data:
+      </p>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin: var(--space-md) 0;">
+        <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; width: 100%; max-width: 500px; text-align: center;">
+          UNRESTRICTED MODEL: Explanatory fit = \(R^2_U\)
+        </div>
+        <div style="color: var(--color-text-secondary); font-size: 1.2rem;">↓ &nbsp; impose \(H_0\) (\(J\) restrictions)</div>
+        <div style="background: #ecfdf5; color: #047857; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; width: 100%; max-width: 500px; text-align: center;">
+          RESTRICTED MODEL: Explanatory fit = \(R^2_R\)
+        </div>
+        <div style="color: var(--color-text-secondary); font-size: 1.2rem;">↓ &nbsp; loss of fit</div>
+        <div style="background: #fef2f2; color: #b91c1c; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; width: 100%; max-width: 500px; text-align: center;">
+          FIT PENALTY: \(\Delta R^2 = R^2_U - R^2_R \ge 0\)
+        </div>
+      </div>
+
+      <!-- Key Equation Box: R-squared F Test -->
+      <div class="equation-card">
+        <div class="equation-header">
+          <span class="equation-badge">INTUITIVE FORMULA</span>
+          <span class="equation-title">Goodness-of-Fit Representation of \(F\)</span>
+        </div>
+        <div class="equation-main">
+          \[ F = \frac{(R^2_U - R^2_R) / J}{(1 - R^2_U) / (n - k)} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">INTERPRETATION:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\frac{R^2_U - R^2_R}{J}\)</span>
+              <span class="symbol-desc">Loss in explanatory power per restriction imposed</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\frac{1 - R^2_U}{n - k}\)</span>
+              <span class="symbol-desc">Unexplained variance per residual degree of freedom in the unrestricted model</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive Fit Loss Lab -->
+    <section class="lesson-section" id="sectionInteractiveFit">
+      <h2>6. Interactive \(F\)-Test &amp; Fit Loss Lab</h2>
+      <p>
+        Adjust the unrestricted fit \(R^2_U\) and restricted fit \(R^2_R\) below to observe how the drop in fit \(\Delta R^2 = R^2_U - R^2_R\) drives the \(F\)-statistic and alters the testing decision relative to critical threshold \(F_{0.05}(2, 95) = 3.09\).
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">Interactive Fit Lab</div>
+          <h3 class="lab-title">Model Comparison: Unrestricted vs Restricted Fit</h3>
+        </div>
+
+        <div class="lab-controls-bar f-test-controls">
+          <div class="slider-control-item">
+            <label for="fSliderR2U" class="control-label">Unrestricted Fit (\(R^2_U\)): <span id="fReadoutR2U" class="readout-val">0.65</span></label>
+            <input type="range" id="fSliderR2U" min="0.30" max="0.95" step="0.01" value="0.65" class="control-slider">
+          </div>
+          <div class="slider-control-item">
+            <label for="fSliderR2R" class="control-label">Restricted Fit (\(R^2_R\)): <span id="fReadoutR2R" class="readout-val">0.58</span></label>
+            <input type="range" id="fSliderR2R" min="0.20" max="0.90" step="0.01" value="0.58" class="control-slider">
+          </div>
+          <div class="lab-readout-group">
+            <span class="readout-item">Computed \(F\): <strong id="fReadoutF">9.50</strong></span>
+            <span class="readout-item">Decision: <strong id="fReadoutDecision" style="color: #dc2626;">REJECT H₀</strong></span>
+          </div>
+        </div>
+
+        <!-- Inline Chart Legend -->
+        <div class="outside-chart-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Unrestricted Model (\(R^2_U\), full specification)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: #059669;"></span> Restricted Model (\(R^2_R\), imposing \(H_0\))</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: rgba(239, 68, 68, 0.65);"></span> Goodness-of-Fit Gap (\(\Delta R^2 = R^2_U - R^2_R\))</span>
+        </div>
+
+        <div class="lab-visual-container">
+          <div class="chart-svg-shell">
+            <svg id="fTestLossSvg" viewBox="0 0 540 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="F-Test Loss of Fit Visualizer"></svg>
+          </div>
+        </div>
+
+        <!-- Structured 5-Box Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>Two horizontal comparison bars displaying the percentage of variation explained by the Unrestricted model (\(R^2_U\)) versus the Restricted model (\(R^2_R\)).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>The shaded red gap \(\Delta R^2 = R^2_U - R^2_R\) represents the penalty in fit caused by forcing the coefficients to satisfy the restrictions under \(H_0\).</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>If the restrictions are true in the population, imposing them should barely reduce \(R^2\). If the restrictions are false, imposing them substantially damages explanatory power.</p>
+          </div>
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>When the loss in fit per restriction is large compared to the baseline unexplained variance \(\frac{1 - R^2_U}{n - k}\), the \(F\)-statistic exceeds critical value 3.09, rejecting \(H_0\).</p>
+          </div>
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>Drag the <strong>Restricted Fit</strong> slider close to \(R^2_U\) (e.g., \(R^2_R = 0.64\)). Notice how \(\Delta R^2\) shrinks, causing \(F\) to fall below 3.09 and resulting in <em>FAIL TO REJECT \(H_0\)</em>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Quick Check & Takeaways -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.5rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text); display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span> Joint F-Test Calculation
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        An econometrician estimates an unrestricted model with \(n = 105\) and \(k = 5\) parameters, obtaining \(R^2_U = 0.60\). She tests the joint hypothesis that three slope coefficients are zero (\(J = 3\)). The restricted model yields \(R^2_R = 0.54\). What is the value of the \(F\)-statistic?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> \(F = 5.00\). Reject \(H_0\) at the 5% significance level.<br><br>
+          <strong>CALCULATION:</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li>Numerator loss of fit per restriction: \(\frac{R^2_U - R^2_R}{J} = \frac{0.60 - 0.54}{3} = \frac{0.06}{3} = 0.02\).</li>
+            <li>Denominator residual variance per df: \(\frac{1 - R^2_U}{n - k} = \frac{1 - 0.60}{105 - 5} = \frac{0.40}{100} = 0.004\).</li>
+            <li>The ratio is: \(F = \frac{0.02}{0.004} = 5.00\).</li>
+            <li>Since \(5.00 > F_{0.05}(3, 100) \approx 2.70\), we reject the joint null hypothesis \(H_0\) at the 5% level.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- Summary Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The restriction discrepancy \(R\hat{\beta} - q\) must be scaled by its covariance matrix \(\operatorname{Var}(R\hat{\beta} - q \mid X) = \sigma^2 R(X'X)^{-1} R'\).</li>
+        <li>The Wald statistic \(W = (R\hat{\beta} - q)' \left[\sigma^2 R(X'X)^{-1} R'\right]^{-1} (R\hat{\beta} - q)\) follows a \(\chi^2_J\) distribution under \(H_0\).</li>
+        <li>When \(\sigma^2\) is replaced by sample residual variance \(s^2\), dividing by \(J\) yields the exact finite-sample \(F(J, n - k)\) statistic.</li>
+        <li>The \(R^2\) formula \(F = \frac{(R^2_U - R^2_R)/J}{(1 - R^2_U)/(n - k)}\) provides an intuitive test of whether imposing restrictions causes an intolerable loss of fit.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-03.html" class="btn btn-outline">
+        ← Previous: Testing Linear Restrictions: Rβ = q
+      </a>
+      <a href="lesson-05.html" class="btn btn-primary">
+        Next: Binary Dummy Variables →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/module-05-interactions.js"></script>
+</body>
+</html>

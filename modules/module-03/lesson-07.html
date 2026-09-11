@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.7: Normality, t Statistics, CLTs & Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Master exact normal and Student's t inference, examine the Lindeberg–Lévy and Lindeberg–Feller central limit theorems, and review the entire curriculum of Module 3 with 15 study cards.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="07">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 7 of 7 &middot; Normality, t Statistics, CLTs &amp; Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.7</span>
+        <span class="badge">Capstone &amp; Asymptotic Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Normality, t Statistics, CLTs &amp; Module Review
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Distinguish exact finite-sample inference under normal disturbances from large-sample Central Limit Theorem asymptotics, explore the transition from the theoretical \(z\) to the feasible \(t_{n - k}\) statistic, examine the Lindeberg–Lévy and Lindeberg–Feller theorems, and review the unified curriculum of Module 3.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>State the exact finite-sample distribution of OLS under normal errors: \(\hat{\beta} \mid X \sim \mathcal{N}(\beta, \sigma^2(X'X)^{-1})\).</li>
+        <li>Distinguish the theoretical \(z_k\) statistic (using true \(\sigma^2\)) from the feasible \(t_k\) statistic (using \(s^2\)) with \(n - k\) degrees of freedom.</li>
+        <li>Separate exact normal distribution theory from large-sample Central Limit Theorem (CLT) motivations.</li>
+        <li>State and contrast the Lindeberg–Lévy CLT (i.i.d.) and the Lindeberg–Feller CLT (independent with unequal variances).</li>
+        <li>Review all 15 foundational concepts of Module 3 using the integrated knowledge map and standardized review cards.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Part A — Exact Finite-Sample Normal Theory -->
+    <section class="lesson-section" id="normalitySection">
+      <h2>1. Part A: Exact Finite-Sample Normal Theory</h2>
+      <p>
+        What is this section about? When disturbances are assumed to be multivariate normal conditional on \(X\), the linearity of OLS guarantees that the estimator vector is <em>exactly normally distributed in finite samples of any size</em>.
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-header">
+          <span class="callout-icon">🎯</span>
+          <span class="callout-title">Classical Normal Linear Regression Model (CNLRM)</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            Assume the unobserved disturbances follow a conditional multivariate normal distribution:
+            $$\varepsilon \mid X \sim \mathcal{N}(\mathbf{0}, \sigma^2 I_n)$$
+            Because \(\hat{\beta} = \beta + (X'X)^{-1}X'\varepsilon\) is an affine linear transformation of the Gaussian vector \(\varepsilon\), the OLS estimator is <strong>exactly normally distributed</strong>:
+            $$\hat{\beta} \mid X \sim \mathcal{N}\left(\beta, \sigma^2(X'X)^{-1}\right)$$
+          </p>
+        </div>
+      </div>
+
+      <p>
+        For any single regression coefficient \(\hat{\beta}_k\) (the \(k\)-th coordinate of \(\hat{\beta}\)):
+        \[
+        \hat{\beta}_k \mid X \sim \mathcal{N}\left(\beta_k, \sigma^2 s^{kk}\right)
+        \]
+        where \(s^{kk} = [(X'X)^{-1}]_{kk}\) denotes the \(k\)-th diagonal element of \((X'X)^{-1}\).
+      </p>
+
+      <!-- z vs t Distinction Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div class="study-card" style="background: var(--surface); padding: var(--space-md); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--color-primary); margin-bottom: 6px;">
+            THEORETICAL \(z\)-STATISTIC (KNOWN \(\sigma^2\))
+          </div>
+          <p style="margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+            If the disturbance variance \(\sigma^2\) were known, standardizing the estimation error produces a standard Gaussian:
+          </p>
+          <div style="font-size: 1.05rem; font-weight: 700; text-align: center; color: var(--color-primary); padding: 8px; background: var(--color-bg); border-radius: var(--radius-sm);">
+            $$z_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{\sigma^2 s^{kk}}} \sim \mathcal{N}(0, 1)$$
+          </div>
+          <p style="margin: 8px 0 0 0; font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+            Infeasible in practice because true population disturbance variance \(\sigma^2\) is never known.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: var(--space-md); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #059669; margin-bottom: 6px;">
+            FEASIBLE \(t\)-STATISTIC (ESTIMATED \(s^2\))
+          </div>
+          <p style="margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+            Replacing \(\sigma^2\) with the unbiased sample estimator \(s^2 = \frac{e'e}{n - k}\) yields a Student's \(t\) ratio:
+          </p>
+          <div style="font-size: 1.05rem; font-weight: 700; text-align: center; color: #059669; padding: 8px; background: var(--color-bg); border-radius: var(--radius-sm);">
+            $$t_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 s^{kk}}} \sim t_{n - k}$$
+          </div>
+          <p style="margin: 8px 0 0 0; font-size: 0.82rem; color: var(--color-text-secondary); line-height: 1.5;">
+            Has exact Student's \(t\) distribution with \(n - k\) degrees of freedom under normal errors.
+          </p>
+        </div>
+      </div>
+
+      <!-- Reusable Key Equation Box: z vs t -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY EQUATION</span>
+          <span class="equation-title">Finite-Sample Student's t Statistic</span>
+        </div>
+        <div class="equation-main">
+          $$t_k = \frac{\hat{\beta}_k - \beta_k}{\operatorname{SE}(\hat{\beta}_k)} = \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 [(X'X)^{-1}]_{kk}}} \sim t_{n - k}$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\hat{\beta}_k - \beta_k\)</div>
+              <div class="def-desc"><strong>Estimation Error:</strong> Difference between sample OLS estimate and true hypothesized parameter.</div>
+              <div class="def-term">\(\operatorname{SE}(\hat{\beta}_k) = \sqrt{s^2 s^{kk}}\)</div>
+              <div class="def-desc"><strong>Estimated Standard Error:</strong> Sample uncertainty measured in identical coefficient units.</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(n - k\)</div>
+              <div class="def-desc"><strong>Degrees of Freedom:</strong> Inherited directly from the denominator of \(s^2 = \frac{e'e}{n - k}\).</div>
+              <div class="def-term">Heavy Tails</div>
+              <div class="def-desc"><strong>Sampling Dispersion:</strong> Student's \(t\) has wider tails than normal to account for estimation uncertainty in \(s^2\).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Normal vs Student's t Lab -->
+    <section class="lesson-section" id="interactiveSection">
+      <h2>2. Interactive Lab: Standard Normal vs Student's t Distribution</h2>
+      <p>
+        Observe how replacing true \(\sigma^2\) with estimated \(s^2\) introduces additional variability, producing the heavier tails of the Student's \(t\) curve. Toggle degrees of freedom (\(df = n - k\)) to watch \(t_{df}\) smoothly converge to the standard Gaussian curve \(\mathcal{N}(0, 1)\).
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Bar -->
+        <div style="margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-secondary); display: block; margin-bottom: 6px;">
+            Select Degrees of Freedom (n - k):
+          </span>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" id="tBtnDf1" class="btn btn-sm btn-outline">df = 1</button>
+            <button type="button" id="tBtnDf2" class="btn btn-sm btn-outline">df = 2</button>
+            <button type="button" id="tBtnDf5" class="btn btn-sm btn-outline active">df = 5</button>
+            <button type="button" id="tBtnDf10" class="btn btn-sm btn-outline">df = 10</button>
+            <button type="button" id="tBtnDf30" class="btn btn-sm btn-outline">df = 30</button>
+            <button type="button" id="tBtnDfInf" class="btn btn-sm btn-outline">df = ∞ (Normal)</button>
+          </div>
+        </div>
+
+        <!-- Readout Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Degrees of Freedom</div>
+            <div id="tReadoutDf" style="font-size: 1.05rem; font-weight: 700; color: #1e293b; font-family: var(--font-mono);">5</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #dc2626; font-weight: 600;">Tail Area (|t| ≥ 2.0)</div>
+            <div id="tReadoutTailP" style="font-size: 1.05rem; font-weight: 700; color: #dc2626; font-family: var(--font-mono);">10.19%</div>
+          </div>
+          <div style="background: rgba(5, 150, 105, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid #059669; text-align: center;">
+            <div style="font-size: 0.72rem; color: #047857; font-weight: 700;">Two-Tailed 5% Critical Value</div>
+            <div id="tReadoutCrit" style="font-size: 1.15rem; font-weight: 800; color: #065f46; font-family: var(--font-mono);">2.57</div>
+          </div>
+        </div>
+
+        <div id="tReadoutSummary" style="font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: var(--space-md); padding: 8px 12px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          Moderate tails; typical small sample (\(n - k = 5\)). Notice critical value 2.57 is substantially wider than the normal 1.96 benchmark.
+        </div>
+
+        <!-- SVG Curve Comparison -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="normalityTsvg" viewBox="0 0 540 240" style="width: 100%; max-width: 540px; height: auto;" aria-label="Comparison of standard normal and Student's t distributions"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            An overlay of the Standard Normal distribution \(\mathcal{N}(0, 1)\) (dashed blue line) and the Student's \(t_{df}\) distribution (solid emerald line). Vertical red lines mark the \(\pm 2.0\) benchmark.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            At small degrees of freedom (\(df = 2\) or \(df = 5\)), the \(t\) curve is flatter at the peak and noticeably thicker in the tails. Consequently, the two-tailed 5% critical value moves from 1.96 out to 2.57 (\(df = 5\)) or 4.30 (\(df = 2\)).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            If you mistakenly use the normal critical value \(1.96\) in a small sample with \(n - k = 5\), your actual false rejection rate is over \(10\%\) instead of the nominal \(5\%\)! The \(t\)-distribution protects against false discoveries.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            As \(df = n - k\) grows (\(df \ge 30\)), the uncertainty in estimating \(\sigma^2\) diminishes. The \(t\) curve becomes visually indistinguishable from the normal curve, and the critical value drops toward 1.96.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Click <em>df = 1</em> to inspect the extreme Cauchy distribution where variance is undefined, then step up through <em>df = 10</em>, <em>df = 30</em>, and <em>df = ∞</em> to watch the tails contract.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Part B — Large-Sample Motivation & CLTs -->
+    <section class="lesson-section" id="cltSection">
+      <h2>3. Part B: Large-Sample Central Limit Motivation</h2>
+      <p>
+        What if the true disturbances \(\varepsilon_i\) are <strong>not normally distributed</strong>? Econometrics relies on Central Limit Theorems (CLTs) to motivate why properly normalized sums and estimators converge approximately to Gaussian distributions in large samples, even when the underlying data are non-normal.
+      </p>
+
+      <div class="study-card" style="background: rgba(220, 38, 38, 0.04); border: 1.5px solid #dc2626; padding: 14px 18px; margin-bottom: var(--space-md); border-radius: var(--radius-sm);">
+        <div style="font-weight: 700; font-size: 0.90rem; color: #dc2626; margin-bottom: 4px;">
+          ⚠️ CRITICAL DISTINCTION: EXACT FINITE-SAMPLE THEORY VS ASYMPTOTIC CLT
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+          Do <strong>NOT</strong> confuse the two results! Exact \(t_{n - k}\) distribution requires the assumption of conditional Gaussian disturbances \(\varepsilon \mid X \sim \mathcal{N}\). The Central Limit Theorem does <em>not</em> prove an exact \(t\) distribution in finite samples; rather, CLTs show that as \(n \to \infty\), properly scaled estimators become <em>asymptotically normal</em> under general error distributions.
+        </p>
+      </div>
+
+      <!-- Lindeberg-Lévy CLT Box (NO HORIZONTAL SCROLLBAR ON DESKTOP) -->
+      <div class="equation-box equation-box--key" style="margin-bottom: var(--space-md);">
+        <div class="equation-header">
+          <span class="equation-badge">THEOREM</span>
+          <span class="equation-title">Lindeberg–Lévy Central Limit Theorem (i.i.d.)</span>
+        </div>
+        
+        <div style="padding: 12px 16px; background: var(--color-bg); border-bottom: 1px solid var(--border-subtle); font-size: 0.90rem; line-height: 1.6;">
+          <strong>Assumptions:</strong> Let \(x_1, x_2, \dots, x_n\) be independent and identically distributed (i.i.d.) random variables with mean \(\mathbb{E}[x_i] = \mu\) and finite variance \(\operatorname{Var}(x_i) = \sigma^2 < \infty\).
+        </div>
+
+        <div class="equation-main" style="padding: 18px 12px;">
+          $$\sqrt{n}\left(\bar{x}_n - \mu\right) \xrightarrow{d} \mathcal{N}\left(0, \sigma^2\right)$$
+        </div>
+
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\bar{x}_n = \frac{1}{n}\sum_{i=1}^n x_i\)</div>
+              <div class="def-desc"><strong>Sample Mean:</strong> Simple arithmetic average of \(n\) i.i.d. observations.</div>
+              <div class="def-term">\(\sqrt{n}\)</div>
+              <div class="def-desc"><strong>Asymptotic Rate:</strong> Standard normalization factor preventing the variance from collapsing to zero.</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(\xrightarrow{d}\)</div>
+              <div class="def-desc"><strong>Convergence in Distribution:</strong> The cumulative distribution function converges pointwise to the standard Gaussian CDF.</div>
+              <div class="def-term">\(\sigma^2 < \infty\)</div>
+              <div class="def-desc"><strong>Finite Variance:</strong> The essential regularity condition ensuring no infinite-variance tails.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lindeberg-Feller CLT Box (NO HORIZONTAL SCROLLBAR ON DESKTOP) -->
+      <div class="equation-box equation-box--key" style="margin-bottom: var(--space-md);">
+        <div class="equation-header">
+          <span class="equation-badge">THEOREM</span>
+          <span class="equation-title">Lindeberg–Feller Central Limit Theorem (Unequal Variances)</span>
+        </div>
+
+        <div style="padding: 14px 18px; background: var(--color-bg); border-bottom: 1px solid var(--border-subtle); font-size: 0.88rem; line-height: 1.65;">
+          <div style="margin-bottom: 8px;">
+            <strong>Setup:</strong> Let \(x_1, \dots, x_n\) be independent (not necessarily identically distributed) with \(\mathbb{E}[x_i] = \mu_i\) and \(\operatorname{Var}(x_i) = \sigma_i^2\).
+          </div>
+          <div style="margin-bottom: 8px;">
+            <strong>Definitions:</strong> Average mean \(\bar{\mu}_n = \frac{1}{n}\sum_{i=1}^n \mu_i\) and average variance \(\bar{\sigma}_n^2 = \frac{1}{n}\sum_{i=1}^n \sigma_i^2\).
+          </div>
+          <div>
+            <strong>Lindeberg Condition:</strong> \(\lim_{n \to \infty} \frac{\max_{1 \le i \le n} \sigma_i}{n \bar{\sigma}_n} = 0\). (Ensures no single observation dominates the sum).
+          </div>
+        </div>
+
+        <div class="equation-main" style="padding: 18px 12px;">
+          $$\sqrt{n}\left(\bar{x}_n - \bar{\mu}_n\right) \xrightarrow{d} \mathcal{N}\left(0, \bar{\sigma}^2\right)$$
+        </div>
+
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\bar{\sigma}^2 = \lim_{n \to \infty} \bar{\sigma}_n^2\)</div>
+              <div class="def-desc"><strong>Limiting Average Variance:</strong> The asymptotic limit of the average individual variances.</div>
+              <div class="def-term">Heteroskedastic Settings</div>
+              <div class="def-desc"><strong>Why This Matters:</strong> Permits observations to have non-identical variances, accommodating realistic empirical microdata.</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(\lim_{n \to \infty} \frac{\max(\sigma_i)}{n \bar{\sigma}_n} = 0\)</div>
+              <div class="def-desc"><strong>Regularity Condition:</strong> Guarantees the maximum individual variance is asymptotically negligible compared to the total variance.</div>
+              <div class="def-term">Econometric Application</div>
+              <div class="def-desc"><strong>Large-Sample Inference:</strong> Forms the mathematical bridge justifying asymptotic \(t\) and \(F\) tests in large cross-sections.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLT Comparison Card -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+        <div class="study-card" style="background: var(--surface); padding: var(--space-md); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.90rem; color: var(--color-primary); margin-bottom: 6px;">
+            LINDEBERG–LÉVY CLT
+          </div>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.6; color: var(--color-text);">
+            <li><strong>Core Assumption:</strong> Strictly identical distribution (i.i.d.) across all observations.</li>
+            <li><strong>Structure:</strong> Common mean \(\mu\) and common variance \(\sigma^2 < \infty\).</li>
+            <li><strong>Intuition:</strong> Repeated random sampling from a single homogeneous population.</li>
+          </ul>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: var(--space-md); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.90rem; color: #059669; margin-bottom: 6px;">
+            LINDEBERG–FELLER CLT
+          </div>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.6; color: var(--color-text);">
+            <li><strong>Core Assumption:</strong> Independence without requiring identical distributions.</li>
+            <li><strong>Structure:</strong> Observation-specific means \(\mu_i\) and variances \(\sigma_i^2\).</li>
+            <li><strong>Intuition:</strong> Adds a condition ensuring no single observation dominates the aggregate sum.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Module 3 Master Knowledge Map -->
+    <section class="lesson-section" id="mapSection">
+      <h2>4. Module 3 Master Knowledge Map</h2>
+      <p>
+        Trace the full conceptual architecture of Module 3—from in-sample fit diagnostics to finite-sample properties, efficiency theorems, and asymptotic inference:
+      </p>
+
+      <div class="study-card" style="background: var(--surface); padding: var(--space-lg); border: 1.5px solid var(--border-subtle); margin: var(--space-lg) 0; border-radius: var(--radius-sm);">
+        <div style="display: flex; flex-direction: column; gap: var(--space-xs); max-width: 680px; margin: 0 auto;">
+          
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">GOODNESS OF FIT &amp; R²</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">How well variations in \(X\) predict variations in \(y\): \(R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">MODEL COMPLEXITY &amp; ADJUSTED R̄²</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">Penalizes regressor proliferation: \(\bar{R}^2 = 1 - \frac{\text{SSE}}{\text{SST}}\left(\frac{n - 1}{n - K}\right)\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">JOINT RESTRICTIONS &amp; F TEST</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">Scales fit deterioration per restriction: \(F[J, n - k] = \frac{(R^2 - R_r^2)/J}{(1 - R^2)/(n - k)}\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">EXPECTED VALUE OF OLS &amp; UNBIASEDNESS</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">Strict exogeneity \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0} \implies \mathbb{E}[\hat{\beta} \mid X] = \beta\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">OMITTED VARIABLE BIAS (OVB)</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">Two ingredients: \(\text{Bias} = (X_1'X_1)^{-1}X_1'X_2\beta_2 \neq \mathbf{0}\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">COEFFICIENT UNCERTAINTY &amp; VARIANCE</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">\(\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2(X'X)^{-1}\). Precision levers: \(\sigma^2 \downarrow, N \uparrow, \operatorname{Var}(x) \uparrow\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">SAMPLING EFFICIENCY: GAUSS–MARKOV &amp; BLUE</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">\(\operatorname{Var}(\tilde{\beta} \mid X) = \operatorname{Var}(\hat{\beta} \mid X) + \sigma^2 DD'\). OLS has minimal variance in linear unbiased class</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">UNKNOWN \(\sigma^2\) &amp; UNBIASED ESTIMATOR \(s^2\)</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">\(\mathbb{E}[e'e \mid X] = \sigma^2(n - k) \implies s^2 = \frac{e'e}{n - k}\) and \(\widehat{\operatorname{Var}}(\hat{\beta} \mid X) = s^2(X'X)^{-1}\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">EXACT NORMAL INFERENCE (z vs t)</div>
+            <div style="font-size: 0.92rem; font-weight: 600;">Normal disturbances \(\implies \hat{\beta} \mid X \sim \mathcal{N}\) and \(t_k = \frac{\hat{\beta}_k - \beta_k}{\operatorname{SE}(\hat{\beta}_k)} \sim t_{n - k}\)</div>
+          </div>
+
+          <div style="text-align: center; color: var(--color-accent); font-weight: 700;">↓</div>
+
+          <div style="background: rgba(5, 150, 105, 0.08); border: 1.5px solid #059669; border-radius: var(--radius-sm); padding: 10px; text-align: center;">
+            <div style="font-weight: 700; color: #059669; font-size: 0.85rem;">ASYMPTOTIC CENTRAL LIMIT FOUNDATIONS</div>
+            <div style="font-size: 0.92rem; font-weight: 600; color: var(--text-primary);">Lindeberg–Lévy &amp; Lindeberg–Feller: \(\sqrt{n}(\bar{x}_n - \bar{\mu}_n) \xrightarrow{d} \mathcal{N}(0, \bar{\sigma}^2)\)</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: 15 Concise Module Review Cards -->
+    <section class="lesson-section" id="reviewCardsSection">
+      <h2>5. Module 3 Review Cards</h2>
+      <p>
+        These 15 focused review study cards synthesize the core definitions, formulas, and theorems from <code>Econometrics (3).pdf</code>:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-xl);">
+        
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">1. Goodness of Fit</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary);">Measures how well variation in regressors \(X\) accounts for variation in observed outcomes \(y\) around their sample mean.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">2. SST (Total Sum of Squares)</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\sum (y_i - \bar{y})^2 = y'M_0 y\). Total sample variation of \(y\) around its mean.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">3. SSR (Regression Sum of Squares)</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\sum (\hat{y}_i - \bar{y})^2 = \hat{\beta}'X'M_0 X \hat{\beta}\). Variation explained by the fitted regression.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">4. SSE (Sum of Squared Residuals)</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\sum e_i^2 = e'e\). Unexplained variation minimized by the OLS projection.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">5. R² (Coefficient of Determination)</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = \frac{\text{SSR}}{\text{SST}}\). High \(R^2\) measures in-sample fit, NOT causality.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">6. Adjusted R̄²</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(\bar{R}^2 = 1 - \frac{\text{SSE}}{\text{SST}}\left(\frac{n-1}{n-K}\right)\). Penalizes model expansion by degrees of freedom.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">7. F-Test via R²</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(F = \frac{(R^2 - R_r^2)/J}{(1 - R^2)/(n - k)}\). Evaluates joint significance of \(J\) linear restrictions.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">8. OLS Unbiasedness</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(\mathbb{E}[\hat{\beta} \mid X] = \beta\). Guaranteed by strict exogeneity \(\mathbb{E}[\varepsilon \mid X] = \mathbf{0}\).</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">9. Omitted Variable Bias</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\text{Bias} = (X_1'X_1)^{-1}X_1'X_2\beta_2\). Nonzero if \(\beta_2 \neq \mathbf{0}\) and \(X_1'X_2 \neq \mathbf{0}\).</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">10. OLS Variance Matrix</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2(X'X)^{-1}\). Requires spherical disturbance assumption \(\sigma^2 I_n\).</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">11. Gauss–Markov &amp; BLUE</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\operatorname{Var}(\tilde{\beta}) = \operatorname{Var}(\hat{\beta}) + \sigma^2 DD'\). OLS has minimum variance among all linear unbiased rules.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">12. Estimated Error Variance (s²)</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(s^2 = \frac{e'e}{n-k}\). Corrects for the \(k\) degrees of freedom consumed by the OLS normal equations.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">13. Student's t Statistic</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono); font-weight: 600;">\(t_k = \frac{\hat{\beta}_k - \beta_k}{\sqrt{s^2 s^{kk}}} \sim t_{n-k}\). Replaces true \(\sigma^2\) with sample estimate \(s^2\).</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">14. Lindeberg–Lévy CLT</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\sqrt{n}(\bar{x}_n - \mu) \xrightarrow{d} \mathcal{N}(0, \sigma^2)\). Establishes asymptotic normality for i.i.d. sums.</p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface); padding: 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary); margin-bottom: 4px;">15. Lindeberg–Feller CLT</div>
+          <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary); font-family: var(--font-mono);">\(\sqrt{n}(\bar{x}_n - \bar{\mu}_n) \xrightarrow{d} \mathcal{N}(0, \bar{\sigma}^2)\). Extends asymptotic normality to unequal variances.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: rgba(37, 99, 235, 0.03); border: 1.5px solid var(--color-primary); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-xs);">
+        <span style="font-size: 1.2rem;">🧠</span>
+        <h3 style="font-size: var(--text-base); font-weight: 700; margin: 0; color: var(--color-primary);">
+          Can You Explain It? Why Standardize by Standard Error?
+        </h3>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text); margin-bottom: var(--space-sm);">
+        Why do we divide the raw estimation error \(\hat{\beta}_k - \beta_k\) by its estimated standard error \(\operatorname{SE}(\hat{\beta}_k)\) when forming the test statistic? What would happen if we used the raw difference directly?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Conceptual Explanation</summary>
+        <div style="margin-top: 10px; padding: 12px; background: var(--color-bg); border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+          <strong>Answer:</strong>
+          <ol style="margin: 0; padding-left: 1.25rem;">
+            <li><strong>Scale Invariance:</strong> The raw difference \(\hat{\beta}_k - \beta_k\) depends entirely on the arbitrary units in which \(y\) and \(x_k\) are measured (e.g., dollars vs cents). Dividing by \(\operatorname{SE}(\hat{\beta}_k)\) cancels the measurement units, creating a unitless, standardized ratio.</li>
+            <li><strong>Pivotal Quantity:</strong> Under the null hypothesis, the distribution of the ratio \(t_k = \frac{\hat{\beta}_k - \beta_{k,0}}{\operatorname{SE}(\hat{\beta}_k)}\) depends <em>only</em> on the degrees of freedom \(n - k\), not on the unknown variance \(\sigma^2\) or regressor scaling. This "pivotal" property allows us to tabulate universal critical values (such as \(\pm 1.96\) or \(\pm 2.04\)) to conduct exact hypothesis testing.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- What You Should Now Understand -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-title">
+        <span>📖</span> WHAT YOU SHOULD NOW UNDERSTAND (LESSON 3.7 &amp; MODULE 3 REVISION)
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Exact Normal Inference:</strong> Under Gaussian disturbances \(\varepsilon \mid X \sim \mathcal{N}\), OLS is exactly normally distributed in finite samples: \(\hat{\beta} \mid X \sim \mathcal{N}(\beta, \sigma^2(X'X)^{-1})\).</li>
+        <li><strong>z vs t Distinction:</strong> The \(z\)-statistic requires known disturbance variance \(\sigma^2\). The feasible test replaces \(\sigma^2\) with \(s^2\), creating a Student's \(t_{n - k}\) statistic whose heavier tails reflect uncertainty in estimating \(\sigma^2\).</li>
+        <li><strong>Asymptotics vs Finite Samples:</strong> Central Limit Theorems explain large-sample normality without requiring normal errors. A CLT does not provide an exact finite-sample \(t\) distribution.</li>
+        <li><strong>Lindeberg–Lévy vs Lindeberg–Feller:</strong> Lindeberg–Lévy applies to i.i.d. observations with finite variance; Lindeberg–Feller extends normality to independent observations with unequal variances under a condition ensuring no single observation dominates.</li>
+        <li><strong>Unified Module Progression:</strong> In-sample fit (\(R^2\)) \(\to\) Model Complexity (\(\bar{R}^2\)) \(\to\) Restrictions (\(F\)) \(\to\) Unbiasedness \(\to\) OVB \(\to\) Precision \(\to\) BLUE \(\to\) Unknown \(\sigma^2\) (\(s^2\)) \(\to\) Exact Inference \(\to\) Asymptotic Normality.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-06.html" class="btn btn-outline">
+        ← Previous: Gauss–Markov, BLUE &amp; Estimating σ²
+      </a>
+      <a href="index.html" class="btn btn-primary">
+        Return to Module 3 Overview 🎓
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

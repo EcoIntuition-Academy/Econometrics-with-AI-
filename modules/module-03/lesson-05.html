@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3.5: Variance of the OLS Estimator — EcoIntuition Academy</title>
+  <meta name="description" content="Derive the variance-covariance matrix of the OLS estimator under spherical errors, evaluate the diagonal 2-regressor matrix example, and master the key drivers of econometric precision.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body data-module="module-03" data-lesson="05">
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li><a href="../../index.html#modules" class="nav-item-link">Modules</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 3</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 03</a>
+          <span class="module-nav-title">Goodness of Fit &amp; Finite-Sample OLS Properties</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 7 &middot; Variance of the OLS Estimator</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 3 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.1 Goodness of Fit &amp; R-Squared</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.2 Adjusted R-Squared &amp; Model Comparison</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.3 R-Squared &amp; F Tests</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.4 OLS Unbiasedness &amp; Omitted Variable Bias</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">3.5 Variance of the OLS Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.6 Gauss–Markov, BLUE &amp; Estimating Error Variance</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">3.7 Normality, t Statistics, CLTs &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">71%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 71.4%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 3.5</span>
+        <span class="badge">Sampling Dispersion &amp; Precision</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Variance of the OLS Estimator
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Knowing that OLS is unbiased on average is not enough—we must quantify how tightly the estimates cluster around the true parameter across repeated samples. Derive the variance matrix \(\sigma^2(X'X)^{-1}\) and explore the three levers of econometric precision.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Box -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the general conditional variance formula: \(\operatorname{Var}(b \mid X) = (X'X)^{-1}X'\operatorname{Var}(\varepsilon \mid X)X(X'X)^{-1}\).</li>
+        <li>Simplify the variance-covariance matrix to \(\operatorname{Var}(b \mid X) = \sigma^2(X'X)^{-1}\) under spherical errors.</li>
+        <li>Inspect the source's 2-regressor diagonal matrix example and derive \(\operatorname{Var}(b_1) = \frac{\sigma^2}{N \cdot \operatorname{var}(x_1)}\).</li>
+        <li>Strictly distinguish between sampling variance and the standard error (\(\operatorname{SE} = \sqrt{\text{Var}}\)).</li>
+        <li>Explain the three direct levers for shrinking standard errors: increasing \(N\), expanding \(\operatorname{var}(x_1)\), and reducing \(\sigma^2\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Matrix Derivation under Spherical Errors -->
+    <section class="lesson-section" id="derivationSection">
+      <h2>1. Deriving the OLS Variance-Covariance Matrix</h2>
+      <p>
+        Unbiasedness guarantees that our estimator is centered on the truth, but it tells us nothing about how widely individual estimates vary from sample to sample. We need to evaluate the sampling variance-covariance matrix.
+      </p>
+
+      <!-- THREE PRECISION LEVERS CAUSAL CHAIN CARDS -->
+      <div class="precision-levers-grid">
+        <div class="precision-lever-card precision-lever-card--noise">
+          <div class="precision-lever-tag">Lever 1: Disturbance Noise</div>
+          <div class="precision-lever-arrow">\(\sigma^2 \downarrow \implies \operatorname{Var}(\hat{\beta}_k) \downarrow\)</div>
+          <p class="precision-lever-effect">
+            Less unobserved noise in outcomes produces tighter clustering of sample estimates around the true parameter.
+          </p>
+        </div>
+
+        <div class="precision-lever-card precision-lever-card--n">
+          <div class="precision-lever-tag">Lever 2: Sample Size</div>
+          <div class="precision-lever-arrow">\(N \uparrow \implies \operatorname{Var}(\hat{\beta}_k) \downarrow\)</div>
+          <p class="precision-lever-effect">
+            More sample information averages out random idiosyncrasies, shrinking sampling spread at the rate \(1/\sqrt{N}\).
+          </p>
+        </div>
+
+        <div class="precision-lever-card precision-lever-card--varx">
+          <div class="precision-lever-tag">Lever 3: Variation in X</div>
+          <div class="precision-lever-arrow">\(\operatorname{Var}(x_k) \uparrow \implies \operatorname{Var}(\hat{\beta}_k) \downarrow\)</div>
+          <p class="precision-lever-effect">
+            A wider spread in the explanatory variable provides a longer leverage baseline to accurately identify the slope.
+          </p>
+        </div>
+      </div>
+
+      <!-- DERIVATION JOURNEY: OLS VARIANCE -->
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">Matrix Derivation</span>
+          <h3 class="derivation-journey-title">Variance-Covariance Matrix of the OLS Estimator</h3>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">What are we trying to show?</span>
+            <p class="derivation-goal-text">
+              Derive the general sampling covariance matrix of \(\hat{\beta}\) conditional on \(X\), and show that under spherical disturbances it simplifies to \(\sigma^2(X'X)^{-1}\).
+            </p>
+          </div>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Express variance in terms of estimation error</h4>
+              </div>
+              <p class="derivation-step-desc">Substitute the structural identity \(\hat{\beta} = \beta + (X'X)^{-1}X'\varepsilon\) into the variance operator:</p>
+              <div class="derivation-step-math">\(\operatorname{Var}(\hat{\beta} \mid X) = \operatorname{Var}\left(\beta + (X'X)^{-1}X'\varepsilon \mid X\right) = \operatorname{Var}\left((X'X)^{-1}X'\varepsilon \mid X\right)\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The true population vector \(\beta\) is a constant parameter; adding a constant vector does not change variance.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Apply the linear variance transformation rule</h4>
+              </div>
+              <p class="derivation-step-desc">For any non-random matrix \(A\), \(\operatorname{Var}(A \varepsilon \mid X) = A \operatorname{Var}(\varepsilon \mid X) A'\):</p>
+              <div class="derivation-step-math">\(\operatorname{Var}(\hat{\beta} \mid X) = (X'X)^{-1}X' \operatorname{Var}(\varepsilon \mid X) \left[(X'X)^{-1}X'\right]'\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Conditioning on \(X\) treats \((X'X)^{-1}X'\) as a fixed deterministic transformation matrix.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Transpose the right-hand factor</h4>
+              </div>
+              <p class="derivation-step-desc">Using \((A B)' = B' A'\) and symmetry of \((X'X)^{-1}\):</p>
+              <div class="derivation-step-math">\(\left[(X'X)^{-1}X'\right]' = (X')' \left((X'X)^{-1}\right)' = X (X'X)^{-1}\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                The matrix \(X'X\) is symmetric, so its inverse \((X'X)^{-1}\) is also symmetric: \(((X'X)^{-1})' = (X'X)^{-1}\).
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Impose spherical disturbances</h4>
+                <span class="derivation-result-badge">Homoskedasticity &amp; No Autocorrelation</span>
+              </div>
+              <p class="derivation-step-desc">Substitute \(\operatorname{Var}(\varepsilon \mid X) = \sigma^2 I_n\) and factor out the scalar \(\sigma^2\):</p>
+              <div class="derivation-step-math">\(\operatorname{Var}(\hat{\beta} \mid X) = (X'X)^{-1}X' (\sigma^2 I_n) X (X'X)^{-1} = \sigma^2 (X'X)^{-1} (X'X) (X'X)^{-1}\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Spherical errors assume every observation has constant variance \(\sigma^2\) and zero correlation across different sample units.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">5</div>
+              <div class="derivation-step-rail"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Cancel inner inverse product to reach the fundamental formula</h4>
+                <span class="derivation-result-badge">Fundamental Result</span>
+              </div>
+              <p class="derivation-step-desc">Cancel \((X'X)^{-1}(X'X) = I_k\):</p>
+              <div class="derivation-step-math">\(\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2 I_k (X'X)^{-1} = \sigma^2 (X'X)^{-1}\)</div>
+              <div class="derivation-why">
+                <span class="derivation-why-label">Why this step works</span>
+                Matrix inversion cancellation collapses the expression to a clean, compact \(k \times k\) variance-covariance matrix.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIG PICTURE CARD -->
+      <div class="big-picture-card">
+        <div class="big-picture-header">
+          <span class="big-picture-icon">💡</span>
+          <h4 class="big-picture-title">Big Picture: The Structure of Var(β̂ | X)</h4>
+        </div>
+        <p class="big-picture-body">
+          The matrix \(\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2 (X'X)^{-1}\) bundles all estimation uncertainty: the \(k\) diagonal elements \(\sigma^2 [(X'X)^{-1}]_{jj}\) represent the individual variances of each coefficient \(\hat{\beta}_j\), while the off-diagonal elements represent sampling covariances between different coefficient estimates.
+        </p>
+      </div>
+
+      <!-- Reusable Key Equation Box: Variance -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">KEY RESULT</span>
+          <h3 class="equation-title" style="margin:0; font-size:1.05rem;">Variance-Covariance Matrix of OLS</h3>
+        </div>
+        <div class="equation-main">
+          $$\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2(X'X)^{-1}$$
+        </div>
+        <div class="equation-explainer">
+          <span class="where-label">WHERE</span>
+          <div class="equation-definitions">
+            <div class="def-col">
+              <div class="def-term">\(\sigma^2\)</div>
+              <div class="def-desc"><strong>Disturbance Variance:</strong> Variance of the unobserved population error term \(\varepsilon_i\).</div>
+              <div class="def-term">\((X'X)^{-1}\)</div>
+              <div class="def-desc"><strong>Precision Matrix:</strong> Encodes sample size, spread of regressors, and multicollinearity.</div>
+            </div>
+            <div class="def-col">
+              <div class="def-term">\(\operatorname{Var}(\hat{\beta}_k \mid X)\)</div>
+              <div class="def-desc"><strong>Diagonal Elements:</strong> Individual parameter variances \(\sigma^2 [(X'X)^{-1}]_{kk}\).</div>
+              <div class="def-term">\(\operatorname{Cov}(\hat{\beta}_j, \hat{\beta}_k \mid X)\)</div>
+              <div class="def-desc"><strong>Off-Diagonal Elements:</strong> Sampling covariances between pairs of estimated regression slopes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Source Two-Regressor Matrix Example -->
+    <section class="lesson-section" id="matrixExampleSection">
+      <h2>2. Simplified Orthogonal-Regressor Example</h2>
+      <p>
+        To make the matrix expression concrete, the source document (<code>Econometrics (3).pdf</code>, page 4) analyzes a simplified setting where two regressors \(x_1\) and \(x_2\) are mutually orthogonal and centered, producing a diagonal cross-product matrix:
+      </p>
+
+      <!-- Prominent Label: Simplified Example -->
+      <div class="study-card" style="background: var(--surface); padding: 1.25rem 1.4rem; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-bottom: 1.25rem; overflow-x: auto;">
+        <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #2563eb; margin-bottom: 0.35rem;">
+          Simplified Orthogonal-Regressor Example
+        </div>
+        <div style="font-size: 0.95rem; line-height: 1.8; font-family: var(--font-mono);">
+          \[
+          X'X = N \begin{bmatrix} \operatorname{var}(x_1) & 0 & 0 \\ 0 & \operatorname{var}(x_2) & 0 \\ 0 & 0 & 1 \end{bmatrix} \implies (X'X)^{-1} = \frac{1}{N} \begin{bmatrix} \frac{1}{\operatorname{var}(x_1)} & 0 & 0 \\ 0 & \frac{1}{\operatorname{var}(x_2)} & 0 \\ 0 & 0 & 1 \end{bmatrix}
+          \]
+        </div>
+        <div style="margin-top: 0.75rem; padding-top: 0.65rem; border-top: 1px solid #e2e8f0; font-size: 0.88rem; color: #475569;">
+          Multiplying by scalar \(\sigma^2\) yields the individual slope variance:
+          <span style="font-family: var(--font-mono); font-weight: 700; color: #0f172a; margin-left: 0.35rem;">
+            \(\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{N \cdot \operatorname{var}(x_1)}\)
+          </span>
+        </div>
+      </div>
+
+      <!-- Warning Note on Multicollinearity -->
+      <div class="callout callout-note" style="margin-bottom: 1.25rem;">
+        <div class="callout-header">
+          <span class="callout-icon">📌</span>
+          <span class="callout-title">Clarification: Multicollinearity in the General Case</span>
+        </div>
+        <div class="callout-body">
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.55;">
+            The scalar formula \(\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{N \operatorname{var}(x_1)}\) holds exactly only when regressors are mutually orthogonal. In general multiple regression with correlated predictors, the diagonal element of \((X'X)^{-1}\) is inflated by \(\frac{1}{1 - R_1^2}\) (the Variance Inflation Factor), where \(R_1^2\) is the fit from regressing \(x_1\) on all other regressors.
+          </p>
+        </div>
+      </div>
+
+      <!-- PROMINENT DISTINCTION: VARIANCE VS STANDARD ERROR -->
+      <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem 1.4rem; margin: 1.25rem 0;">
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 0.5rem;">
+          Crucial Distinction: Variance vs. Standard Error
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 6px; padding: 1rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b;">Variance</div>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0.25rem 0;">
+              \(\operatorname{Var}(\hat{\beta}_k \mid X)\)
+            </div>
+            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+              Measured in <strong>squared coefficient units</strong> (e.g., \(\text{dollars}^2 / \text{year}^2\)). Used in mathematical derivations, proofs, and matrix algebra.
+            </div>
+          </div>
+
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 6px; padding: 1rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #2563eb;">Standard Error</div>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #1d4ed8; margin: 0.25rem 0;">
+              \(\operatorname{SE}(\hat{\beta}_k) = \sqrt{\operatorname{Var}(\hat{\beta}_k \mid X)}\)
+            </div>
+            <div style="font-size: 0.85rem; color: #1e3a8a; line-height: 1.5;">
+              Measured in the <strong>exact same units as the coefficient</strong> (e.g., \(\text{dollars} / \text{year}\)). Used to form confidence intervals and compute \(t\)-statistics.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Standard-Error Lab -->
+    <section class="lesson-section" id="interactiveSection">
+      <h2>3. Interactive Lab: The Three Levers of Econometric Precision</h2>
+      <p>
+        According to the source intuition, researchers can lower the standard error \(\operatorname{SE}(\hat{\beta}_1)\) through three distinct mechanisms:
+        (1) <strong>increasing sample size \(N\)</strong>,
+        (2) <strong>increasing regressor spread \(\operatorname{var}(x_1)\)</strong>, or
+        (3) <strong>reducing error variance \(\sigma^2\)</strong> (e.g., by adding explanatory controls).
+        Adjust the sliders below to watch the sampling distribution tighten.
+      </p>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        
+        <!-- Controls Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <label for="varSliderN" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Sample Size (N)</span>
+              <span id="varReadoutN" style="font-family: var(--font-mono); color: var(--color-primary);">100</span>
+            </label>
+            <input type="range" id="varSliderN" min="20" max="400" step="10" value="100" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="varSliderSigma" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Error Variance (σ²)</span>
+              <span id="varReadoutSigma" style="font-family: var(--font-mono); color: #dc2626;">2.0</span>
+            </label>
+            <input type="range" id="varSliderSigma" min="0.5" max="6.0" step="0.5" value="2.0" style="width: 100%;">
+          </div>
+
+          <div>
+            <label for="varSliderVarX" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between;">
+              <span>Regressor Variance Var(x₁)</span>
+              <span id="varReadoutVarX" style="font-family: var(--font-mono); color: #059669;">1.5</span>
+            </label>
+            <input type="range" id="varSliderVarX" min="0.5" max="4.0" step="0.25" value="1.5" style="width: 100%;">
+          </div>
+        </div>
+
+        <!-- Readout Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-text-secondary); font-weight: 600;">Var(β̂₁) = σ² / (N·Var(x))</div>
+            <div id="varReadoutVarB" style="font-size: 1.05rem; font-weight: 700; color: #1e293b; font-family: var(--font-mono);">0.0133</div>
+          </div>
+          <div style="background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--color-primary); text-align: center;">
+            <div style="font-size: 0.72rem; color: var(--color-primary); font-weight: 700;">Standard Error SE(β̂₁)</div>
+            <div id="varReadoutSeB" style="font-size: 1.15rem; font-weight: 800; color: #1d4ed8; font-family: var(--font-mono);">0.1155</div>
+          </div>
+          <div style="background: var(--color-bg); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 0.72rem; color: #059669; font-weight: 600;">95% Confidence Band</div>
+            <div id="varReadoutCi" style="font-size: 1.05rem; font-weight: 700; color: #047857; font-family: var(--font-mono);">[1.77, 2.23]</div>
+          </div>
+        </div>
+
+        <!-- SVG Sampling Distribution -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: center;">
+          <svg id="varianceLabSvg" viewBox="0 0 540 240" style="width: 100%; max-width: 540px; height: auto;" aria-label="Gaussian sampling distribution for OLS estimator"></svg>
+        </div>
+      </div>
+
+      <!-- Boxed 2x2 Visual Explanation Cards -->
+      <div class="visual-explanation-grid">
+        <div class="visual-explanation-card visual-card--seeing">
+          <div class="visual-explanation-title">👁 What You Are Seeing</div>
+          <div class="visual-explanation-body">
+            The theoretical Gaussian sampling distribution of \(\hat{\beta}_1\) centered on the true value \(\beta_1 = 2.00\). The shaded blue area represents the central 95% probability region (\(\pm 1.96 \operatorname{SE}\)).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--notice">
+          <div class="visual-explanation-title">🔎 What to Notice</div>
+          <div class="visual-explanation-body">
+            Increasing sample size \(N\) from 20 to 400 or boosting regressor spread \(\operatorname{var}(x_1)\) causes the bell curve to become tall and narrow, shrinking the 95% confidence interval toward the truth.
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--matters">
+          <div class="visual-explanation-title">◆ Why It Matters</div>
+          <div class="visual-explanation-body">
+            Precision depends on data design: collecting data with wide variation in treatment \(x\) provides just as much statistical leverage as tripling the sample size with clustered, low-variance \(x\).
+          </div>
+        </div>
+
+        <div class="visual-explanation-card visual-card--interp">
+          <div class="visual-explanation-title">📊 Econometric Interpretation</div>
+          <div class="visual-explanation-body">
+            The standard error represents statistical uncertainty. A smaller \(\operatorname{SE}(\hat{\beta}_1)\) yields a larger \(t\)-statistic (\(t = \hat{\beta}_1 / \operatorname{SE}\)), converting noisy point estimates into highly statistically significant findings.
+          </div>
+        </div>
+
+        <div class="visual-try-this">
+          <strong>💡 Try This:</strong> Maximize <em>Sample Size (N)</em> to 400 and <em>Var(x₁)</em> to 4.0, while lowering <em>Error Variance</em> to 0.5. Notice how the standard error collapses to ~0.0177, creating near-deterministic estimation!
+        </div>
+      </div>
+    </section>
+
+    <!-- Conceptual Check: Can You Explain It? -->
+    <div class="study-card" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.35rem 1.5rem; margin: 1.5rem 0;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.1rem;">🧠</span>
+        <h4 style="font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0f172a; margin: 0;">
+          Can You Explain It? Conceptual Check
+        </h4>
+      </div>
+      <p style="font-size: 0.92rem; color: #334155; line-height: 1.55; margin: 0 0 0.75rem 0;">
+        <strong>Question:</strong> Why does having greater sample variation in \(X\) reduce the variance of the slope estimate \(\hat{\beta}_1\)?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #2563eb;">Show Explanation</summary>
+        <div style="margin-top: 0.5rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; color: #1e293b;">
+          <strong>Explanation:</strong> A slope is defined as change in \(Y\) divided by change in \(X\). If all observations are tightly clustered around a single \(x\) value, the denominator is near zero, making the line wobble wildly in response to slight random disturbance shocks \(\varepsilon\). Spreading observations widely across \(X\) provides a long, stable lever arm that anchors the regression line and sharply suppresses slope estimation uncertainty.
+        </div>
+      </details>
+    </div>
+
+    <!-- Quick Check Card -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-top: 1.25rem;">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-text);">
+        ✅ Quick Check: Precision Scaling
+      </h3>
+      <p style="font-size: 0.9rem; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">
+        If an investigator quadruples the sample size from \(N = 100\) to \(N = 400\), by what factor does the standard error \(\operatorname{SE}(\hat{\beta}_1)\) change?
+      </p>
+      <details style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text);">
+        <summary style="cursor: pointer; font-weight: 600; color: var(--color-primary);">Show Answer &amp; Explanation</summary>
+        <div style="margin-top: 8px; padding: 10px; background: var(--color-bg); border-radius: var(--radius-sm);">
+          <strong>ANSWER:</strong> The standard error is halved (\(\times 0.5\)).<br><br>
+          <strong>WHY?</strong> The standard error scales inversely with the square root of sample size: \(\operatorname{SE} \propto \frac{1}{\sqrt{N}}\). Increasing \(N\) fourfold multiplies the denominator by \(\sqrt{4} = 2\), dividing the standard error by 2 (a 50% reduction in uncertainty).
+        </div>
+      </details>
+    </div>
+
+    <!-- REVISION CARD: WHAT YOU SHOULD NOW UNDERSTAND -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Under spherical disturbances \(\operatorname{Var}(\varepsilon \mid X) = \sigma^2 I_n\), the conditional covariance matrix of OLS is \(\operatorname{Var}(\hat{\beta} \mid X) = \sigma^2(X'X)^{-1}\).</li>
+        <li>Sampling variance is measured in squared units of the coefficient, whereas standard error (\(\operatorname{SE} = \sqrt{\text{Var}}\)) is in the original linear units of the coefficient.</li>
+        <li>Three levers directly reduce coefficient uncertainty: decreasing error variance \(\sigma^2\), expanding regressor spread \(\operatorname{Var}(x_k)\), and increasing sample size \(N\).</li>
+        <li>The scalar formula \(\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{N \operatorname{Var}(x_1)}\) applies to orthogonal regressors; in general multiple regressions, multicollinearity further inflates individual variances.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-04.html" class="btn btn-outline">
+        ← Previous: OLS Unbiasedness &amp; OVB
+      </a>
+      <a href="lesson-06.html" class="btn btn-primary">
+        Next: Gauss–Markov, BLUE &amp; Estimating σ² →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/module-03-interactions.js"></script>
+</body>
+</html>

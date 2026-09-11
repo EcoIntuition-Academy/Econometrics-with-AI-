@@ -61,19 +61,20 @@
   --transition-base: 240ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 360ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Light Theme Colors (Default — Enhanced Study Contrast & Surface Hierarchy) */
-  --bg-body: #eaf0f8;              /* Cool Slate-150 neutral: distinct from white cards, non-faint */
-  --bg-secondary: #dfe6f0;         /* Slate-200 */
-  --surface: #ffffff;              /* Crisp White Content Cards & Elevated Surfaces */
+  /* Light Theme Colors (Default — Enhanced University Quality & Scholarly Contrast) */
+  --bg-body: #F4F7FB;              /* Subtle cool off-white neutral: calm, scholarly, non-dominating */
+  --bg-secondary: #e9f0f8;         /* Subtle secondary cool surface */
+  --surface: #ffffff;              /* Crisp Pure White Learning Cards & Elevated Containers */
   --surface-raised: #f8fafc;       /* Slate-50 Sub-surfaces */
+  --surface-secondary: #F7FAFF;    /* Light accent card surface */
   --surface-hover: #f1f5f9;
 
-  --text-primary: #090d16;         /* Slate-950: assertive, high-contrast headings & symbols */
-  --text-secondary: #1e293b;       /* Slate-800: deep, comfortable reading text across all blocks */
-  --text-muted: #334155;           /* Slate-700: clear, legible muted text */
-  --text-light: #475569;           /* Slate-600: tertiary labels */
+  --text-primary: #111827;         /* Deep Near-Black/Navy: high-contrast headings & primary symbols */
+  --text-secondary: #1F2937;       /* Refined Slate-850: comfortable, crisp academic body text */
+  --text-muted: #4B5563;           /* Slate-600: supporting secondary text & explanations */
+  --text-light: #64748B;           /* Slate-500: muted metadata, hints, and axis labels */
 
-  --border-light: #cbd5e1;         /* Slate-300 */
+  --border-light: #e2e8f0;         /* Slate-200 */
   --border-subtle: #cbd5e1;        /* Slate-300: crisp, clear card boundaries */
   --border-strong: #94a3b8;        /* Slate-400 */
 
@@ -194,6 +195,12 @@
   --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.55);
 
   /* Pedagogical Components in Dark Mode */
+  --equation-bg: #111827;
+  --equation-border: #2e3d55;
+  --equation-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --equation-main-bg: #090d16;
+  --equation-main-border: #1e293b;
+
   --formula-bg: #111827;
   --formula-border: #2e3d55;
   --formula-text: #f8fafc;
