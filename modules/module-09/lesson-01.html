@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9.1: Time-Ordered Data &amp; AR(1) Autocorrelation — EcoIntuition Academy</title>
+  <meta name="description" content="Understand non-spherical errors in time-series regressions, define autocorrelation E[ε_t ε_s] ≠ 0, explore the AR(1) process with |ρ| < 1, and evaluate why OLS can remain unbiased under strict exogeneity.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-09" data-lesson="01">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 9: Autocorrelation &amp; HAC Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 9</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 09</a>
+          <span class="module-nav-title">Autocorrelation &amp; HAC Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 5 &middot; Time-Ordered Data &amp; AR(1) Autocorrelation</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 9 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">9.1 Time-Ordered Data &amp; AR(1) Autocorrelation</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.2 Detecting Autocorrelation &amp; GLS with Known ρ</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.4 Newey–West HAC Standard Errors</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.5 Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">20%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 9.1</span>
+        <span class="badge">Serial Correlation &amp; AR(1)</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Time-Ordered Data &amp; AR(1) Autocorrelation
+      </h1>
+      <p class="lesson-hero-lead">
+        Examine what happens when regression disturbances exhibit temporal persistence, formalize the first-order autoregressive error process, and understand why OLS point estimates can remain unbiased under strict exogeneity even while conventional standard errors fail.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul>
+        <li>Connect Module 8 non-spherical error theory (\(\boldsymbol{\Omega} \neq \mathbf{I}\)) to temporal cross-period dependencies (\(t \neq s\)).</li>
+        <li>Define autocorrelation (serial correlation) mathematically as \(\mathbb{E}[\varepsilon_t \varepsilon_s] \neq 0\) for distinct time periods \(t \neq s\).</li>
+        <li>Deconstruct the AR(1) disturbance process \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\) with stationarity constraint \(|\rho| < 1\).</li>
+        <li>Distinguish positive persistence (\(\rho > 0\)), independent shocks (\(\rho = 0\)), and alternating dynamics (\(\rho < 0\)).</li>
+        <li>Evaluate why OLS remains unbiased under strict exogeneity, but suffers from efficiency loss and invalid conventional standard errors.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Bridge from Module 8 & Definition -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. From Non-Spherical Errors to Time Series</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <!-- Module 8 Bridge Card -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">MODULE 8 REMINDER &middot; NON-SPHERICAL ERRORS</div>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.6;">
+            Module 8 established that \(\boldsymbol{\Omega} \neq \mathbf{I}\) represents non-spherical disturbance behavior. In cross-sectional data, this typically takes the form of heteroskedasticity (non-constant diagonal variances). In <strong>time-ordered data</strong>, the primary breakdown is that <strong>disturbances from different periods are correlated across time</strong>, populating the off-diagonal elements of \(\boldsymbol{\Omega}\).
+          </p>
+        </div>
+
+        <p>
+          Formally, time-series autocorrelation is defined as:
+        </p>
+
+        <!-- Equation Card: Definition -->
+        <div class="card card-bordered" style="padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-md); text-align: center; background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">AUTOCORRELATION (SERIAL CORRELATION) DEFINITION</div>
+          <div style="font-size: 1.35rem; padding: 0.5rem 0;">
+            $$\mathbb{E}[\varepsilon_t \varepsilon_s] \neq 0 \quad \text{for } t \neq s$$
+          </div>
+          <div style="font-size: 0.85rem; color: var(--color-text-secondary);">
+            <strong>Autocorrelation</strong> is identical to <strong>serial correlation</strong>: disturbance realizations are related across temporal periods.
+          </div>
+        </div>
+
+        <!-- Intuition Box & Timeline -->
+        <div class="study-card" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">INTUITION &middot; PERSISTENCE OF SHOCKS</div>
+          <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: var(--space-sm);">
+            In economic systems, a shock occurring today does not evaporate immediately—it tends to persist into tomorrow. If an unobserved macroeconomic shock creates a positive regression disturbance in period \(t\), the disturbance in period \(t+1\) is also more likely to be positive.
+          </p>
+
+          <!-- Timeline Visual -->
+          <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); padding: var(--space-md) 0; flex-wrap: wrap;">
+            <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-sm); text-align: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-secondary); display: block;">t − 2</span>
+              <span style="font-size: 0.75rem;">Past Shock</span>
+            </div>
+            <span style="color: var(--color-text-muted);">→</span>
+            <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-sm); text-align: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-secondary); display: block;">t − 1</span>
+              <span style="font-size: 0.75rem;">Memory</span>
+            </div>
+            <span style="color: var(--color-text-muted);">→</span>
+            <div style="background: var(--color-primary-light); border: 1px solid var(--color-primary); padding: 6px 14px; border-radius: var(--radius-sm); text-align: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-primary); font-weight: 700; display: block;">t</span>
+              <span style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary);">Current Disturbance</span>
+            </div>
+            <span style="color: var(--color-text-muted);">→</span>
+            <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-sm); text-align: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-secondary); display: block;">t + 1</span>
+              <span style="font-size: 0.75rem;">Persistence</span>
+            </div>
+            <span style="color: var(--color-text-muted);">→</span>
+            <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-sm); text-align: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-secondary); display: block;">t + 2</span>
+              <span style="font-size: 0.75rem;">Decaying Echo</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: AR(1) Specification -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The First-Order Autoregressive Process: AR(1)</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The canonical mathematical model for serial dependence in econometrics is the <strong>first-order autoregressive error process</strong>, denoted <strong>AR(1)</strong>:
+        </p>
+
+        <!-- Equation Card: AR(1) -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">THE AR(1) DISTURBANCE PROCESS</div>
+          <div style="padding: 0.75rem 0; text-align: center; font-size: 1.4rem;">
+            $$\varepsilon_t = \rho \varepsilon_{t-1} + u_t, \quad |\rho| < 1, \quad u_t \sim \text{iid}(0, \sigma^2)$$
+          </div>
+        </div>
+
+        <!-- Deconstruction of Terms -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div style="background: var(--color-surface); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <span style="font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">\(\varepsilon_t\)</span>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-top: 2px;">
+              Current regression disturbance, capturing all unobserved contemporaneous factors.
+            </span>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <span style="font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">\(\varepsilon_{t-1}\)</span>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-top: 2px;">
+              Previous-period regression disturbance, transmitting historical persistence into period \(t\).
+            </span>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <span style="font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">\(\rho\)</span>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-top: 2px;">
+              First-order autocorrelation parameter. Governs the direction and fraction of memory transmitted.
+            </span>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <span style="font-weight: 700; color: var(--color-primary); font-family: var(--font-mono);">\(u_t\)</span>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-top: 2px;">
+              Fresh white-noise innovation, satisfying classical spherical conditions (\(\mathbb{E}[u_t] = 0\), \(\operatorname{Var}(u_t) = \sigma^2\)).
+            </span>
+          </div>
+        </div>
+
+        <!-- Three Regimes of rho -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Interpretation of the Parameter \(\rho\)</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin-top: var(--space-sm);">
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-md); border-top: 3px solid #059669; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #059669; font-size: 0.9rem; margin-bottom: 4px;">\(\rho > 0\) &middot; Positive Persistence</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Neighboring disturbances exhibit cyclical clustering. A positive error today tends to be followed by another positive error tomorrow.
+            </p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-md); border-top: 3px solid var(--color-text-secondary); border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: var(--color-text-primary); font-size: 0.9rem; margin-bottom: 4px;">\(\rho = 0\) &middot; Zero Autocorrelation</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Errors are uncorrelated across time (\(\varepsilon_t = u_t\)). The Gauss–Markov spherical assumption is satisfied.
+            </p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-md); border-top: 3px solid #d97706; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #d97706; font-size: 0.9rem; margin-bottom: 4px;">\(\rho < 0\) &middot; Negative Alternating</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Consecutive errors oscillate back and forth across zero, switching between positive and negative values at each step.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Consequences for OLS -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Consequences of Autocorrelation for OLS</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <!-- Crucial Assumption Card -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid #059669; background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.25rem;">IMPORTANT ASSUMPTION CARD &middot; WHY CAN OLS REMAIN UNBIASED?</div>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.6;">
+            Autocorrelation alters the <strong>covariance structure</strong> of the error vector \(\boldsymbol{\varepsilon}\), setting \(\operatorname{Var}(\boldsymbol{\varepsilon} \mid \mathbf{X}) = \sigma^2 \boldsymbol{\Omega} \neq \sigma^2 \mathbf{I}\).
+            However, estimator unbiasedness depends entirely on the conditional mean:
+            $$\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}] = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}]$$
+            Because the source maintains <strong>strict exogeneity</strong> (\(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\)), the expectation vanishes. <strong>Autocorrelation does not by itself bias OLS point estimates!</strong>
+          </p>
+        </div>
+
+        <p>
+          While OLS remains unbiased and consistent under strict exogeneity, the presence of serial correlation imposes severe econometric penalties:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #dc2626; font-size: 0.9rem; margin-bottom: 4px;">1. OLS is Inefficient (Not BLUE)</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              The Gauss–Markov theorem fails because errors are non-spherical. OLS no longer has the minimum sampling variance; a GLS transformation achieves lower variance.
+            </p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #dc2626; font-size: 0.9rem; margin-bottom: 4px;">2. Conventional Standard Errors are Invalid</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              The standard formula \(s^2 (\mathbf{X}'\mathbf{X})^{-1}\) ignores off-diagonal autocovariances. Under positive autocorrelation, standard errors are severely underestimated.
+            </p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #dc2626; font-size: 0.9rem; margin-bottom: 4px;">3. Hypothesis Testing Breaks Down</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Deflated standard errors artificially inflate \(t\)-statistics and \(F\)-statistics, resulting in spuriously narrow confidence intervals and inflated Type I error rates.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 9.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">INTERACTIVE LAB 9.1</span>
+        <h2 class="study-section-title">4. AR(1) Residual Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Adjust the autocorrelation slider \(\rho\) from \(-0.90\) to \(+0.90\) to observe how temporal persistence transforms the trajectory of regression disturbances:
+        </p>
+
+        <!-- Lab Card -->
+        <div class="interactive-lab-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-lg); margin-top: var(--space-md);">
+          
+          <!-- Controls -->
+          <div style="display: flex; gap: var(--space-lg); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-md);">
+            <div style="flex: 1; min-width: 260px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label for="sliderRho" style="font-weight: 600; font-size: 0.9rem;">Autocorrelation Parameter (\(\rho\)):</label>
+                <span id="labelRhoVal" style="font-family: var(--font-mono); font-weight: 700; font-size: 1rem; color: var(--color-primary);">+0.70</span>
+              </div>
+              <input type="range" id="sliderRho" min="-0.90" max="0.90" step="0.05" value="0.70" style="width: 100%; cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--color-text-secondary); margin-top: 4px;">
+                <span>−0.90 (Alternating)</span>
+                <span>0.00 (White Noise)</span>
+                <span>+0.90 (Persistent)</span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+              <button id="btnPresetPos" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Positive (+0.80)</button>
+              <button id="btnPresetZero" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Zero (0.00)</button>
+              <button id="btnPresetNeg" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Negative (−0.75)</button>
+            </div>
+          </div>
+
+          <!-- Live Metrics Bar -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em;">Population \(\rho\)</div>
+              <div id="metricTheoreticalRho" style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary);">+0.70</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em;">Sample Lag-1 \(\widehat{\rho}\)</div>
+              <div id="metricSampleLag1" style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); color: #059669;">+0.68</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em;">Longest Run</div>
+              <div id="metricConsecutiveRun" style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); color: #d97706;">11 periods</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em;">Error Regime</div>
+              <div id="metricRegimeLabel" style="font-size: 0.92rem; font-weight: 700; color: var(--color-primary); padding-top: 2px;">Strong Persistence</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div class="external-legend-bar" style="display: flex; gap: var(--space-lg); justify-content: center; align-items: center; padding: var(--space-xs) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: var(--space-sm); font-size: 0.8rem;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 18px; height: 3px; background-color: var(--color-primary); border-radius: 2px;"></span>
+              <span>Observed Residual Path (\(\varepsilon_t\))</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 18px; height: 2px; border-top: 2px dashed var(--color-text-secondary);"></span>
+              <span>Zero Reference Baseline (\(\mathbb{E}[\varepsilon_t] = 0\))</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-primary);"></span>
+              <span>Discrete Disturbance</span>
+            </div>
+          </div>
+
+          <!-- SVG Plot Container -->
+          <div class="graph-container" style="background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden; position: relative; min-height: 280px;">
+            <svg id="svgAr1Plot" viewBox="0 0 800 280" style="width: 100%; height: 100%; display: block;" role="img" aria-label="AR(1) Residual Path Simulation">
+              <!-- Dynamically populated via JS -->
+            </svg>
+          </div>
+
+          <!-- Live Econometric Insight Box -->
+          <div id="labInsightBox" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37, 99, 235, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary); font-size: 0.88rem; line-height: 1.6;">
+            <strong>Econometric Regime:</strong> At \(\rho = +0.70\), disturbances exhibit strong positive memory. Shocks persist across consecutive quarters, generating smooth, cyclical excursions above and below zero. Standard OLS formulas interpret these clustered observations as independent pieces of information, severely underestimating true sampling variance.
+          </div>
+
+        </div>
+
+        <!-- 5-Card Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p id="expSeeing">
+              A simulated trajectory of 50 consecutive time-series disturbances generated by \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\), using standard normal innovations \(u_t \sim \text{iid}(0, 1)\).
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p id="expNotice">
+              When \(\rho > 0\), notice how the path stays on one side of zero for extended runs. When \(\rho < 0\), the path oscillates violently across zero at nearly every step.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p id="expMatters">
+              Positive autocorrelation creates an illusion of sample precision. Two consecutive observations carry partially redundant information, yet conventional standard errors treat them as two independent data points.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p id="expInterpretation">
+              While OLS remains unbiased under strict exogeneity, conventional standard errors underestimate true uncertainty by 50% or more under strong positive persistence, inflating \(t\)-statistics and leading to spurious statistical significance.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p id="expTryThis">
+              Drag the slider from \(+0.85\) down to \(0.00\), and then to \(-0.80\). Observe the dramatic transformation from long, smooth waves to random static, and finally to a rapid alternating sawtooth pattern.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check 9.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">CONCEPT CHECK</span>
+        <h2 class="study-section-title">5. Quick Check 9.1</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-container quick-check-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: var(--space-xs);">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">CHECK 9.1</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">AR(1) Disturbance Persistence</span>
+          </div>
+
+          <div class="qc-question" style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm);">
+            <strong>Question:</strong> If \(\rho > 0\) in an AR(1) error process, what visual pattern would you expect in neighboring residuals?
+          </div>
+          
+          <div class="qc-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button class="btn btn-sm btn-outline hint-toggle" id="btnQcHint" type="button">Show Hint</button>
+            <button class="btn btn-sm btn-primary solution-toggle" id="btnQcSolution" type="button">Show Solution</button>
+          </div>
+
+          <div class="qc-feedback d-none" id="qcHintBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem;">
+            <strong>HINT:</strong> Consider what the conditional expectation \(\mathbb{E}[\varepsilon_t \mid \varepsilon_{t-1}] = \rho \varepsilon_{t-1}\) implies about the sign and magnitude of consecutive disturbance points.
+          </div>
+
+          <div class="qc-feedback d-none" id="qcSolutionBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.4rem;">
+              <strong>ANSWER:</strong> Neighboring residuals will exhibit persistent clustering—prolonged runs above zero followed by prolonged runs below zero.
+            </p>
+            <p style="margin: 0; color: var(--color-text-secondary);">
+              <strong>WHY?</strong> In the AR(1) process \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\), when \(\rho > 0\), each disturbance inherits a positive fraction of the previous period's value. If \(\varepsilon_{t-1} > 0\), the conditional expectation \(\mathbb{E}[\varepsilon_t \mid \varepsilon_{t-1}] = \rho \varepsilon_{t-1}\) is strictly positive, making it much more likely that \(\varepsilon_t\) remains positive as well. Rather than scattering randomly across the zero line like independent white noise, the residual path drifts in smooth, multi-period cyclical excursions.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Autocorrelation Defined:</strong> Disturbances violate the spherical assumption via cross-period correlation: \(\mathbb{E}[\varepsilon_t \varepsilon_s] \neq 0\) for \(t \neq s\).</li>
+        <li><strong>AR(1) Model:</strong> \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\) where \(|\rho| < 1\) guarantees weak covariance stationarity and non-explosive variance.</li>
+        <li><strong>Autocovariance &amp; Autocorrelation:</strong> \(\gamma_s = \frac{\sigma^2 \rho^{|s|}}{1 - \rho^2}\) and \(\text{Corr}(\varepsilon_t, \varepsilon_{t-s}) = \rho^s\), decaying exponentially toward zero.</li>
+        <li><strong>OLS Unbiasedness Preserved:</strong> Under strict exogeneity (\(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\)), OLS point estimates remain unbiased and consistent despite autocorrelation.</li>
+        <li><strong>Inference Failure:</strong> Autocorrelation renders OLS inefficient (not BLUE) and invalidates conventional standard error formulas, leading to spuriously high \(t\)-statistics under positive persistence.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="index.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Module Overview</span>
+        <span class="nav-btn-title">Module 9: Autocorrelation &amp; HAC</span>
+      </a>
+      <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">9.2 Detecting Autocorrelation &amp; GLS with Known ρ</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 9.1 JavaScript -->
+  <script>
+    (function() {
+      'use strict';
+
+      const T = 50;
+      const baseInnovations = [
+         0.45, -0.62,  0.81,  0.22, -1.15,  0.78,  0.94, -0.31,
+        -0.85,  0.58, -0.21,  1.12, -0.64,  0.28, -0.92,  0.41,
+         0.73, -0.56,  0.15, -0.83,  0.68, -0.42,  0.77, -0.48,
+         0.35, -0.79,  0.89,  0.18, -1.05,  0.61,  0.96, -0.37,
+        -0.75,  0.51, -0.29,  1.08, -0.61,  0.33, -0.88,  0.45,
+         0.69, -0.51,  0.22, -0.81,  0.64, -0.38,  0.72, -0.44,
+         0.28, -0.67
+      ];
+
+      let currentRho = 0.70;
+
+      const slider = document.getElementById('sliderRho');
+      const labelRhoVal = document.getElementById('labelRhoVal');
+      const metricTheoreticalRho = document.getElementById('metricTheoreticalRho');
+      const metricSampleLag1 = document.getElementById('metricSampleLag1');
+      const metricConsecutiveRun = document.getElementById('metricConsecutiveRun');
+      const metricRegimeLabel = document.getElementById('metricRegimeLabel');
+      const labInsightBox = document.getElementById('labInsightBox');
+      const svgPlot = document.getElementById('svgAr1Plot');
+
+      const expSeeing = document.getElementById('expSeeing');
+      const expNotice = document.getElementById('expNotice');
+      const expMatters = document.getElementById('expMatters');
+      const expInterpretation = document.getElementById('expInterpretation');
+      const expTryThis = document.getElementById('expTryThis');
+
+      function generateAR1(rho) {
+        const eps = new Array(T);
+        const initScale = 1.0 / Math.sqrt(Math.max(0.01, 1 - rho * rho));
+        eps[0] = baseInnovations[0] * initScale;
+        for (let t = 1; t < T; t++) {
+          eps[t] = rho * eps[t - 1] + baseInnovations[t];
+        }
+        return eps;
+      }
+
+      function computeMetrics(eps, rho) {
+        let num = 0, den = 0;
+        let maxRun = 1, currentRun = 1;
+        let lastSign = Math.sign(eps[0]);
+
+        for (let t = 1; t < T; t++) {
+          num += eps[t] * eps[t - 1];
+          den += eps[t - 1] * eps[t - 1];
+
+          const sign = Math.sign(eps[t]);
+          if (sign === lastSign && sign !== 0) {
+            currentRun++;
+            if (currentRun > maxRun) maxRun = currentRun;
+          } else {
+            currentRun = 1;
+            lastSign = sign;
+          }
+        }
+        const sampleRho = den > 0 ? num / den : 0;
+        return { sampleRho, maxRun };
+      }
+
+      function updateUI() {
+        const sign = currentRho >= 0 ? '+' : '';
+        labelRhoVal.textContent = sign + currentRho.toFixed(2);
+        metricTheoreticalRho.textContent = sign + currentRho.toFixed(2);
+
+        const eps = generateAR1(currentRho);
+        const { sampleRho, maxRun } = computeMetrics(eps, currentRho);
+
+        metricSampleLag1.textContent = (sampleRho >= 0 ? '+' : '') + sampleRho.toFixed(2);
+        metricConsecutiveRun.textContent = `${maxRun} periods`;
+
+        if (currentRho > 0.4) {
+          metricRegimeLabel.textContent = 'Strong Persistence';
+          metricRegimeLabel.style.color = 'var(--color-primary)';
+          labInsightBox.innerHTML = `<strong>Econometric Regime:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), disturbances exhibit strong positive memory. Shocks persist across consecutive quarters, generating smooth excursions above and below zero (longest run: ${maxRun} periods). Standard OLS formulas severely underestimate true sampling variance.`;
+          expSeeing.textContent = `A simulated 50-period path with strong positive autocorrelation (ρ = ${sign + currentRho.toFixed(2)}). The path exhibits smooth cyclical drift.`;
+          expNotice.textContent = `Notice the extended run of ${maxRun} periods where residuals stay on the same side of the zero reference line.`;
+        } else if (currentRho < -0.4) {
+          metricRegimeLabel.textContent = 'Rapid Alternating';
+          metricRegimeLabel.style.color = '#d97706';
+          labInsightBox.innerHTML = `<strong>Econometric Regime:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), negative serial dependence causes errors to reverse signs rapidly at nearly every period, producing a sharp sawtooth oscillation.`;
+          expSeeing.textContent = `A simulated 50-period path with strong negative autocorrelation (ρ = ${sign + currentRho.toFixed(2)}).`;
+          expNotice.textContent = 'Notice the frequent crossings of the zero reference line. Adjacent disturbances systematically jump from positive to negative.';
+        } else {
+          metricRegimeLabel.textContent = 'Near White Noise';
+          metricRegimeLabel.style.color = '#059669';
+          labInsightBox.innerHTML = `<strong>Econometric Regime:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), disturbances approximate independent white noise. Neighboring errors carry negligible predictive power, satisfying classical spherical error conditions.`;
+          expSeeing.textContent = `A simulated 50-period path with minimal serial correlation (ρ = ${sign + currentRho.toFixed(2)}).`;
+          expNotice.textContent = 'Residuals scatter irregularly across the zero baseline without prolonged runs or mechanical oscillations.';
+        }
+
+        renderPlot(eps);
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([labInsightBox]);
+        }
+      }
+
+      function renderPlot(eps) {
+        const width = 800;
+        const height = 280;
+        const padLeft = 60;
+        const padRight = 40;
+        const padTop = 25;
+        const padBottom = 45;
+
+        const plotW = width - padLeft - padRight;
+        const plotH = height - padTop - padBottom;
+        const yZero = padTop + plotH / 2;
+        const maxAbs = 4.5;
+
+        function getX(t) { return padLeft + (t / (T - 1)) * plotW; }
+        function getY(val) {
+          const clamped = Math.max(-maxAbs, Math.min(maxAbs, val));
+          return yZero - (clamped / maxAbs) * (plotH / 2);
+        }
+
+        let svgHtml = '';
+
+        for (let yStep = -3; yStep <= 3; yStep += 1.5) {
+          const yPos = getY(yStep);
+          svgHtml += `<line x1="${padLeft}" y1="${yPos}" x2="${width - padRight}" y2="${yPos}" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>`;
+          svgHtml += `<text x="${padLeft - 10}" y="${yPos + 4}" font-family="var(--font-mono)" font-size="11" fill="var(--color-text-secondary)" text-anchor="end">${yStep > 0 ? '+' : ''}${yStep.toFixed(1)}</text>`;
+        }
+
+        svgHtml += `<line x1="${padLeft}" y1="${yZero}" x2="${width - padRight}" y2="${yZero}" stroke="var(--color-text-secondary)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.8"/>`;
+
+        for (let t = 0; t < T; t += 5) {
+          const xPos = getX(t);
+          svgHtml += `<line x1="${xPos}" y1="${yZero - 4}" x2="${xPos}" y2="${yZero + 4}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+          svgHtml += `<text x="${xPos}" y="${height - 15}" font-family="var(--font-mono)" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">t=${t + 1}</text>`;
+        }
+
+        let pathD = `M ${getX(0)} ${getY(eps[0])}`;
+        for (let t = 1; t < T; t++) {
+          pathD += ` L ${getX(t)} ${getY(eps[t])}`;
+        }
+        svgHtml += `<path d="${pathD}" fill="none" stroke="var(--color-primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+        for (let t = 0; t < T; t++) {
+          const px = getX(t);
+          const py = getY(eps[t]);
+          svgHtml += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--color-primary)" stroke="var(--color-surface)" stroke-width="1.5"/>`;
+        }
+
+        svgPlot.innerHTML = svgHtml;
+      }
+
+      slider.addEventListener('input', (e) => {
+        currentRho = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      document.getElementById('btnPresetPos').addEventListener('click', () => {
+        currentRho = 0.80; slider.value = currentRho; updateUI();
+      });
+      document.getElementById('btnPresetZero').addEventListener('click', () => {
+        currentRho = 0.00; slider.value = currentRho; updateUI();
+      });
+      document.getElementById('btnPresetNeg').addEventListener('click', () => {
+        currentRho = -0.75; slider.value = currentRho; updateUI();
+      });
+
+      const btnQcHint = document.getElementById('btnQcHint');
+      const btnQcSolution = document.getElementById('btnQcSolution');
+      const qcHintBox = document.getElementById('qcHintBox');
+      const qcSolutionBox = document.getElementById('qcSolutionBox');
+
+      btnQcHint.addEventListener('click', () => {
+        qcHintBox.classList.toggle('d-none');
+        btnQcHint.textContent = qcHintBox.classList.contains('d-none') ? 'Show Hint' : 'Hide Hint';
+      });
+
+      btnQcSolution.addEventListener('click', () => {
+        qcSolutionBox.classList.toggle('d-none');
+        btnQcSolution.textContent = qcSolutionBox.classList.contains('d-none') ? 'Show Solution' : 'Hide Solution';
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

@@ -16,12 +16,12 @@ const ProgressTracker = (function () {
     'module-04': 8,
     'module-05': 7,
     'module-06': 8,
-    'module-07': 7,
-    'module-08': 9,
-    'module-09': 7,
-    'module-10': 8,
-    'module-11': 8,
-    'module-12': 8
+    'module-07': 5,
+    'module-08': 6,
+    'module-09': 5,
+    'module-10': 5,
+    'module-11': 7,
+    'module-12': 6
   };
 
   function getProgressData() {

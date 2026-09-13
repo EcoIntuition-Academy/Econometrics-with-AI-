@@ -28,7 +28,11 @@ const targetDirs = [
   path.join(rootDir, 'modules', 'module-04'),
   path.join(rootDir, 'modules', 'module-05'),
   path.join(rootDir, 'modules', 'module-06'),
-  path.join(rootDir, 'modules', 'module-07')
+  path.join(rootDir, 'modules', 'module-07'),
+  path.join(rootDir, 'modules', 'module-08'),
+  path.join(rootDir, 'modules', 'module-09'),
+  path.join(rootDir, 'modules', 'module-10'),
+  path.join(rootDir, 'modules', 'module-11')
 ];
 
 let totalErrors = 0;

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9.4: Newey–West HAC Standard Errors — EcoIntuition Academy</title>
+  <meta name="description" content="Master Heteroskedasticity and Autocorrelation Consistent (HAC) inference. Understand the coefficient invariance principle, the Newey–West sandwich covariance formula, and Bartlett kernel weights.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-09" data-lesson="04">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 9: Autocorrelation &amp; HAC Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 9</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 09</a>
+          <span class="module-nav-title">Autocorrelation &amp; HAC Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 5 &middot; Newey–West HAC Standard Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 9 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.1 Time-Ordered Data &amp; AR(1) Autocorrelation</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.2 Detecting Autocorrelation &amp; GLS with Known ρ</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">9.4 Newey–West HAC Standard Errors</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.5 Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">80%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 9.4</span>
+        <span class="badge">HAC Covariance &amp; Robust Inference</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Newey–West HAC Standard Errors
+      </h1>
+      <p class="lesson-hero-lead">
+        While GLS and FGLS transform the regression data to satisfy spherical error conditions, Newey–West takes an alternative path: keep the OLS point estimates unchanged and correct the asymptotic covariance matrix. Learn how Heteroskedasticity and Autocorrelation Consistent (HAC) inference works with Bartlett kernel lag weighting.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul>
+        <li>Distinguish between data transformation (GLS/FGLS) and robust covariance adjustment (Newey–West HAC).</li>
+        <li>Understand what Heteroskedasticity and Autocorrelation Consistent inference achieves in large samples.</li>
+        <li>Recognize that Newey–West leaves \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) completely unchanged and only recalculates standard errors.</li>
+        <li>Analyze how weights \(w_s = 1 - \frac{|s|}{L+1}\) decay linearly as lag length \(s\) increases toward truncation lag \(L\).</li>
+        <li>Evaluate how HAC standard errors correct confidence intervals and hypothesis tests under persistent errors.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The HAC Paradigm -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">ESTIMATION PARADIGM</span>
+        <h2 class="study-section-title">1. The HAC Strategy: Transform vs. Robustify</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--color-text-secondary);">
+            When disturbances in time-ordered data violate the spherical error assumption, econometricians face a fundamental architectural choice: <strong>transform the regression model</strong> (quasi-differencing) to purge autocorrelation, or <strong>robustify standard errors</strong> directly while retaining original OLS point estimates.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <!-- Strategy A -->
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #d97706;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #d97706; margin-bottom: 0.35rem;">STRATEGY A</div>
+            <h3 style="font-size: 1.1rem; margin: 0 0 0.5rem 0;">GLS / FGLS Transformation</h3>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.75rem;">
+              Assumes a specific parametric structure for errors (e.g., AR(1) with \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\)).
+            </p>
+            <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.84rem; line-height: 1.6; color: var(--color-text-secondary);">
+              <li>Transforms \(y_t\) and \(\mathbf{x}_t\) by quasi-differencing.</li>
+              <li>Produces a new coefficient vector: \(\widehat{\boldsymbol{\beta}}_{\text{FGLS}} \neq \widehat{\boldsymbol{\beta}}_{\text{OLS}}\).</li>
+              <li>Aims for Gauss–Markov efficiency if the parametric AR(1) specification is correct.</li>
+            </ul>
+          </div>
+
+          <!-- Strategy B -->
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #2563eb;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.35rem;">STRATEGY B</div>
+            <h3 style="font-size: 1.1rem; margin: 0 0 0.5rem 0;">Newey–West HAC Robustification</h3>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.75rem;">
+              Newey–West keeps OLS coefficients unchanged and adjusts the estimated covariance matrix to accommodate unknown autocorrelation and heteroskedasticity.
+            </p>
+            <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.84rem; line-height: 1.6; color: var(--color-text-secondary);">
+              <li>Leaves \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) completely untouched.</li>
+              <li>HAC = <strong>Heteroskedasticity and Autocorrelation Consistent</strong>.</li>
+              <li>Guarantees valid large-sample inference without requiring the exact AR(1) model to hold.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Coefficient Invariance Callout -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">CRUCIAL ECONOMETRIC PRINCIPLE &middot; COEFFICIENT INVARIANCE</div>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.6;">
+            <strong>Newey–West does NOT change your regression coefficients.</strong> The estimated slopes and intercepts remain exactly \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\). What changes is the variance-covariance matrix \(\widehat{\mathbf{V}}(\widehat{\boldsymbol{\beta}})\), providing honest standard errors, t-statistics, and confidence intervals under autocorrelation and heteroskedasticity.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Newey–West HAC Formula -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">MATHEMATICAL FORMULATION</span>
+        <h2 class="study-section-title">2. The Newey–West HAC Covariance Estimator</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">ASYMPTOTIC VARIANCE FOUNDATION</div>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary);">
+            Under serial correlation and heteroskedasticity, the classical Gauss–Markov variance formula \(\sigma^2(\mathbf{X}'\mathbf{X})^{-1}\) collapses. The true asymptotic variance takes a robust <em>sandwich form</em>, requiring a non-parametric estimate of the inner spectral kernel:
+          </p>
+        </div>
+
+        <div class="study-card" style="padding: var(--space-md); margin: var(--space-md) 0; background: var(--color-bg); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">NEWEY–WEST HAC COVARIANCE MATRIX</div>
+          <div style="font-size: 1.15rem; padding: 0.5rem 0; text-align: center;">
+            $$\begin{aligned}
+            \operatorname{Avar}(\widehat{\boldsymbol{\beta}}_{\text{OLS}}) &= (\mathbf{X}'\mathbf{X})^{-1}\mathbf{S}^*(\mathbf{X}'\mathbf{X})^{-1} \quad \\
+            \mathbf{S}^* &= \sum_{s=-L}^{L} w_s \widehat{\boldsymbol{\Gamma}}_s
+            \end{aligned}$$
+          </div>
+        </div>
+
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-text-secondary); margin-bottom: 0.5rem;">WHERE THE COMPONENTS ARE DEFINED AS:</div>
+          
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <div style="padding: var(--space-xs) 0; border-bottom: 1px solid var(--border-subtle);">
+              <strong>\(\widehat{\boldsymbol{\Gamma}}_s\) &middot; Sample Lag-\(s\) Covariance Contribution:</strong>
+              <div style="font-size: 1rem; padding: 0.25rem 0;">
+                $$\widehat{\boldsymbol{\Gamma}}_s = \sum_{t=s+1}^{n} \widehat{\varepsilon}_t \widehat{\varepsilon}_{t-s} \mathbf{x}_t \mathbf{x}_{t-s}'$$
+              </div>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+                Measures cross-period correlation between regressors and residuals separated by \(s\) periods. When \(s = 0\), this collapses to the White heteroskedasticity term.
+              </p>
+            </div>
+
+            <div style="padding: var(--space-xs) 0; border-bottom: 1px solid var(--border-subtle);">
+              <strong>\(w_s\) &middot; Bartlett Kernel Weight:</strong>
+              <div style="font-size: 1rem; padding: 0.25rem 0;">
+                $$w_s = 1 - \frac{|s|}{L + 1}$$
+              </div>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+                A linearly declining weight that assigns full weight (\(w_0 = 1\)) to contemporaneous variance and diminishing weight to higher lags, guaranteeing positive semi-definiteness.
+              </p>
+            </div>
+
+            <div style="padding: var(--space-xs) 0;">
+              <strong>\(L\) &middot; Bandwidth / Truncation Lag:</strong>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.25rem 0 0 0;">
+                The maximum lag horizon included in the summation. Autocovariances beyond lag \(L\) (where \(|s| > L\)) receive zero weight.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bartlett Kernel Decay Visual -->
+        <div class="study-card" style="padding: var(--space-md); margin-top: var(--space-lg);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">BARTLETT WEIGHT DECAY PROFILE ACROSS LAGS</div>
+          <p style="font-size: 0.86rem; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+            Notice how weights peak at lag \(s=0\) (\(w_0 = 1.0\)) and decline symmetrically to zero at the truncation boundary \(|s| = L + 1\):
+          </p>
+
+          <!-- External Legend -->
+          <div class="outside-chart-legend external-legend-bar" style="display: flex; gap: var(--space-md); justify-content: flex-end; margin-bottom: var(--space-xs); font-size: 0.8rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #2563eb; display: inline-block;"></span>
+              <span style="color: var(--color-text-secondary);">Bartlett Kernel Weight \(w_s\)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="width: 18px; height: 2px; border-top: 2px dashed #dc2626; display: inline-block;"></span>
+              <span style="color: var(--color-text-secondary);">Truncation Lag Boundary (\(\pm(L+1)\))</span>
+            </div>
+          </div>
+
+          <div class="graph-container" style="background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden; height: 160px;">
+            <svg id="bartlettSvg" viewBox="0 0 760 160" style="width: 100%; height: 100%; display: block;" role="img" aria-label="Bartlett Kernel Weight Decay">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 9.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">INTERACTIVE LAB 9.4</span>
+        <h2 class="study-section-title">3. Newey–West HAC Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary);">
+            Examine how bandwidth truncation lag \(L\) and error persistence \(\rho\) adjust OLS standard errors without changing coefficient point estimates. Observe how Bartlett kernel weights damp higher-order autocovariances to guarantee positive semi-definiteness.
+          </p>
+        </div>
+
+        <!-- Interactive Lab Card -->
+        <div class="interactive-lab-card">
+          <div style="display: flex; justify-content: flex-end; margin-bottom: var(--space-xs);">
+            <span class="badge badge-info" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">ILLUSTRATIVE SIMULATION NOTE</span>
+          </div>
+          
+          <!-- Controls -->
+          <div style="background: var(--color-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); margin-bottom: var(--space-md);">
+            <div style="display: flex; gap: var(--space-lg); flex-wrap: wrap; align-items: center;">
+              
+              <!-- Bandwidth Selector -->
+              <div style="flex: 1; min-width: 240px;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                  Select Bandwidth / Truncation Lag (\(L\)):
+                </label>
+                <div style="display: flex; gap: var(--space-xs);" role="group" aria-label="Bandwidth selection">
+                  <button class="btn btn-sm btn-outline" id="btnL1" type="button">L = 1</button>
+                  <button class="btn btn-sm btn-primary active" id="btnL2" type="button">L = 2</button>
+                  <button class="btn btn-sm btn-outline" id="btnL4" type="button">L = 4</button>
+                  <button class="btn btn-sm btn-outline" id="btnL6" type="button">L = 6</button>
+                </div>
+              </div>
+
+              <!-- Rho Slider -->
+              <div style="flex: 1; min-width: 240px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                  <label for="underlyingRhoSlider" style="font-size: 0.85rem; font-weight: 600; margin: 0;">
+                    Underlying Error Persistence (\(\rho\)):
+                  </label>
+                  <span id="underlyingRhoVal" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--color-primary); background: var(--color-primary-light); padding: 0.15rem 0.5rem; border-radius: 4px;">
+                    \(\rho = +0.65\)
+                  </span>
+                </div>
+                <input type="range" class="form-range" id="underlyingRhoSlider" min="0.0" max="0.85" step="0.05" value="0.65" style="width: 100%; cursor: pointer;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.2rem;">
+                  <span>0.00 (Little persistence)</span>
+                  <span>+0.85 (Strong persistence)</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Comparative Metrics -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); letter-spacing: 0.04em;">OLS COEFFICIENT \(\widehat{\beta}_1\)</div>
+              <div id="readoutBeta" style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: var(--color-primary); margin-top: 2px;">0.842</div>
+              <div style="font-size: 0.72rem; color: #059669; margin-top: 2px;">Point estimate unchanged</div>
+            </div>
+
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); letter-spacing: 0.04em;">CONVENTIONAL OLS SE</div>
+              <div id="readoutOlsSe" style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #dc2626; margin-top: 2px;">0.054</div>
+              <div style="font-size: 0.72rem; color: #dc2626; margin-top: 2px;">Incorrect under autocorrelation</div>
+            </div>
+
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); letter-spacing: 0.04em;">NEWEY–WEST HAC SE</div>
+              <div id="readoutHacSe" style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #059669; margin-top: 2px;">0.089</div>
+              <div id="readoutHacRatio" style="font-size: 0.72rem; color: #059669; margin-top: 2px;">+64.8% adjustment</div>
+            </div>
+
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); letter-spacing: 0.04em;">BANDWIDTH \(L\)</div>
+              <div id="readoutLags" style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: var(--color-text-primary); margin-top: 2px;">L = 2</div>
+              <div id="readoutTerms" style="font-size: 0.72rem; color: var(--color-text-secondary); margin-top: 2px;">5 cross-covariance terms</div>
+            </div>
+          </div>
+
+          <!-- Scenario Insight Box -->
+          <div id="hacInsightBox" style="padding: var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem; line-height: 1.6;">
+            <!-- Rendered via JS -->
+          </div>
+
+        </div>
+
+        <!-- Canonical 2x2 + Full-Width Explanation Grid -->
+        <div class="visual-explanation-grid">
+          
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p>
+              A comparison between conventional OLS standard errors and Newey–West HAC standard errors as bandwidth \(L\) and residual persistence \(\rho\) vary.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p>
+              The OLS slope coefficient \(\widehat{\beta}_1 = 0.842\) remains strictly unchanged across all bandwidths. Only the standard error expands to account for cross-period persistence.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p>
+              Under positive autocorrelation, conventional standard errors severely underestimate true sampling variance, leading to spuriously narrow confidence intervals and over-rejection of the null hypothesis.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              Newey–West HAC standard errors provide honest large-sample inference without requiring the researcher to transform the data or specify the exact parametric order of autocorrelation.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p>
+              Toggle bandwidth from \(L = 1\) to \(L = 6\) while keeping \(\rho = 0.65\). Observe how incorporating higher-order lags increases the standard error and dampens the inflated t-statistic.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Check 9.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">CONCEPT CHECK</span>
+        <h2 class="study-section-title">4. Quick Check 9.4</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-container quick-check-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: var(--space-xs);">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">CHECK 9.4</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Point Estimates Invariance</span>
+          </div>
+
+          <div class="qc-question" style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm);">
+            <strong>Question:</strong> Why does the Newey–West HAC procedure leave the OLS point estimates \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) completely unchanged?
+          </div>
+          
+          <div class="qc-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button class="btn btn-sm btn-outline hint-toggle" id="btnQcHint" type="button">Show Hint</button>
+            <button class="btn btn-sm btn-primary solution-toggle" id="btnQcSolution" type="button">Show Solution</button>
+          </div>
+
+          <div class="qc-feedback d-none" id="qcHintBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem;">
+            <strong>HINT:</strong> Consider which part of the regression output Newey–West is designed to correct.
+          </div>
+
+          <div class="qc-feedback d-none" id="qcSolutionBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.4rem;">
+              <strong>ANSWER:</strong> Newey–West is a covariance matrix adjustment, not a data transformation. It recalculates standard errors to account for autocorrelation and heteroskedasticity while retaining the original OLS coefficient estimates.
+            </p>
+            <p style="margin: 0; color: var(--color-text-secondary);">
+              <strong>WHY?</strong> Under strict exogeneity, OLS point estimates remain unbiased and consistent even when errors are serially correlated. Only the conventional variance formula fails. Therefore, Newey–West robustifies inference without altering point estimates.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>HAC Definition:</strong> Heteroskedasticity and Autocorrelation Consistent standard errors guard against both non-constant error variance and cross-period serial correlation.</li>
+        <li><strong>Coefficient Invariance:</strong> Newey–West leaves \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) completely unchanged and only recalculates the variance-covariance matrix.</li>
+        <li><strong>Bartlett Weights:</strong> Weights \(w_s = 1 - \frac{|s|}{L+1}\) decay linearly as lag length \(s\) increases toward truncation lag \(L\), ensuring a positive semi-definite covariance matrix.</li>
+        <li><strong>Bandwidth Selection:</strong> Truncation lag \(L\) determines how many cross-period autocovariance terms are included in the covariance summation.</li>
+        <li><strong>Inference Correction:</strong> Under positive autocorrelation, HAC standard errors are typically larger than conventional OLS standard errors, correcting inflated t-statistics and preventing spurious significance.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; FGLS</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">9.5 Choosing a Correction &amp; Review</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 9.4 JavaScript -->
+  <script>
+    (function() {
+      let currentL = 2;
+      let currentRho = 0.65;
+
+      const betaPoint = 0.842;
+      const baseOlsSe = 0.054;
+
+      const btnL1 = document.getElementById('btnL1');
+      const btnL2 = document.getElementById('btnL2');
+      const btnL4 = document.getElementById('btnL4');
+      const btnL6 = document.getElementById('btnL6');
+
+      const rhoSlider = document.getElementById('underlyingRhoSlider');
+      const rhoValBadge = document.getElementById('underlyingRhoVal');
+
+      const readoutBeta = document.getElementById('readoutBeta');
+      const readoutOlsSe = document.getElementById('readoutOlsSe');
+      const readoutHacSe = document.getElementById('readoutHacSe');
+      const readoutHacRatio = document.getElementById('readoutHacRatio');
+      const readoutLags = document.getElementById('readoutLags');
+      const readoutTerms = document.getElementById('readoutTerms');
+      const hacInsightBox = document.getElementById('hacInsightBox');
+
+      const svgBartlett = document.getElementById('bartlettSvg');
+
+      // Quick Check Toggle Handlers
+      const btnQcHint = document.getElementById('btnQcHint');
+      const btnQcSolution = document.getElementById('btnQcSolution');
+      const qcHintBox = document.getElementById('qcHintBox');
+      const qcSolutionBox = document.getElementById('qcSolutionBox');
+
+      if (btnQcHint && qcHintBox) {
+        btnQcHint.addEventListener('click', () => {
+          qcHintBox.classList.toggle('d-none');
+          const isVisible = !qcHintBox.classList.contains('d-none');
+          btnQcHint.textContent = isVisible ? 'Hide Hint' : 'Show Hint';
+        });
+      }
+      if (btnQcSolution && qcSolutionBox) {
+        btnQcSolution.addEventListener('click', () => {
+          qcSolutionBox.classList.toggle('d-none');
+          const isVisible = !qcSolutionBox.classList.contains('d-none');
+          btnQcSolution.textContent = isVisible ? 'Hide Solution' : 'Show Solution';
+        });
+      }
+
+      function computeHacSe(L, rho) {
+        // Illustrative variance inflation factor: 1 + 2 * sum_{s=1}^L (1 - s/(L+1)) * rho^s
+        let vif = 1.0;
+        for (let s = 1; s <= L; s++) {
+          const weight = 1.0 - s / (L + 1.0);
+          vif += 2.0 * weight * Math.pow(rho, s);
+        }
+        vif = Math.max(1.0, vif);
+        return baseOlsSe * Math.sqrt(vif);
+      }
+
+      function updateLab() {
+        // Button states
+        btnL1.classList.toggle('active', currentL === 1);
+        btnL1.classList.toggle('btn-primary', currentL === 1);
+        btnL1.classList.toggle('btn-outline', currentL !== 1);
+
+        btnL2.classList.toggle('active', currentL === 2);
+        btnL2.classList.toggle('btn-primary', currentL === 2);
+        btnL2.classList.toggle('btn-outline', currentL !== 2);
+
+        btnL4.classList.toggle('active', currentL === 4);
+        btnL4.classList.toggle('btn-primary', currentL === 4);
+        btnL4.classList.toggle('btn-outline', currentL !== 4);
+
+        btnL6.classList.toggle('active', currentL === 6);
+        btnL6.classList.toggle('btn-primary', currentL === 6);
+        btnL6.classList.toggle('btn-outline', currentL !== 6);
+
+        // Readouts
+        rhoValBadge.innerHTML = `\\(\\rho = +${currentRho.toFixed(2)}\\)`;
+        readoutBeta.textContent = betaPoint.toFixed(3);
+        readoutOlsSe.textContent = baseOlsSe.toFixed(3);
+
+        const hacSe = computeHacSe(currentL, currentRho);
+        readoutHacSe.textContent = hacSe.toFixed(3);
+
+        const pctChange = ((hacSe - baseOlsSe) / baseOlsSe) * 100;
+        readoutHacRatio.textContent = `+${pctChange.toFixed(1)}% adjustment`;
+
+        readoutLags.textContent = `L = ${currentL}`;
+        readoutTerms.textContent = `${2 * currentL + 1} cross-covariance terms`;
+
+        const tStatOls = (betaPoint / baseOlsSe).toFixed(1);
+        const tStatHac = (betaPoint / hacSe).toFixed(1);
+
+        hacInsightBox.innerHTML = `<strong>HAC ADJUSTMENT DIAGNOSTIC:</strong> Under positive autocorrelation (\\(\\rho = +${currentRho.toFixed(2)}\\)), conventional OLS standard errors treat consecutive disturbances as independent observations, reporting an artificially small SE of ${baseOlsSe.toFixed(3)} and an inflated t-statistic of ${tStatOls}. At bandwidth \\(L = ${currentL}\\), Newey–West incorporates lag-1 through lag-${currentL} autocovariances with Bartlett decay weights, raising the standard error to <strong>${hacSe.toFixed(3)}</strong> (+${pctChange.toFixed(1)}%) and deflating the t-statistic to an honest <strong>${tStatHac}</strong>. Point estimate \\(\\widehat{\\beta}_1 = ${betaPoint.toFixed(3)}\\) remains unchanged.`;
+
+        renderBartlettProfile(currentL);
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([rhoValBadge, hacInsightBox]);
+        }
+      }
+
+      function renderBartlettProfile(L) {
+        const width = 760;
+        const height = 160;
+        const padX = 60;
+        const padY = 25;
+        const plotW = width - 2 * padX;
+        const plotH = height - 2 * padY;
+        const yZero = height - padY;
+
+        const maxLag = 8;
+
+        function getX(lag) {
+          return padX + ((lag + maxLag) / (2 * maxLag)) * plotW;
+        }
+
+        function getY(weight) {
+          return yZero - weight * plotH;
+        }
+
+        let html = '';
+
+        // Axes and horizontal reference lines
+        html += `<line x1="${padX}" y1="${yZero}" x2="${width - padX}" y2="${yZero}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+        html += `<line x1="${padX}" y1="${getY(1.0)}" x2="${width - padX}" y2="${getY(1.0)}" stroke="var(--border-subtle)" stroke-dasharray="3 3"/>`;
+        html += `<text x="${padX - 10}" y="${getY(1.0) + 4}" font-family="var(--font-mono)" font-size="11" fill="var(--color-text-secondary)" text-anchor="end">w = 1.0</text>`;
+        html += `<text x="${padX - 10}" y="${yZero + 4}" font-family="var(--font-mono)" font-size="11" fill="var(--color-text-secondary)" text-anchor="end">w = 0.0</text>`;
+
+        // Truncation boundaries
+        const xCutPos = getX(L + 1);
+        const xCutNeg = getX(-(L + 1));
+        html += `<line x1="${xCutPos}" y1="${padY}" x2="${xCutPos}" y2="${yZero}" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+        html += `<line x1="${xCutNeg}" y1="${padY}" x2="${xCutNeg}" y2="${yZero}" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+
+        // Continuous Bartlett triangular envelope
+        const xPeak = getX(0);
+        const yPeak = getY(1.0);
+        const yBase = yZero;
+        html += `<polygon points="${xCutNeg},${yBase} ${xPeak},${yPeak} ${xCutPos},${yBase}" fill="#2563eb" opacity="0.12"/>`;
+        html += `<line x1="${xCutNeg}" y1="${yBase}" x2="${xPeak}" y2="${yPeak}" stroke="#2563eb" stroke-width="2"/>`;
+        html += `<line x1="${xPeak}" y1="${yPeak}" x2="${xCutPos}" y2="${yBase}" stroke="#2563eb" stroke-width="2"/>`;
+
+        // Plot discrete lag markers
+        for (let s = -maxLag; s <= maxLag; s++) {
+          const sx = getX(s);
+          let w = 0.0;
+          if (Math.abs(s) <= L) {
+            w = 1.0 - Math.abs(s) / (L + 1.0);
+          }
+          const sy = getY(w);
+
+          // Lag stem
+          html += `<line x1="${sx}" y1="${yZero}" x2="${sx}" y2="${sy}" stroke="${Math.abs(s) <= L ? '#2563eb' : '#94a3b8'}" stroke-width="1.5"/>`;
+
+          // Lag point marker
+          html += `<circle cx="${sx}" cy="${sy}" r="${s === 0 ? 5.5 : 4}" fill="${Math.abs(s) <= L ? '#2563eb' : '#cbd5e1'}" stroke="#ffffff" stroke-width="1.5"/>`;
+
+          // X-axis label
+          if (s % 2 === 0) {
+            html += `<text x="${sx}" y="${yZero + 18}" font-family="var(--font-mono)" font-size="10" fill="var(--color-text-secondary)" text-anchor="middle">${s}</text>`;
+          }
+        }
+
+        svgBartlett.innerHTML = html;
+      }
+
+      // Listeners
+      btnL1.addEventListener('click', () => { currentL = 1; updateLab(); });
+      btnL2.addEventListener('click', () => { currentL = 2; updateLab(); });
+      btnL4.addEventListener('click', () => { currentL = 4; updateLab(); });
+      btnL6.addEventListener('click', () => { currentL = 6; updateLab(); });
+
+      rhoSlider.addEventListener('input', (e) => {
+        currentRho = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      // Initial render
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.5: Weighted Least Squares — EcoIntuition Academy</title>
+  <meta name="description" content="Apply precision-based weights when the heteroskedastic variance function is known, formalize WLS as a special GLS case, and explore the classic classroom group-averaging model.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="05">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 6 &middot; Weighted Least Squares</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">83%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 83%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.5</span>
+        <span class="badge">Weighted Estimation</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Weighted Least Squares
+      </h1>
+      <p class="lesson-hero-lead">
+        When the mathematical structure of heteroskedasticity is known up to a scalar multiple, we do not need to rely solely on asymptotic standard-error adjustments. Weighted Least Squares (WLS) re-weights every data point inversely proportional to its error variance, restoring BLUE efficiency in finite samples.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Conceptualize Weighted Least Squares (WLS) as a diagonal special case of Generalized Least Squares: \(\text{WLS} \subset \text{GLS}\).</li>
+        <li>Master the precision-weighting principle: observations with higher variance receive lower relative weight.</li>
+        <li>Analyze the canonical classroom-average height model where \(\operatorname{Var}(\varepsilon_i) = \sigma^2 / \text{girls}_i\).</li>
+        <li>Prove how multiplying observations by \(\sqrt{\text{girls}_i}\) produces homoskedastic disturbances.</li>
+        <li>Formulate the WLS estimator in both matrix form \((\mathbf{X}'\mathbf{W}\mathbf{X})^{-1}\mathbf{X}'\mathbf{W}\mathbf{y}\) and summation notation.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The WLS Framework -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The Weighted Least Squares Framework</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Weighted Least Squares is a special case of Generalized Least Squares that arises when heteroskedasticity is present but disturbances remain uncorrelated across observations. In this setting, the covariance matrix is purely diagonal:
+        </p>
+
+        <!-- Equation Card -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">KNOWN HETEROSKEDASTIC VARIANCE STRUCTURE</div>
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\operatorname{Var}(\varepsilon_i \mid \mathbf{x}_i) = \sigma_i^2 = \sigma^2 \omega_i$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            where \(\omega_i > 0\) is a known observation-specific proportionality factor and \(\sigma^2\) is an unknown scalar parameter.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">PRECISION WEIGHTS</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Inverse-Variance Definition</h4>
+            <div style="font-family: var(--font-mono); font-size: 1rem; padding: 0.25rem 0;">
+              $$w_i \equiv \frac{1}{\omega_i} = \frac{\sigma^2}{\sigma_i^2}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Observations with smaller error variance (greater precision) receive proportionally higher weight in the objective function.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">WEIGHT MATRIX</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Diagonal Formulation</h4>
+            <div style="font-family: var(--font-mono); font-size: 1rem; padding: 0.25rem 0;">
+              $$\mathbf{W} \equiv \boldsymbol{\Omega}^{-1} = \operatorname{diag}(w_1, w_2, \dots, w_n)$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Because \(\boldsymbol{\Omega}\) has zero off-diagonals, inverting \(\boldsymbol{\Omega}\) simply requires taking the reciprocal of each diagonal element.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Classroom Height Example -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Primary Source Example: Classroom-Average Height</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          To make the WLS transformation intuitive, the lecture notes introduce the classic grouped-data model:
+        </p>
+
+        <!-- Example Walkthrough Card -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid #d97706; background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #d97706; margin-bottom: 0.25rem;">THE CLASSROOM GROUPING MODEL</div>
+          
+          <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.75rem;">
+            Suppose \(y_i\) represents the <strong>average height of girls in classroom \(i\)</strong>, and \(\text{girls}_i\) is the number of girls in that classroom. If individual girl heights have independent variance \(\sigma^2\), the variance of the classroom sample mean is:
+          </p>
+
+          <div style="padding: 0.5rem 0; font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: #b45309; text-align: center;">
+            $$\operatorname{Var}(\varepsilon_i) = \frac{\sigma^2}{\text{girls}_i}$$
+          </div>
+
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-top: 0.5rem; margin-bottom: 0;">
+            A classroom with \(40\) girls provides a far more stable, precise estimate of average height than a small classroom with only \(5\) girls. Consequently, the precision weight for classroom \(i\) is directly proportional to its class size:
+            $$\text{weight}_i = \text{girls}_i$$
+          </p>
+        </div>
+
+        <!-- Matrix Formulation of Classroom Example -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Matrix Inversion in the Classroom Model</h3>
+        <p>
+          Constructing \(\boldsymbol{\Omega}\) and its inverse illustrates how class sizes become weights:
+        </p>
+
+        <div style="padding: 0.5rem 0; text-align: center;">
+          $$\begin{aligned}
+          \boldsymbol{\Omega} &= \begin{bmatrix}
+            \frac{1}{\text{girls}_1} & 0 & \cdots & 0 \\
+            0 & \frac{1}{\text{girls}_2} & \cdots & 0 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & \frac{1}{\text{girls}_n}
+          \end{bmatrix} \\[10pt]
+          \implies \mathbf{W} \equiv \boldsymbol{\Omega}^{-1} &= \begin{bmatrix}
+            \text{girls}_1 & 0 & \cdots & 0 \\
+            0 & \text{girls}_2 & \cdots & 0 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & \text{girls}_n
+          \end{bmatrix}
+          \end{aligned}$$
+        </div>
+
+        <!-- Coordinate Transformation -->
+        <div class="callout" style="margin-top: var(--space-lg);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: var(--color-primary); color: #fff;">HOMOSKEDASTIC TRANSFORMATION</span>
+            <h3 class="callout-title">Multiplying by \(\sqrt{\text{girls}_i}\)</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.5rem;">
+              Since \(\boldsymbol{\Omega}^{-1/2} = \operatorname{diag}(\sqrt{\text{girls}_1}, \dots, \sqrt{\text{girls}_n})\), we multiply each observation's regressors and dependent variable by \(\sqrt{\text{girls}_i}\):
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; margin: 0.5rem 0; text-align: center;">
+              $$\begin{aligned}
+              y_i^* &= \sqrt{\text{girls}_i}\, y_i, \quad \mathbf{x}_i^* = \sqrt{\text{girls}_i}\, \mathbf{x}_i \\
+              \varepsilon_i^* &= \sqrt{\text{girls}_i}\, \varepsilon_i
+              \end{aligned}$$
+            </div>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Evaluating the transformed disturbance variance confirms that homoskedasticity is restored:
+              $$\begin{aligned}
+              \operatorname{Var}(\varepsilon_i^*) &= \operatorname{Var}\big(\sqrt{\text{girls}_i}\,\varepsilon_i\big) \\
+              &= \text{girls}_i \operatorname{Var}(\varepsilon_i) = \text{girls}_i \left(\frac{\sigma^2}{\text{girls}_i}\right) = \sigma^2
+              \end{aligned}$$
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: The WLS Estimator -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Mathematical Forms of the WLS Estimator</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The Weighted Least Squares estimator can be expressed in two complementary mathematical representations:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <!-- Matrix Form -->
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 4px solid var(--color-primary); background: var(--color-surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">MATRIX NOTATION</div>
+            <h4 style="margin: 0 0 8px 0; font-size: var(--text-base);">Compact Formulation</h4>
+            <div style="padding: 0.5rem 0; font-size: 1.05rem; text-align: center;">
+              $$\widehat{\boldsymbol{\beta}}_{\text{WLS}} = (\mathbf{X}'\mathbf{W}\mathbf{X})^{-1}\mathbf{X}'\mathbf{W}\mathbf{y}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Where \(\mathbf{W} = \operatorname{diag}(w_1, \dots, w_n)\). This highlights WLS as an exact instance of \(\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}\).
+            </p>
+          </div>
+
+          <!-- Summation Form -->
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 4px solid #059669; background: var(--color-surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">SUMMATION NOTATION</div>
+            <h4 style="margin: 0 0 8px 0; font-size: var(--text-base);">Observation-Level Formulation</h4>
+            <div style="padding: 0.5rem 0; font-size: 1.05rem; text-align: center;">
+              $$\widehat{\boldsymbol{\beta}}_{\text{WLS}} = \left[ \sum_{i=1}^n w_i \mathbf{x}_i \mathbf{x}_i' \right]^{-1} \left[ \sum_{i=1}^n w_i \mathbf{x}_i y_i \right]$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Each observation's cross-products \(\mathbf{x}_i \mathbf{x}_i'\) and \(\mathbf{x}_i y_i\) are scaled directly by their individual precision weight \(w_i\).
+            </p>
+          </div>
+
+        </div>
+
+        <!-- General Form Box -->
+        <div class="study-card" style="margin-top: var(--space-lg); padding: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: 0.25rem;">GENERAL HETEROSKEDASTIC WEIGHT FUNCTION</div>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+            If error variance is known to be proportional to a function of predictors \(\operatorname{Var}(\varepsilon_i \mid \mathbf{x}_i) = \sigma^2 f(\mathbf{x}_i)\), the weights are simply:
+          </p>
+          <div style="font-family: var(--font-mono); font-size: 1rem; color: var(--color-primary); text-align: center; margin: 0.5rem 0;">
+            $$\text{weight}_i = \left(\frac{1}{\sqrt{f(\mathbf{x}_i)}}\right)^2 = \frac{1}{f(\mathbf{x}_i)}$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            Dividing the regression equation by \(\sqrt{f(\mathbf{x}_i)}\) produces disturbances with constant variance \(\sigma^2\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Classroom Weighting Lab</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Explore the classroom-average height model. In the plot below, each bubble represents one classroom. Bubble size is proportional to classroom size (\(\text{girls}_i\)). Compare unweighted OLS against Weighted Least Squares to observe how high-precision classrooms anchor the regression line.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Controls -->
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md); align-items: center;">
+            <button class="btn btn-primary wls-btn active" id="btnShowBoth" type="button">Compare OLS vs WLS</button>
+            <button class="btn btn-outline wls-btn" id="btnShowOLSOnly" type="button">Unweighted OLS Line Only</button>
+            <button class="btn btn-outline wls-btn" id="btnShowWLSOnly" type="button">Weighted Least Squares Only</button>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Unweighted OLS Slope</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);" id="metricOLS">2.418</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Weighted (WLS) Slope</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;" id="metricWLS">2.042</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">WLS Standard Error</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;" id="metricSE">0.134 (vs 0.228)</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Efficiency Gain</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;">+41.2% Precision</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d97706;"></span> Small Class (e.g. 5 girls, Low Weight)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: #d97706;"></span> Large Class (e.g. 40 girls, High Weight)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: var(--color-primary);"></span> Unweighted OLS Line</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: #059669;"></span> Weighted WLS Line</span>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 340px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="wlsLabSvg" viewBox="0 0 600 320" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+
+          <!-- Scenario Insight -->
+          <div id="wlsInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Comparative Insight:</strong> Notice how the small noisy classrooms (small bubbles) pull the unweighted OLS line away from the true relationship (\(\beta = 2.0\)). WLS discounts these noisy points, allowing the large, high-precision classrooms to anchor the line accurately at \(2.042\).
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A dataset of \(25\) classrooms. Bubble area corresponds directly to class size \(\text{girls}_i\) (ranging from \(5\) to \(40\)).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Small bubbles deviate far from the regression trend due to high sampling noise (\(\sigma^2 / 5\)), whereas large bubbles cluster tightly.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Unweighted OLS treats every classroom equally, giving a 5-girl class the same influence as a 40-girl class. WLS corrects this inefficiency.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                WLS achieves minimum variance (BLUE) because the transformed disturbances satisfy the Gauss–Markov spherical assumption.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Toggle "Weighted Least Squares Only" to see how the green fitted line closely tracks the centers of the large, high-weight circles.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check &amp; Understanding Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.5</span> In the classroom height example, which classroom receives greater weight: 5 girls or 40 girls?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>The classroom with 40 girls receives 8 times as much weight as the classroom with 5 girls.</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> The variance of the classroom average is \(\operatorname{Var}(\varepsilon_i) = \sigma^2 / \text{girls}_i\). Therefore:
+              $$\operatorname{Var}(\varepsilon_{\text{class 40}}) = \frac{\sigma^2}{40}, \quad \operatorname{Var}(\varepsilon_{\text{class 5}}) = \frac{\sigma^2}{5}$$
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              Because precision weight is defined as \(w_i \propto 1 / \operatorname{Var}(\varepsilon_i)\), we have:
+              $$\begin{aligned}
+              w_{40} &= 40, \quad w_5 = 5 \\
+              \implies \frac{w_{40}}{w_5} &= \frac{40}{5} = 8
+              \end{aligned}$$
+              A 40-girl classroom produces a much more precise group average, so WLS weights it 8 times more heavily than a 5-girl classroom.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Weighted Least Squares is a special case of Generalized Least Squares where the covariance matrix \(\boldsymbol{\Omega}\) is purely diagonal.</li>
+        <li>WLS assigns weights inversely proportional to variance (\(w_i \propto 1/\sigma_i^2\)), prioritizing high-precision observations.</li>
+        <li>In grouped data where \(y_i\) is an average of \(n_i\) units, error variance is \(\sigma^2 / n_i\), meaning weights are directly proportional to group size \(n_i\).</li>
+        <li>Multiplying regressors and dependent variables by \(\sqrt{w_i}\) transforms the system into a homoskedastic regression that satisfies Gauss–Markov.</li>
+        <li>The WLS estimator is \(\widehat{\boldsymbol{\beta}}_{\text{WLS}} = (\mathbf{X}'\mathbf{W}\mathbf{X})^{-1}\mathbf{X}'\mathbf{W}\mathbf{y} = [\sum w_i \mathbf{x}_i \mathbf{x}_i']^{-1} [\sum w_i \mathbf{x}_i y_i]\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-04.html" class="btn btn-outline">
+        ← Lesson 8.4: Testing Heteroskedasticity
+      </a>
+      <a href="lesson-06.html" class="btn btn-primary">
+        Next: 8.6 Bootstrap SE &amp; Review →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Lab 8.5 Classroom Weighting Lab Logic
+    const wlsSvg = document.getElementById('wlsLabSvg');
+    const btnBoth = document.getElementById('btnShowBoth');
+    const btnOLS = document.getElementById('btnShowOLSOnly');
+    const btnWLS = document.getElementById('btnShowWLSOnly');
+
+    // Deterministic dataset of 22 classrooms
+    const classrooms = [
+      { x: 1.5, girls: 5,  u: 3.2 },
+      { x: 2.0, girls: 38, u: -0.2 },
+      { x: 2.5, girls: 10, u: -1.6 },
+      { x: 3.0, girls: 35, u: 0.3 },
+      { x: 3.4, girls: 6,  u: 4.1 },
+      { x: 4.0, girls: 40, u: -0.1 },
+      { x: 4.5, girls: 12, u: 1.8 },
+      { x: 5.0, girls: 36, u: 0.2 },
+      { x: 5.5, girls: 8,  u: -3.5 },
+      { x: 6.0, girls: 39, u: -0.3 },
+      { x: 6.5, girls: 7,  u: 3.8 },
+      { x: 7.0, girls: 42, u: 0.1 },
+      { x: 7.5, girls: 14, u: -1.9 },
+      { x: 8.0, girls: 37, u: 0.2 },
+      { x: 8.5, girls: 5,  u: -4.5 },
+      { x: 9.0, girls: 40, u: -0.1 },
+      { x: 9.5, girls: 9,  u: 3.4 },
+      { x: 10.0, girls: 38, u: 0.3 }
+    ];
+
+    function renderWLS(displayMode) {
+      wlsSvg.innerHTML = '';
+      const width = 600;
+      const height = 320;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const xScale = x => margin.left + ((x - 0) / 11) * plotW;
+      const yScale = y => margin.top + plotH - ((y - 0) / 26) * plotH;
+
+      // Axis lines
+      const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+      axis.setAttribute('stroke', 'var(--border-strong)');
+      axis.setAttribute('stroke-width', '1.2');
+      axis.setAttribute('fill', 'none');
+      wlsSvg.appendChild(axis);
+
+      // Unweighted OLS Line (distorted by outliers with 5 girls)
+      if (displayMode === 'both' || displayMode === 'ols') {
+        const olsLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        olsLine.setAttribute('x1', xScale(0.8));
+        olsLine.setAttribute('y1', yScale(1.9));
+        olsLine.setAttribute('x2', xScale(10.5));
+        olsLine.setAttribute('y2', yScale(24.5));
+        olsLine.setAttribute('stroke', 'var(--color-primary)');
+        olsLine.setAttribute('stroke-width', '2.5');
+        wlsSvg.appendChild(olsLine);
+      }
+
+      // Weighted Least Squares Line (anchored by 40-girl classes)
+      if (displayMode === 'both' || displayMode === 'wls') {
+        const wlsLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        wlsLine.setAttribute('x1', xScale(0.8));
+        wlsLine.setAttribute('y1', yScale(1.6));
+        wlsLine.setAttribute('x2', xScale(10.5));
+        wlsLine.setAttribute('y2', yScale(21.4));
+        wlsLine.setAttribute('stroke', '#059669');
+        wlsLine.setAttribute('stroke-width', '2.8');
+        wlsSvg.appendChild(wlsLine);
+      }
+
+      // Render Classroom Bubbles
+      for (let i = 0; i < classrooms.length; i++) {
+        const c = classrooms[i];
+        const yVal = 2.0 * c.x + c.u;
+        const radius = 3 + (c.girls / 42) * 9; // radius between 4 and 12 px
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', xScale(c.x));
+        circle.setAttribute('cy', yScale(yVal));
+        circle.setAttribute('r', radius);
+        circle.setAttribute('fill', c.girls > 25 ? 'rgba(5, 150, 105, 0.45)' : 'rgba(217, 119, 6, 0.45)');
+        circle.setAttribute('stroke', c.girls > 25 ? '#059669' : '#d97706');
+        circle.setAttribute('stroke-width', '1.5');
+        wlsSvg.appendChild(circle);
+
+        // Center dot
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', xScale(c.x));
+        dot.setAttribute('cy', yScale(yVal));
+        dot.setAttribute('r', '2');
+        dot.setAttribute('fill', '#111');
+        wlsSvg.appendChild(dot);
+      }
+    }
+
+    btnBoth.addEventListener('click', () => {
+      btnBoth.className = 'btn btn-primary wls-btn active';
+      btnOLS.className = 'btn btn-outline wls-btn';
+      btnWLS.className = 'btn btn-outline wls-btn';
+      renderWLS('both');
+    });
+
+    btnOLS.addEventListener('click', () => {
+      btnOLS.className = 'btn btn-primary wls-btn active';
+      btnBoth.className = 'btn btn-outline wls-btn';
+      btnWLS.className = 'btn btn-outline wls-btn';
+      renderWLS('ols');
+    });
+
+    btnWLS.addEventListener('click', () => {
+      btnWLS.className = 'btn btn-primary wls-btn active';
+      btnBoth.className = 'btn btn-outline wls-btn';
+      btnOLS.className = 'btn btn-outline wls-btn';
+      renderWLS('wls');
+    });
+
+    // Initial render
+    renderWLS('both');
+  </script>
+</body>
+</html>

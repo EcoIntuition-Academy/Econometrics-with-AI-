@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11.4: Simultaneity: Supply, Demand &amp; Price IV — Econometrics with AI</title>
+  <meta name="description" content="Derive the simultaneous supply and demand system, prove why equilibrium prices correlate with demand disturbances, solve for reduced-form equations, and use cost shifters as instruments.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-11" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 11: Instrumental Variables &amp; 2SLS</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 11</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 11</a>
+          <span class="module-nav-title">Instrumental Variables &amp; 2SLS</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 7 &middot; Simultaneity: Supply, Demand &amp; Price IV</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 11 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.1 Endogeneity &amp; Why OLS Can Fail</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.2 Instrumental Variables &amp; the Three Criteria</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.3 Simple IV Examples &amp; Two-Stage Intuition</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">11.4 Simultaneity: Supply, Demand &amp; Price IV</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.5 General IV / 2SLS &amp; Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.6 IV in Matrix Form: Exactly Identified</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.7 2SLS, Projection Matrices &amp; Overidentification</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 56%;"></div>
+          </div>
+          <span class="progress-text">56%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 11.4</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Simultaneity &amp; Price IV</span>
+      </div>
+      <h1 class="lesson-hero-title">Simultaneity: Supply, Demand &amp; Instrumenting Price</h1>
+      <p class="lesson-hero-lead">
+        Formulate simultaneous market equilibrium, prove mathematically why price correlates with demand disturbances, solve for reduced-form equations, and use production cost shifters as instruments.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Formulate the structural supply and demand system with price and quantity simultaneously determined.</li>
+        <li>Understand why empirical market data forms a &ldquo;cloud&rdquo; of equilibrium points that naive OLS cannot disentangle.</li>
+        <li>Derive the structural market-clearing price equation and show that price contains the demand disturbance \(\varepsilon\).</li>
+        <li>Calculate the reduced-form equation for quantity in terms of the cost instrument \(z\).</li>
+        <li>Understand how an exogenous supply shifter \(z\) traces out the downward-sloping demand curve.</li>
+        <li>Interact with the Supply&ndash;Demand Simultaneity Explorer to visualize equilibrium shifts.</li>
+      </ul>
+    </div>
+
+    <!-- Study Section 1: The Simultaneous Supply-Demand System -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Structural System</span>
+          <h2 class="section-title">The Supply and Demand Equations</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          The classic econometric problem of simultaneity arises when prices and quantities are determined at the exact same moment by the intersection of consumer demand and producer supply.
+        </p>
+
+        <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #2563eb; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #2563eb;">STRUCTURAL DEMAND</h4>
+              <span class="badge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">\(\beta_1 \le 0\)</span>
+            </div>
+            <div style="margin: 0.75rem 0; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary); text-align: center;">
+              \[Q_D = \beta_0 + \beta_1 \cdot \text{price} + \varepsilon\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Consumers purchase less as price rises (\(\beta_1 \le 0\)). The error \(\varepsilon\) represents unobserved consumer tastes, preferences, and aggregate demand shocks.
+            </p>
+          </div>
+
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #059669; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #059669;">STRUCTURAL SUPPLY</h4>
+              <span class="badge" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: 600;">\(\gamma_1 \ge 0\)</span>
+            </div>
+            <div style="margin: 0.75rem 0; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary); text-align: center;">
+              \[Q_S = \gamma_0 + \gamma_1 \cdot \text{price} + \gamma_2 z + \nu\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Firms produce more as price rises (\(\gamma_1 \ge 0\)). Variable \(z\) is the <strong>per-unit cost of production</strong>, and \(\nu\) captures supply-side productivity disturbances.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="definition-box" style="padding: 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <strong style="color: #7c3aed;">The Instrument: Production Cost Shifter \(z\)</strong>
+          <p style="margin: 0.4rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
+            By economic assumption, per-unit input cost \(z\) is determined in factor markets independently of retail consumer tastes (\(\text{Cov}(z, \varepsilon) = 0\)) and firm-specific productivity shocks (\(\text{Cov}(z, \nu) = 0\)).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 2: Why Naive OLS Fails -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Identification Failure</span>
+          <h2 class="section-title">The Equilibrium Cloud &amp; OLS Breakdown</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          In a competitive market, observed transactions occur only where demand equals supply:
+        </p>
+
+        <div class="equation-container" style="text-align: center; margin: 1.25rem 0;">
+          \[Q_D = Q_S\]
+        </div>
+
+        <p>
+          Every observed data point \((Q_E, P_E)\) is an equilibrium intersection. As both consumer preferences (\(\varepsilon\)) and producer shocks (\(\nu, z\)) fluctuate across time or markets, the intersection shifts in multiple directions simultaneously.
+        </p>
+
+        <div class="intuition-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm);">
+          <h4 style="margin: 0 0 0.4rem 0; color: #dc2626;">Why Naive OLS Cannot Recover Demand</h4>
+          <p style="margin: 0; color: var(--text-secondary); line-height: 1.6;">
+            A naive regression of observed quantity on observed price fits a line through this <em>&ldquo;cloud&rdquo; of intersection points</em>. Because both curves move at once, the estimated slope could be positive, negative, or completely flat &mdash; reflecting an arbitrary mixture of supply and demand schedules rather than the true causal demand response \(\beta_1\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 3: Derivation Journey — Solving for Equilibrium Price -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Mathematical Proof</span>
+          <h2 class="section-title">Derivation Journey: Solving for Price Under Simultaneity</h2>
+        </div>
+      </div>
+
+      <div class="derivation-journey-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+        
+        <div class="journey-goal" style="padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">DERIVATION GOAL</span>
+          <h3 style="margin: 0.25rem 0 0 0; color: var(--text-primary); font-size: 1.15rem;">Prove that Equilibrium Price Contains the Demand Disturbance \(\varepsilon\)</h3>
+          <p style="margin: 0.4rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
+            Assume \(\beta_0 = \gamma_0 = 0\) without loss of generality (by demeaning all variables around their expectations).
+          </p>
+        </div>
+
+        <div class="journey-steps" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <!-- Step 1 -->
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid var(--accent-primary); border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-primary); font-weight: 600;">STEP 1: IMPOSE MARKET CLEARING</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Equate structural demand to structural supply:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary);">
+              \[\beta_1 \cdot \text{price} + \varepsilon = \gamma_1 \cdot \text{price} + \gamma_2 z + \nu\]
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid var(--accent-primary); border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-primary); font-weight: 600;">STEP 2: COLLECT PRICE TERMS</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Group all terms involving price on the left-hand side:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary);">
+              \[(\beta_1 - \gamma_1) \cdot \text{price} = \gamma_2 z + \nu - \varepsilon\]
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #7c3aed; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #7c3aed; font-weight: 600;">STEP 3: SOLVE FOR REDUCED-FORM PRICE</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Divide by \((\beta_1 - \gamma_1)\) (noting \(\beta_1 - \gamma_1 < 0\)):
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary); margin: 0.5rem 0;">
+              \[\text{price} = \frac{\gamma_2}{\beta_1 - \gamma_1} z + \frac{\nu - \varepsilon}{\beta_1 - \gamma_1}\]
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="journey-step" style="padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-left: 4px solid #ef4444; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #dc2626; font-weight: 700;">KEY INSIGHT: MATHEMATICAL PROOF OF ENDOGENEITY</div>
+            <p style="margin: 0.35rem 0 0 0; font-size: 0.9rem; color: var(--text-primary); line-height: 1.6;">
+              Look closely at the numerator: <strong>the demand disturbance \(\varepsilon\) appears directly in the price equation</strong> with coefficient \(-\frac{1}{\beta_1 - \gamma_1} > 0\).
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.05rem; color: #dc2626; margin: 0.5rem 0;">
+              \[\text{Cov}(\text{price}, \varepsilon) = -\frac{\sigma_\varepsilon^2}{\beta_1 - \gamma_1} > 0 \ne 0\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Because price covaries positively with demand shocks, naive OLS estimates of the demand slope \(\beta_1\) are upward-biased (less negative than true demand).
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 4: Reduced Form for Quantity -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">System Completion</span>
+          <h2 class="section-title">The Reduced Form for Quantity</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          We now substitute the solved reduced-form price into the structural demand equation to obtain the reduced form for quantity:
+        </p>
+
+        <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-family: var(--font-mono); font-size: 1rem; color: var(--text-primary); line-height: 2;">
+            \[\begin{aligned}
+              Q_D &= \beta_1 \cdot \text{price} + \varepsilon \\
+              &= \beta_1 \left[ \frac{\gamma_2}{\beta_1 - \gamma_1} z + \frac{\nu - \varepsilon}{\beta_1 - \gamma_1} \right] + \varepsilon \\
+              &= \frac{\beta_1\gamma_2}{\beta_1 - \gamma_1} z + \frac{\beta_1\nu}{\beta_1 - \gamma_1} - \frac{\beta_1\varepsilon}{\beta_1 - \gamma_1} + \frac{(\beta_1 - \gamma_1)\varepsilon}{\beta_1 - \gamma_1} \\
+              &= \frac{\beta_1\gamma_2}{\beta_1 - \gamma_1} z + \frac{\beta_1\nu - \gamma_1\varepsilon}{\beta_1 - \gamma_1}
+            \end{aligned}\]
+          </div>
+        </div>
+
+        <div class="intuition-box" style="padding: 1.25rem; background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: var(--radius-sm);">
+          <h4 style="margin: 0 0 0.3rem 0; color: #059669;">Why Cost Shifter \(z\) Works as an Instrument</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Notice that instrument \(z\) shifts supply without entering the demand disturbance \(\varepsilon\). In the first stage, \(z\) predicts price through coefficient \(\frac{\gamma_2}{\beta_1 - \gamma_1}\). In the second stage, taking the ratio of the reduced-form quantity coefficient to the reduced-form price coefficient recovers \(\beta_1\) exactly:
+          </p>
+          <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: #059669; margin-top: 0.5rem;">
+            \[\frac{\frac{\beta_1\gamma_2}{\beta_1 - \gamma_1}}{\frac{\gamma_2}{\beta_1 - \gamma_1}} = \beta_1\]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 5: Interactive Lab — Simultaneity Explorer -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Interactive Simulation</span>
+          <h2 class="section-title">Interactive Lab: Supply&ndash;Demand Simultaneity Explorer</h2>
+        </div>
+      </div>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+        
+        <!-- Controls Header -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Supply Cost Shifter z (Instrument)</label>
+            <div style="display: flex; gap: 0.4rem;">
+              <button type="button" class="btn btn-sm btn-outline" id="btnZLow">Low Cost</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnZBase">Base</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnZHigh">High Cost</button>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Demand Shock &epsilon; (Confounder)</label>
+            <div style="display: flex; gap: 0.4rem;">
+              <button type="button" class="btn btn-sm btn-outline" id="btnEpsNeg">&minus; Shock</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnEpsZero">Neutral (0)</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnEpsPos">+ Shock</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metric-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">EQUILIBRIUM PRICE</div>
+            <div id="metricP" style="font-size: 1.3rem; font-weight: 700; color: #7c3aed; font-family: var(--font-mono); margin: 0.25rem 0;">P = 5.00</div>
+            <div id="metricPDesc" style="font-size: 0.75rem; color: var(--text-secondary);">Simultaneous clearing price</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">EQUILIBRIUM QUANTITY</div>
+            <div id="metricQ" style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono); margin: 0.25rem 0;">Q = 5.00</div>
+            <div id="metricQDesc" style="font-size: 0.75rem; color: var(--text-secondary);">Market transaction volume</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">TRUE DEMAND SLOPE</div>
+            <div style="font-size: 1.3rem; font-weight: 700; color: #2563eb; font-family: var(--font-mono); margin: 0.25rem 0;">β₁ = &minus;1.00</div>
+            <div style="font-size: 0.75rem; color: #2563eb;">Recovered via cost instrument z</div>
+          </div>
+        </div>
+
+        <!-- External Graph Legend Only -->
+        <div class="external-legend" style="display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; margin-bottom: 1rem; padding: 0.6rem 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.85rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="width: 18px; height: 2.5px; background: #2563eb;"></span>
+            <span style="color: var(--text-secondary);">Blue: Demand Curve \(D(\varepsilon)\)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="width: 18px; height: 2.5px; background: #059669;"></span>
+            <span style="color: var(--text-secondary);">Green: Supply Curve \(S(z)\)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="width: 10px; height: 10px; border-radius: 50%; background: #7c3aed;"></span>
+            <span style="color: var(--text-secondary);">Purple Dot: Active Equilibrium \((Q_E, P_E)\)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #94a3b8;"></span>
+            <span style="color: var(--text-secondary);">Gray Dots: Historical Equilibrium Cloud</span>
+          </div>
+        </div>
+
+        <!-- SVG Visual Area -->
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 300px; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); overflow: hidden; padding: 1rem;">
+          <svg id="simultaneitySvg" viewBox="0 0 600 300" style="width: 100%; max-width: 600px; height: auto;" aria-label="Supply and Demand Simultaneity Plot">
+            <!-- Rendered by JS -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Lab Insight -->
+        <div class="lab-insight-box" style="margin-top: 1.25rem; padding: 1rem 1.25rem; background: rgba(37, 99, 235, 0.05); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-xs);">
+          <h4 id="labSimTitle" style="margin: 0 0 0.25rem 0; font-size: 0.95rem; color: var(--accent-primary);">COST SHIFTER TRACES OUT DEMAND</h4>
+          <p id="labSimText" style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+            When the cost instrument z moves from Low to High while demand shocks are held constant, the supply curve translates along the demand curve. The resulting equilibrium points trace the true downward-sloping demand curve.
+          </p>
+        </div>
+
+        <!-- Visual Explanation Grid -->
+        <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+          <div style="padding: 0.9rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">WHAT YOU ARE SEEING</div>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Market supply and demand intersection with an underlying historical cloud of equilibrium outcomes.
+            </p>
+          </div>
+          <div style="padding: 0.9rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">WHAT TO NOTICE</div>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Changing &epsilon; moves demand right/left. Both P and Q rise together, confusing naive OLS with an upward slope.
+            </p>
+          </div>
+          <div style="padding: 0.9rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">HOW IV IDENTIFIES</div>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              By holding &epsilon; orthogonal and shifting only supply via z, the price movements isolate the true causal demand response.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 6: Quick Check -->
+    <div class="quick-check-card" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <span style="font-size: 1.1rem;">💡</span>
+        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">QUICK CHECK</h3>
+      </div>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+        Why is price endogenous in the demand equation under simultaneous market equilibrium?
+      </p>
+
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint114">Hint</button>
+        <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol114">Show Solution</button>
+      </div>
+
+      <div class="hint-content" id="hint114" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <strong>HINT:</strong> Examine the solved reduced-form equation for price from the market-clearing condition \(Q_D = Q_S\).
+      </div>
+
+      <div class="solution-content" id="sol114" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.4rem;">
+          <strong>ANSWER:</strong> Because equilibrium price depends partly on the demand disturbance term \(\varepsilon\).
+        </p>
+        <p style="margin: 0; color: var(--text-secondary);">
+          <strong>WHY?</strong> Setting \(Q_D = Q_S\) and solving for price yields \(\text{price} = \frac{\gamma_2}{\beta_1 - \gamma_1} z + \frac{\nu - \varepsilon}{\beta_1 - \gamma_1}\). Because the demand shock \(\varepsilon\) enters directly into the determination of price, \(\text{Cov}(\text{price}, \varepsilon) \ne 0\). This violates the OLS exogeneity assumption and creates simultaneity bias.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>In simultaneous market equilibrium, observed data represent intersections of supply and demand schedules rather than single curves.</li>
+        <li>Solving \(Q_D = Q_S\) reveals that market price contains the demand error \(\varepsilon\), proving that price is endogenous in naive demand regressions.</li>
+        <li>The reduced-form equations express endogenous price and quantity solely as functions of exogenous instruments and disturbances.</li>
+        <li>An exogenous supply cost shifter \(z\) shifts the supply curve along the demand curve, cleanly identifying the causal demand parameter \(\beta_1\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">11.3 Simple IV Examples &amp; Two-Stage Intuition</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">11.5 General IV / 2SLS &amp; Identification</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 11.4 Script -->
+  <script>
+    (function() {
+      let zLevel = 0; // -1 (low), 0 (base), +1 (high)
+      let epsLevel = 0; // -1 (neg), 0 (zero), +1 (pos)
+
+      const btnZLow = document.getElementById('btnZLow');
+      const btnZBase = document.getElementById('btnZBase');
+      const btnZHigh = document.getElementById('btnZHigh');
+      const btnEpsNeg = document.getElementById('btnEpsNeg');
+      const btnEpsZero = document.getElementById('btnEpsZero');
+      const btnEpsPos = document.getElementById('btnEpsPos');
+
+      const metricP = document.getElementById('metricP');
+      const metricQ = document.getElementById('metricQ');
+      const labSimTitle = document.getElementById('labSimTitle');
+      const labSimText = document.getElementById('labSimText');
+      const svg = document.getElementById('simultaneitySvg');
+
+      // Model: Q_D = 10 - 1.0 * P + eps
+      // Model: Q_S = 0 + 1.0 * P - 2.0 * z
+      // Equilibrium: 10 - P + eps = P - 2z => 2P = 10 + 2z + eps => P = 5 + z + 0.5*eps
+      // Q = 5 - z + 0.5*eps
+
+      const cloudPoints = [
+        { z: -1.2, eps: 1.1 }, { z: -0.8, eps: -0.9 }, { z: 0.3, eps: 1.4 },
+        { z: 0.9, eps: -1.2 }, { z: -0.4, eps: 0.2 }, { z: 1.1, eps: 0.8 },
+        { z: -1.0, eps: -0.3 }, { z: 0.5, eps: -0.7 }, { z: 0.1, eps: 0.9 }
+      ];
+
+      function updateSim() {
+        btnZLow.className = zLevel === -1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnZBase.className = zLevel === 0 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnZHigh.className = zLevel === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        btnEpsNeg.className = epsLevel === -1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnEpsZero.className = epsLevel === 0 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnEpsPos.className = epsLevel === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        const curP = 5.0 + (zLevel * 1.5) + (epsLevel * 1.0);
+        const curQ = 5.0 - (zLevel * 1.5) + (epsLevel * 1.0);
+
+        metricP.textContent = 'P = ' + curP.toFixed(2);
+        metricQ.textContent = 'Q = ' + curQ.toFixed(2);
+
+        if (epsLevel !== 0) {
+          labSimTitle.textContent = 'DEMAND SHOCK SHIFTS CURVE OUTWARD / INWARD';
+          labSimTitle.style.color = '#dc2626';
+          labSimText.textContent = 'Demand shock ε changes consumer tastes, shifting the blue demand curve. Notice both P and Q move in the same direction, generating positive correlation between price and the demand disturbance.';
+        } else {
+          labSimTitle.textContent = 'COST SHIFTER TRACES OUT DEMAND SCHEDULE';
+          labSimTitle.style.color = 'var(--accent-primary)';
+          labSimText.textContent = 'With demand shock held at zero, changing the cost instrument z translates only the supply curve. The resulting equilibrium points trace the true downward-sloping demand curve (β₁ = -1.00).';
+        }
+
+        renderCurves(curP, curQ);
+      }
+
+      function renderCurves(eqP, eqQ) {
+        svg.innerHTML = '';
+        const width = 600;
+        const height = 300;
+        const pad = { top: 30, right: 40, bottom: 45, left: 60 };
+
+        function scaleQ(q) {
+          return pad.left + ((q - 0) / (12 - 0)) * (width - pad.left - pad.right);
+        }
+        function scaleP(p) {
+          return height - pad.bottom - ((p - 0) / (12 - 0)) * (height - pad.top - pad.bottom);
+        }
+
+        // Axes
+        const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        axisGroup.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.setAttribute('stroke-width', '1.5');
+
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', pad.left);
+        xAxis.setAttribute('x2', width - pad.right);
+        xAxis.setAttribute('y1', height - pad.bottom);
+        xAxis.setAttribute('y2', height - pad.bottom);
+        axisGroup.appendChild(xAxis);
+
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', pad.left);
+        yAxis.setAttribute('x2', pad.left);
+        yAxis.setAttribute('y1', pad.top);
+        yAxis.setAttribute('y2', height - pad.bottom);
+        axisGroup.appendChild(yAxis);
+        svg.appendChild(axisGroup);
+
+        // Labels
+        const lblX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lblX.setAttribute('x', width - pad.right);
+        lblX.setAttribute('y', height - 12);
+        lblX.setAttribute('text-anchor', 'end');
+        lblX.setAttribute('font-family', 'var(--font-mono)');
+        lblX.setAttribute('font-size', '11');
+        lblX.setAttribute('fill', 'var(--text-muted)');
+        lblX.textContent = 'Quantity (Q)';
+        svg.appendChild(lblX);
+
+        const lblY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lblY.setAttribute('x', pad.left);
+        lblY.setAttribute('y', 18);
+        lblY.setAttribute('text-anchor', 'start');
+        lblY.setAttribute('font-family', 'var(--font-mono)');
+        lblY.setAttribute('font-size', '11');
+        lblY.setAttribute('fill', 'var(--text-muted)');
+        lblY.textContent = 'Price (P)';
+        svg.appendChild(lblY);
+
+        // Draw Historical Cloud
+        cloudPoints.forEach(pt => {
+          const pVal = 5.0 + (pt.z * 1.5) + (pt.eps * 1.0);
+          const qVal = 5.0 - (pt.z * 1.5) + (pt.eps * 1.0);
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', scaleQ(qVal));
+          circle.setAttribute('cy', scaleP(pVal));
+          circle.setAttribute('r', '3.5');
+          circle.setAttribute('fill', '#94a3b8');
+          circle.setAttribute('opacity', '0.6');
+          svg.appendChild(circle);
+        });
+
+        // Demand Curve: Q = (10 + 2*epsLevel) - P => P = (10 + 2*epsLevel) - Q
+        const dIntercept = 10 + (epsLevel * 2);
+        const dLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        dLine.setAttribute('x1', scaleQ(1));
+        dLine.setAttribute('y1', scaleP(dIntercept - 1));
+        dLine.setAttribute('x2', scaleQ(9));
+        dLine.setAttribute('y2', scaleP(dIntercept - 9));
+        dLine.setAttribute('stroke', '#2563eb');
+        dLine.setAttribute('stroke-width', '2.5');
+        svg.appendChild(dLine);
+
+        // Supply Curve: Q = P - 3*zLevel => P = Q + 3*zLevel
+        const sShift = zLevel * 3;
+        const sLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        sLine.setAttribute('x1', scaleQ(1));
+        sLine.setAttribute('y1', scaleP(1 + sShift));
+        sLine.setAttribute('x2', scaleQ(9));
+        sLine.setAttribute('y2', scaleP(9 + sShift));
+        sLine.setAttribute('stroke', '#059669');
+        sLine.setAttribute('stroke-width', '2.5');
+        svg.appendChild(sLine);
+
+        // Equilibrium Point
+        const eqCirc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        eqCirc.setAttribute('cx', scaleQ(eqQ));
+        eqCirc.setAttribute('cy', scaleP(eqP));
+        eqCirc.setAttribute('r', '7');
+        eqCirc.setAttribute('fill', '#7c3aed');
+        eqCirc.setAttribute('stroke', '#ffffff');
+        eqCirc.setAttribute('stroke-width', '2');
+        svg.appendChild(eqCirc);
+
+        // Equilibrium dotted guidelines
+        const qGuide = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        qGuide.setAttribute('x1', scaleQ(eqQ));
+        qGuide.setAttribute('y1', scaleP(eqP));
+        qGuide.setAttribute('x2', scaleQ(eqQ));
+        qGuide.setAttribute('y2', height - pad.bottom);
+        qGuide.setAttribute('stroke', '#7c3aed');
+        qGuide.setAttribute('stroke-dasharray', '3 3');
+        svg.appendChild(qGuide);
+
+        const pGuide = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        pGuide.setAttribute('x1', pad.left);
+        pGuide.setAttribute('y1', scaleP(eqP));
+        pGuide.setAttribute('x2', scaleQ(eqQ));
+        pGuide.setAttribute('y2', scaleP(eqP));
+        pGuide.setAttribute('stroke', '#7c3aed');
+        pGuide.setAttribute('stroke-dasharray', '3 3');
+        svg.appendChild(pGuide);
+      }
+
+      btnZLow.addEventListener('click', () => { zLevel = -1; updateSim(); });
+      btnZBase.addEventListener('click', () => { zLevel = 0; updateSim(); });
+      btnZHigh.addEventListener('click', () => { zLevel = 1; updateSim(); });
+
+      btnEpsNeg.addEventListener('click', () => { epsLevel = -1; updateSim(); });
+      btnEpsZero.addEventListener('click', () => { epsLevel = 0; updateSim(); });
+      btnEpsPos.addEventListener('click', () => { epsLevel = 1; updateSim(); });
+
+      // Quick Check toggles
+      const btnHint = document.getElementById('btnHint114');
+      const hint = document.getElementById('hint114');
+      const btnSol = document.getElementById('btnSol114');
+      const sol = document.getElementById('sol114');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateSim();
+    })();
+  </script>
+</body>
+</html>

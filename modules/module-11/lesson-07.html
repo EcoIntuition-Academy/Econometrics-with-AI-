@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11.7: 2SLS, Projection Matrices &amp; Overidentification — Econometrics with AI</title>
+  <meta name="description" content="Master the Two-Stage Least Squares estimator when instruments exceed regressors, derive the projection matrix PZ, contrast just-identified and overidentified systems, and review Module 11.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-11" data-lesson="7">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 11: Instrumental Variables &amp; 2SLS</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 11</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 11</a>
+          <span class="module-nav-title">Instrumental Variables &amp; 2SLS</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 7 of 7 &middot; 2SLS, Projection Matrices &amp; Overidentification</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 11 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.1 Endogeneity &amp; Why OLS Can Fail</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.2 Instrumental Variables &amp; the Three Criteria</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.3 Simple IV Examples &amp; Two-Stage Intuition</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.4 Simultaneity: Supply, Demand &amp; Price IV</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.5 General IV / 2SLS &amp; Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.6 IV in Matrix Form: Exactly Identified</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">11.7 2SLS, Projection Matrices &amp; Overidentification</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+          </div>
+          <span class="progress-text">100%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 11.7</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">2SLS &amp; Projection</span>
+      </div>
+      <h1 class="lesson-hero-title">2SLS, Projection Matrices &amp; Overidentification</h1>
+      <p class="lesson-hero-lead">
+        Formulate Two-Stage Least Squares when instruments exceed regressors, derive the projection matrix onto the instrument subspace, compare just-identified and overidentified systems, and review Module 11.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Understand why the simple IV matrix formula fails when instruments exceed endogenous regressors (\(L > K\)).</li>
+        <li>Define the projection matrix \(\mathbf{P_Z} = \mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\) and interpret it geometrically.</li>
+        <li>Derive the First Stage in matrix form: \(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\).</li>
+        <li>Derive the Second Stage 2SLS estimator: \(\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\).</li>
+        <li>Compare just-identified (\(L = K\)) and overidentified (\(L > K\)) systems, recognizing when 2SLS reduces to simple IV.</li>
+        <li>Synthesize the complete Module 11 curriculum using the final comparison table and comprehensive review cards.</li>
+      </ul>
+    </div>
+
+    <!-- Study Section 1: The Overidentified Case & Why Simple IV Fails -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Overidentified Setup</span>
+          <h2 class="section-title">The Overidentified Case: \(L > K\)</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Let outcome \(\mathbf{y}\) be \(n \times 1\), endogenous regressors \(\mathbf{X}\) be \(n \times K\), and instruments \(\mathbf{Z}\) be \(n \times L\), where:
+        </p>
+
+        <div class="equation-container" style="text-align: center; margin: 1.25rem 0;">
+          \[L > K\]
+        </div>
+
+        <div class="definition-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(239, 68, 68, 0.04); border-left: 4px solid #ef4444; border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2); border-left-width: 4px;">
+          <h4 style="margin: 0 0 0.4rem 0; color: #dc2626;">WHY THE SIMPLE IV FORMULA NO LONGER APPLIES</h4>
+          <p style="margin: 0; color: var(--text-secondary); line-height: 1.6;">
+            In the exactly identified case, the IV estimator was \(\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\). But when \(L > K\), the cross-product matrix \(\mathbf{Z}'\mathbf{X}\) has dimension \(L \times K\). <strong>It is a rectangular matrix and cannot be inverted</strong>.
+          </p>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">
+            There are more moment equations than unknown parameters. To use all the available information, we must project \(\mathbf{X}\) into the column space of \(\mathbf{Z}\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 2: The Projection Matrix P_Z -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Geometric Projection</span>
+          <h2 class="section-title">The Projection Matrix \(\mathbf{P_Z}\)</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          The projection matrix onto the column space of instruments \(\mathbf{Z}\) is defined as:
+        </p>
+
+        <div class="equation-container" style="text-align: center; margin: 1.25rem 0;">
+          \[\mathbf{P_Z} = \mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\]
+        </div>
+
+        <p>
+          \(\mathbf{P_Z}\) is an \(n \times n\) symmetric and idempotent matrix possessing two fundamental properties:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+          <div style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="color: #7c3aed;">Symmetric:</strong>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; margin: 0.3rem 0; color: var(--text-primary);">
+              \[\mathbf{P_Z}' = \mathbf{P_Z}\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">Transposing the projection matrix yields the same matrix.</p>
+          </div>
+          <div style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="color: #059669;">Idempotent:</strong>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; margin: 0.3rem 0; color: var(--text-primary);">
+              \[\mathbf{P_Z}\mathbf{P_Z} = \mathbf{P_Z}\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">Projecting a second time onto the same space leaves vectors unchanged.</p>
+          </div>
+        </div>
+
+        <div class="intuition-box" style="padding: 1.25rem; background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-sm);">
+          <h4 style="margin: 0 0 0.3rem 0; color: var(--color-primary);">Projection Intuition: Fitted Values</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Multiplying any vector or matrix by \(\mathbf{P_Z}\) produces the fitted values from an OLS regression on \(\mathbf{Z}\). Therefore, \(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\) represents the fitted values from regressing the endogenous regressors \(\mathbf{X}\) onto the full set of instruments \(\mathbf{Z}\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 3: Step-by-Step Derivation of 2SLS -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Derivation Journey</span>
+          <h2 class="section-title">Step-by-Step Derivation of 2SLS</h2>
+        </div>
+      </div>
+
+      <div class="derivation-journey-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+        
+        <div class="journey-goal" style="padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">DERIVATION GOAL</span>
+          <h3 style="margin: 0.25rem 0 0 0; color: var(--text-primary); font-size: 1.15rem;">Show How 2SLS Uses the Projection of \(\mathbf{X}\) onto \(\mathbf{Z}\)</h3>
+        </div>
+
+        <div class="journey-steps" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #7c3aed; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #7c3aed; font-weight: 600;">STEP 1: FIRST STAGE (PROJECT X ONTO Z)</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Project the endogenous regressors \(\mathbf{X}\) onto the column space of instruments \(\mathbf{Z}\):
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary);">
+              \[\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X} = \mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\mathbf{X}\]
+            </div>
+          </div>
+
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #7c3aed; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #7c3aed; font-weight: 600;">STEP 2: SECOND STAGE (RUN OLS OF y ON X̂)</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Run Ordinary Least Squares of \(\mathbf{y}\) on the fitted regressors \(\hat{\mathbf{X}}\):
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary);">
+              \[\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\hat{\mathbf{X}}'\hat{\mathbf{X}})^{-1}\hat{\mathbf{X}}'\mathbf{y}\]
+            </div>
+          </div>
+
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #059669; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #059669; font-weight: 600;">STEP 3: SUBSTITUTE PROJECTION DEFINITION</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Substitute \(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\) into the second-stage estimator:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary); line-height: 2;">
+              \[\begin{aligned}
+                \hat{\boldsymbol{\beta}}_{\text{2SLS}} &= [(\mathbf{P_Z}\mathbf{X})'(\mathbf{P_Z}\mathbf{X})]^{-1} (\mathbf{P_Z}\mathbf{X})'\mathbf{y} \\
+                &= [\mathbf{X}'\mathbf{P_Z}'\mathbf{P_Z}\mathbf{X}]^{-1} \mathbf{X}'\mathbf{P_Z}'\mathbf{y}
+              \end{aligned}\]
+            </div>
+          </div>
+
+          <div class="journey-step" style="padding: 1.25rem; background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); border-left: 4px solid #059669; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #059669; font-weight: 700;">STEP 4: APPLY SYMMETRY &amp; IDEMPOTENCY</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Because \(\mathbf{P_Z}' = \mathbf{P_Z}\) and \(\mathbf{P_Z}\mathbf{P_Z} = \mathbf{P_Z}\), we have \(\mathbf{P_Z}'\mathbf{P_Z} = \mathbf{P_Z}\). This yields the famous closed-form 2SLS matrix formula:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.3rem; font-weight: 700; color: #059669; margin: 0.75rem 0;">
+              \[\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\]
+            </div>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+              <strong>Intuition:</strong> You can think of this as &ldquo;instrumenting&rdquo; \(\mathbf{X}\) with its orthogonal projection onto \(\mathbf{Z}\), then applying OLS.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 4: Comparison with Just-Identified Case -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Equivalence Analysis</span>
+          <h2 class="section-title">Just-Identified vs. Overidentified Systems</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          The lecture notes provide a critical conceptual link between simple IV and 2SLS:
+        </p>
+
+        <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #2563eb; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #2563eb;">JUST IDENTIFIED (\(L = K\))</h4>
+              <span class="badge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">2SLS = IV</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              When \(L = K\), \(\mathbf{Z}\) and \(\mathbf{X}\) are both \(n \times K\). The cross-product \(\mathbf{Z}'\mathbf{X}\) is square and invertible.
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1rem; color: var(--text-primary); padding: 0.5rem; background: var(--surface-subtle); border-radius: var(--radius-xs);">
+              \[\hat{\boldsymbol{\beta}}_{\text{2SLS}} = \hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\]
+            </div>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              In this case, \(\hat{\mathbf{X}}\) spans the exact same column space as \(\mathbf{Z}\), and 2SLS simplifies algebraically to simple IV.
+            </p>
+          </div>
+
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #059669; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #059669;">OVERIDENTIFIED (\(L > K\))</h4>
+              <span class="badge" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: 600;">2SLS Required</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              When \(L > K\), there are more instruments than endogenous regressors. \(\mathbf{Z}'\mathbf{X}\) is not square and cannot be inverted.
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1rem; color: var(--text-primary); padding: 0.5rem; background: var(--surface-subtle); border-radius: var(--radius-xs);">
+              \[\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\]
+            </div>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              2SLS optimally combines the \(L\) available moment conditions into a \(K\)-dimensional weighted linear combination.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="intuition-box" style="padding: 1rem 1.25rem; background: rgba(217, 119, 6, 0.05); border: 1px solid rgba(217, 119, 6, 0.2); border-radius: var(--radius-sm);">
+          <strong style="color: #d97706;">Efficiency vs. Validity Note from Lecture:</strong>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
+            The lecture notes note that overidentification (having more instruments than regressors) may improve efficiency by utilizing additional variation, but each additional instrument also raises instrument-validity concerns that must be justified economically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 5: Module 11 Final Review Map & Comparison Table -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Comprehensive Review</span>
+          <h2 class="section-title">Module 11 Final Review Map &amp; Estimator Comparison</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Below is the complete conceptual workflow developed throughout Module 11:
+        </p>
+
+        <!-- Final Review Flowchart -->
+        <div style="padding: 1.5rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin: 1.5rem 0; overflow-x: auto;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; min-width: 500px;">
+            
+            <div style="padding: 0.6rem 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs); font-weight: 600;">
+              OLS Model: \(y = X\beta + \varepsilon\)
+            </div>
+            <div style="color: var(--text-muted); font-size: 1rem;">&darr;</div>
+
+            <div style="padding: 0.6rem 1.25rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-xs); font-weight: 600; color: #dc2626;">
+              Endogeneity: \(\mathbb{E}[X\varepsilon] \ne 0\) &implies; OLS Biased &amp; Inconsistent
+            </div>
+            <div style="color: var(--text-muted); font-size: 1rem;">&darr;</div>
+
+            <div style="padding: 0.6rem 1.25rem; background: rgba(124, 58, 237, 0.08); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: var(--radius-xs); font-weight: 600; color: #7c3aed;">
+              Find Instrument \(Z\): Validity + Relevance + Monotonicity
+            </div>
+            <div style="color: var(--text-muted); font-size: 1rem;">&darr;</div>
+
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <div style="padding: 0.6rem 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs); text-align: center;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">FIRST STAGE</span><br>
+                <strong>\(Z \to \hat{X}\)</strong>
+              </div>
+              <span style="color: var(--text-muted);">&rarr;</span>
+              <div style="padding: 0.6rem 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs); text-align: center;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">SECOND STAGE</span><br>
+                <strong>\(\hat{X} \to y\)</strong>
+              </div>
+            </div>
+            <div style="color: var(--text-muted); font-size: 1rem;">&darr;</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%;">
+              <div style="padding: 0.75rem; background: var(--surface); border: 1px solid #2563eb; border-radius: var(--radius-xs); text-align: center;">
+                <span style="font-size: 0.8rem; font-weight: 600; color: #2563eb;">JUST IDENTIFIED (\(L = K\))</span><br>
+                <div style="font-family: var(--font-mono); font-size: 0.95rem; margin-top: 0.25rem;">\(\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\)</div>
+              </div>
+              <div style="padding: 0.75rem; background: var(--surface); border: 1px solid #059669; border-radius: var(--radius-xs); text-align: center;">
+                <span style="font-size: 0.8rem; font-weight: 600; color: #059669;">OVERIDENTIFIED (\(L > K\))</span><br>
+                <div style="font-family: var(--font-mono); font-size: 0.95rem; margin-top: 0.25rem;">\(\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\)</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Comparative Summary Table -->
+        <h4 style="margin: 1.5rem 0 0.75rem 0; color: var(--text-primary);">Comparative Estimator Summary</h4>
+        <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-strong); background: var(--surface-subtle);">
+                <th style="padding: 0.75rem;">Estimator</th>
+                <th style="padding: 0.75rem;">Uses X Directly?</th>
+                <th style="padding: 0.75rem;">Uses Instruments?</th>
+                <th style="padding: 0.75rem;">Handles Endogeneity?</th>
+                <th style="padding: 0.75rem;">Identification Setting</th>
+                <th style="padding: 0.75rem;">Matrix Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600; color: #dc2626;">OLS</td>
+                <td style="padding: 0.75rem;">Yes</td>
+                <td style="padding: 0.75rem;">No</td>
+                <td style="padding: 0.75rem; color: #dc2626;">No (Biased)</td>
+                <td style="padding: 0.75rem;">Exogenous \(X\)</td>
+                <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">\((\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}\)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600; color: #2563eb;">Simple IV</td>
+                <td style="padding: 0.75rem;">In Cross-Product</td>
+                <td style="padding: 0.75rem;">Yes (\(\mathbf{Z}\))</td>
+                <td style="padding: 0.75rem; color: #059669;">Yes (Consistent)</td>
+                <td style="padding: 0.75rem;">Exactly Identified (\(L = K\))</td>
+                <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">\((\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600; color: #059669;">2SLS</td>
+                <td style="padding: 0.75rem;">Via Projection \(\hat{\mathbf{X}}\)</td>
+                <td style="padding: 0.75rem;">Yes (\(\mathbf{P_Z}\))</td>
+                <td style="padding: 0.75rem; color: #059669;">Yes (Consistent)</td>
+                <td style="padding: 0.75rem;">Overidentified (\(L \ge K\))</td>
+                <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">\((\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 18 Review Cards -->
+        <h4 style="margin: 1.5rem 0 0.75rem 0; color: var(--text-primary);">Module 11 Core Concepts Lexicon</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+          
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Endogeneity</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\mathbb{E}[X\varepsilon] \ne 0\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Exogeneity</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\mathbb{E}[X\varepsilon] = 0\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Instrument \(Z\)</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">Predicts \(X\), orthogonal to \(\varepsilon\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Validity</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\mathbb{E}[Z\varepsilon] = 0\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Exclusion Restriction</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">\(Z\) affects \(y\) only through \(X\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Relevance</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\text{Cov}(Z, X) \ne 0\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Monotonicity</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">Rules out defiers (LATE)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">First Stage</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(x_i = Z\pi + \nu_i \implies \hat{x}_i\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Second Stage</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(y = \hat{X}\beta + \varepsilon\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Simultaneity</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">Joint determination (\(Q_D = Q_S\))</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Excluded Instrument</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">\(Z_E\) omitted from stage 2</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Included Control</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">\(Z_C\) appears in both stages</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Exactly Identified</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(L = K\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Overidentified</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(L > K\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Underidentified</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(L < K\) (Not estimable)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Projection \(\mathbf{P_Z}\)</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">Fitted Regressors</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\)</p>
+          </div>
+
+          <div style="padding: 0.75rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <strong style="font-size: 0.85rem; color: var(--text-primary);">2SLS Estimator</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">\((\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\)</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 6: Quick Check -->
+    <div class="quick-check-card" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <span style="font-size: 1.1rem;">💡</span>
+        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">QUICK CHECK</h3>
+      </div>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+        What is the algebraic expression for the projection matrix \(\mathbf{P_Z}\), and what does \(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\) represent geometrically?
+      </p>
+
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint117">Hint</button>
+        <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol117">Show Solution</button>
+      </div>
+
+      <div class="hint-content" id="hint117" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <strong>HINT:</strong> Consider the standard OLS &ldquo;hat matrix&rdquo; when regressing onto the columns of \(\mathbf{Z}\).
+      </div>
+
+      <div class="solution-content" id="sol117" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.4rem;">
+          <strong>ANSWER:</strong> \(\mathbf{P_Z} = \mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\), and \(\hat{\mathbf{X}}\) represents the fitted values from regressing \(\mathbf{X}\) onto \(\mathbf{Z}\).
+        </p>
+        <p style="margin: 0; color: var(--text-secondary);">
+          <strong>WHY?</strong> \(\mathbf{P_Z}\) is the orthogonal projection matrix onto the subspace spanned by the columns of \(\mathbf{Z}\). Multiplying \(\mathbf{X}\) by \(\mathbf{P_Z}\) projects each endogenous regressor onto this instrument subspace, extracting only the exogenous variation \(\hat{\mathbf{X}}\) to be used in the second-stage causal regression.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>When instruments exceed endogenous regressors (\(L > K\)), \(\mathbf{Z}'\mathbf{X}\) is not square; 2SLS resolves this by projecting onto \(\mathbf{Z}\).</li>
+        <li>The projection matrix \(\mathbf{P_Z} = \mathbf{Z}(\mathbf{Z}'\mathbf{Z})^{-1}\mathbf{Z}'\) projects variables into the instrument column space.</li>
+        <li>The First Stage produces \(\hat{\mathbf{X}} = \mathbf{P_Z}\mathbf{X}\), and the Second Stage yields \(\hat{\boldsymbol{\beta}}_{\text{2SLS}} = (\mathbf{X}'\mathbf{P_Z}\mathbf{X})^{-1}\mathbf{X}'\mathbf{P_Z}\mathbf{y}\).</li>
+        <li>When \(L = K\), \(\hat{\mathbf{X}} = \mathbf{Z}\) algebraically and 2SLS reduces to the classical just-identified IV estimator.</li>
+        <li>Overidentification can improve asymptotic efficiency but requires careful economic justification of instrument validity.</li>
+        <li>Proper econometric software must be used to ensure standard errors account for generated regressor uncertainty.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-06.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">11.6 IV in Matrix Form: Exactly Identified</span>
+      </a>
+      <a href="index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Module Overview &rarr;</span>
+        <span class="nav-btn-title">Return to Module 11 Overview</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Quick Check Script -->
+  <script>
+    (function() {
+      const btnHint = document.getElementById('btnHint117');
+      const hint = document.getElementById('hint117');
+      const btnSol = document.getElementById('btnSol117');
+      const sol = document.getElementById('sol117');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+    })();
+  </script>
+</body>
+</html>

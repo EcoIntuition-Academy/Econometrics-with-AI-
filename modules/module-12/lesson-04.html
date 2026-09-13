@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12.4: Measurement Error in y &amp; x — Econometrics with AI</title>
+  <meta name="description" content="Contrast the econometric consequences of classical measurement error in the dependent variable versus the independent variable, examine exogeneity violations, and observe attenuation bias.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-12" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 12</a>
+          <span class="module-nav-title">IV Diagnostics &amp; Measurement Error</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Measurement Error in y &amp; x</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 12 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.1 Do We Need IV? Hausman &amp; Wu Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.2 Testing Instrument Validity: Sargan</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.3 Instrument Strength &amp; Weak IVs</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">12.4 Measurement Error in y &amp; x</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.5 Attenuation Bias &amp; IV Solution</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.6 Propagation of Error &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 66.7%;"></div>
+          </div>
+          <span class="progress-text">67%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 12.4</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Measurement Error</span>
+      </div>
+      <h1 class="lesson-hero-title">Measurement Error in Dependent and Independent Variables</h1>
+      <p class="lesson-hero-lead">
+        Classical measurement error has different consequences depending on whether the noise enters the outcome or the regressor.
+      </p>
+    </header>
+
+    <!-- Learning Objectives -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Define classical measurement error in \(y\) and \(x\).</li>
+        <li>Explain why classical error in \(y\) increases uncertainty without creating slope bias under the maintained assumptions.</li>
+        <li>Explain why classical error in \(x\) creates regressor–error correlation and attenuation bias.</li>
+        <li>Compare the econometric consequences of outcome noise and regressor noise.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Classical Framework -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 1</span>
+        <h2 class="study-section-title">1. Classical Measurement-Error Framework</h2>
+      </div>
+
+      <!-- Small intro intuition callout -->
+      <div class="callout callout-info" style="margin-bottom: var(--space-md);">
+        <div class="callout-header">
+          <span class="callout-badge">FOUNDATIONAL PREMISE</span>
+          <h4 class="callout-title">Location Determines the Econometric Consequence</h4>
+        </div>
+        <div class="callout-body">
+          Observed economic variables are often noisy. The key question is whether the measurement error enters \(y\) or \(x\), because the econometric consequences differ sharply.
+        </div>
+      </div>
+
+      <!-- True Model Equation Card -->
+      <div class="equation-card">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-size: var(--text-xs); margin-bottom: 0.5rem;">TRUE STRUCTURAL MODEL</span>
+        <div class="equation-display">
+          $$y^* = \alpha + x^*\beta + \varepsilon, \quad \text{with } \mathbb{E}[\varepsilon \mid x^*] = 0$$
+        </div>
+        <p class="equation-note">
+          \(y^*\) and \(x^*\) represent the true underlying latent constructs of economic interest.
+        </p>
+      </div>
+
+      <!-- Two Compact Measurement Cards -->
+      <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+        <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+          <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">OBSERVED OUTCOME</span>
+          <h4 style="margin: 0 0 0.35rem 0; font-size: 1.1rem; font-weight: 600;">\(y = y^* + v\)</h4>
+          <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+            Where \(v\) is additive measurement error contaminating the dependent variable.
+          </p>
+        </div>
+        <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+          <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">OBSERVED REGRESSOR</span>
+          <h4 style="margin: 0 0 0.35rem 0; font-size: 1.1rem; font-weight: 600;">\(x = x^* + u\)</h4>
+          <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+            Where \(u\) is additive measurement error contaminating the explanatory variable.
+          </p>
+        </div>
+      </div>
+
+      <!-- Classical Assumptions Callout -->
+      <div class="callout callout-neutral" style="margin-top: var(--space-md); background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+        <div style="font-weight: 700; font-size: var(--text-xs); text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; letter-spacing: 0.05em;">CLASSICAL MEASUREMENT-ERROR ASSUMPTIONS</div>
+        <ul style="margin: 0 0 0.5rem 1.25rem; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.6;">
+          <li>Measurement errors have mean zero: \(\mathbb{E}[v] = 0\) and \(\mathbb{E}[u] = 0\).</li>
+          <li>Measurement noise is uncorrelated with the true variables in the maintained setup: \(\text{Cov}(v, x^*) = 0\) and \(\text{Cov}(u, x^*) = 0\).</li>
+          <li>Measurement noise is uncorrelated with the structural disturbance: \(\text{Cov}(v, \varepsilon) = 0\) and \(\text{Cov}(u, \varepsilon) = 0\).</li>
+          <li>Outcome- and regressor-measurement errors are independent where both are considered: \(\text{Cov}(v, u) = 0\).</li>
+        </ul>
+        <div class="equation-display" style="padding: 0.4rem 0 0 0; border-top: 1px dashed var(--border-subtle); margin-top: 0.4rem; font-size: 0.88rem;">
+          $$\text{Cov}(v, u) = 0, \quad \text{Cov}(v, x^*) = 0, \quad \text{Cov}(u, x^*) = 0, \quad \text{Cov}(v, \varepsilon) = 0, \quad \text{Cov}(u, \varepsilon) = 0$$
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Error in y -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 2</span>
+        <h2 class="study-section-title">2. Measurement Error in the Dependent Variable</h2>
+      </div>
+
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">ALGEBRAIC DERIVATION</span>
+          <h3 class="derivation-journey-title">Measurement Error in the Dependent Variable</h3>
+        </div>
+        <div class="derivation-goal">
+          <span class="derivation-goal-label">GOAL:</span>
+          <span class="derivation-goal-text">Determine whether classical noise in \(y\) changes the OLS slope.</span>
+        </div>
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Observed Outcome</h4>
+              </div>
+              <p class="derivation-step-desc">We observe \(y\), not the true latent outcome \(y^*\):</p>
+              <div class="derivation-step-math">
+                \[y = y^* + v \implies y^* = y - v\]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Substitute Into the True Model</h4>
+              </div>
+              <p class="derivation-step-desc">Substitute \(y^* = y - v\) into the structural equation \(y^* = \alpha + x^*\beta + \varepsilon\) (assuming \(x = x^*\)):</p>
+              <div class="derivation-step-math">
+                \[y = \alpha + x^*\beta + (\varepsilon + v)\]
+              </div>
+              <p class="derivation-step-desc" style="margin-top: 0.35rem;">Define the composite disturbance \(\varepsilon' = \varepsilon + v\):</p>
+              <div class="derivation-step-math">
+                \[y = \alpha + x^*\beta + \varepsilon'\]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Check Exogeneity</h4>
+              </div>
+              <p class="derivation-step-desc">Under the maintained classical assumptions, the added measurement noise \(v\) is unrelated to \(x^*\):</p>
+              <div class="derivation-step-math">
+                \[\mathbb{E}[\varepsilon' \mid x^*] = \mathbb{E}[\varepsilon + v \mid x^*] = \mathbb{E}[\varepsilon \mid x^*] + \mathbb{E}[v \mid x^*] = 0\]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Variance Consequence</h4>
+              </div>
+              <p class="derivation-step-desc">Under zero covariance between structural shock \(\varepsilon\) and noise \(v\), the error variance expands:</p>
+              <div class="derivation-step-math">
+                \[\text{Var}(\varepsilon') = \text{Var}(\varepsilon + v) = \sigma^2_\varepsilon + \sigma^2_v\]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-success" style="margin-top: var(--space-md);">
+          <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">KEY RESULT</div>
+          Classical measurement error in \(y\) does not create slope attenuation under the maintained assumptions. It increases disturbance variance and reduces precision.
+        </div>
+
+        <div class="big-picture-card" style="margin-top: var(--space-md); padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div class="big-picture-header" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+            <span class="academic-badge" style="background: rgba(37,99,235,0.15); color: #2563eb; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">BIG PICTURE</span>
+            <span style="font-weight: 600; font-size: 0.9rem;">Vertical Noise Only</span>
+          </div>
+          <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+            Noise in the outcome makes the data noisier vertically, but it does not contaminate the explanatory variable.
+          </p>
+        </div>
+      </div>
+
+      <div class="comparison-card" style="background: var(--surface); border-left: 3px solid #2563eb; border-radius: var(--radius-xs); padding: var(--space-md); margin-top: var(--space-md);">
+        <div style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 700; color: #2563eb; margin-bottom: 0.35rem;">UNBIASED, BUT LESS PRECISE</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary);">
+          Under the classical assumptions, measurement error in \(y\) leaves the OLS slope centered on \(\beta\) but increases sampling uncertainty.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Error in x -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 3</span>
+        <h2 class="study-section-title">3. Measurement Error in the Independent Variable</h2>
+      </div>
+
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">ALGEBRAIC DERIVATION</span>
+          <h3 class="derivation-journey-title">Measurement Error in the Independent Variable</h3>
+        </div>
+        <div class="derivation-goal">
+          <span class="derivation-goal-label">GOAL:</span>
+          <span class="derivation-goal-text">Show why classical measurement error in \(x\) creates endogeneity.</span>
+        </div>
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Observed Regressor</h4>
+              </div>
+              <p class="derivation-step-desc">The observed regressor \(x\) is contaminated by measurement noise \(u\):</p>
+              <div class="derivation-step-math">
+                \[x = x^* + u \implies x^* = x - u\]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Substitute Into the Model</h4>
+              </div>
+              <p class="derivation-step-desc">Substitute \(x^* = x - u\) into the true equation \(y = \alpha + x^*\beta + \varepsilon\) (assuming \(y = y^*\)):</p>
+              <div class="derivation-step-math">
+                \[y = \alpha + (x - u)\beta + \varepsilon = \alpha + x\beta + (\varepsilon - \beta u)\]
+              </div>
+              <p class="derivation-step-desc" style="margin-top: 0.35rem;">Define the composite disturbance \(\omega = \varepsilon - \beta u\):</p>
+              <div class="derivation-step-math">
+                \[y = \alpha + x\beta + \omega\]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Notice the Shared Noise</h4>
+              </div>
+              <p class="derivation-step-desc">Observed \(x\) contains \(+u\), while composite disturbance \(\omega\) contains \(-\beta u\):</p>
+              <div class="derivation-step-math">
+                \[x = x^* + u \quad \text{and} \quad \omega = \varepsilon - \beta u\]
+              </div>
+              <p class="derivation-step-desc" style="margin-top: 0.35rem;">Therefore, \(x\) and \(\omega\) share the same measurement-error component.</p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Compute Covariance</h4>
+              </div>
+              <p class="derivation-step-desc">Under the maintained classical assumptions:</p>
+              <div class="derivation-step-math">
+                \[\text{Cov}(x, \omega) = \text{Cov}(x^* + u, \varepsilon - \beta u) = -\beta \text{Var}(u) = -\beta \sigma^2_u\]
+              </div>
+              <p class="derivation-step-desc" style="margin-top: 0.35rem;">Therefore, \(\text{Cov}(x, \omega) \neq 0\) whenever \(\beta \neq 0\) and measurement-error variance is positive.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top: var(--space-md);">
+          <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">KEY RESULT</div>
+          Observed \(x\) is endogenous.
+        </div>
+
+        <div class="big-picture-card" style="margin-top: var(--space-md); padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div class="big-picture-header" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+            <span class="academic-badge" style="background: rgba(220,38,38,0.15); color: #dc2626; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">BIG PICTURE</span>
+            <span style="font-weight: 600; font-size: 0.9rem;">Structural Contamination</span>
+          </div>
+          <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+            Measurement error in \(x\) contaminates both the regressor and the composite disturbance. This is why the problem is much more serious than measurement error in \(y\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Forward reference card -->
+      <div class="comparison-card" style="background: var(--surface); border-left: 3px solid #d97706; border-radius: var(--radius-xs); padding: var(--space-md); margin-top: var(--space-md);">
+        <div style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 700; color: #d97706; margin-bottom: 0.35rem;">NEXT LESSON</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary);">
+          In Lesson 12.5, we will derive the exact attenuation factor \(\lambda\) and show how instrumental variables can restore consistency.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: Comparing Measurement Error in y and x -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 4</span>
+        <h2 class="study-section-title">4. Comparing Measurement Error in y and x</h2>
+      </div>
+
+      <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+        <div class="comparison-card" style="background: var(--surface); border: 1.5px solid #2563eb; border-radius: var(--radius-sm); padding: var(--space-md);">
+          <span class="badge" style="background: #e0e7ff; color: #1d4ed8; font-size: var(--text-xs); margin-bottom: 0.5rem;">INFORMATION / NEUTRAL</span>
+          <h4 style="margin: 0 0 0.75rem 0; font-size: 1.1rem; color: #1d4ed8;">Error in Outcome (y)</h4>
+          <div style="font-size: var(--text-xs); display: grid; gap: 0.5rem; color: var(--text-secondary);">
+            <div><strong style="color: var(--text-primary);">Where noise enters:</strong> Outcome (\(y = y^* + v\))</div>
+            <div><strong style="color: var(--text-primary);">Composite error:</strong> \(\varepsilon' = \varepsilon + v\)</div>
+            <div><strong style="color: var(--text-primary);">Exogeneity:</strong> Preserved under classical assumptions</div>
+            <div><strong style="color: var(--text-primary);">Main effect:</strong> Lower precision; inflated standard errors</div>
+          </div>
+        </div>
+
+        <div class="comparison-card" style="background: var(--surface); border: 1.5px solid #d97706; border-radius: var(--radius-sm); padding: var(--space-md);">
+          <span class="badge" style="background: #fef3c7; color: #b45309; font-size: var(--text-xs); margin-bottom: 0.5rem;">AMBER CAUTION</span>
+          <h4 style="margin: 0 0 0.75rem 0; font-size: 1.1rem; color: #b45309;">Error in Regressor (x)</h4>
+          <div style="font-size: var(--text-xs); display: grid; gap: 0.5rem; color: var(--text-secondary);">
+            <div><strong style="color: var(--text-primary);">Where noise enters:</strong> Regressor (\(x = x^* + u\))</div>
+            <div><strong style="color: var(--text-primary);">Composite error:</strong> \(\omega = \varepsilon - \beta u\)</div>
+            <div><strong style="color: var(--text-primary);">Exogeneity:</strong> Violated (\(\text{Cov}(x, \omega) = -\beta \sigma^2_u \neq 0\))</div>
+            <div><strong style="color: var(--text-primary);">Main effect:</strong> Attenuation bias / inconsistency toward zero</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 12.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 5</span>
+        <h2 class="study-section-title">5. Interactive Lab: Where Is the Measurement Error?</h2>
+      </div>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-header-badge">Interactive Simulation</div>
+          <h3 class="lab-title">Where Is the Measurement Error?</h3>
+          <p class="lab-desc">
+            Compare how measurement noise affects OLS when it enters the outcome versus the regressor.
+          </p>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="lab-controls-bar" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
+          <div>
+            <label style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">
+              Error Location Mode:
+            </label>
+            <div class="btn-group-segmented" role="group">
+              <button type="button" class="btn btn-sm btn-primary" id="btnModeY">Error in y (Outcome)</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnModeX">Error in x (Regressor)</button>
+            </div>
+          </div>
+
+          <div style="min-width: 220px; flex: 1; max-width: 320px;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); font-weight: 600; color: var(--text-muted); margin-bottom: 0.25rem;">
+              <span>Measurement Noise (\(\sigma\)):</span>
+              <span id="noiseVal" style="color: var(--color-primary); font-family: var(--font-mono);">1.00</span>
+            </div>
+            <input type="range" id="noiseSlider" min="0.0" max="3.0" step="0.2" value="1.0" style="width: 100%;">
+          </div>
+        </div>
+
+        <!-- 2x2 Metric Grid -->
+        <div class="metric-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">TRUE PARAMETER</div>
+            <div id="metricTrueBeta" style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin: 0.25rem 0;">β = 2.00</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Structural slope in DGP</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">ESTIMATED OLS SLOPE</div>
+            <div id="metricEstBeta" style="font-size: 1.4rem; font-weight: 700; color: var(--color-primary); margin: 0.25rem 0;">β̂ = 2.01</div>
+            <div id="metricEstBetaDesc" style="font-size: 0.8rem; color: var(--text-secondary);">Fitted regression slope</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">MEASUREMENT NOISE</div>
+            <div id="metricNoiseDisplay" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary); margin: 0.25rem 0;">σ = 1.00</div>
+            <div id="metricSEStatus" style="font-size: 0.8rem; color: var(--text-secondary);">Standard precision</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">STATUS</div>
+            <div id="metricStatus" style="font-size: 1.25rem; font-weight: 700; color: #059669; margin: 0.25rem 0;">Unbiased (Centered)</div>
+            <div id="metricStatusDesc" style="font-size: 0.8rem; color: var(--text-secondary);">Vertical dispersion only</div>
+          </div>
+        </div>
+
+        <!-- External Chart Legend -->
+        <div class="outside-chart-legend" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: var(--space-sm); font-size: var(--text-xs); color: var(--text-secondary);">
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2563eb;"></span> Observed data</div>
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed var(--text-muted);"></span> True relationship</div>
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; background: #2563eb;"></span> OLS fit</div>
+        </div>
+
+        <!-- SVG Shell -->
+        <div class="chart-svg-shell" style="background: var(--surface-secondary, rgba(0,0,0,0.02)); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.5rem; overflow-x: auto;">
+          <svg id="errorSimSvg" viewBox="0 0 680 340" width="100%" height="340" style="display: block; min-width: 500px;"></svg>
+        </div>
+
+        <!-- Lab Insight Callout -->
+        <div class="callout callout-info" style="margin-top: var(--space-md);" id="labInsight">
+          <div class="callout-header">
+            <span class="callout-badge" id="labInsightBadge" style="background: #d1fae5; color: #065f46;">VERTICAL NOISE ONLY</span>
+            <h4 class="callout-title" id="labInsightTitle">Error in y Active: Slope Unbiased</h4>
+          </div>
+          <div class="callout-body" id="labInsightBody">
+            In Error in y mode, data points scatter vertically away from the line. The estimated slope stays close to the true slope of 2.00, but sampling uncertainty increases as noise expands.
+          </div>
+        </div>
+
+        <!-- Canonical 5-card Explanation Grid -->
+        <div class="chart-explanations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT YOU ARE SEEING</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              A scatter plot of \(n=40\) observations. The dashed line depicts the true structural relationship \(y^* = 1.5 + 2.0x^*\), while the solid line depicts the empirical OLS fit.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT TO NOTICE</h4>
+            <p id="noticeText" style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              As measurement noise increases, observations spread further vertically around the true line, while the fitted slope remains centered near 2.00.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHY IT MATTERS</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Noise in the regressor attenuates the estimated relationship, making real economic effects appear weak or insignificant, whereas noise in the outcome only reduces precision.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">ECONOMETRIC INTERPRETATION</h4>
+            <p id="interpretationText" style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Under the classical assumptions, added outcome noise increases uncertainty without generating attenuation bias in the OLS slope.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); grid-column: 1 / -1;">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">TRY THIS</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Switch to <strong>Error in x</strong> mode and drag noise toward 3.00. Observe the observations spreading horizontally and the solid fitted line flattening toward zero.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">6. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why is classical measurement error in \(x\) more damaging to OLS than classical measurement error in \(y\)?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Ask whether the observed regressor becomes correlated with the regression disturbance.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Measurement error in \(x\) causes regressor endogeneity.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Measurement error in \(x\) enters both the observed regressor and the composite disturbance, creating endogeneity. Classical error in \(y\) instead enters the outcome disturbance and mainly reduces precision under the maintained assumptions.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Classical measurement error means observed variables differ from their underlying true values because of noise.</li>
+        <li>Under the maintained classical assumptions, error in \(y\) increases disturbance variance but does not attenuate the OLS slope.</li>
+        <li>Error in \(x\) enters both the observed regressor and the composite disturbance.</li>
+        <li>This creates endogeneity and leads to attenuation bias under the classical setup.</li>
+        <li>The next lesson derives the attenuation factor and shows how IV can address the problem.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">12.3 Instrument Strength &amp; Weak IVs</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">12.5 Attenuation Bias &amp; IV Solution</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 12.4 Script -->
+  <script>
+    (function() {
+      function initLab() {
+        let currentMode = 'y'; // 'y' or 'x'
+        const btnModeY = document.getElementById('btnModeY');
+        const btnModeX = document.getElementById('btnModeX');
+        const noiseSlider = document.getElementById('noiseSlider');
+        const noiseVal = document.getElementById('noiseVal');
+
+        const metricTrueBeta = document.getElementById('metricTrueBeta');
+        const metricEstBeta = document.getElementById('metricEstBeta');
+        const metricNoiseDisplay = document.getElementById('metricNoiseDisplay');
+        const metricSEStatus = document.getElementById('metricSEStatus');
+        const metricStatus = document.getElementById('metricStatus');
+        const metricStatusDesc = document.getElementById('metricStatusDesc');
+
+        const labInsightBadge = document.getElementById('labInsightBadge');
+        const labInsightTitle = document.getElementById('labInsightTitle');
+        const labInsightBody = document.getElementById('labInsightBody');
+        const noticeText = document.getElementById('noticeText');
+        const interpretationText = document.getElementById('interpretationText');
+        const svg = document.getElementById('errorSimSvg');
+
+        // Deterministic Base DGP points: y* = 1.5 + 2.0*x* + eps
+        const baseData = [];
+        const trueAlpha = 1.5;
+        const trueBeta = 2.0;
+
+        for (let i = 0; i < 40; i++) {
+          const xStar = 1.0 + (i / 39) * 6.0;
+          const pseudoEps = Math.sin(i * 1.7) * 0.8 + Math.cos(i * 3.1) * 0.4;
+          const pseudoV = Math.cos(i * 2.3) * 1.1 + Math.sin(i * 4.9) * 0.5;
+          const pseudoU = Math.sin(i * 2.9) * 1.0 + Math.cos(i * 1.3) * 0.6;
+          const yStar = trueAlpha + trueBeta * xStar + pseudoEps;
+          baseData.push({ xStar, yStar, pseudoEps, pseudoV, pseudoU });
+        }
+
+        function updateLab() {
+          if (!btnModeY || !btnModeX || !noiseSlider) return;
+
+          const noiseSd = parseFloat(noiseSlider.value);
+          if (noiseVal) noiseVal.textContent = noiseSd.toFixed(2);
+          if (metricNoiseDisplay) metricNoiseDisplay.textContent = `σ = ${noiseSd.toFixed(2)}`;
+
+          btnModeY.className = currentMode === 'y' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+          btnModeX.className = currentMode === 'x' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+          // Generate observed data depending on mode
+          const pts = baseData.map(d => {
+            let obsX = d.xStar;
+            let obsY = d.yStar;
+            if (currentMode === 'y') {
+              obsY = d.yStar + d.pseudoV * (noiseSd / 1.2);
+            } else {
+              obsX = d.xStar + d.pseudoU * (noiseSd / 1.2);
+            }
+            return { x: obsX, y: obsY };
+          });
+
+          // Compute OLS
+          const n = pts.length;
+          let sumX = 0, sumY = 0;
+          pts.forEach(p => { sumX += p.x; sumY += p.y; });
+          const meanX = sumX / n;
+          const meanY = sumY / n;
+
+          let sxx = 0, sxy = 0;
+          pts.forEach(p => {
+            sxx += (p.x - meanX) * (p.x - meanX);
+            sxy += (p.x - meanX) * (p.y - meanY);
+          });
+
+          const bHat = sxx > 0 ? sxy / sxx : 0;
+          const aHat = meanY - bHat * meanX;
+
+          if (metricTrueBeta) metricTrueBeta.textContent = `β = ${trueBeta.toFixed(2)}`;
+          if (metricEstBeta) metricEstBeta.textContent = `β̂ = ${bHat.toFixed(2)}`;
+
+          if (currentMode === 'y') {
+            if (metricSEStatus) metricSEStatus.textContent = noiseSd > 1.5 ? 'Inflated SE (low precision)' : 'Standard precision';
+            if (metricStatus) {
+              metricStatus.textContent = 'Unbiased (Centered)';
+              metricStatus.style.color = '#059669';
+            }
+            if (metricStatusDesc) metricStatusDesc.textContent = 'Vertical dispersion only';
+
+            if (labInsightBadge) {
+              labInsightBadge.textContent = 'VERTICAL NOISE ONLY';
+              labInsightBadge.style.background = '#d1fae5';
+              labInsightBadge.style.color = '#065f46';
+            }
+            if (labInsightTitle) labInsightTitle.textContent = 'Error in y Active: Slope Unbiased';
+            if (labInsightBody) {
+              labInsightBody.textContent = `In Error in y mode, data points scatter vertically away from the line. The estimated slope (β̂ = ${bHat.toFixed(2)}) stays close to the true slope of 2.00, but sampling uncertainty increases as noise expands.`;
+            }
+            if (noticeText) {
+              noticeText.textContent = 'As measurement noise increases, observations spread further vertically around the true line, while the fitted slope remains centered near 2.00.';
+            }
+            if (interpretationText) {
+              interpretationText.textContent = 'Under the classical assumptions, added outcome noise increases uncertainty without generating attenuation bias in the OLS slope.';
+            }
+          } else {
+            if (metricSEStatus) metricSEStatus.textContent = 'Inconsistent OLS';
+            if (metricStatus) {
+              metricStatus.textContent = 'Attenuated toward zero';
+              metricStatus.style.color = '#d97706';
+            }
+            if (metricStatusDesc) metricStatusDesc.textContent = 'Horizontal regressor noise';
+
+            if (labInsightBadge) {
+              labInsightBadge.textContent = 'REGRESSOR CONTAMINATION';
+              labInsightBadge.style.background = '#fef3c7';
+              labInsightBadge.style.color = '#b45309';
+            }
+            if (labInsightTitle) labInsightTitle.textContent = 'Error in x Active: Attenuation Bias';
+            if (labInsightBody) {
+              labInsightBody.textContent = `In Error in x mode, data points scatter horizontally. Notice that the fitted OLS line visibly flattens from 2.00 down to β̂ = ${bHat.toFixed(2)} as noise increases.`;
+            }
+            if (noticeText) {
+              noticeText.textContent = 'Horizontal measurement noise weakens the observed relationship between x and y, causing the fitted regression line to rotate toward horizontal.';
+            }
+            if (interpretationText) {
+              interpretationText.textContent = 'Because the observed regressor and the composite disturbance share the measurement error u, OLS becomes inconsistent and the slope is attenuated toward zero under the classical setup.';
+            }
+          }
+
+          renderPlot(pts, aHat, bHat);
+        }
+
+        function renderPlot(pts, aHat, bHat) {
+          if (!svg) return;
+          const svgW = 680;
+          const svgH = 340;
+          const padL = 60, padR = 40, padT = 30, padB = 50;
+          const plotW = svgW - padL - padR;
+          const plotH = svgH - padT - padB;
+
+          const xMin = 0.0, xMax = 8.5;
+          const yMin = 0.0, yMax = 19.0;
+
+          function toSvgX(val) {
+            return padL + ((val - xMin) / (xMax - xMin)) * plotW;
+          }
+          function toSvgY(val) {
+            return svgH - padB - ((val - yMin) / (yMax - yMin)) * plotH;
+          }
+
+          let svgHtml = '';
+
+          // Grid lines
+          for (let gx = 1; gx <= 8; gx += 1) {
+            const sx = toSvgX(gx);
+            svgHtml += `<line x1="${sx}" y1="${padT}" x2="${sx}" y2="${svgH - padB}" stroke="var(--border-subtle)" stroke-dasharray="3,3" stroke-width="1" opacity="0.6"/>`;
+            svgHtml += `<text x="${sx}" y="${svgH - padB + 18}" fill="var(--text-muted)" font-size="11" text-anchor="middle" font-family="Poppins">${gx}</text>`;
+          }
+          for (let gy = 2; gy <= 18; gy += 4) {
+            const sy = toSvgY(gy);
+            svgHtml += `<line x1="${padL}" y1="${sy}" x2="${svgW - padR}" y2="${sy}" stroke="var(--border-subtle)" stroke-dasharray="3,3" stroke-width="1" opacity="0.6"/>`;
+            svgHtml += `<text x="${padL - 10}" y="${sy + 4}" fill="var(--text-muted)" font-size="11" text-anchor="end" font-family="Poppins">${gy}</text>`;
+          }
+
+          // Axes
+          svgHtml += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${svgH - padB}" stroke="var(--border-strong)" stroke-width="1.5"/>`;
+          svgHtml += `<line x1="${padL}" y1="${svgH - padB}" x2="${svgW - padR}" y2="${svgH - padB}" stroke="var(--border-strong)" stroke-width="1.5"/>`;
+          svgHtml += `<text x="${padL + plotW / 2}" y="${svgH - 12}" fill="var(--text-muted)" font-size="12" font-weight="500" text-anchor="middle" font-family="Poppins">Observed Regressor (x)</text>`;
+          svgHtml += `<text x="${16}" y="${padT + plotH / 2}" fill="var(--text-muted)" font-size="12" font-weight="500" text-anchor="middle" transform="rotate(-90, 16, ${padT + plotH / 2})" font-family="Poppins">Observed Outcome (y)</text>`;
+
+          // True DGP line (dashed neutral)
+          const trueY1 = trueAlpha + trueBeta * 0.8;
+          const trueY2 = trueAlpha + trueBeta * 8.0;
+          svgHtml += `<line x1="${toSvgX(0.8)}" y1="${toSvgY(trueY1)}" x2="${toSvgX(8.0)}" y2="${toSvgY(trueY2)}" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" opacity="0.8"/>`;
+
+          // Estimated OLS line (solid blue)
+          const estY1 = aHat + bHat * 0.8;
+          const estY2 = aHat + bHat * 8.0;
+          svgHtml += `<line x1="${toSvgX(0.8)}" y1="${toSvgY(estY1)}" x2="${toSvgX(8.0)}" y2="${toSvgY(estY2)}" stroke="#2563eb" stroke-width="2.5"/>`;
+
+          // Data points
+          pts.forEach(p => {
+            const sx = toSvgX(p.x);
+            const sy = toSvgY(p.y);
+            svgHtml += `<circle cx="${sx}" cy="${sy}" r="4.5" fill="#2563eb" fill-opacity="0.75" stroke="var(--surface)" stroke-width="1.5"/>`;
+          });
+
+          svg.innerHTML = svgHtml;
+        }
+
+        if (btnModeY) btnModeY.addEventListener('click', () => { currentMode = 'y'; updateLab(); });
+        if (btnModeX) btnModeX.addEventListener('click', () => { currentMode = 'x'; updateLab(); });
+        if (noiseSlider) noiseSlider.addEventListener('input', updateLab);
+
+        // Quick check toggles using canonical selector
+        document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const card = btn.closest('.quick-check-card');
+            const hint = card ? card.querySelector('.quick-check-hint') : null;
+            if (hint) {
+              const isHidden = hint.style.display === 'none' || !hint.style.display;
+              hint.style.display = isHidden ? 'block' : 'none';
+              btn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+            }
+          });
+        });
+
+        document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const card = btn.closest('.quick-check-card');
+            const sol = card ? card.querySelector('.quick-check-solution') : null;
+            if (sol) {
+              const isHidden = sol.style.display === 'none' || !sol.style.display;
+              sol.style.display = isHidden ? 'block' : 'none';
+              btn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+            }
+          });
+        });
+
+        // Initial render
+        updateLab();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLab);
+      } else {
+        initLab();
+      }
+    })();
+  </script>
+</body>
+</html>

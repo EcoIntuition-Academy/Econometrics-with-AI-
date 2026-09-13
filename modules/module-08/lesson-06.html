@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.6: Bootstrap Standard Errors & Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Estimate sampling dispersion through empirical resampling with replacement, analyze small-sample combinatorics, and synthesize Module 8 through structured knowledge review cards.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="06">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; Bootstrap Standard Errors &amp; Module Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.6</span>
+        <span class="badge">Resampling &amp; Review</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Bootstrap Standard Errors &amp; Module Review
+      </h1>
+      <p class="lesson-hero-lead">
+        When mathematical standard error formulas are intractable or rely on fragile distributional assumptions, the bootstrap approximates sampling variability by repeated empirical resampling. We examine the mechanics of bootstrapping, analyze its combinatorics, and synthesize Module 8 across 12 core knowledge cards.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Understand the motivation for bootstrap inference when analytical standard-error formulas are difficult or undesirable.</li>
+        <li>Master the bootstrap resampling algorithm: drawing with replacement to build an empirical sampling distribution.</li>
+        <li>Evaluate small-sample bootstrap combinatorics: \(n^n\) ordered samples vs \(\binom{n+r-1}{r}\) combinations with repetition.</li>
+        <li>Compute the empirical bootstrap estimator mean, variance, and standard error.</li>
+        <li>Synthesize all 12 core concepts of Module 8 and compare the five foundational econometric responses to non-spherical disturbances.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Bootstrapping Standard Errors -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Bootstrap Resampling Mechanics</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          In complex econometric models, deriving an analytical standard-error formula (such as White's sandwich matrix) can be mathematically cumbersome or require large-sample asymptotic justifications that perform poorly in small samples. The <strong>bootstrap</strong> provides a computer-intensive alternative that approximates the sampling distribution directly through repeated resampling.
+        </p>
+
+        <!-- Bootstrap Flowchart Box -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-md) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs); text-align: center;">THE BOOTSTRAP RESAMPLING WORKFLOW</div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              1. Observed Original Sample: \(\mathbf{x} = \{x_1, x_2, \dots, x_n\}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              2. Draw Sample of Size \(n\) WITH REPLACEMENT: \(\mathbf{x}^{*(b)}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              3. Recompute Estimator on Resample: \(\widehat{\theta}^{*(b)} = \widehat{\theta}(\mathbf{x}^{*(b)})\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+            <div style="background: rgba(217,119,6,0.1); color: #b45309; padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid rgba(217,119,6,0.3); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              4. Repeat for \(B\) Replications: \(\{\widehat{\theta}^{*(1)}, \dots, \widehat{\theta}^{*(B)}\}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+            <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-primary); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              5. Compute Empirical Bootstrap Standard Error: \(\operatorname{SE}^*(\widehat{\theta})\)
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Source Concrete Example -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Source Example: A 4-Observation Sample</h3>
+        <p>
+          Consider the exact numeric example from page 8 of the lecture notes:
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-md); border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">SAMPLE OBSERVATIONS</div>
+          <div style="font-family: var(--font-mono); font-size: 1rem; font-weight: 700; margin: 4px 0;">
+            $$\begin{aligned}
+            \mathbf{x} &= \{2, 4, 9, 12\}, \quad n = 4 \\
+            \bar{x} &= \frac{2 + 4 + 9 + 12}{4} = 6.75
+            \end{aligned}$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            When drawing with replacement, any value can appear multiple times or not at all in a given resample:
+          </p>
+          <ul style="font-family: var(--font-mono); font-size: 0.88rem; margin: 8px 0 0 0; padding-left: 1.25rem;">
+            <li>Draw 1: \(\{2, 2, 9, 12\} \implies \bar{x}^{*(1)} = 6.25\)</li>
+            <li>Draw 2: \(\{4, 4, 4, 9\} \implies \bar{x}^{*(2)} = 5.25\)</li>
+            <li>Draw 3: \(\{12, 2, 12, 9\} \implies \bar{x}^{*(3)} = 8.75\)</li>
+          </ul>
+        </div>
+
+        <!-- Combinatorics Box -->
+        <div class="study-card" style="margin-top: var(--space-lg); padding: var(--space-md); border-top: 4px solid #7c3aed;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #7c3aed; letter-spacing: 0.05em; margin-bottom: 0.25rem;">COMBINATORICS &middot; DISTINCT RESAMPLES OF SIZE 4</div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin-top: var(--space-sm);">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 0.95rem;">Ordered Possible Draws:</h4>
+              <div style="font-family: var(--font-mono); font-size: 0.98rem; font-weight: 700; color: #7c3aed;">
+                $$n^n = 4^4 = 256 \text{ sequences}$$
+              </div>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+                Each of the \(4\) slots in the bootstrap sample has \(4\) independent choices.
+              </p>
+            </div>
+
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 0.95rem;">Distinct Combinations with Repetition:</h4>
+              <div style="font-family: var(--font-mono); font-size: 0.98rem; font-weight: 700; color: #059669;">
+                $$\begin{aligned}
+                \binom{n + r - 1}{r} &= \binom{4 + 4 - 1}{4} \\
+                &= \binom{7}{4} = \frac{7!}{4!3!} = 35
+                \end{aligned}$$
+              </div>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+                Accounting for unordered multisets, there are exactly \(35\) distinct empirical compositions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estimator Formulas -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Formal Bootstrap Estimator Formulas</h3>
+        <p>
+          Let \(\widehat{\theta}^{*(b)}\) be the statistic estimated from bootstrap replication \(b\) for \(b = 1, \dots, B\):
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-top: var(--space-sm);">
+          
+          <div class="card card-bordered" style="padding: var(--space-md); background: var(--color-surface); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">BOOTSTRAP MEAN OF ESTIMATES</div>
+            <div style="font-family: var(--font-mono); font-size: 1rem; padding: 0.25rem 0;">
+              $$\bar{\theta}^* = \frac{1}{B}\sum_{b=1}^B \widehat{\theta}^{*(b)}$$
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Center of the empirical resampling distribution.
+            </p>
+          </div>
+
+          <div class="card card-bordered" style="padding: var(--space-md); background: var(--color-surface); border-left: 3px solid #d97706;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #d97706;">BOOTSTRAP VARIANCE</div>
+            <div style="font-family: var(--font-mono); font-size: 1rem; padding: 0.25rem 0;">
+              $$\operatorname{Var}^*(\widehat{\theta}) = \frac{1}{B - 1}\sum_{b=1}^B \big(\widehat{\theta}^{*(b)} - \bar{\theta}^*\big)^2$$
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Empirical dispersion across the \(B\) resamples.
+            </p>
+          </div>
+
+          <div class="card card-bordered" style="padding: var(--space-md); background: var(--color-surface); border-left: 3px solid #059669;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #059669;">BOOTSTRAP STANDARD ERROR</div>
+            <div style="font-family: var(--font-mono); font-size: 1rem; padding: 0.25rem 0;">
+              $$\operatorname{SE}^*(\widehat{\theta}) = \sqrt{\operatorname{Var}^*(\widehat{\theta})}$$
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Standard deviation of the bootstrap distribution.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Interactive Lab: Bootstrap Resampling Lab</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Execute live bootstrap draws from the source sample \(\mathbf{x} = \{2, 4, 9, 12\}\). Draw individual samples or run batch replications to build the empirical histogram of bootstrap sample means.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Control Buttons -->
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md); align-items: center;">
+            <button class="btn btn-primary" id="btnDrawOne" type="button">Draw One Sample</button>
+            <button class="btn btn-outline" id="btnDraw50" type="button">Run 50 Resamples</button>
+            <button class="btn btn-outline" id="btnDraw250" type="button">Run 250 Resamples</button>
+            <button class="btn btn-outline" id="btnResetBoot" type="button">Reset</button>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Latest Resample</div>
+              <div style="font-size: 1.05rem; font-weight: 700; color: var(--color-primary);" id="metricLatestDraw">{2, 4, 9, 12}</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Replications (\(B\))</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricB">0</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Bootstrap Mean (\(\bar{\theta}^*\))</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricMean">6.750</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Bootstrap SE (\(\operatorname{SE}^*\))</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;" id="metricBootSE">—</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 14px; height: 14px; background: rgba(37,99,235,0.7); border: 1px solid var(--color-primary);"></span> Bootstrap Mean Frequency</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: #dc2626;"></span> Original Sample Mean (\(\bar{x} = 6.75\))</span>
+          </div>
+
+          <!-- Histogram Canvas / SVG -->
+          <div style="position: relative; width: 100%; height: 320px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="bootHistSvg" viewBox="0 0 600 300" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="bootInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            Click <strong>"Run 50 Resamples"</strong> or <strong>"Run 250 Resamples"</strong> to populate the empirical distribution. The empirical standard deviation of these means converges directly to the true standard error of the sample mean!
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A frequency histogram of bootstrap sample means drawn randomly with replacement from \(\{2, 4, 9, 12\}\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                As \(B\) increases, the distribution centers symmetrically around \(\bar{x} = 6.75\), forming an empirical bell curve.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                We did not need to assume normality or invoke asymptotic theorems. The empirical distribution simulates the sampling process directly.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The sample standard error formula gives \(s / \sqrt{n} = 4.57 / 2 = 2.28\). Notice how the bootstrap SE converges tightly to \(\approx 2.1 - 2.3\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Click "Run 250 Resamples" multiple times to watch the histogram smoothly approximate the continuous sampling distribution.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Module 8 Conceptual Pipeline -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Module 8 Conceptual Synthesis Map</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The architecture of Module 8 connects classical Gauss–Markov breakdown to practical econometric solutions:
+        </p>
+
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-md) 0;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 460px; text-align: center;">
+              Classical Assumption 4: Spherical Errors \(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \mathbf{I}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+
+            <div style="background: rgba(220,38,38,0.08); color: #dc2626; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; width: 100%; max-width: 460px; text-align: center; border: 1px solid rgba(220,38,38,0.25);">
+              Violation: Non-Spherical Disturbances \(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \boldsymbol{\Omega} \neq \sigma^2 \mathbf{I}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+
+            <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; width: 100%; max-width: 460px; text-align: center; border: 1px solid var(--color-primary);">
+              Key Finding: OLS Remains Unbiased, but Conventional SEs Are Invalid
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓</div>
+
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 460px; text-align: center;">
+              Diagnostics: Breusch–Pagan &amp; White Tests (\(n R^2 \sim \chi^2\))
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓ three methodological pathways</div>
+
+            <!-- 3 Branches Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); width: 100%; max-width: 650px;">
+              
+              <div style="background: var(--color-bg); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-weight: 700; color: var(--color-primary); font-size: 0.85rem;">1. MODEL COVARIANCE</div>
+                <div style="font-size: 0.82rem; color: var(--color-text-secondary); margin-top: 4px;">
+                  GLS / FGLS / WLS<br>
+                  <em>Transforms data for BLUE efficiency</em>
+                </div>
+              </div>
+
+              <div style="background: var(--color-bg); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-weight: 700; color: #d97706; font-size: 0.85rem;">2. KEEP OLS ESTIMATOR</div>
+                <div style="font-size: 0.82rem; color: var(--color-text-secondary); margin-top: 4px;">
+                  White HC0 Robust SE<br>
+                  <em>Corrects standard errors directly</em>
+                </div>
+              </div>
+
+              <div style="background: var(--color-bg); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-weight: 700; color: #059669; font-size: 0.85rem;">3. RESAMPLE DATA</div>
+                <div style="font-size: 0.82rem; color: var(--color-text-secondary); margin-top: 4px;">
+                  Bootstrap SE<br>
+                  <em>Simulates sampling dispersion</em>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: 12 Modular Review Cards -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Module 8 Core Knowledge Cards</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Review the 12 foundational concepts established across all lessons of Module 8:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.25rem;">01 &middot; SPHERICAL</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Spherical Disturbances</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Assumption that \(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \mathbf{I}\), combining constant variance and zero error covariance.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.25rem;">02 &middot; NON-SPHERICAL</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Non-Spherical Errors</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              When \(\boldsymbol{\Omega} \neq \mathbf{I}\), causing conventional OLS standard errors and test statistics to be invalid.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.25rem;">03 &middot; HETERO</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Heteroskedasticity</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Non-constant error variance (\(\sigma_i^2 \neq \sigma^2\)), common in cross-sectional samples where dispersion scales with unit size.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.25rem;">04 &middot; AUTOCORR</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Autocorrelation</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Nonzero off-diagonal covariances (\(\operatorname{Cov}(\varepsilon_i, \varepsilon_j) \neq 0\)), commonly arising in time-series and panel data.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">05 &middot; OLS VARIANCE</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">True OLS Covariance</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              \(\operatorname{Var}(\widehat{\boldsymbol{\beta}}) = \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\); OLS remains unbiased but inefficient.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">06 &middot; GLS</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Generalized Least Squares</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Transforms variables by \(\boldsymbol{\Omega}^{-1/2}\) when \(\boldsymbol{\Omega}\) is known: \(\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">07 &middot; FGLS</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Feasible GLS</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Estimates \(\widehat{\boldsymbol{\Omega}}\) from preliminary OLS residuals, then applies the GLS formula to achieve asymptotic efficiency.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #d97706; margin-bottom: 0.25rem;">08 &middot; WHITE HC0</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">White Robust Standard Errors</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Sandwich estimator \((\mathbf{X}'\mathbf{X})^{-1}[\sum \widehat{\varepsilon}_i^2 \mathbf{x}_i \mathbf{x}_i'](\mathbf{X}'\mathbf{X})^{-1}\) preserving OLS point estimates.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">09 &middot; BREUSCH-PAGAN</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Breusch–Pagan Test</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Regresses squared residuals \(\widehat{\varepsilon}_i^2\) on explanatory variables; evaluates test statistic \(n R^2 \sim \chi^2_k\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">10 &middot; WHITE TEST</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">White Test</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Auxiliary regression including regressors, squares, and cross-products; evaluates \(n R^2 \sim \chi^2_q\) for general heteroskedasticity.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">11 &middot; WLS</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Weighted Least Squares</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Special diagonal case of GLS where observations are weighted by precision: \(\widehat{\boldsymbol{\beta}}_{\text{WLS}} = (\mathbf{X}'\mathbf{W}\mathbf{X})^{-1}\mathbf{X}'\mathbf{W}\mathbf{y}\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">12 &middot; BOOTSTRAP</div>
+            <h4 style="margin: 4px 0; font-size: var(--text-base);">Bootstrap Standard Errors</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+              Approximates sampling dispersion by drawing samples of size \(n\) with replacement and evaluating the standard deviation of estimates.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Comparative Synthesis Table -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Methodological Comparison of Approaches</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Summary of how the five foundational approaches address non-spherical disturbances:
+        </p>
+
+        <div class="table-responsive">
+          <table class="table table-bordered" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="background: var(--color-surface);">
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Method</th>
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Effect on Coefficients</th>
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Information Required</th>
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Primary Advantage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 700;">GLS</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Changes point estimates to \(\widehat{\boldsymbol{\beta}}_{\text{GLS}}\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Exact covariance matrix \(\boldsymbol{\Omega}\) known</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Attains BLUE minimum variance</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 700;">FGLS</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Changes point estimates to \(\widehat{\boldsymbol{\beta}}_{\text{FGLS}}\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Model for \(\boldsymbol{\Omega}\) estimated from residuals</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Feasible in empirical practice; asymptotically efficient</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 700; color: #d97706;">White Robust SE</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 600;">Leaves OLS coefficients unchanged</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">None (model-free; uses sample residuals)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Asymptotically valid inference without modeling \(\sigma_i^2\)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 700; color: #059669;">WLS</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Changes point estimates to \(\widehat{\boldsymbol{\beta}}_{\text{WLS}}\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Observation weights \(w_i \propto 1/\sigma_i^2\) known</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">BLUE efficiency for heteroskedasticity (e.g. group data)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 700; color: #7c3aed;">Bootstrap SE</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Retains original estimator \(\widehat{\theta}\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Empirical sample data; repeated computing power</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Robust inference when standard error formulas are intractable</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check & Review Reflection -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">6. Quick Check &amp; Understanding Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.6</span> In the bootstrap procedure, what is the conceptual difference between the resample size and the number of replications?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>Each individual bootstrap resample must contain exactly \(n\) observations (the original sample size) drawn with replacement, while the number of replications \(B\) is the number of times this entire resampling cycle is independently repeated on the computer.</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> The resample size must match the actual sample size \(n\) so that the sampling variance of the bootstrap statistic mimics the true finite-sample sampling variability of the estimator on data of size \(n\).
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              In contrast, the replication count \(B\) (such as \(B = 50, 250, \dots, 1000\)) is a computational parameter. A larger \(B\) reduces Monte Carlo simulation error and maps out the empirical sampling distribution \(\{\widehat{\theta}^{*(1)}, \dots, \widehat{\theta}^{*(B)}\}\) with high fidelity.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Bootstrap standard errors estimate sampling variability by repeatedly resampling the observed sample with replacement.</li>
+        <li>For a sample of size \(n\), there are \(n^n\) possible ordered bootstrap draws and \(\binom{2n-1}{n}\) distinct combinations with repetition.</li>
+        <li>The standard deviation of estimates across \(B\) bootstrap replications yields a consistent estimator of the standard error.</li>
+        <li>Module 8 provides three practical avenues for non-spherical disturbances: re-weighting/transformation (GLS/WLS/FGLS), robust sandwich standard errors (White), or computational resampling (Bootstrap).</li>
+        <li>Diagnostic tests (Breusch–Pagan and White) allow researchers to statistically verify whether homoskedasticity holds before drawing inferential conclusions.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-05.html" class="btn btn-outline">
+        ← Lesson 8.5: Weighted Least Squares
+      </a>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="index.html" class="btn btn-outline">
+          Module 8 Overview
+        </a>
+        <a href="../module-09/lesson-01.html" class="btn btn-primary">
+          Next: Module 9 • Lesson 9.1 →
+        </a>
+      </div>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Lab 8.6 Bootstrap Simulator Logic
+    const histSvg = document.getElementById('bootHistSvg');
+    const btnOne = document.getElementById('btnDrawOne');
+    const btn50 = document.getElementById('btnDraw50');
+    const btn250 = document.getElementById('btnDraw250');
+    const btnReset = document.getElementById('btnResetBoot');
+    const metricLatest = document.getElementById('metricLatestDraw');
+    const metricB = document.getElementById('metricB');
+    const metricMean = document.getElementById('metricMean');
+    const metricBootSE = document.getElementById('metricBootSE');
+    const bootInsight = document.getElementById('bootInsight');
+
+    const sourceData = [2, 4, 9, 12];
+    const n = sourceData.length;
+    let bootstrapMeans = [];
+
+    function sampleWithReplacement() {
+      const draw = [];
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        const val = sourceData[Math.floor(Math.random() * n)];
+        draw.push(val);
+        sum += val;
+      }
+      return { draw, mean: sum / n };
+    }
+
+    function runReplications(count) {
+      let lastDraw = null;
+      for (let c = 0; c < count; c++) {
+        const res = sampleWithReplacement();
+        bootstrapMeans.push(res.mean);
+        lastDraw = res.draw;
+      }
+
+      metricLatest.textContent = '{' + lastDraw.sort((a, b) => a - b).join(', ') + '}';
+      metricB.textContent = bootstrapMeans.length;
+
+      // Compute mean of bootstrap estimates
+      let total = 0;
+      for (let i = 0; i < bootstrapMeans.length; i++) {
+        total += bootstrapMeans[i];
+      }
+      const bMean = total / bootstrapMeans.length;
+      metricMean.textContent = bMean.toFixed(3);
+
+      // Compute bootstrap variance & SE
+      if (bootstrapMeans.length > 1) {
+        let varSum = 0;
+        for (let i = 0; i < bootstrapMeans.length; i++) {
+          varSum += Math.pow(bootstrapMeans[i] - bMean, 2);
+        }
+        const bVar = varSum / (bootstrapMeans.length - 1);
+        const bSE = Math.sqrt(bVar);
+        metricBootSE.textContent = bSE.toFixed(3);
+        bootInsight.innerHTML = `<strong>Active Simulation (\(B = ${bootstrapMeans.length}\)):</strong> Bootstrap mean is \(${bMean.toFixed(3)}\) (true sample mean \(6.750\)). Bootstrap standard error has converged to <strong>\(${bSE.toFixed(3)}\)</strong>.`;
+      }
+
+      renderHistogram();
+    }
+
+    function renderHistogram() {
+      histSvg.innerHTML = '';
+      const width = 600;
+      const height = 300;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      // X scale: means can range from 2.0 to 12.0
+      const minX = 2.0;
+      const maxX = 12.0;
+      const xScale = val => margin.left + ((val - minX) / (maxX - minX)) * plotW;
+
+      // Axis lines
+      const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+      axis.setAttribute('stroke', 'var(--border-strong)');
+      axis.setAttribute('stroke-width', '1.2');
+      axis.setAttribute('fill', 'none');
+      histSvg.appendChild(axis);
+
+      // X axis ticks
+      for (let t = 2; t <= 12; t += 2) {
+        const xPos = xScale(t);
+        const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        tick.setAttribute('x1', xPos);
+        tick.setAttribute('y1', margin.top + plotH);
+        tick.setAttribute('x2', xPos);
+        tick.setAttribute('y2', margin.top + plotH + 5);
+        tick.setAttribute('stroke', 'var(--border-strong)');
+        histSvg.appendChild(tick);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', xPos);
+        label.setAttribute('y', margin.top + plotH + 18);
+        label.setAttribute('font-size', '10');
+        label.setAttribute('font-family', 'var(--font-mono)');
+        label.setAttribute('fill', 'var(--color-text-secondary)');
+        label.setAttribute('text-anchor', 'middle');
+        label.textContent = t.toFixed(0);
+        histSvg.appendChild(label);
+      }
+
+      if (bootstrapMeans.length === 0) return;
+
+      // Bin counts: bin width = 0.5
+      const numBins = 21; // from 2.0 to 12.0 in steps of 0.5
+      const bins = new Array(numBins).fill(0);
+
+      for (let i = 0; i < bootstrapMeans.length; i++) {
+        const val = bootstrapMeans[i];
+        const idx = Math.min(numBins - 1, Math.max(0, Math.floor((val - minX) / 0.5)));
+        bins[idx]++;
+      }
+
+      const maxCount = Math.max(...bins, 1);
+      const yScale = count => margin.top + plotH - (count / maxCount) * plotH;
+
+      // Draw Bars
+      for (let b = 0; b < numBins; b++) {
+        if (bins[b] > 0) {
+          const xStart = xScale(minX + b * 0.5);
+          const xEnd = xScale(minX + (b + 1) * 0.5);
+          const barW = Math.max(1, xEnd - xStart - 2);
+          const barH = (bins[b] / maxCount) * plotH;
+          const yPos = margin.top + plotH - barH;
+
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', xStart);
+          rect.setAttribute('y', yPos);
+          rect.setAttribute('width', barW);
+          rect.setAttribute('height', barH);
+          rect.setAttribute('fill', 'rgba(37,99,235,0.65)');
+          rect.setAttribute('stroke', 'var(--color-primary)');
+          rect.setAttribute('stroke-width', '1');
+          rect.setAttribute('rx', '2');
+          histSvg.appendChild(rect);
+        }
+      }
+
+      // Vertical line for True Sample Mean (6.75)
+      const trueX = xScale(6.75);
+      const meanLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      meanLine.setAttribute('x1', trueX);
+      meanLine.setAttribute('y1', margin.top);
+      meanLine.setAttribute('x2', trueX);
+      meanLine.setAttribute('y2', margin.top + plotH);
+      meanLine.setAttribute('stroke', '#dc2626');
+      meanLine.setAttribute('stroke-width', '2.5');
+      meanLine.setAttribute('stroke-dasharray', '4 3');
+      histSvg.appendChild(meanLine);
+    }
+
+    btnOne.addEventListener('click', () => runReplications(1));
+    btn50.addEventListener('click', () => runReplications(50));
+    btn250.addEventListener('click', () => runReplications(250));
+    btnReset.addEventListener('click', () => {
+      bootstrapMeans = [];
+      metricLatest.textContent = '{2, 4, 9, 12}';
+      metricB.textContent = '0';
+      metricMean.textContent = '6.750';
+      metricBootSE.textContent = '—';
+      bootInsight.innerHTML = 'Click <strong>"Run 50 Resamples"</strong> or <strong>"Run 250 Resamples"</strong> to populate the empirical distribution.';
+      renderHistogram();
+    });
+
+    // Initial Empty Render
+    renderHistogram();
+  </script>
+</body>
+</html>

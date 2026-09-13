@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9.5: Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review — EcoIntuition Academy</title>
+  <meta name="description" content="Synthesize the econometric toolkit for non-spherical disturbances. Compare GLS, FGLS, Prais–Winsten, Cochrane–Orcutt, Newey–West HAC, and WLS across key theoretical dimensions.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-09" data-lesson="05">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 9: Autocorrelation &amp; HAC Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 9</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 09</a>
+          <span class="module-nav-title">Autocorrelation &amp; HAC Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 5 &middot; Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 9 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.1 Time-Ordered Data &amp; AR(1) Autocorrelation</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.2 Detecting Autocorrelation &amp; GLS with Known ρ</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.4 Newey–West HAC Standard Errors</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">9.5 Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 9.5</span>
+        <span class="badge">Method Choice &amp; Synthesis</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review
+      </h1>
+      <p class="lesson-hero-lead">
+        Synthesize the complete econometric toolkit for non-spherical disturbances. Compare when to transform data via GLS, FGLS, Prais–Winsten, or Cochrane–Orcutt, when to robustify inference via Newey–West HAC standard errors, and how these methods connect back to Module 8 Weighted Least Squares.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul>
+        <li>Determine the appropriate econometric strategy based on what is known or assumed about the error covariance \(\boldsymbol{\Omega}\).</li>
+        <li>Review why Generalized Least Squares is BLUE when the non-scalar covariance matrix is known up to scale.</li>
+        <li>Connect time-series quasi-differencing to cross-sectional Weighted Least Squares under heteroskedasticity.</li>
+        <li>Compare OLS, GLS, FGLS, Prais–Winsten, Cochrane–Orcutt, HAC, and WLS across key theoretical dimensions.</li>
+        <li>Integrate the foundational concepts from autocorrelation to HAC inference into one unified framework.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Method Decision Map -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">STRATEGY SELECTOR</span>
+        <h2 class="study-section-title">1. The Non-Spherical Error Decision Map</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">THE CENTRAL ESTIMATION DILEMMA</div>
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--color-text-secondary);">
+            When spherical error assumptions fail (\(\boldsymbol{\Omega} \neq \mathbf{I}\)), the appropriate estimator depends directly on: <strong>What do we know about the structure of \(\boldsymbol{\Omega}\), and what assumptions are maintained about the data generating process?</strong>
+          </p>
+        </div>
+
+        <!-- 4 Scenarios Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.35rem;">SCENARIO 1</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">True \(\boldsymbol{\Omega}\) is Known</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              The error covariance matrix \(\boldsymbol{\Omega}\) is completely known up to scale.
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}$$
+            </div>
+            <div style="font-size: 0.8rem; color: #065f46;">
+              <strong>Applicable Tool:</strong> Generalized Least Squares (GLS). Attains the Gauss–Markov bound (BLUE).
+            </div>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #2563eb;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.35rem;">SCENARIO 2</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">AR(1) Assumed (\(\rho\) Unknown)</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              Disturbances follow \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\), but \(\rho\) is unknown.
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\text{Estimate } \widehat{\rho} \implies \text{Quasi-Difference Data}$$
+            </div>
+            <div style="font-size: 0.8rem; color: #1e40af;">
+              <strong>Applicable Tools:</strong> Prais–Winsten (preserves \(t=1\)) or Cochrane–Orcutt (drops \(t=1\)).
+            </div>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #d97706;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #d97706; margin-bottom: 0.35rem;">SCENARIO 3</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">Agnostic / Unknown Dependence</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              Retain OLS coefficients and guard against arbitrary autocorrelation and heteroskedasticity.
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\operatorname{Avar}(\widehat{\boldsymbol{\beta}}) = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{S}^*(\mathbf{X}'\mathbf{X})^{-1}$$
+            </div>
+            <div style="font-size: 0.8rem; color: #92400e;">
+              <strong>Applicable Tool:</strong> Newey–West HAC Standard Errors with Bartlett kernel weights.
+            </div>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #6366f1;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #6366f1; margin-bottom: 0.35rem;">SCENARIO 4</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">Known Heteroskedastic Form</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              Cross-sectional variance varies according to \(\operatorname{Var}(\varepsilon_i) = \sigma^2 h(\mathbf{x}_i)^2\).
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$y_i^* = y_i / h(\mathbf{x}_i), \quad \mathbf{x}_i^* = \mathbf{x}_i / h(\mathbf{x}_i)$$
+            </div>
+            <div style="font-size: 0.8rem; color: #4338ca;">
+              <strong>Applicable Tool:</strong> Weighted Least Squares (WLS) using precision weights \(w_i = 1 / \widehat{\sigma}_i^2\).
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card card-bordered" style="padding: var(--space-md); margin-top: var(--space-md); background: var(--color-surface); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">METHOD SELECTION PRINCIPLE</div>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.6;">
+            There is no universal "best" method. The appropriate approach depends on what is known or assumed about the error structure. When the parametric AR(1) model is maintained, FGLS transformations target efficiency. When the dynamic structure is unknown or robust inference is preferred without altering OLS estimates, Newey–West HAC standard errors are indicated.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Theoretical Foundations & Source Recaps -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">THEORETICAL UNIFICATION</span>
+        <h2 class="study-section-title">2. WLS &amp; GLS Efficiency Recaps</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">CROSS-MODULE LINEAGE</div>
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--color-text-secondary);">
+            The methods developed in Module 9 share a direct mathematical lineage with the general theory of non-spherical errors from Module 8. Both frameworks replace the naive spherical assumption with optimal linear combinations tailored to error covariance structure.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <!-- WLS Recap -->
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #6366f1;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #6366f1; margin-bottom: 0.35rem;">MODULE 8 BRIDGE</div>
+            <h3 style="font-size: 1.1rem; margin: 0 0 0.5rem 0;">WLS Source Recap</h3>
+            <p style="font-size: 0.86rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              Under heteroskedasticity \(\operatorname{Var}(\varepsilon_i) = \sigma^2 h(x_i)^2\), dividing the regression by \(h(x_i)\) restores homoskedasticity:
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\frac{y_i}{h(x_i)} = \left(\frac{\mathbf{x}_i}{h(x_i)}\right)'\boldsymbol{\beta} + \frac{\varepsilon_i}{h(x_i)}$$
+            </div>
+            <div style="font-size: 0.82rem; color: var(--color-text-secondary);">
+              <strong>The 6-Step WLS Procedure:</strong>
+              <ol style="margin: 0.3rem 0 0 0; padding-left: 1.25rem; line-height: 1.55;">
+                <li>Run initial OLS to obtain residuals \(\widehat{\varepsilon}_i\).</li>
+                <li>Model squared residuals \(\widehat{\varepsilon}_i^2\) using regressors.</li>
+                <li>Predict observation variance function \(\widehat{\sigma}_i^2\).</li>
+                <li>Construct precision weights \(w_i = 1 / \widehat{\sigma}_i^2\).</li>
+                <li>Re-estimate regression by weighted OLS.</li>
+                <li>Report standard errors from the transformed model.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- GLS Efficiency Recap -->
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.35rem;">GAUSS–MARKOV RESULT</div>
+            <h3 style="font-size: 1.1rem; margin: 0 0 0.5rem 0;">GLS Efficiency Recap</h3>
+            <p style="font-size: 0.86rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              Under the general linear model with non-spherical disturbances:
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \boldsymbol{\Omega}$$
+            </div>
+            <p style="font-size: 0.86rem; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 0.5rem;">
+              When the covariance matrix \(\boldsymbol{\Omega}\) is known, the GLS estimator is:
+            </p>
+            <div style="background: var(--color-bg); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); font-size: 0.88rem; text-align: center; margin-bottom: 0.5rem;">
+              $$\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}$$
+            </div>
+            <div style="font-size: 0.84rem; color: #065f46; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-xs); padding: 0.5rem 0.75rem;">
+              <strong>Gauss–Markov Theorem:</strong> Under strict exogeneity and known \(\boldsymbol{\Omega}\), GLS is the Best Linear Unbiased Estimator (BLUE), attaining the minimum variance bound.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Master Method Comparison Table -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">COMPARATIVE MATRIX</span>
+        <h2 class="study-section-title">3. Master Method Comparison Table</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The table below synthesizes the complete non-spherical error toolkit according to the properties established in the primary lecture notes:
+        </p>
+
+        <div class="table-responsive-wrapper" style="margin-top: var(--space-md);">
+          <table class="academic-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 16%;">Method</th>
+                <th style="width: 16%;">Point Estimates</th>
+                <th style="width: 16%;">Data Transformation</th>
+                <th style="width: 18%;">Standard Errors</th>
+                <th style="width: 16%;">Assumed Error Structure</th>
+                <th style="width: 18%;">Primary Role in Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>OLS Conventional</strong></td>
+                <td>\(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\)</td>
+                <td>None</td>
+                <td>Conventional (Invalid if \(\boldsymbol{\Omega} \neq \mathbf{I}\))</td>
+                <td>\(\boldsymbol{\Omega} = \mathbf{I}\) (Spherical)</td>
+                <td>Standard baseline; inference fails under autocorrelation</td>
+              </tr>
+              <tr>
+                <td><strong>General GLS</strong></td>
+                <td>New \(\widehat{\boldsymbol{\beta}}_{\text{GLS}}\)</td>
+                <td>Quasi-differencing via \(\boldsymbol{\Omega}\)</td>
+                <td>GLS variance formula</td>
+                <td>Known \(\boldsymbol{\Omega}\)</td>
+                <td>Theoretical benchmark; BLUE under known covariance</td>
+              </tr>
+              <tr>
+                <td><strong>Feasible GLS (FGLS)</strong></td>
+                <td>New \(\widehat{\boldsymbol{\beta}}_{\text{FGLS}}\)</td>
+                <td>Quasi-differencing via \(\widehat{\rho}\)</td>
+                <td>Transformed OLS variance</td>
+                <td>AR(1) structure with unknown \(\rho\)</td>
+                <td>Operational GLS using estimated parameter \(\widehat{\rho}\)</td>
+              </tr>
+              <tr>
+                <td><strong>Prais–Winsten</strong></td>
+                <td>New \(\widehat{\boldsymbol{\beta}}_{\text{PW}}\)</td>
+                <td>Retains \(t=1\) via \(\sqrt{1-\widehat{\rho}^2}\)</td>
+                <td>Transformed OLS variance</td>
+                <td>AR(1) disturbance</td>
+                <td>Preserves all \(n\) observations; avoids efficiency loss</td>
+              </tr>
+              <tr>
+                <td><strong>Cochrane–Orcutt</strong></td>
+                <td>New \(\widehat{\boldsymbol{\beta}}_{\text{CO}}\)</td>
+                <td>Drops observation \(t=1\)</td>
+                <td>Transformed OLS variance</td>
+                <td>AR(1) disturbance</td>
+                <td>Iterative quasi-differencing discarding first period</td>
+              </tr>
+              <tr>
+                <td><strong>Newey–West HAC</strong></td>
+                <td><strong>Unchanged</strong> (\(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\))</td>
+                <td>None (Original data)</td>
+                <td>HAC sandwich with Bartlett weights</td>
+                <td>Agnostic up to bandwidth \(L\)</td>
+                <td>Robust inference for OLS without altering coefficients</td>
+              </tr>
+              <tr>
+                <td><strong>Weighted LS (WLS)</strong></td>
+                <td>New \(\widehat{\boldsymbol{\beta}}_{\text{WLS}}\)</td>
+                <td>Scaled by \(1 / h(\mathbf{x}_i)\)</td>
+                <td>Homoskedastic transformed formula</td>
+                <td>\(\operatorname{Var}(\varepsilon_i) = \sigma^2 h(\mathbf{x}_i)^2\)</td>
+                <td>Cross-sectional heteroskedasticity correction (Module 8)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Module 9 Conceptual Roadmap & Core Review Cards -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">SYNTHESIS &amp; REVIEW</span>
+        <h2 class="study-section-title">4. Module 9 Conceptual Roadmap &amp; Review Cards</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Trace the intellectual journey of Module 9 from time-ordered data to robust econometric inference:
+        </p>
+
+        <!-- Connected Roadmap Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-xs); margin: var(--space-md) 0;">
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 1</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">Time-Ordered Data</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Disturbances exhibit temporal cross-period memory: \(\mathbb{E}[\varepsilon_t \varepsilon_s] \neq 0\).</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 2</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">AR(1) Model</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">\(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\). Positive \(\rho\) causes persistent runs.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 3</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">Durbin–Watson Test</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">\(\text{DW} \approx 2(1 - \widehat{\rho})\). Values \(< 2\) indicate positive serial correlation.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 4</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">Quasi-Differencing</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Subtracting \(\rho\) times lagged values purges serial correlation.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 5</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">FGLS (CO vs. PW)</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Prais–Winsten preserves \(t=1\); Cochrane–Orcutt drops it.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-sm); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left: 3px solid var(--color-primary);">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary);">STAGE 6</div>
+            <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">Newey–West HAC</div>
+            <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Preserves OLS point estimates; corrects covariance via Bartlett kernel.</p>
+          </div>
+        </div>
+
+        <!-- 14 Review Cards -->
+        <h3 style="font-size: 1rem; font-weight: 700; margin-top: var(--space-lg); margin-bottom: var(--space-xs);">
+          14 Core Concept Review Cards
+        </h3>
+        <p style="font-size: 0.86rem; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          Master every essential definition and formula from the lecture notes:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xs);">
+          
+          <!-- Card 1 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">1. Serial Correlation</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(\mathbb{E}[\varepsilon_t \varepsilon_s] \neq 0\) for \(t \neq s\). Non-zero covariance between disturbances at distinct periods violates the spherical error assumption.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">2. AR(1) SPECIFICATION</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(\varepsilon_t = \rho \varepsilon_{t-1} + u_t\) with \(u_t \overset{\text{iid}}{\sim} (0, \sigma^2)\). Current error depends linearly on previous error plus white noise shock.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">3. STATIONARITY RESTRICTION</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Requires \(|\rho| < 1\), ensuring that the effect of past innovations decays over time and error variance remains finite.
+            </p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">4. OLS UNBIASEDNESS</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Under strict exogeneity \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\), OLS point estimates remain unbiased and consistent despite autocorrelation.
+            </p>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">5. CONVENTIONAL SE FAILURE</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(\sigma^2(\mathbf{X}'\mathbf{X})^{-1}\) is incorrect under autocorrelation, understating sampling variance and inflating t-statistics under positive persistence.
+            </p>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">6. DURBIN–WATSON STATISTIC</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(\text{DW} = \frac{\sum (\widehat{\varepsilon}_t - \widehat{\varepsilon}_{t-1})^2}{\sum \widehat{\varepsilon}_t^2} \approx 2(1 - \widehat{\rho})\). Benchmarks: \(\approx 2\) (none), \(< 2\) (positive), \(> 2\) (negative).
+            </p>
+          </div>
+
+          <!-- Card 7 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">7. QUASI-DIFFERENCING</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(y_t - \rho y_{t-1} = (\mathbf{x}_t - \rho \mathbf{x}_{t-1})'\boldsymbol{\beta} + u_t\). Subtracting scaled lag purges AR(1) persistence, leaving spherical innovations \(u_t\).
+            </p>
+          </div>
+
+          <!-- Card 8 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">8. FGLS FOR UNKNOWN ρ</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Estimates \(\widehat{\rho}\) from OLS residuals \(\widehat{\varepsilon}_t\), transforms data via \(\widehat{\rho}\), and re-estimates the regression by OLS.
+            </p>
+          </div>
+
+          <!-- Card 9 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">9. COCHRANE–ORCUTT</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Applies AR(1) transformation for \(t \ge 2\) and drops observation \(t=1\). The source emphasizes that discarding \(t=1\) causes some efficiency loss.
+            </p>
+          </div>
+
+          <!-- Card 10 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">10. PRAIS–WINSTEN</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Retains \(t=1\) by transforming it via \(y_1^* = \sqrt{1-\widehat{\rho}^2}\,y_1\), preserving all \(n\) observations and avoiding Cochrane–Orcutt efficiency loss.
+            </p>
+          </div>
+
+          <!-- Card 11 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">11. COEFFICIENT INVARIANCE</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Newey–West HAC does not alter \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\). Point estimates remain untouched; only standard errors and covariance are adjusted.
+            </p>
+          </div>
+
+          <!-- Card 12 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">12. BARTLETT KERNEL</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              \(w_s = 1 - \frac{|s|}{L+1}\) for \(|s| \le L\). Assigns linearly declining weights to higher lags, guaranteeing positive semi-definiteness of the covariance matrix.
+            </p>
+          </div>
+
+          <!-- Card 13 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">13. BANDWIDTH HORIZON L</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              Controls how many lag cross-covariances are included. All lags beyond \(L\) receive zero weight in the Newey–West sandwich summation.
+            </p>
+          </div>
+
+          <!-- Card 14 -->
+          <div class="study-card" style="padding: var(--space-sm);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);">14. GLS Efficiency</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 3px 0 0 0;">
+              When the covariance matrix \(\boldsymbol{\Omega}\) is known, Generalized Least Squares (GLS) is Best Linear Unbiased (BLUE).
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check 9.5 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">CONCEPT CHECK</span>
+        <h2 class="study-section-title">5. Quick Check 9.5</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-container quick-check-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: var(--space-xs);">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">CHECK 9.5</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Transformation vs HAC Selection</span>
+          </div>
+
+          <div class="qc-question" style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm);">
+            <strong>Question:</strong> An applied researcher suspects serial correlation in a quarterly macro model with 60 observations, but is uncertain whether errors follow a clean AR(1) process or a more general dynamic pattern with potential heteroskedasticity. Which econometric procedure from the course is most appropriate, and why?
+          </div>
+          
+          <div class="qc-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button class="btn btn-sm btn-outline hint-toggle" id="btnQcHint" type="button">Show Hint</button>
+            <button class="btn btn-sm btn-primary solution-toggle" id="btnQcSolution" type="button">Show Solution</button>
+          </div>
+
+          <div class="qc-feedback d-none" id="qcHintBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem;">
+            <strong>HINT:</strong> Consider which procedure protects inference without forcing the researcher to assume an exact parametric AR(1) specification.
+          </div>
+
+          <div class="qc-feedback d-none" id="qcSolutionBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.4rem;">
+              <strong>ANSWER:</strong> Ordinary Least Squares paired with <strong>Newey–West HAC Standard Errors</strong>.
+            </p>
+            <p style="margin: 0; color: var(--color-text-secondary);">
+              <strong>WHY?</strong> Prais–Winsten and Cochrane–Orcutt strictly assume an AR(1) error specification. If the true disturbance process contains higher-order dynamics or arbitrary heteroskedasticity, those parametric FGLS transformations may be misspecified. In contrast, Newey–West HAC standard errors leave OLS point estimates unchanged and provide consistent asymptotic standard errors robust to both serial correlation (up to bandwidth \(L\)) and arbitrary heteroskedasticity.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Method Dichotomy:</strong> Non-spherical error corrections either transform the data (GLS, FGLS, Prais–Winsten, Cochrane–Orcutt, WLS) or preserve OLS coefficients and adjust standard errors (Newey–West HAC).</li>
+        <li><strong>Prais–Winsten Preservation:</strong> When an AR(1) error process is maintained, Prais–Winsten avoids the efficiency loss of Cochrane–Orcutt by retaining observation \(t=1\) via \(\sqrt{1-\widehat{\rho}^2}\).</li>
+        <li><strong>Newey–West Robustness:</strong> When the dynamic structure is unknown, Newey–West HAC standard errors provide honest large-sample inference without requiring data transformations.</li>
+        <li><strong>WLS Connection:</strong> WLS weights cross-sectional observations by inverse estimated variances, just as quasi-differencing purges serial dependence across time periods.</li>
+        <li><strong>No Universal Hierarchy:</strong> The choice between FGLS transformation and HAC covariance adjustment depends on whether the researcher maintains a specific parametric error model or prefers model-agnostic inference.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">9.4 Newey–West HAC Standard Errors</span>
+      </a>
+      <a href="index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Module Complete &rarr;</span>
+        <span class="nav-btn-title">Module 9 Overview &amp; Hub</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <script>
+    (function() {
+      // Quick Check Toggle Handlers
+      const btnQcHint = document.getElementById('btnQcHint');
+      const btnQcSolution = document.getElementById('btnQcSolution');
+      const qcHintBox = document.getElementById('qcHintBox');
+      const qcSolutionBox = document.getElementById('qcSolutionBox');
+
+      if (btnQcHint && qcHintBox) {
+        btnQcHint.addEventListener('click', () => {
+          qcHintBox.classList.toggle('d-none');
+          const isVisible = !qcHintBox.classList.contains('d-none');
+          btnQcHint.textContent = isVisible ? 'Hide Hint' : 'Show Hint';
+        });
+      }
+      if (btnQcSolution && qcSolutionBox) {
+        btnQcSolution.addEventListener('click', () => {
+          qcSolutionBox.classList.toggle('d-none');
+          const isVisible = !qcSolutionBox.classList.contains('d-none');
+          btnQcSolution.textContent = isVisible ? 'Hide Solution' : 'Show Solution';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

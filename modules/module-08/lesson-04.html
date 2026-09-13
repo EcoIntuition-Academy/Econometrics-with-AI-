@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.4: Testing for Heteroskedasticity — EcoIntuition Academy</title>
+  <meta name="description" content="Detect non-constant error variance through residual auxiliary regressions, compare the Breusch–Pagan and White test procedures, and interpret chi-square test statistics.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="04">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Testing for Heteroskedasticity</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.4</span>
+        <span class="badge">Specification Testing</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Testing for Heteroskedasticity
+      </h1>
+      <p class="lesson-hero-lead">
+        Before deciding whether to report conventional standard errors, robust standard errors, or implement weighted estimation, researchers test whether error variance is constant. We formalize the Breusch–Pagan and White auxiliary regression tests, examine their asymptotic chi-square statistics, and analyze their detection capabilities.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Explain why squared sample residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\) act as empirical proxies for conditional variance.</li>
+        <li>Execute the Breusch–Pagan Lagrange Multiplier test and derive its asymptotic \(\chi^2_k\) null distribution.</li>
+        <li>Implement the White general test incorporating linear terms, quadratic squares, and cross-products.</li>
+        <li>Compare the power, specification assumptions, and trade-offs between Breusch–Pagan and White tests.</li>
+        <li>Internalize that rejecting homoskedasticity signals inference failure, NOT coefficient bias.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Breusch-Pagan Test -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The Breusch–Pagan Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The Breusch–Pagan (1979) test investigates whether the conditional variance of \(\varepsilon_i\) is linearly related to the explanatory variables in the regression model.
+        </p>
+
+        <!-- 4-Step Procedure Container -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">STEP 1</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Primary OLS Regression</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Estimate the main regression model by OLS and save the residuals:
+              $$\widehat{\varepsilon}_i = y_i - \mathbf{x}_i'\widehat{\boldsymbol{\beta}}_{\text{OLS}}$$
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #d97706; margin-bottom: 0.25rem;">STEP 2</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Compute Squared Residuals</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Calculate the squared residuals to serve as the proxy for error variance:
+              $$\widehat{u}_i \equiv \widehat{\varepsilon}_i^2$$
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #7c3aed;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">STEP 3</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Auxiliary Regression</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Regress \(\widehat{u}_i\) on the original \(k\) explanatory variables:
+              $$\widehat{u}_i = \gamma_0 + \gamma_1 x_{i1} + \dots + \gamma_k x_{ik} + v_i$$
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">STEP 4</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Test Statistic Computation</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Retrieve \(R^2\) from the auxiliary regression and evaluate:
+              $$n R^2 \xrightarrow{d} \chi^2_k$$
+            </p>
+          </div>
+
+        </div>
+
+        <!-- BP Flowchart & Intuition -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-top: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs); text-align: center;">BREUSCH–PAGAN TEST WORKFLOW</div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600;">
+            <span style="padding: 6px 12px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--color-border);">OLS</span>
+            <span>→</span>
+            <span style="padding: 6px 12px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--color-border);">Residuals \(\widehat{\varepsilon}_i\)</span>
+            <span>→</span>
+            <span style="padding: 6px 12px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--color-border);">Square \(\widehat{u}_i = \widehat{\varepsilon}_i^2\)</span>
+            <span>→</span>
+            <span style="padding: 6px 12px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--color-border);">Auxiliary OLS</span>
+            <span>→</span>
+            <span style="padding: 6px 12px; background: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-xs); border: 1px solid var(--color-primary);">Test Stat \(n R^2\)</span>
+            <span>→</span>
+            <span style="padding: 6px 12px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--color-border);">Compare to \(\chi^2_k\)</span>
+          </div>
+        </div>
+
+        <!-- Economic Intuition -->
+        <div class="callout" style="margin-top: var(--space-lg);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: var(--color-primary); color: #fff;">TEST INTUITION</span>
+            <h3 class="callout-title">What Is the Breusch–Pagan Test Asking?</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">
+              Under the null hypothesis of homoskedasticity \(H_0: \gamma_1 = \dots = \gamma_k = 0\), the explanatory variables have zero predictive power over error magnitude; the auxiliary regression should yield an \(R^2\) close to zero. If the regressors systematically explain fluctuations in squared residuals, \(n R^2\) exceeds the critical value of \(\chi^2_k\), and homoskedasticity is rejected.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The White Test -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The White General Test for Heteroskedasticity</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The Breusch–Pagan test assumes heteroskedasticity is linear in the regressors. However, variance could depend nonlinearly on the predictors (e.g., \(x^2\)) or on interactions between them (\(x_1 x_2\)). Halbert White (1980) formulated a general test that captures nonlinear variance functions:
+        </p>
+
+        <!-- White Test Steps -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">WHITE TEST AUXILIARY REGRESSION</div>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+            Regress squared OLS residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\) on all original regressors, their squares, and all distinct cross-products:
+          </p>
+          <div style="padding: 0.5rem 0;">
+            $$\begin{aligned}
+              \widehat{u}_i = \gamma_0 &+ \sum_{j=1}^k \gamma_j x_{ij} + \sum_{j=1}^k \delta_j x_{ij}^2 \\
+              &+ \sum_{j=1}^{k-1}\sum_{m=j+1}^k \lambda_{jm} x_{ij}x_{im} + v_i
+            \end{aligned}$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            Under the null hypothesis of homoskedasticity \(H_0\):
+          </p>
+          <div style="padding: 0.25rem 0; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); text-align: center;">
+            $$n R^2 \xrightarrow{d} \chi^2_q$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            where \(q\) is the total number of non-constant slope regressors in the expanded auxiliary model.
+          </p>
+        </div>
+
+        <!-- Comparison Table: BP vs White -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Methodological Comparison: Breusch–Pagan vs. White</h3>
+        
+        <div class="table-responsive" style="margin-top: var(--space-sm);">
+          <table class="table table-bordered" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="background: var(--color-surface);">
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Feature</th>
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">Breusch–Pagan Test</th>
+                <th style="padding: 10px; border: 1px solid var(--border-subtle); text-align: left;">White Test</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 600;">Dependent Variable</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Squared OLS residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Squared OLS residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 600;">Auxiliary Regressors</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Original regressors \(x_{i1}, \dots, x_{ik}\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Regressors, squared regressors \(x_{ij}^2\), cross-products \(x_{ij}x_{im}\)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 600;">Degrees of Freedom</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-weight: 600;">\(k\)</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-weight: 600;">\(q = 2k + k(k-1)/2\)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle); font-weight: 600;">Sensitivity</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Detects linear variance trends; higher power against monotonic heteroskedasticity</td>
+                <td style="padding: 10px; border: 1px solid var(--border-subtle);">Detects general nonlinear variance patterns, but consumes more degrees of freedom</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Crucial Caution Card -->
+        <div class="callout callout-warning" style="margin-top: var(--space-lg);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: #d97706; color: #fff;">METHODOLOGICAL CAUTION</span>
+            <h3 class="callout-title" style="color: #d97706;">Rejection of \(H_0\) Does NOT Mean OLS Is Biased</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">
+              Rejecting the null hypothesis of homoskedasticity (\(p < 0.05\)) informs the researcher that <strong>conventional standard errors and \(t\)-statistics are invalid</strong>. It does <em>not</em> imply that \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) is biased or inconsistent. Under strict exogeneity \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\), OLS point estimates remain unbiased; researchers should simply report White robust standard errors or apply weighted least squares.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: Heteroskedasticity Test Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Select from three empirical disturbance regimes to visualize how the auxiliary regression fits the squared residuals \(\widehat{u}_i\), how \(n R^2\) is computed, and whether the test detects heteroskedasticity.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Mode Buttons -->
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md);" role="group" aria-label="Test Regime Selection">
+            <button class="btn btn-primary test-mode-btn active" id="btnTestHomo" type="button">1. Homoskedastic Data</button>
+            <button class="btn btn-outline test-mode-btn" id="btnTestLinear" type="button">2. Linear Heteroskedasticity</button>
+            <button class="btn btn-outline test-mode-btn" id="btnTestNonlinear" type="button">3. Quadratic Heteroskedasticity</button>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Sample Size (\(n\))</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">50</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Auxiliary \(R^2\)</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricR2">0.021</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Test Stat \(n R^2\) (\(\chi^2_{\text{stat}}\))</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricStat">1.05</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">5% Critical Value \(\chi^2_{0.05}\)</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-text-secondary);" id="metricCrit">3.84 (df=1)</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Test Decision</div>
+              <div style="font-size: 1.05rem; font-weight: 700; color: #059669;" id="metricDecision">Fail to Reject H₀</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #d97706;"></span> Squared Residual \(\widehat{u}_i = \widehat{\varepsilon}_i^2\)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: var(--color-primary);"></span> Auxiliary Fitted Curve</span>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 320px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="testLabSvg" viewBox="0 0 600 300" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="testLabInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Homoskedastic Scenario:</strong> Regressing squared residuals on \(x\) yields an auxiliary line with virtually zero slope (\(R^2 = 0.021\)). The test statistic \(n R^2 = 1.05 < 3.84\), so we fail to reject the null hypothesis of homoskedasticity.
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A scatter plot of squared OLS residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\) plotted against the explanatory variable \(x_i\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                When heteroskedasticity is present, the auxiliary regression curve trends sharply upward, driving up \(R^2\) and the test statistic \(nR^2\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The Lagrange Multiplier statistic \(n R^2\) requires only an auxiliary OLS regression, making testing computationally straightforward.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Under the null hypothesis, \(n R^2\) follows a \(\chi^2\) distribution. Rejection indicates that the spherical-error assumption fails.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Click "Quadratic Heteroskedasticity" to observe how a U-shaped variance pattern yields \(nR^2 = 18.25\), soundly rejecting homoskedasticity.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check &amp; Understanding Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.4</span> Why are squared residuals \(\widehat{\varepsilon}_i^2\) used as the dependent variable in these tests?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>Because under the zero conditional mean assumption \(\mathbb{E}[\varepsilon_i \mid \mathbf{X}] = 0\), the conditional variance of the disturbance is mathematically defined as \(\operatorname{Var}(\varepsilon_i \mid \mathbf{X}) = \mathbb{E}[\varepsilon_i^2 \mid \mathbf{X}]\).</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> Since the true disturbance \(\varepsilon_i\) is unobservable, the squared OLS residual \(\widehat{u}_i = \widehat{\varepsilon}_i^2\) serves as the natural observable sample proxy for the underlying conditional error variance.
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              Regressing \(\widehat{\varepsilon}_i^2\) on explanatory variables directly tests whether the conditional variance is a function of the regressors, which would directly contradict the constant-variance assumption \(\mathbb{E}[\varepsilon_i^2 \mid \mathbf{X}] = \sigma^2\).
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The Breusch–Pagan test regresses squared OLS residuals \(\widehat{u}_i = \widehat{\varepsilon}_i^2\) on the original regressors to detect linear heteroskedasticity.</li>
+        <li>The White test expands the auxiliary regression to include squares and cross-products, capturing arbitrary nonlinear variance patterns.</li>
+        <li>Both procedures evaluate the Lagrange Multiplier test statistic \(n R^2\), which asymptotically follows a chi-square distribution under the null hypothesis of homoskedasticity.</li>
+        <li>Rejecting homoskedasticity signals that conventional standard errors are invalid, but does NOT imply that OLS point estimates are biased.</li>
+        <li>When tests reject homoskedasticity, researchers should report White robust standard errors or apply Weighted Least Squares.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-03.html" class="btn btn-outline">
+        ← Lesson 8.3: White's Robust SE
+      </a>
+      <a href="lesson-05.html" class="btn btn-primary">
+        Next: 8.5 Weighted Least Squares →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Lab 8.4 Heteroskedasticity Test Explorer Logic
+    const testSvg = document.getElementById('testLabSvg');
+    const btnHomo = document.getElementById('btnTestHomo');
+    const btnLinear = document.getElementById('btnTestLinear');
+    const btnNonlinear = document.getElementById('btnTestNonlinear');
+    const metricR2 = document.getElementById('metricR2');
+    const metricStat = document.getElementById('metricStat');
+    const metricCrit = document.getElementById('metricCrit');
+    const metricDecision = document.getElementById('metricDecision');
+    const testInsight = document.getElementById('testLabInsight');
+
+    const sampleN = 50;
+    const testXs = [];
+    const testBaseShocks = [];
+
+    for (let i = 0; i < sampleN; i++) {
+      const x = 1.0 + (i / (sampleN - 1)) * 9.0;
+      testXs.push(x);
+      const shock = Math.sin(i * 2.1) * 0.7 + Math.cos(i * 3.4) * 0.55;
+      testBaseShocks.push(shock);
+    }
+
+    function renderTestLab(mode) {
+      testSvg.innerHTML = '';
+      const width = 600;
+      const height = 300;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const xScale = x => margin.left + ((x - 0) / 11) * plotW;
+      const yScale = u => margin.top + plotH - ((u - 0) / 16) * plotH;
+
+      // Axis lines
+      const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+      axis.setAttribute('stroke', 'var(--border-strong)');
+      axis.setAttribute('stroke-width', '1.2');
+      axis.setAttribute('fill', 'none');
+      testSvg.appendChild(axis);
+
+      const squaredResiduals = [];
+      let r2Val, statVal, critVal, decisionText, decisionColor, insightHtml;
+
+      if (mode === 'homo') {
+        for (let i = 0; i < sampleN; i++) {
+          const res = testBaseShocks[i] * 1.4;
+          squaredResiduals.push(res * res);
+        }
+        r2Val = 0.021;
+        statVal = (sampleN * r2Val).toFixed(2);
+        critVal = '3.84 (df=1)';
+        decisionText = 'Fail to Reject H₀ (Homoskedastic)';
+        decisionColor = '#059669';
+        insightHtml = '<strong>Homoskedastic Scenario:</strong> Squared residuals show no systematic trend with \(x\). The auxiliary line is nearly flat (\(R^2 = 0.021\)). Test statistic \(n R^2 = 1.05 < 3.84\), so we fail to reject the null hypothesis of homoskedasticity.';
+
+        // Auxiliary regression line: flat
+        const auxLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        auxLine.setAttribute('x1', xScale(1));
+        auxLine.setAttribute('y1', yScale(1.8));
+        auxLine.setAttribute('x2', xScale(10));
+        auxLine.setAttribute('y2', yScale(2.1));
+        auxLine.setAttribute('stroke', 'var(--color-primary)');
+        auxLine.setAttribute('stroke-width', '2.5');
+        testSvg.appendChild(auxLine);
+
+      } else if (mode === 'linear') {
+        for (let i = 0; i < sampleN; i++) {
+          const sd = 0.5 + 0.32 * testXs[i];
+          const res = testBaseShocks[i] * sd;
+          squaredResiduals.push(res * res);
+        }
+        r2Val = 0.284;
+        statVal = (sampleN * r2Val).toFixed(2);
+        critVal = '3.84 (df=1)';
+        decisionText = 'Reject H₀ (p < 0.001)';
+        decisionColor = '#dc2626';
+        insightHtml = '<strong>Linear Heteroskedasticity:</strong> Squared residuals expand steadily across \(x\). The auxiliary regression fits a strong positive slope (\(R^2 = 0.284\)). The test statistic \(n R^2 = 14.20 \gg 3.84\), strongly rejecting homoskedasticity!';
+
+        // Auxiliary regression line: upward linear
+        const auxLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        auxLine.setAttribute('x1', xScale(1));
+        auxLine.setAttribute('y1', yScale(1.0));
+        auxLine.setAttribute('x2', xScale(10));
+        auxLine.setAttribute('y2', yScale(8.8));
+        auxLine.setAttribute('stroke', 'var(--color-primary)');
+        auxLine.setAttribute('stroke-width', '2.5');
+        testSvg.appendChild(auxLine);
+
+      } else if (mode === 'nonlinear') {
+        for (let i = 0; i < sampleN; i++) {
+          const dev = testXs[i] - 5.5;
+          const sd = 0.6 + 0.12 * (dev * dev);
+          const res = testBaseShocks[i] * sd;
+          squaredResiduals.push(res * res);
+        }
+        r2Val = 0.365;
+        statVal = (sampleN * r2Val).toFixed(2);
+        critVal = '5.99 (df=2)';
+        decisionText = 'Reject H₀ (p < 0.001)';
+        decisionColor = '#dc2626';
+        insightHtml = '<strong>Quadratic Heteroskedasticity:</strong> Variance forms a U-shaped profile with high dispersion at both extreme ends of \(x\). The White auxiliary model with \(x^2\) captures this curvature (\(R^2 = 0.365\)). Test statistic \(n R^2 = 18.25 \gg 5.99\), decisive rejection!';
+
+        // Curved auxiliary regression line
+        let pathD = `M ${xScale(1)} ${yScale(0.6 + 0.12 * Math.pow(1 - 5.5, 2))}`;
+        for (let x = 1.5; x <= 10; x += 0.5) {
+          const uFit = 0.8 + 0.22 * Math.pow(x - 5.5, 2);
+          pathD += ` L ${xScale(x)} ${yScale(uFit)}`;
+        }
+        const auxCurve = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        auxCurve.setAttribute('d', pathD);
+        auxCurve.setAttribute('stroke', 'var(--color-primary)');
+        auxCurve.setAttribute('stroke-width', '2.5');
+        auxCurve.setAttribute('fill', 'none');
+        testSvg.appendChild(auxCurve);
+      }
+
+      // Plot squared residual points
+      for (let i = 0; i < sampleN; i++) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', xScale(testXs[i]));
+        circle.setAttribute('cy', yScale(squaredResiduals[i]));
+        circle.setAttribute('r', '4');
+        circle.setAttribute('fill', '#d97706');
+        circle.setAttribute('stroke', '#fff');
+        circle.setAttribute('stroke-width', '1');
+        testSvg.appendChild(circle);
+      }
+
+      // Update metrics
+      metricR2.textContent = r2Val.toFixed(3);
+      metricStat.textContent = statVal;
+      metricCrit.textContent = critVal;
+      metricDecision.textContent = decisionText;
+      metricDecision.style.color = decisionColor;
+      testInsight.innerHTML = insightHtml;
+    }
+
+    btnHomo.addEventListener('click', () => {
+      btnHomo.className = 'btn btn-primary test-mode-btn active';
+      btnLinear.className = 'btn btn-outline test-mode-btn';
+      btnNonlinear.className = 'btn btn-outline test-mode-btn';
+      renderTestLab('homo');
+    });
+
+    btnLinear.addEventListener('click', () => {
+      btnLinear.className = 'btn btn-primary test-mode-btn active';
+      btnHomo.className = 'btn btn-outline test-mode-btn';
+      btnNonlinear.className = 'btn btn-outline test-mode-btn';
+      renderTestLab('linear');
+    });
+
+    btnNonlinear.addEventListener('click', () => {
+      btnNonlinear.className = 'btn btn-primary test-mode-btn active';
+      btnHomo.className = 'btn btn-outline test-mode-btn';
+      btnLinear.className = 'btn btn-outline test-mode-btn';
+      renderTestLab('nonlinear');
+    });
+
+    // Initial render
+    renderTestLab('homo');
+  </script>
+</body>
+</html>

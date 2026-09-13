@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10.4: Choosing the Cluster Level &amp; Small Clusters — Econometrics with AI</title>
+  <meta name="description" content="Determine the appropriate level of clustering based on treatment assignment and policy variation, analyze small-cluster asymptotic breakdown, and survey modern wild cluster bootstrap methods.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-10" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 10</a>
+          <span class="module-nav-title">Panel Data II</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 5 &middot; Choosing the Cluster Level &amp; Small Clusters</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 10 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.1 The First Differences Model</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.2 First Differences vs Fixed Effects</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.3 Cluster-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">80%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Header Block -->
+    <header class="lesson-header-block">
+      <div class="lesson-badge-row">
+        <span class="academic-badge badge-tier">Tier 4 &middot; Panel &amp; Discrete</span>
+        <span class="academic-badge badge-module">Module 10 &middot; Lesson 4</span>
+        <span class="academic-badge badge-time">Est. 25 min</span>
+      </div>
+      <h1 class="lesson-title">Choosing the Cluster Level &amp; Small-Cluster Issues</h1>
+      <p class="lesson-subtitle">
+        Aligning clustering levels with policy variation, diagnosing finite-sample asymptotic breakdown, and navigating modern wild bootstrap solutions.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      <ul class="objectives-list">
+        <li>Apply the core econometric rule: clustering should match the level of treatment assignment or policy variation.</li>
+        <li>Identify the catastrophic consequences of clustering too finely (e.g., individual instead of state).</li>
+        <li>Analyze the small-cluster problem: why having few clusters biases cluster-robust standard errors downward.</li>
+        <li>Survey modern econometric literature (Cameron-Gelbach-Miller 2008, Djogbenou et al. 2019, Roodman et al. 2019) supporting inference with as few as 6 clusters via wild cluster bootstrap.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: What to Cluster On -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. What Should We Cluster On?</h2>
+      </div>
+
+      <div class="study-section-body">
+        <p class="lead-text">
+          There is no universally accepted automatic rule on what level to cluster at. However, applied econometrics provides a foundational guiding principle:
+        </p>
+
+        <div class="callout callout-info" style="margin-top: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge">CORE GUIDELINE</span>
+            <span class="callout-title">Align with Policy Variation</span>
+          </div>
+          <div class="callout-body">
+            <p style="margin-bottom: 0;">
+              <strong>Clustering should ideally match the level of treatment assignment or policy variation.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div style="padding: var(--space-md); background: var(--surface-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-top: 3px solid var(--success);">
+            <div style="font-weight: 700; color: var(--success); font-size: 0.95rem;">County-Level Policy</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              If health clinic subsidies vary across counties, clustering at the county level accounts for common local economic and demographic shocks affecting all individuals in that county.
+            </p>
+          </div>
+
+          <div style="padding: var(--space-md); background: var(--surface-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-top: 3px solid #ef4444;">
+            <div style="font-weight: 700; color: #ef4444; font-size: 0.95rem;">State-Level Policy</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              If minimum wage laws or tax reforms vary at the state level, clustering at the individual or household level <strong>erroneously assumes zero correlation</strong> across residents of the same state, severely understating standard errors.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge">CAUTION</span>
+            <span class="callout-title">Randomization Within Groups</span>
+          </div>
+          <div class="callout-body">
+            <p style="margin-bottom: 0;">Even when treatments are randomly assigned to individuals or schools within a district, unobserved district-wide policies or institutional shocks can induce correlation. In many cases, clustering at the broader group level remains essential.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Small Number of Clusters -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Small Number of Clusters Problem</h2>
+      </div>
+
+      <div class="study-section-body">
+        <p class="lead-text">
+          Standard cluster-robust covariance matrices rely on large-cluster asymptotics (as the number of clusters \(G \to \infty\)). When the number of clusters is small in practice, several serious econometric issues arise:
+        </p>
+
+        <p>
+          <strong>1. Downward Bias of Standard Errors:</strong> When the number of clusters is small, cluster residuals are mechanically constrained by OLS first-order conditions, causing sample outer products to systematically underestimate the true population score variance.
+        </p>
+
+        <p>
+          <strong>2. Worse Asymptotic Approximation:</strong> As cluster count decreases, the sampling distribution of the variance estimator exhibits heavy skewness and excess variance, causing \(t\)-statistics to reject the null hypothesis far too frequently (e.g., rejecting at 20% when nominal size is 5%).
+        </p>
+
+        <!-- The Clustering Dilemma -->
+        <div class="dilemma-block" style="margin-top: 18px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">The Clustering Dilemma</h3>
+          <p><strong>Broader clustering:</strong> captures wider dependence but may leave fewer effective clusters.</p>
+          <p><strong>Finer clustering:</strong> creates more clusters but can incorrectly assume independence across broader groups.</p>
+        </div>
+
+        <!-- Further Reading Callout -->
+        <div class="further-reading">
+          <div class="further-reading-label">FURTHER READING</div>
+          <ul class="further-reading-list">
+            <li><strong>Cameron, Gelbach &amp; Miller (2008)</strong> &mdash; <span class="ref-title">Bootstrap-Based Improvements for Inference with Clustered Errors</span>, <span class="ref-journal">Rev. Econ. Stat.</span></li>
+            <li><strong>Djogbenou, MacKinnon &amp; Nielsen (2019)</strong> &mdash; <span class="ref-title">Asymptotic Theory and Wild Bootstrap for High-Dimensional Clustering</span>, <span class="ref-journal">J. Econometrics</span></li>
+            <li><strong>Hess (2017)</strong> &mdash; <span class="ref-title">Randomization Inference with Few Clusters</span>, <span class="ref-journal">Stata J.</span></li>
+            <li><strong>Roodman, Nielsen, Webb &amp; MacKinnon (2019)</strong> &mdash; <span class="ref-title">Fast and Wild: Bootstrap Inference in Stata</span>, <span class="ref-journal">Stata J.</span></li>
+          </ul>
+        </div>
+
+        <!-- Key Takeaway Callout -->
+        <div class="key-takeaway-card">
+          <div class="key-takeaway-label">KEY TAKEAWAY</div>
+          <p class="key-takeaway-text">
+            Specialized small-cluster methods are discussed in the cited literature; ordinary large-cluster approximations become less reliable when the number of clusters is limited.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Lab 10.4 -->
+    <div class="interactive-lab-card interactive-lab" id="lab104">
+      <div class="lab-header">
+        <span class="lab-badge">INTERACTIVE LAB 10.4</span>
+        <h2 class="lab-title">Policy Level &amp; Clustering Diagnostic</h2>
+        <p class="lab-desc">
+          Select an empirical research design scenario and choose candidate clustering levels to evaluate trade-offs between unmodeled intra-group correlation and small-cluster bias.
+        </p>
+      </div>
+
+      <!-- Controls -->
+      <div class="lab-controls-panel">
+        <div class="control-group">
+          <label class="control-label">Research Scenario</label>
+          <div class="btn-group" role="group" aria-label="Scenarios">
+            <button type="button" class="btn btn-sm btn-primary" id="btnScenState">1. State Minimum Wage</button>
+            <button type="button" class="btn btn-sm btn-outline" id="btnScenSchool">2. Classroom Tutoring</button>
+            <button type="button" class="btn btn-sm btn-outline" id="btnScenCounty">3. County Health Subsidy</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Proposed Clustering Level</label>
+          <div class="btn-group" role="group" aria-label="Cluster Levels">
+            <button type="button" class="btn btn-sm btn-outline" id="btnLvlInd">Individual</button>
+            <button type="button" class="btn btn-sm btn-outline" id="btnLvlMid">Sub-Unit (School/County)</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btnLvlMacro">Macro (State/District)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagnostic Evaluation Card -->
+      <div class="card card-bordered" id="diagCard" style="padding: var(--space-md); background: var(--surface-secondary); margin-top: var(--space-md);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-xs);">
+          <div style="font-weight: 700; font-size: 1.05rem;" id="diagTitle">
+            Evaluating: State Minimum Wage clustered at State Level
+          </div>
+          <span class="badge" id="diagBadge" style="background: var(--success-soft); color: var(--success); font-weight: 700;">
+            RECOMMENDED SPECIFICATION
+          </span>
+        </div>
+        <p style="margin-top: var(--space-sm); font-size: 0.9rem; color: var(--text-secondary);" id="diagExplanation">
+          State policies vary across states. Clustering at the state level directly matches the policy variation dimension, capturing all unobserved state-level labor market dynamics and avoiding false precision.
+        </p>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="lab-metrics-grid" style="margin-top: var(--space-md);">
+        <div class="metric-card">
+          <div class="metric-label">CLUSTERS AVAILABLE (G)</div>
+          <div class="metric-value" id="metricDiagG">50 States</div>
+          <div class="metric-sub">Sufficient for asymptotics</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">CORRELATION RISK</div>
+          <div class="metric-value" id="metricRisk" style="color: var(--success);">Minimal</div>
+          <div class="metric-sub">Within-state captured</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">SMALL-G BIAS</div>
+          <div class="metric-value" id="metricBias" style="color: var(--success);">Low</div>
+          <div class="metric-sub">G &ge; 40 asymptotic zone</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">VERDICT</div>
+          <div class="metric-value" id="metricVerdict" style="color: var(--success);">Valid</div>
+          <div class="metric-sub">Honest inference</div>
+        </div>
+      </div>
+
+      <!-- Visual Explanation Grid -->
+      <div class="visual-explanation-grid" style="margin-top: var(--space-lg);">
+        <div class="grid-card seeing">
+          <div class="grid-card-label">WHAT YOU ARE SEEING</div>
+          <p>
+            An interactive diagnostic matrix linking policy assignment levels to clustering choices and asymptotic trade-offs.
+          </p>
+        </div>
+
+        <div class="grid-card notice">
+          <div class="grid-card-label">WHAT TO NOTICE</div>
+          <p>
+            Selecting <strong>Individual</strong> for State Minimum Wage yields "Severe Risk" because it ignores within-state correlation across individuals, producing false precision.
+          </p>
+        </div>
+
+        <div class="grid-card matters">
+          <div class="grid-card-label">WHY IT MATTERS</div>
+          <p>
+            In empirical microeconomics, clustering at the wrong level is among the most frequent causes of overturned findings in peer review.
+          </p>
+        </div>
+
+        <div class="grid-card interpretation">
+          <div class="grid-card-label">ECONOMETRIC INTERPRETATION</div>
+          <p>
+            Always cluster at least as high as the level of treatment variation. If the number of clusters becomes small at that level, turn to wild bootstrap methods.
+          </p>
+        </div>
+
+        <div class="grid-card highlight">
+          <div class="grid-card-label">TRY THIS</div>
+          <p>
+            Select <strong>Classroom Tutoring</strong> and test <strong>Individual</strong> vs <strong>Sub-Unit (School)</strong> vs <strong>Macro (District)</strong> to observe how the trade-offs shift.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Concept Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Concept Check</h2>
+      </div>
+
+      <div class="study-section-body">
+        <div class="quick-check-container quick-check-card">
+          <div class="quick-check-header">
+            <span class="academic-badge badge-check">CHECK 10.4</span>
+            <span class="quick-check-subtitle">Policy Variation Principle</span>
+          </div>
+
+          <h3 class="quick-check-question">
+            Why is clustering at the individual level inappropriate when the policy being evaluated varies at the state level?
+          </h3>
+
+          <div class="quick-check-actions">
+            <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint104">Show Hint</button>
+            <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol104">Show Solution</button>
+          </div>
+
+          <div class="hint-content" id="hint104" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: var(--warning-soft); border-left: 3px solid var(--warning); border-radius: var(--radius-sm);">
+            <strong>Hint:</strong> Are individuals living in the same state exposed to common state-level economic conditions and shocks?
+          </div>
+
+          <div class="solution-content" id="sol104" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: var(--success-soft); border-left: 3px solid var(--success); border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: var(--success); margin-bottom: var(--space-xs);">ANSWER:</div>
+            <p style="margin-bottom: var(--space-xs);">
+              Clustering at the individual level <strong>erroneously assumes zero correlation</strong> among individuals residing within the same state.
+            </p>
+            <div style="font-weight: 700; color: var(--success); margin-top: var(--space-sm); margin-bottom: var(--space-xs);">WHY?</div>
+            <p style="margin-bottom: 0;">
+              Because the policy applies uniformly to all residents in a state, their outcomes share common state-level unobserved shocks. Clustering only at the individual level ignores this within-state correlation, treating 1,000 individuals in Texas as 1,000 independent policy experiments. This drastically understates standard errors and creates spurious statistical significance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Policy Alignment Rule:</strong> The level of clustering should match the level of treatment assignment or policy variation.</li>
+        <li><strong>Finer Clustering Pitfall:</strong> Clustering at smaller units (e.g., household or individual) erroneously assumes zero correlation across broader groups sharing common policy shocks.</li>
+        <li><strong>Small Number of Clusters:</strong> When the number of clusters is small, asymptotic formulas break down, underestimating standard errors.</li>
+        <li><strong>Modern Bootstrap Solutions:</strong> Literature (Cameron et al. 2008, Djogbenou et al. 2019, Roodman et al. 2019) validates inference with as few as 6 clusters using wild cluster bootstrap methods.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">10.3 Cluster-Robust Standard Errors</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 10.4 Script -->
+  <script>
+    (function() {
+      let currentScen = 'state'; // 'state', 'school', 'county'
+      let currentLvl = 'macro';  // 'ind', 'mid', 'macro'
+
+      const btnScenState = document.getElementById('btnScenState');
+      const btnScenSchool = document.getElementById('btnScenSchool');
+      const btnScenCounty = document.getElementById('btnScenCounty');
+
+      const btnLvlInd = document.getElementById('btnLvlInd');
+      const btnLvlMid = document.getElementById('btnLvlMid');
+      const btnLvlMacro = document.getElementById('btnLvlMacro');
+
+      const diagTitle = document.getElementById('diagTitle');
+      const diagBadge = document.getElementById('diagBadge');
+      const diagExplanation = document.getElementById('diagExplanation');
+
+      const metricDiagG = document.getElementById('metricDiagG');
+      const metricRisk = document.getElementById('metricRisk');
+      const metricBias = document.getElementById('metricBias');
+      const metricVerdict = document.getElementById('metricVerdict');
+
+      function updateDiagnostic() {
+        // Scenarios details
+        if (currentScen === 'state') {
+          btnLvlMid.textContent = 'County Level';
+          btnLvlMacro.textContent = 'State Level';
+
+          if (currentLvl === 'ind') {
+            diagTitle.textContent = 'State Policy with Individual Clustering';
+            diagBadge.textContent = 'FATALLY FLAWED';
+            diagBadge.style.background = 'rgba(239,68,68,0.15)';
+            diagBadge.style.color = '#ef4444';
+            diagExplanation.textContent = 'Policy varies at the state level. Clustering at the individual level ignores all correlation among workers in the same state, severely understating standard errors and creating false positive findings.';
+            metricDiagG.textContent = '25,000 Workers';
+            metricRisk.textContent = 'Extreme';
+            metricRisk.style.color = '#ef4444';
+            metricBias.textContent = 'None';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Invalid';
+            metricVerdict.style.color = '#ef4444';
+          } else if (currentLvl === 'mid') {
+            diagTitle.textContent = 'State Policy with County Clustering';
+            diagBadge.textContent = 'SUB-OPTIMAL';
+            diagBadge.style.background = 'var(--warning-soft)';
+            diagBadge.style.color = 'var(--warning)';
+            diagExplanation.textContent = 'Better than individual clustering, but still assumes zero correlation between neighboring counties within the same state. Because the minimum wage law is statewide, state-level clustering is preferred.';
+            metricDiagG.textContent = '350 Counties';
+            metricRisk.textContent = 'Moderate';
+            metricRisk.style.color = 'var(--warning)';
+            metricBias.textContent = 'Very Low';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Questionable';
+            metricVerdict.style.color = 'var(--warning)';
+          } else {
+            diagTitle.textContent = 'State Policy with State-Level Clustering';
+            diagBadge.textContent = 'RECOMMENDED SPECIFICATION';
+            diagBadge.style.background = 'var(--success-soft)';
+            diagBadge.style.color = 'var(--success)';
+            diagExplanation.textContent = 'Matches the exact level of policy variation. Captures all within-state serial correlation and statewide macroeconomic shocks. Standard errors provide honest, robust inference.';
+            metricDiagG.textContent = '50 States';
+            metricRisk.textContent = 'Minimal';
+            metricRisk.style.color = 'var(--success)';
+            metricBias.textContent = 'Low (G=50)';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Valid';
+            metricVerdict.style.color = 'var(--success)';
+          }
+        } else if (currentScen === 'school') {
+          btnLvlMid.textContent = 'School Level';
+          btnLvlMacro.textContent = 'District Level';
+
+          if (currentLvl === 'ind') {
+            diagTitle.textContent = 'Classroom Intervention with Student Clustering';
+            diagBadge.textContent = 'INCORRECT';
+            diagBadge.style.background = 'rgba(239,68,68,0.15)';
+            diagBadge.style.color = '#ef4444';
+            diagExplanation.textContent = 'Students in the same classroom share the same teacher and peer environment. Clustering at the student level ignores peer effects and common teacher shocks.';
+            metricDiagG.textContent = '3,200 Students';
+            metricRisk.textContent = 'High';
+            metricRisk.style.color = '#ef4444';
+            metricBias.textContent = 'None';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Invalid';
+            metricVerdict.style.color = '#ef4444';
+          } else if (currentLvl === 'mid') {
+            diagTitle.textContent = 'Classroom Intervention with School Clustering';
+            diagBadge.textContent = 'RECOMMENDED SPECIFICATION';
+            diagBadge.style.background = 'var(--success-soft)';
+            diagBadge.style.color = 'var(--success)';
+            diagExplanation.textContent = 'Accounts for common school administration, teacher allocation, and school-wide disruptions. 80 schools provide plenty of clusters for robust asymptotics.';
+            metricDiagG.textContent = '80 Schools';
+            metricRisk.textContent = 'Minimal';
+            metricRisk.style.color = 'var(--success)';
+            metricBias.textContent = 'Low';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Valid';
+            metricVerdict.style.color = 'var(--success)';
+          } else {
+            diagTitle.textContent = 'Classroom Intervention with District Clustering';
+            diagBadge.textContent = 'FEW CLUSTERS WARNING';
+            diagBadge.style.background = 'var(--warning-soft)';
+            diagBadge.style.color = 'var(--warning)';
+            diagExplanation.textContent = 'District-level clustering covers all possible cross-school spillovers, but there are only 8 school districts. Naive CRSE breaks down here; you must apply wild cluster bootstrap.';
+            metricDiagG.textContent = '8 Districts';
+            metricRisk.textContent = 'Zero';
+            metricRisk.style.color = 'var(--success)';
+            metricBias.textContent = 'Severe (G=8)';
+            metricBias.style.color = '#ef4444';
+            metricVerdict.textContent = 'Needs Bootstrap';
+            metricVerdict.style.color = 'var(--warning)';
+          }
+        } else {
+          btnLvlMid.textContent = 'County Level';
+          btnLvlMacro.textContent = 'State Level';
+
+          if (currentLvl === 'ind') {
+            diagTitle.textContent = 'County Clinic Subsidy with Patient Clustering';
+            diagBadge.textContent = 'INCORRECT';
+            diagBadge.style.background = 'rgba(239,68,68,0.15)';
+            diagBadge.style.color = '#ef4444';
+            diagExplanation.textContent = 'Subsidy is assigned at the county health network level. Ignoring intra-county correlation produces artificially small standard errors.';
+            metricDiagG.textContent = '12,000 Patients';
+            metricRisk.textContent = 'High';
+            metricRisk.style.color = '#ef4444';
+            metricBias.textContent = 'None';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Invalid';
+            metricVerdict.style.color = '#ef4444';
+          } else if (currentLvl === 'mid') {
+            diagTitle.textContent = 'County Clinic Subsidy with County Clustering';
+            diagBadge.textContent = 'RECOMMENDED SPECIFICATION';
+            diagBadge.style.background = 'var(--success-soft)';
+            diagBadge.style.color = 'var(--success)';
+            diagExplanation.textContent = 'Directly matches the policy rollout unit. 120 counties provide strong asymptotic reliability without small-cluster downward bias.';
+            metricDiagG.textContent = '120 Counties';
+            metricRisk.textContent = 'Minimal';
+            metricRisk.style.color = 'var(--success)';
+            metricBias.textContent = 'None (G=120)';
+            metricBias.style.color = 'var(--success)';
+            metricVerdict.textContent = 'Valid';
+            metricVerdict.style.color = 'var(--success)';
+          } else {
+            diagTitle.textContent = 'County Clinic Subsidy with State Clustering';
+            diagBadge.textContent = 'ACCEPTABLE (CONSERVATIVE)';
+            diagBadge.style.background = 'var(--success-soft)';
+            diagBadge.style.color = 'var(--success)';
+            diagExplanation.textContent = 'More conservative than necessary since treatment varied by county. However, with 25 states, clustering at state level provides valid (though slightly less precise) inference.';
+            metricDiagG.textContent = '25 States';
+            metricRisk.textContent = 'Zero';
+            metricRisk.style.color = 'var(--success)';
+            metricBias.textContent = 'Moderate';
+            metricBias.style.color = 'var(--warning)';
+            metricVerdict.textContent = 'Conservative';
+            metricVerdict.style.color = 'var(--success)';
+          }
+        }
+      }
+
+      btnScenState.addEventListener('click', () => {
+        currentScen = 'state';
+        btnScenState.className = 'btn btn-sm btn-primary';
+        btnScenSchool.className = 'btn btn-sm btn-outline';
+        btnScenCounty.className = 'btn btn-sm btn-outline';
+        updateDiagnostic();
+      });
+      btnScenSchool.addEventListener('click', () => {
+        currentScen = 'school';
+        btnScenState.className = 'btn btn-sm btn-outline';
+        btnScenSchool.className = 'btn btn-sm btn-primary';
+        btnScenCounty.className = 'btn btn-sm btn-outline';
+        updateDiagnostic();
+      });
+      btnScenCounty.addEventListener('click', () => {
+        currentScen = 'county';
+        btnScenState.className = 'btn btn-sm btn-outline';
+        btnScenSchool.className = 'btn btn-sm btn-outline';
+        btnScenCounty.className = 'btn btn-sm btn-primary';
+        updateDiagnostic();
+      });
+
+      btnLvlInd.addEventListener('click', () => {
+        currentLvl = 'ind';
+        btnLvlInd.className = 'btn btn-sm btn-primary';
+        btnLvlMid.className = 'btn btn-sm btn-outline';
+        btnLvlMacro.className = 'btn btn-sm btn-outline';
+        updateDiagnostic();
+      });
+      btnLvlMid.addEventListener('click', () => {
+        currentLvl = 'mid';
+        btnLvlInd.className = 'btn btn-sm btn-outline';
+        btnLvlMid.className = 'btn btn-sm btn-primary';
+        btnLvlMacro.className = 'btn btn-sm btn-outline';
+        updateDiagnostic();
+      });
+      btnLvlMacro.addEventListener('click', () => {
+        currentLvl = 'macro';
+        btnLvlInd.className = 'btn btn-sm btn-outline';
+        btnLvlMid.className = 'btn btn-sm btn-outline';
+        btnLvlMacro.className = 'btn btn-sm btn-primary';
+        updateDiagnostic();
+      });
+
+      // Quick check
+      const btnHint = document.getElementById('btnHint104');
+      const hint = document.getElementById('hint104');
+      const btnSol = document.getElementById('btnSol104');
+      const sol = document.getElementById('sol104');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateDiagnostic();
+    })();
+  </script>
+</body>
+</html>

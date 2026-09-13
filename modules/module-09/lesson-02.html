@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9.2: Detecting Autocorrelation &amp; GLS with Known ρ — EcoIntuition Academy</title>
+  <meta name="description" content="Compute and interpret the Durbin–Watson statistic, explore the large-sample heuristic link to rho, and derive the quasi-differencing GLS transformation under known autocorrelation.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-09" data-lesson="02">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 9: Autocorrelation &amp; HAC Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 9</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 09</a>
+          <span class="module-nav-title">Autocorrelation &amp; HAC Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 5 &middot; Detecting Autocorrelation &amp; GLS with Known ρ</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 9 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.1 Time-Ordered Data &amp; AR(1) Autocorrelation</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">9.2 Detecting Autocorrelation &amp; GLS with Known ρ</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.4 Newey–West HAC Standard Errors</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">9.5 Choosing a Correction: GLS, FGLS, HAC &amp; WLS Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">40%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 40%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 9.2</span>
+        <span class="badge">Testing &amp; Known-ρ GLS</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Detecting Autocorrelation &amp; GLS with Known ρ
+      </h1>
+      <p class="lesson-hero-lead">
+        Explore the classic Durbin–Watson diagnostic test for first-order serial correlation, understand its mathematical link to the sample autocorrelation coefficient, and derive the Generalized Least Squares quasi-differencing transformation when \(\rho\) is known.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul>
+        <li>State and compute the Durbin–Watson (DW) test statistic using OLS sample residuals.</li>
+        <li>Explain the intuition behind the DW numerator (squared residual changes) versus denominator (total residual variance).</li>
+        <li>Apply the source decision benchmarks: \(\text{DW} \approx 2\) (no correlation), \(\text{DW} < 2\) (positive), and \(\text{DW} > 2\) (negative).</li>
+        <li>Derive the large-sample asymptotic heuristic link \(\text{DW} \approx 2(1 - \widehat{\rho})\).</li>
+        <li>Formulate the GLS quasi-differencing transformation to convert AR(1) disturbances into spherical innovations.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Part A - The Durbin–Watson Test -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Part A: The Durbin–Watson Diagnostic Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Before applying an estimator adjustment, econometricians test whether residuals exhibit first-order serial correlation. The classic diagnostic in time series econometrics is the <strong>Durbin–Watson (DW) test</strong>:
+        </p>
+
+        <!-- Equation Card: Durbin-Watson Formula -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface); text-align: center;">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">DURBIN–WATSON TEST STATISTIC</div>
+          <div style="padding: 0.75rem 0; font-size: 1.4rem;">
+            $$\text{DW} = \frac{\sum_{t=2}^n (\widehat{\varepsilon}_t - \widehat{\varepsilon}_{t-1})^2}{\sum_{t=1}^n \widehat{\varepsilon}_t^2}$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0;">
+            where \(\widehat{\varepsilon}_t = y_t - \mathbf{x}_t'\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) are the conventional OLS sample residuals.
+          </p>
+        </div>
+
+        <!-- Intuition of DW -->
+        <div class="study-card" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">MATHEMATICAL INTUITION &middot; RATIO OF CHANGES TO TOTAL VARIATION</div>
+          
+          <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: var(--space-md);">
+            The Durbin–Watson statistic is a normalized comparison between how much residuals <strong>change from one period to the next</strong> versus their <strong>overall squared magnitude</strong>:
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <span style="font-weight: 700; color: var(--color-primary);">Numerator: \(\sum_{t=2}^n (\widehat{\varepsilon}_t - \widehat{\varepsilon}_{t-1})^2\)</span>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+                Measures step-to-step volatility. If adjacent residuals are positively correlated, \(\widehat{\varepsilon}_t\) and \(\widehat{\varepsilon}_{t-1}\) are close in value, making their difference small and shrinking the numerator.
+              </p>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <span style="font-weight: 700; color: #059669;">Denominator: \(\sum_{t=1}^n \widehat{\varepsilon}_t^2\)</span>
+              <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+                The total sum of squared residuals (SSR). Normalizes the statistic so that scale variations in the original data cancel out.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Source Decision Rules -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Source Decision Benchmarks</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-top: var(--space-sm);">
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border-top: 3px solid #059669; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #059669; font-size: 1rem; margin-bottom: 4px;">\(\text{DW} \approx 2\)</div>
+            <p style="font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;">No Autocorrelation</p>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 0;">Errors behave like independent white noise. Conventional OLS inference is valid.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border-top: 3px solid #dc2626; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #dc2626; font-size: 1rem; margin-bottom: 4px;">\(\text{DW} < 2\)</div>
+            <p style="font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;">Positive Autocorrelation</p>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 0;">Consecutive residuals are similar (\(\widehat{\rho} > 0\)), shrinking numerator differences.</p>
+          </div>
+
+          <div style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border-top: 3px solid #d97706; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 700; color: #d97706; font-size: 1rem; margin-bottom: 4px;">\(\text{DW} > 2\)</div>
+            <p style="font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;">Negative Autocorrelation</p>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 0;">Consecutive residuals alternate signs (\(\widehat{\rho} < 0\)), inflating numerator differences.</p>
+          </div>
+        </div>
+
+        <!-- Asymptotic Heuristic -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin-top: var(--space-lg); border-left: 4px solid #059669; background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.25rem;">LARGE-SAMPLE ASYMPTOTIC HEURISTIC</div>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.9rem; line-height: 1.6;">
+            In large samples, expanding the numerator yields the direct relation between the Durbin–Watson statistic and the sample autocorrelation coefficient:
+          </p>
+          <div style="text-align: center; font-size: 1.25rem; padding: 0.4rem 0;">
+            $$\text{DW} \approx 2(1 - \widehat{\rho})$$
+          </div>
+          <p style="margin: 0; font-size: 0.85rem; color: var(--color-text-secondary);">
+            Notice: If \(\widehat{\rho} = 0 \implies \text{DW} \approx 2\). If \(\widehat{\rho} = +1 \implies \text{DW} \approx 0\). If \(\widehat{\rho} = -1 \implies \text{DW} \approx 4\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Lab 9.2 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">INTERACTIVE LAB 9.2</span>
+        <h2 class="study-section-title">2. Durbin–Watson &amp; Autocorrelation Simulator</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Move the slider to alter \(\rho\) and observe how the sample Durbin–Watson statistic tracks the large-sample heuristic \(2(1 - \widehat{\rho})\):
+        </p>
+
+        <div class="interactive-lab-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-lg); margin-top: var(--space-md);">
+          
+          <!-- Controls -->
+          <div style="display: flex; gap: var(--space-lg); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-md);">
+            <div style="flex: 1; min-width: 260px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label for="sliderDwRho" style="font-weight: 600; font-size: 0.9rem;">Autocorrelation Parameter (\(\rho\)):</label>
+                <span id="labelDwRhoVal" style="font-family: var(--font-mono); font-weight: 700; font-size: 1rem; color: var(--color-primary);">+0.60</span>
+              </div>
+              <input type="range" id="sliderDwRho" min="-0.90" max="0.90" step="0.05" value="0.60" style="width: 100%; cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--color-text-secondary); margin-top: 4px;">
+                <span>−0.90 (DW > 3.5)</span>
+                <span>0.00 (DW ≈ 2.0)</span>
+                <span>+0.90 (DW < 0.5)</span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+              <button id="btnDwPos" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Positive (+0.70)</button>
+              <button id="btnDwZero" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Zero (0.00)</button>
+              <button id="btnDwNeg" class="btn btn-outline" style="font-size: 0.78rem; padding: 6px 12px;" type="button">Negative (−0.60)</button>
+            </div>
+          </div>
+
+          <!-- Live Metrics Bar -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase;">Sample DW</div>
+              <div id="metricDwStat" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary);">0.82</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase;">Heuristic \(2(1 - \widehat{\rho})\)</div>
+              <div id="metricDwHeuristic" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: #059669;">0.80</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase;">Sample \(\widehat{\rho}\)</div>
+              <div id="metricDwRho" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary);">+0.60</div>
+            </div>
+
+            <div style="background: var(--color-bg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--color-text-secondary); text-transform: uppercase;">Diagnosis</div>
+              <div id="metricDwDiagnosis" style="font-size: 0.88rem; font-weight: 700; color: #dc2626; padding-top: 2px;">Positive Autocorr</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div class="external-legend-bar" style="display: flex; gap: var(--space-lg); justify-content: center; align-items: center; padding: var(--space-xs) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: var(--space-sm); font-size: 0.8rem;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 14px; height: 14px; background: rgba(220, 38, 38, 0.25); border-radius: 2px;"></span>
+              <span>Positive Zone (DW &lt; 1.6)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 14px; height: 14px; background: rgba(5, 150, 105, 0.25); border-radius: 2px;"></span>
+              <span>No Autocorr (1.6 to 2.4)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 14px; height: 14px; background: rgba(217, 119, 6, 0.25); border-radius: 2px;"></span>
+              <span>Negative Zone (DW &gt; 2.4)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #dc2626;"></span>
+              <span>Sample DW Pointer</span>
+            </div>
+          </div>
+
+          <!-- SVG Gauge Container -->
+          <div class="graph-container" style="background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden; position: relative; min-height: 160px;">
+            <svg id="svgDwGauge" viewBox="0 0 760 160" style="width: 100%; height: 100%; display: block;" role="img" aria-label="Durbin-Watson Gauge Scale">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+
+          <!-- Live Econometric Insight Box -->
+          <div id="dwInsightBox" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37, 99, 235, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary); font-size: 0.88rem; line-height: 1.6;">
+            <strong>Test Diagnostic:</strong> At \(\rho = +0.60\), consecutive disturbances share positive persistence, shrinking squared successive differences. The sample DW falls to 0.82 (heuristic: 0.80). Substantial evidence of positive autocorrelation requiring GLS or HAC corrections.
+          </div>
+
+        </div>
+
+        <!-- 5-Card Visual Explanation Grid -->
+        <div class="visual-explanation-grid">
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT YOU ARE SEEING</div>
+            <p id="expDwSeeing">
+              The horizontal gauge represents the theoretical domain of the Durbin–Watson statistic from 0 to 4. The red indicator marks the exact sample value for the chosen \(\rho\).
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHAT TO NOTICE</div>
+            <p id="expDwNotice">
+              Notice how closely the sample DW statistic tracks the asymptotic heuristic \(2(1 - \widehat{\rho})\). As \(\rho \to 1\), \(\text{DW} \to 0\). As \(\rho \to -1\), \(\text{DW} \to 4\).
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">WHY IT MATTERS</div>
+            <p id="expDwMatters">
+              A simple inspection of DW relative to 2 gives immediate visual intuition about the direction of error dependence without complicated software routines.
+            </p>
+          </div>
+
+          <div class="grid-card">
+            <div class="grid-card-tag">ECONOMETRIC INTERPRETATION</div>
+            <p id="expDwInterpretation">
+              When \(\text{DW} < 2\), positive correlation inflates test statistics. If detected, the researcher must transform the regression via GLS or use robust HAC standard errors.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-tag">TRY THIS</div>
+            <p id="expDwTryThis">
+              Move the slider to \(\rho = 0.00\). Observe the pointer align directly over the center benchmark of 2.00, confirming zero serial correlation.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Part B - GLS with Known rho -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Part B: GLS Quasi-Differencing with Known ρ</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          When autocorrelation is present, we can purge the serial dependence through <strong>quasi-differencing</strong> if the parameter \(\rho\) is known.
+        </p>
+
+        <!-- Derivation Journey Component -->
+        <div class="derivation-journey">
+          <div class="derivation-journey-header">
+            <span class="derivation-journey-tag">DERIVATION JOURNEY</span>
+            <h3 class="derivation-journey-title">THE 6 STEPS OF QUASI-DIFFERENCING</h3>
+          </div>
+
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">GOAL</span>
+            <p class="derivation-goal-text">
+              Transform the time-series regression to purge first-order serial correlation and recover spherical disturbances when \(\rho\) is known.
+            </p>
+          </div>
+
+          <div class="derivation-timeline">
+            <!-- Step 1 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">1</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 1: Write Current-Period Regression Model</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Start with the standard linear regression model observed at period \(t\):
+                </p>
+                <div class="derivation-step-math">
+                  $$y_t = \mathbf{x}_t'\boldsymbol{\beta} + \varepsilon_t$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">2</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 2: Write Lagged Regression Model</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Write the identical relationship for the immediately preceding time period \(t-1\):
+                </p>
+                <div class="derivation-step-math">
+                  $$y_{t-1} = \mathbf{x}_{t-1}'\boldsymbol{\beta} + \varepsilon_{t-1}$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">3</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 3: Multiply Lagged Model by \(\rho\)</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Scale both sides of the lagged regression by the known autocorrelation parameter \(\rho\):
+                </p>
+                <div class="derivation-step-math">
+                  $$\rho y_{t-1} = \rho \mathbf{x}_{t-1}'\boldsymbol{\beta} + \rho \varepsilon_{t-1}$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">4</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 4: Subtract Scaled Lagged Model from Current Model</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Subtract the scaled lagged equation from the current-period equation:
+                </p>
+                <div class="derivation-step-math">
+                  $$y_t - \rho y_{t-1} = (\mathbf{x}_t - \rho \mathbf{x}_{t-1})'\boldsymbol{\beta} + (\varepsilon_t - \rho \varepsilon_{t-1})$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">5</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 5: Substitute AR(1) Error Definition: \(\varepsilon_t - \rho \varepsilon_{t-1} = u_t\)</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Recognize that the parenthesized disturbance difference exactly equals the white-noise innovation:
+                </p>
+                <div class="derivation-step-math">
+                  $$y_t - \rho y_{t-1} = (\mathbf{x}_t - \rho \mathbf{x}_{t-1})'\boldsymbol{\beta} + u_t$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">WHY?</span>
+                  By definition of AR(1), \(u_t = \varepsilon_t - \rho \varepsilon_{t-1}\) is white noise with \(\mathbb{E}[u_t u_s] = 0\) for \(t \neq s\).
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">6</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Step 6: Define Transformed Variables &amp; Apply OLS</h4>
+                </div>
+                <p class="derivation-step-desc">
+                  Define transformed quasi-differenced variables \(y_t^* = y_t - \rho y_{t-1}\) and \(\mathbf{x}_t^* = \mathbf{x}_t - \rho \mathbf{x}_{t-1}\):
+                </p>
+                <div class="derivation-step-math">
+                  $$y_t^* = \mathbf{x}_t^{*\prime}\boldsymbol{\beta} + u_t, \quad u_t \sim \text{iid}(0, \sigma^2)$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">RESULT</span>
+                  Applying OLS to the transformed equation produces the GLS estimator, which is BLUE under known \(\rho\).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Big Picture Card -->
+          <div class="big-picture-card" style="margin-top: var(--space-lg);">
+            <div class="big-picture-header">
+              <h4 class="big-picture-title">THE BIG PICTURE &middot; WHAT DID THE TRANSFORMATION ACCOMPLISH?</h4>
+            </div>
+            <p class="big-picture-body">
+              The transformation does not change the structural slope vector \(\boldsymbol{\beta}\). Rather, it transforms the <strong>data representation</strong> so that the transformed disturbance term behaves like the spherical innovation \(u_t\). Because \(u_t\) satisfies Gauss–Markov assumptions (\(\operatorname{Var}(\mathbf{u}) = \sigma^2 \mathbf{I}\)), standard OLS applied to the transformed variables is BLUE!
+            </p>
+          </div>
+        </div>
+
+        <!-- Module 8 Connection: Matrix Form -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin-top: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-text-secondary); margin-bottom: 0.25rem;">MODULE 8 CONNECTION &middot; MATRIX GLS ESTIMATOR</div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0 0 var(--space-xs) 0;">
+            Quasi-differencing is the algebraic equivalent of the matrix Generalized Least Squares estimator:
+          </p>
+          <div style="text-align: center; font-size: 1.25rem; padding: 0.4rem 0;">
+            $$\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">
+            When \(\rho\) is known, \(\boldsymbol{\Omega}\) is completely determined, making this estimator Best Linear Unbiased (BLUE).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Check 9.2 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">CONCEPT CHECK</span>
+        <h2 class="study-section-title">4. Quick Check 9.2</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-container quick-check-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: var(--space-xs);">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 700;">CHECK 9.2</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Durbin–Watson &amp; Quasi-Differencing</span>
+          </div>
+
+          <div class="qc-question" style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-sm);">
+            <strong>Question:</strong> In a time-series regression with 100 observations, the OLS residuals yield a Durbin–Watson statistic of \(\text{DW} = 0.50\). What does this imply about the residual autocorrelation, and what would the quasi-differencing transformation look like?
+          </div>
+          
+          <div class="qc-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button class="btn btn-sm btn-outline hint-toggle" id="btnQcHint" type="button">Show Hint</button>
+            <button class="btn btn-sm btn-primary solution-toggle" id="btnQcSolution" type="button">Show Solution</button>
+          </div>
+
+          <div class="qc-feedback d-none" id="qcHintBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem;">
+            <strong>HINT:</strong> Use the asymptotic heuristic link \(\text{DW} \approx 2(1 - \widehat{\rho})\) to solve for the approximate sample correlation \(\widehat{\rho}\).
+          </div>
+
+          <div class="qc-feedback d-none" id="qcSolutionBox" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.4rem;">
+              <strong>ANSWER:</strong> \(\text{DW} = 0.50\) is substantially less than 2, providing strong evidence of <strong>positive autocorrelation</strong>. Solving the heuristic gives \(\widehat{\rho} \approx 1 - \frac{0.50}{2} = 0.75\).
+            </p>
+            <p style="margin: 0; color: var(--color-text-secondary);">
+              <strong>WHY?</strong> The quasi-differenced regression subtracts \(0.75\) times the lagged value from each current observation: \(y_t - 0.75 y_{t-1} = (\mathbf{x}_t - 0.75 \mathbf{x}_{t-1})'\boldsymbol{\beta} + u_t\). This subtraction eliminates the \(0.75\)-degree temporal persistence, restoring white-noise innovations \(u_t\).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Durbin–Watson Formula:</strong> \(\text{DW} = \frac{\sum (\widehat{\varepsilon}_t - \widehat{\varepsilon}_{t-1})^2}{\sum \widehat{\varepsilon}_t^2}\) compares squared period-to-period changes against total residual variance.</li>
+        <li><strong>Source Decision Rules:</strong> \(\text{DW} \approx 2\) indicates zero serial correlation; \(\text{DW} < 2\) indicates positive autocorrelation; \(\text{DW} > 2\) indicates negative autocorrelation.</li>
+        <li><strong>Asymptotic Heuristic:</strong> In large samples, \(\text{DW} \approx 2(1 - \widehat{\rho})\), establishing a direct relationship between DW and the first-order serial correlation coefficient.</li>
+        <li><strong>Quasi-Differencing:</strong> Subtracting \(\rho\) times the lagged regression from the current regression purges AR(1) persistence, leaving uncorrelated white-noise innovations \(u_t\).</li>
+        <li><strong>Known-\(\rho\) GLS Optimality:</strong> Applying OLS to transformed variables \(y_t^* = y_t - \rho y_{t-1}\) and \(\mathbf{x}_t^* = \mathbf{x}_t - \rho \mathbf{x}_{t-1}\) achieves the minimum variance bound (BLUE).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">9.1 Time-Ordered Data &amp; AR(1) Autocorrelation</span>
+      </a>
+      <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">9.3 Prais–Winsten, Cochrane–Orcutt &amp; FGLS</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 9.2 JavaScript -->
+  <script>
+    (function() {
+      'use strict';
+
+      const T = 50;
+      const baseInnovations = [
+         0.45, -0.62,  0.81,  0.22, -1.15,  0.78,  0.94, -0.31,
+        -0.85,  0.58, -0.21,  1.12, -0.64,  0.28, -0.92,  0.41,
+         0.73, -0.56,  0.15, -0.83,  0.68, -0.42,  0.77, -0.48,
+         0.35, -0.79,  0.89,  0.18, -1.05,  0.61,  0.96, -0.37,
+        -0.75,  0.51, -0.29,  1.08, -0.61,  0.33, -0.88,  0.45,
+         0.69, -0.51,  0.22, -0.81,  0.64, -0.38,  0.72, -0.44,
+         0.28, -0.67
+      ];
+
+      let currentRho = 0.60;
+
+      const slider = document.getElementById('sliderDwRho');
+      const labelRhoVal = document.getElementById('labelDwRhoVal');
+      const metricDwStat = document.getElementById('metricDwStat');
+      const metricDwHeuristic = document.getElementById('metricDwHeuristic');
+      const metricDwRho = document.getElementById('metricDwRho');
+      const metricDwDiagnosis = document.getElementById('metricDwDiagnosis');
+      const dwInsightBox = document.getElementById('dwInsightBox');
+      const svgGauge = document.getElementById('svgDwGauge');
+
+      const expDwSeeing = document.getElementById('expDwSeeing');
+      const expDwNotice = document.getElementById('expDwNotice');
+      const expDwMatters = document.getElementById('expDwMatters');
+      const expDwInterpretation = document.getElementById('expDwInterpretation');
+      const expDwTryThis = document.getElementById('expDwTryThis');
+
+      function generateAR1(rho) {
+        const eps = new Array(T);
+        const initScale = 1.0 / Math.sqrt(Math.max(0.01, 1 - rho * rho));
+        eps[0] = baseInnovations[0] * initScale;
+        for (let t = 1; t < T; t++) {
+          eps[t] = rho * eps[t - 1] + baseInnovations[t];
+        }
+        return eps;
+      }
+
+      function computeDW(eps) {
+        let diffSqSum = 0;
+        let sqSum = 0;
+        let crossSum = 0;
+        let lagSqSum = 0;
+
+        for (let t = 0; t < T; t++) {
+          sqSum += eps[t] * eps[t];
+          if (t >= 1) {
+            const diff = eps[t] - eps[t - 1];
+            diffSqSum += diff * diff;
+            crossSum += eps[t] * eps[t - 1];
+            lagSqSum += eps[t - 1] * eps[t - 1];
+          }
+        }
+        const dw = sqSum > 0 ? diffSqSum / sqSum : 2.0;
+        const sampleRho = lagSqSum > 0 ? crossSum / lagSqSum : 0;
+        const heuristic = 2.0 * (1.0 - sampleRho);
+        return { dw, sampleRho, heuristic };
+      }
+
+      function updateUI() {
+        const sign = currentRho >= 0 ? '+' : '';
+        labelRhoVal.textContent = sign + currentRho.toFixed(2);
+        metricDwRho.textContent = sign + currentRho.toFixed(2);
+
+        const eps = generateAR1(currentRho);
+        const { dw, sampleRho, heuristic } = computeDW(eps);
+
+        metricDwStat.textContent = dw.toFixed(2);
+        metricDwHeuristic.textContent = heuristic.toFixed(2);
+
+        if (dw < 1.6) {
+          metricDwDiagnosis.textContent = 'Positive Autocorr';
+          metricDwDiagnosis.style.color = '#dc2626';
+          dwInsightBox.innerHTML = `<strong>Test Diagnostic:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), consecutive disturbances share positive persistence, shrinking squared successive differences. The sample DW falls to <strong>${dw.toFixed(2)}</strong> (heuristic: ${heuristic.toFixed(2)}). Substantial evidence of positive autocorrelation requiring GLS or HAC corrections.`;
+        } else if (dw > 2.4) {
+          metricDwDiagnosis.textContent = 'Negative Autocorr';
+          metricDwDiagnosis.style.color = '#d97706';
+          dwInsightBox.innerHTML = `<strong>Test Diagnostic:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), alternating signs between adjacent disturbances inflate differences, driving the DW statistic up to <strong>${dw.toFixed(2)}</strong>. This indicates negative first-order serial correlation.`;
+        } else {
+          metricDwDiagnosis.textContent = 'No Autocorr';
+          metricDwDiagnosis.style.color = '#059669';
+          dwInsightBox.innerHTML = `<strong>Test Diagnostic:</strong> At \\(\\rho = ${sign + currentRho.toFixed(2)}\\), the sample DW is <strong>${dw.toFixed(2)}</strong>, very close to the benchmark of 2.00. Disturbances behave like independent white noise; conventional OLS inference is valid.`;
+        }
+
+        renderGauge(dw);
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([dwInsightBox]);
+        }
+      }
+
+      function renderGauge(dw) {
+        const width = 760;
+        const height = 160;
+        const padX = 60;
+        const yLine = 75;
+        const plotW = width - 2 * padX;
+
+        function getX(val) {
+          const clamped = Math.max(0, Math.min(4, val));
+          return padX + (clamped / 4.0) * plotW;
+        }
+
+        let html = '';
+
+        const x0 = getX(0);
+        const x16 = getX(1.6);
+        const x24 = getX(2.4);
+        const x4 = getX(4);
+
+        html += `<rect x="${x0}" y="${yLine - 12}" width="${x16 - x0}" height="24" rx="4" fill="#dc2626" opacity="0.25"/>`;
+        html += `<rect x="${x16}" y="${yLine - 12}" width="${x24 - x16}" height="24" rx="4" fill="#059669" opacity="0.25"/>`;
+        html += `<rect x="${x24}" y="${yLine - 12}" width="${x4 - x24}" height="24" rx="4" fill="#d97706" opacity="0.25"/>`;
+
+        html += `<line x1="${padX}" y1="${yLine}" x2="${width - padX}" y2="${yLine}" stroke="var(--border-subtle)" stroke-width="2"/>`;
+
+        const ticks = [
+          { val: 0.0, label: '0.0 (ρ = +1)' },
+          { val: 1.0, label: '1.0' },
+          { val: 2.0, label: '2.0 (ρ = 0)' },
+          { val: 3.0, label: '3.0' },
+          { val: 4.0, label: '4.0 (ρ = −1)' }
+        ];
+
+        ticks.forEach(tk => {
+          const tx = getX(tk.val);
+          html += `<line x1="${tx}" y1="${yLine - 14}" x2="${tx}" y2="${yLine + 14}" stroke="var(--color-text-secondary)" stroke-width="1.5"/>`;
+          html += `<text x="${tx}" y="${yLine + 32}" font-family="var(--font-mono)" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">${tk.label}</text>`;
+        });
+
+        const xCenter = getX(2.0);
+        html += `<line x1="${xCenter}" y1="20" x2="${xCenter}" y2="${height - 25}" stroke="#059669" stroke-width="2" stroke-dasharray="4,4"/>`;
+
+        const pointerX = getX(dw);
+        html += `<polygon points="${pointerX},${yLine - 18} ${pointerX - 9},${yLine - 32} ${pointerX + 9},${yLine - 32}" fill="#dc2626"/>`;
+        html += `<circle cx="${pointerX}" cy="${yLine}" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>`;
+        html += `<text x="${pointerX}" y="${yLine - 38}" font-family="var(--font-mono)" font-size="12" fill="#dc2626" font-weight="700" text-anchor="middle">DW = ${dw.toFixed(2)}</text>`;
+
+        svgGauge.innerHTML = html;
+      }
+
+      slider.addEventListener('input', (e) => {
+        currentRho = parseFloat(e.target.value); updateUI();
+      });
+
+      document.getElementById('btnDwPos').addEventListener('click', () => {
+        currentRho = 0.70; slider.value = currentRho; updateUI();
+      });
+      document.getElementById('btnDwZero').addEventListener('click', () => {
+        currentRho = 0.00; slider.value = currentRho; updateUI();
+      });
+      document.getElementById('btnDwNeg').addEventListener('click', () => {
+        currentRho = -0.60; slider.value = currentRho; updateUI();
+      });
+
+      const btnQcHint = document.getElementById('btnQcHint');
+      const btnQcSolution = document.getElementById('btnQcSolution');
+      const qcHintBox = document.getElementById('qcHintBox');
+      const qcSolutionBox = document.getElementById('qcSolutionBox');
+
+      btnQcHint.addEventListener('click', () => {
+        qcHintBox.classList.toggle('d-none');
+        btnQcHint.textContent = qcHintBox.classList.contains('d-none') ? 'Show Hint' : 'Hide Hint';
+      });
+
+      btnQcSolution.addEventListener('click', () => {
+        qcSolutionBox.classList.toggle('d-none');
+        btnQcSolution.textContent = qcSolutionBox.classList.contains('d-none') ? 'Show Solution' : 'Hide Solution';
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

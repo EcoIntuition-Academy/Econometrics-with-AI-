@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12.5: Attenuation Bias &amp; IV as a Measurement-Error Solution — Econometrics with AI</title>
+  <meta name="description" content="Derive the classical attenuation factor lambda, examine the downward bias of OLS toward zero, and demonstrate how instrumental variables restore consistency by isolating clean signal from measurement noise.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-12" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 12</a>
+          <span class="module-nav-title">IV Diagnostics &amp; Measurement Error</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 6 &middot; Attenuation Bias &amp; IV Solution</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 12 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.1 Do We Need IV? Hausman &amp; Wu Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.2 Testing Instrument Validity: Sargan</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.3 Instrument Strength &amp; Weak IVs</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.4 Measurement Error in y &amp; x</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">12.5 Attenuation Bias &amp; IV Solution</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.6 Propagation of Error &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 83.3%;"></div>
+          </div>
+          <span class="progress-text">83%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content -->
+  <main class="lesson-main">
+    <div class="container lesson-container">
+
+      <!-- Lesson Hero -->
+      <header class="lesson-hero">
+        <div class="lesson-hero-meta">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 12.5</span>
+          <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Attenuation &amp; IV</span>
+        </div>
+        <h1 class="lesson-hero-title">Attenuation Bias &amp; IV as a Measurement-Error Solution</h1>
+        <p class="lesson-hero-lead">
+          When an explanatory regressor is measured with classical error, the estimated OLS slope is systematically compressed toward zero. Instrumental variables can isolate uncontaminated variation to restore consistency.
+        </p>
+      </header>
+
+      <!-- Learning Objectives -->
+      <div class="objectives-card">
+        <div class="objectives-header">
+          <span class="objectives-icon">🎯</span>
+          <h3 class="objectives-title">Learning Objectives</h3>
+        </div>
+        <ul class="objectives-list">
+          <li>Derive the asymptotic limit of the OLS estimator under classical measurement error in \(x\).</li>
+          <li>Define the attenuation factor \(\lambda \in (0, 1)\) as the signal-to-total-variance ratio.</li>
+          <li>Interpret the directional meaning of attenuation bias toward zero for positive and negative slopes.</li>
+          <li>Analyze the benchmark numerical illustration (\(\beta = 2, \lambda = 0.7 \implies \mathbb{E}[\hat{\beta}_{\text{OLS}}] = 1.4\)).</li>
+          <li>Derive the IV estimator and evaluate the identification conditions under which IV restores consistency.</li>
+        </ul>
+      </div>
+
+      <!-- Section 1: Mathematical Derivation of Attenuation Bias -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 1</span>
+          <h2 class="study-section-title">1. Derivation of Attenuation Bias</h2>
+        </div>
+
+        <div class="derivation-journey">
+          <div class="derivation-journey-header">
+            <span class="derivation-journey-tag">ALGEBRAIC DERIVATION</span>
+            <h3 class="derivation-journey-title">Measurement Error in the Independent Variable</h3>
+          </div>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">GOAL:</span>
+            <span class="derivation-goal-text">Show why measurement error in \(x\) shrinks the OLS slope toward zero.</span>
+          </div>
+          <div class="derivation-timeline">
+            <!-- Step 1 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">1</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Express OLS Estimator via Sample Moments</h4>
+                </div>
+                <p class="derivation-step-desc">In the simple bivariate regression of \(y\) on observed \(x\), the OLS slope estimator satisfies:</p>
+                <div class="derivation-step-math">
+                  \[\hat{\beta}_{\text{OLS}} = \frac{\text{Cov}(x, y)}{\text{Var}(x)}\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">2</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Substitute True Model into Covariance</h4>
+                </div>
+                <p class="derivation-step-desc">Substitute the structural model \(y = \alpha + x^*\beta + \varepsilon\) and observed regressor \(x = x^* + u\):</p>
+                <div class="derivation-step-math">
+                  \[\text{Cov}(x, y) = \text{Cov}(x^* + u, \alpha + x^*\beta + \varepsilon) = \beta \text{Var}(x^*) + \text{Cov}(x^*, \varepsilon) + \text{Cov}(u, x^*)\beta + \text{Cov}(u, \varepsilon)\]
+                </div>
+                <p class="derivation-step-desc" style="margin-top: 0.35rem;">Under the classical assumptions (\(\text{Cov}(u, x^*) = 0\), \(\text{Cov}(u, \varepsilon) = 0\), and \(\text{Cov}(x^*, \varepsilon) = 0\)), the numerator simplifies to:</p>
+                <div class="derivation-step-math">
+                  \[\text{Cov}(x, y) = \beta \text{Var}(x^*)\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">3</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Compute Denominator Total Variance</h4>
+                </div>
+                <p class="derivation-step-desc">The observed regressor variance combines true signal variance with measurement noise:</p>
+                <div class="derivation-step-math">
+                  \[\text{Var}(x) = \text{Var}(x^* + u) = \text{Var}(x^*) + \text{Var}(u) + 2\underbrace{\text{Cov}(x^*, u)}_{= 0} = \text{Var}(x^*) + \text{Var}(u)\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">4</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Combine into the Attenuated Slope</h4>
+                </div>
+                <p class="derivation-step-desc">Dividing numerator by denominator establishes the asymptotic expectation:</p>
+                <div class="derivation-step-math">
+                  \[\hat{\beta}_{\text{OLS}} \xrightarrow{p} \beta \cdot \left[ \frac{\text{Var}(x^*)}{\text{Var}(x^*) + \text{Var}(u)} \right]\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">5</div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Define the Attenuation Factor \(\lambda\)</h4>
+                </div>
+                <p class="derivation-step-desc">Define \(\lambda\) as the ratio of signal variance to total variance:</p>
+                <div class="derivation-step-math">
+                  \[\lambda \equiv \frac{\text{Var}(x^*)}{\text{Var}(x^*) + \text{Var}(u)} \implies \mathbb{E}[\hat{\beta}_{\text{OLS}}] = \lambda \beta\]
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-warning" style="margin-top: var(--space-md);">
+            <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">KEY RESULT</div>
+            Because \(\text{Var}(u) > 0\), the attenuation factor is strictly bounded between zero and one: \(0 < \lambda < 1\). The OLS slope is systematically attenuated toward zero.
+          </div>
+
+          <div class="big-picture-card" style="margin-top: var(--space-md); padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div class="big-picture-header" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+              <span class="academic-badge" style="background: rgba(217,119,6,0.15); color: #d97706; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">BIG PICTURE</span>
+              <span style="font-weight: 600; font-size: 0.9rem;">Denominator Noise Dilution</span>
+            </div>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              OLS projects \(y\) onto the total variance \(\text{Var}(x^*) + \text{Var}(u)\). Because the added noise in the denominator contributes zero covariance to the numerator, the observed relationship is diluted toward zero.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Directional Meaning & Numerical Example -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 2</span>
+          <h2 class="study-section-title">2. Directional Meaning &amp; Worked Illustration</h2>
+        </div>
+
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">POSITIVE SLOPE (\(\beta > 0\))</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Compressed Downward</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              When \(\beta > 0\), \(\hat{\beta}_{\text{OLS}}\) remains positive but smaller than \(\beta\): \(0 < \lambda\beta < \beta\).
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fef3c7; color: #b45309; font-size: var(--text-xs); margin-bottom: 0.35rem;">NEGATIVE SLOPE (\(\beta < 0\))</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Compressed Upward</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              When \(\beta < 0\), \(\hat{\beta}_{\text{OLS}}\) remains negative but closer to zero: \(\beta < \lambda\beta < 0\) (less negative).
+            </p>
+          </div>
+        </div>
+
+        <!-- Worked Example Card -->
+        <div class="definition-card" style="border-left: 4px solid var(--color-primary); margin-top: var(--space-md); padding: var(--space-md); background: var(--surface); border-radius: var(--radius-sm);">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-size: var(--text-xs); margin-bottom: 0.35rem;">WORKED NUMERICAL EXAMPLE</span>
+          <h3 class="definition-title" style="margin: 0 0 0.5rem 0; font-size: 1.15rem;">Benchmark Illustration: Attenuation Factor \(\lambda = 0.7\)</h3>
+          <p style="margin: 0 0 0.5rem 0; font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;">
+            Consider a maintained relationship with true structural coefficient \(\beta = 2\):
+          </p>
+          <div class="equation-display" style="margin: 0.5rem 0; padding: 0.5rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs);">
+            \[\beta = 2, \quad \lambda = 0.70 \implies \mathbb{E}[\hat{\beta}_{\text{OLS}}] = 0.70 \times 2 = 1.4\]
+          </div>
+          <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+            Even though the true underlying coefficient is \(2.0\), measurement noise accounting for \(30\%\) of total regressor variance causes OLS to report an expected slope of only \(1.4\)—an underestimation of \(30\%\).
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 3: Interactive Lab: Signal-to-Noise Explorer -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 3</span>
+          <h2 class="study-section-title">3. Interactive Lab: Signal-to-Noise Explorer</h2>
+        </div>
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <div class="lab-header-badge">INTERACTIVE LAB 12.5</div>
+            <h3 class="lab-title">Signal-to-Noise Ratio &amp; Attenuation Visualizer</h3>
+            <p class="lab-desc">
+              Compare how the signal-to-noise ratio compresses the expected OLS slope toward zero, and how a valid IV restores the true slope.
+            </p>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="lab-controls-bar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: var(--space-md);">
+            <div>
+              <label style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;" for="varXSlider">
+                True Signal Variance \(\text{Var}(x^*)\): <span id="valVarX" style="color: var(--color-primary); font-family: var(--font-mono);">3.00</span>
+              </label>
+              <input type="range" id="varXSlider" min="1.0" max="6.0" step="0.5" value="3.0" style="width: 100%;">
+            </div>
+
+            <div>
+              <label style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;" for="varUSlider">
+                Measurement Noise \(\text{Var}(u)\): <span id="valVarU" style="color: var(--color-primary); font-family: var(--font-mono);">1.30</span>
+              </label>
+              <input type="range" id="varUSlider" min="0.0" max="6.0" step="0.2" value="1.3" style="width: 100%;">
+            </div>
+
+            <div>
+              <label style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;" for="betaSlider">
+                True Parameter \(\beta\): <span id="valBeta" style="color: var(--color-primary); font-family: var(--font-mono);">2.00</span>
+              </label>
+              <input type="range" id="betaSlider" min="-3.0" max="3.0" step="0.5" value="2.0" style="width: 100%;">
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="metric-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">TRUE PARAMETER</div>
+              <div id="metricTrueBeta" style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin: 0.25rem 0;">β = 2.00</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">Structural relationship</div>
+            </div>
+            <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">ATTENUATION FACTOR</div>
+              <div id="metricLambdaVal" style="font-size: 1.4rem; font-weight: 700; color: var(--color-primary); margin: 0.25rem 0;">λ = 0.70</div>
+              <div id="metricLambdaPct" style="font-size: 0.8rem; color: var(--text-secondary);">70% signal / 30% noise</div>
+            </div>
+            <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">EXPECTED OLS SLOPE</div>
+              <div id="metricExpOLS" style="font-size: 1.25rem; font-weight: 700; color: #d97706; margin: 0.25rem 0;">E[β̂] = 1.40</div>
+              <div id="metricBiasPct" style="font-size: 0.8rem; color: var(--text-secondary);">30% attenuation toward zero</div>
+            </div>
+            <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">IV RESTORED ESTIMATE</div>
+              <div id="metricIVEst" style="font-size: 1.25rem; font-weight: 700; color: #059669; margin: 0.25rem 0;">β̂_IV = 2.00</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">Consistent under valid IV</div>
+            </div>
+          </div>
+
+          <!-- External Chart Legend -->
+          <div class="outside-chart-legend" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: var(--space-sm); font-size: var(--text-xs); color: var(--text-secondary);">
+            <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; background: #2563eb;"></span> True Relationship (\(y = \beta x^*\)) &amp; IV Estimate</div>
+            <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed var(--text-muted);"></span> Attenuated OLS Expectation (\(\mathbb{E}[\hat{y}] = \lambda\beta x\))</div>
+          </div>
+
+          <!-- SVG Visual Display -->
+          <div class="chart-svg-shell" style="background: var(--surface-secondary, rgba(0,0,0,0.02)); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.5rem; overflow-x: auto;">
+            <svg id="attenuationSvg" viewBox="0 0 680 300" width="100%" height="300" style="display: block; min-width: 500px;"></svg>
+          </div>
+
+          <div class="callout callout-info" style="margin-top: var(--space-md);" id="attenuationInsight">
+            <strong>Simulation Insight:</strong> With \(\text{Var}(x^*) = 3.0\) and \(\text{Var}(u) = 1.3\), the attenuation factor is \(\lambda = 3.0 / (3.0 + 1.3) \approx 0.70\). For true \(\beta = 2.0\), OLS yields expected estimate \(\mathbb{E}[\hat{\beta}_{\text{OLS}}] = 1.40\), while a valid IV restores the true slope of <strong>2.00</strong>.
+          </div>
+
+          <!-- 5-Card Explanation Grid -->
+          <div class="chart-explanations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+            <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT YOU ARE SEEING</h4>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                A dynamic visual comparison between the true regression slope (solid blue) and the attenuated expected OLS line (dashed grey) as noise variance \(\text{Var}(u)\) changes.
+              </p>
+            </div>
+
+            <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT TO NOTICE</h4>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                As \(\text{Var}(u)\) expands, the dashed OLS line flattens progressively toward zero slope, regardless of whether true \(\beta\) is positive or negative.
+              </p>
+            </div>
+
+            <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHY IT MATTERS</h4>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                The degree of bias depends directly on the relative noise ratio \(\text{Var}(u)/\text{Var}(x^*)\). Even moderate noise variance can destroy statistical significance.
+              </p>
+            </div>
+
+            <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+              <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">ECONOMETRIC INTERPRETATION</h4>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                Because OLS projects \(y\) onto total variance \(\text{Var}(x^*) + \text{Var}(u)\), noise in the denominator dilutes the covariance, pulling \(\hat{\beta}_{\text{OLS}}\) toward zero by factor \(\lambda\).
+              </p>
+            </div>
+
+            <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); grid-column: 1 / -1;">
+              <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">TRY THIS</h4>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                Set \(\beta = -2.00\) and slide \(\text{Var}(u)\) to 3.00. Notice how the expected OLS slope becomes \(-1.00\)—moving closer to zero (less negative) rather than more negative!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Instrumental Variables as a Solution -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 4</span>
+          <h2 class="study-section-title">4. Instrumental Variables as a Measurement-Error Solution</h2>
+        </div>
+
+        <div class="derivation-journey">
+          <div class="derivation-journey-header">
+            <span class="derivation-journey-tag">IV DERIVATION</span>
+            <h3 class="derivation-journey-title">IV Consistency Under Classical Measurement Error</h3>
+          </div>
+          <div class="derivation-goal">
+            <span class="derivation-goal-label">GOAL:</span>
+            <span class="derivation-goal-text">Show how an instrumental variable isolates clean signal to restore consistency under the maintained assumptions.</span>
+          </div>
+          <div class="derivation-timeline">
+            <!-- Step 1 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">1</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Instrument Identification Conditions</h4>
+                </div>
+                <p class="derivation-step-desc">An instrumental variable \(z\) requires three conditions under measurement error:</p>
+                <div class="derivation-step-math">
+                  \[\text{Cov}(z, x^*) \neq 0, \quad \text{Cov}(z, u) = 0, \quad \text{Cov}(z, \varepsilon) = 0\]
+                </div>
+                <p class="derivation-step-desc" style="margin-top: 0.35rem;">The instrument must be correlated with true \(x^*\), but orthogonal to both the measurement error \(u\) and structural disturbance \(\varepsilon\).</p>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">2</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Express the IV Estimator</h4>
+                </div>
+                <p class="derivation-step-desc">In the bivariate setup, the IV estimator is given by the ratio of sample covariances with \(z\):</p>
+                <div class="derivation-step-math">
+                  \[\hat{\beta}_{\text{IV}} = \frac{\text{Cov}(z, y)}{\text{Cov}(z, x)}\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">3</div>
+                <div class="derivation-step-line"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Substitute Structural Equations</h4>
+                </div>
+                <p class="derivation-step-desc">Substitute \(y = \alpha + x^*\beta + \varepsilon\) and \(x = x^* + u\):</p>
+                <div class="derivation-step-math">
+                  \[\hat{\beta}_{\text{IV}} = \frac{\text{Cov}(z, \alpha + x^*\beta + \varepsilon)}{\text{Cov}(z, x^* + u)} = \frac{\beta \text{Cov}(z, x^*) + \text{Cov}(z, \varepsilon)}{\text{Cov}(z, x^*) + \text{Cov}(z, u)}\]
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">4</div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Apply the Orthogonality Restrictions</h4>
+                </div>
+                <p class="derivation-step-desc">Because \(\text{Cov}(z, \varepsilon) = 0\) and \(\text{Cov}(z, u) = 0\), the noise components vanish:</p>
+                <div class="derivation-step-math">
+                  \[\hat{\beta}_{\text{IV}} \xrightarrow{p} \frac{\beta \text{Cov}(z, x^*) + 0}{\text{Cov}(z, x^*) + 0} = \beta\]
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-success" style="margin-top: var(--space-md);">
+            <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">KEY RESULT</div>
+            Under the maintained conditions, the IV estimator is consistent: \(\text{plim } \hat{\beta}_{\text{IV}} = \beta\).
+          </div>
+
+          <div class="callout callout-info" style="margin-top: var(--space-md);">
+            <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">CAUTION: DO NOT OVERSTATE IV</div>
+            A valid and relevant IV can restore consistency under the maintained measurement-error assumptions. However, finding an instrument that is correlated with \(x^*\) while completely independent of both \(u\) and \(\varepsilon\) is an empirical challenge.
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Comparison: Classical Endogeneity vs. Measurement Error -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 5</span>
+          <h2 class="study-section-title">5. Classical Endogeneity vs. Measurement Error</h2>
+        </div>
+
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">OMITTED VARIABLES / SIMULTANEITY</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Structural Endogeneity</h4>
+            <ul style="margin: 0.5rem 0 0 1.25rem; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.6;">
+              <li><strong>Observation:</strong> \(x = x^*\) (variable is measured accurately).</li>
+              <li><strong>Source of Failure:</strong> Correlation between regressor and disturbance: \(\text{Cov}(x^*, \varepsilon) \neq 0\).</li>
+              <li><strong>Bias Direction:</strong> Can be positive or negative depending on the sign of omitted covariance.</li>
+              <li><strong>Role of IV:</strong> Isolates exogenous variation in \(x\) that is orthogonal to structural shock \(\varepsilon\).</li>
+            </ul>
+          </div>
+
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">NOISY REGRESSOR CONTAMINATION</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Measurement-Error Endogeneity</h4>
+            <ul style="margin: 0.5rem 0 0 1.25rem; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.6;">
+              <li><strong>Observation:</strong> \(x = x^* + u\) (variable is observed with noise).</li>
+              <li><strong>Source of Failure:</strong> Shared noise component: \(\text{Cov}(x, \varepsilon - \beta u) = -\beta\sigma_u^2 \neq 0\).</li>
+              <li><strong>Bias Direction:</strong> Always toward zero (attenuation bias).</li>
+              <li><strong>Role of IV:</strong> Bypasses the measurement noise \(u\) using an instrument orthogonal to \(u\) and \(\varepsilon\).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Check -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <h2 class="study-section-title">Quick Check 12.5</h2>
+        </div>
+        <div class="study-section-body">
+          <div class="quick-check-card">
+            <div class="quick-check-header">
+              <span class="quick-check-badge">QUICK CHECK</span>
+            </div>
+            <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+              Why must an instrument \(z\) be uncorrelated with the measurement error \(u\) (\(\text{Cov}(z, u) = 0\)) to solve the measurement-error problem?
+            </p>
+            <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+              <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+              <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+            </div>
+            <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+              <strong>HINT:</strong> Consider what happens in the denominator \(\text{Cov}(z, x^* + u)\) if the instrument shares the same noise as the regressor.
+            </div>
+            <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+              <p style="margin: 0 0 0.4rem 0;">
+                <strong>ANSWER:</strong> Otherwise, the instrument would inherit the measurement contamination.
+              </p>
+              <p style="margin: 0; color: var(--text-secondary);">
+                <strong>WHY?</strong> If \(\text{Cov}(z, u) \neq 0\), then in the IV denominator \(\text{Cov}(z, x) = \text{Cov}(z, x^*) + \text{Cov}(z, u)\), the noise term does not cancel out. The instrument would capture reporting noise rather than isolating clean variation in \(x^*\), leaving the IV estimator inconsistent.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- What You Should Now Understand -->
+      <div class="summary-takeaways-card">
+        <div class="academic-badge badge-summary">TAKEAWAYS</div>
+        <h3 class="summary-title">What You Should Now Understand</h3>
+        <ul class="takeaways-list">
+          <li><strong>Attenuation Derivation:</strong> Classical measurement error in \(x\) causes OLS to converge to \(\lambda \beta\), where \(\lambda = \text{Var}(x^*)/[\text{Var}(x^*) + \text{Var}(u)]\).</li>
+          <li><strong>Bounded Factor:</strong> Because \(0 < \lambda < 1\), the OLS estimate is always attenuated toward zero—positive coefficients become smaller, and negative coefficients become less negative.</li>
+          <li><strong>Benchmark Example:</strong> When \(\beta = 2\) and \(\lambda = 0.7\), OLS yields \(\mathbb{E}[\hat{\beta}_{\text{OLS}}] = 1.4\), attenuating the true slope by \(30\%\).</li>
+          <li><strong>Instrument Conditions:</strong> A valid IV for measurement error requires \(\text{Cov}(z, x^*) \neq 0\), \(\text{Cov}(z, u) = 0\), and \(\text{Cov}(z, \varepsilon) = 0\).</li>
+          <li><strong>Consistency Restoration:</strong> A valid and relevant IV can restore consistency under the maintained measurement-error assumptions by filtering out measurement noise.</li>
+        </ul>
+      </div>
+
+      <!-- Lesson Navigation Pager -->
+      <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+        <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">12.4 Measurement Error in y &amp; x</span>
+        </a>
+        <a href="lesson-06.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">12.6 Propagation of Error &amp; Review</span>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <!-- Canonical Shared Minimal Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script>
+    function initLab125() {
+      // Quick Check interactive toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const hint = card ? card.querySelector('.quick-check-hint') : null;
+          if (hint) {
+            const isHidden = window.getComputedStyle(hint).display === 'none';
+            hint.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const sol = card ? card.querySelector('.quick-check-solution') : null;
+          if (sol) {
+            const isHidden = window.getComputedStyle(sol).display === 'none';
+            sol.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+          }
+        });
+      });
+
+      // Interactive Lab 12.5: Signal-to-Noise & Attenuation Explorer
+      const varXSlider = document.getElementById('varXSlider');
+      const varUSlider = document.getElementById('varUSlider');
+      const betaSlider = document.getElementById('betaSlider');
+
+      const valVarX = document.getElementById('valVarX');
+      const valVarU = document.getElementById('valVarU');
+      const valBeta = document.getElementById('valBeta');
+
+      const metricTrueBeta = document.getElementById('metricTrueBeta');
+      const metricLambdaVal = document.getElementById('metricLambdaVal');
+      const metricLambdaPct = document.getElementById('metricLambdaPct');
+      const metricExpOLS = document.getElementById('metricExpOLS');
+      const metricBiasPct = document.getElementById('metricBiasPct');
+      const metricIVEst = document.getElementById('metricIVEst');
+
+      const attenuationInsight = document.getElementById('attenuationInsight');
+      const svg = document.getElementById('attenuationSvg');
+
+      if (!varXSlider || !varUSlider || !betaSlider || !svg) return;
+
+      function updateAttenuationLab() {
+        const varX = parseFloat(varXSlider.value);
+        const varU = parseFloat(varUSlider.value);
+        const beta = parseFloat(betaSlider.value);
+
+        if (valVarX) valVarX.textContent = varX.toFixed(2);
+        if (valVarU) valVarU.textContent = varU.toFixed(2);
+        if (valBeta) valBeta.textContent = beta.toFixed(2);
+
+        const totalVar = varX + varU;
+        const lambda = totalVar > 0 ? (varX / totalVar) : 1;
+        const expOLS = lambda * beta;
+        const attenuationPct = ((1 - lambda) * 100).toFixed(0);
+
+        if (metricTrueBeta) metricTrueBeta.textContent = `β = ${beta.toFixed(2)}`;
+        if (metricLambdaVal) metricLambdaVal.textContent = `λ = ${lambda.toFixed(2)}`;
+        if (metricLambdaPct) metricLambdaPct.textContent = `${(lambda * 100).toFixed(0)}% signal / ${((1 - lambda) * 100).toFixed(0)}% noise`;
+        if (metricExpOLS) metricExpOLS.textContent = `E[β̂] = ${expOLS.toFixed(2)}`;
+        if (metricBiasPct) metricBiasPct.textContent = `${attenuationPct}% attenuation toward zero`;
+        if (metricIVEst) metricIVEst.textContent = `β̂_IV = ${beta.toFixed(2)}`;
+
+        if (attenuationInsight) {
+          attenuationInsight.innerHTML = `<strong>Simulation Insight:</strong> With \\(\\text{Var}(x^*) = ${varX.toFixed(1)}\\) and \\(\\text{Var}(u) = ${varU.toFixed(1)}\\), the attenuation factor is \\(\\lambda = ${lambda.toFixed(2)}\\). For true \\(\\beta = ${beta.toFixed(2)}\\), OLS yields expected estimate \\(\\mathbb{E}[\\hat{\\beta}_{\\text{OLS}}] = ${expOLS.toFixed(2)}\\), while a valid IV restores the true slope of <strong>${beta.toFixed(2)}</strong>.`;
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([attenuationInsight]).catch(() => {});
+          }
+        }
+
+        renderPlot(varX, varU, beta, lambda, expOLS);
+      }
+
+      function renderPlot(varX, varU, beta, lambda, expOLS) {
+        const svgW = 680;
+        const svgH = 300;
+        const padL = 60, padR = 40, padT = 30, padB = 40;
+        const plotW = svgW - padL - padR;
+        const plotH = svgH - padT - padB;
+
+        const xMin = -3.0, xMax = 3.0;
+        const yMin = -8.0, yMax = 8.0;
+
+        function toSvgX(val) {
+          return padL + ((val - xMin) / (xMax - xMin)) * plotW;
+        }
+        function toSvgY(val) {
+          return svgH - padB - ((val - yMin) / (yMax - yMin)) * plotH;
+        }
+
+        let svgHtml = '';
+
+        const originX = toSvgX(0);
+        const originY = toSvgY(0);
+
+        // Grid lines
+        for (let gx = -3; gx <= 3; gx += 1) {
+          const sx = toSvgX(gx);
+          svgHtml += `<line x1="${sx}" y1="${padT}" x2="${sx}" y2="${svgH - padB}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3,3" stroke-width="1" opacity="0.6"/>`;
+          svgHtml += `<text x="${sx}" y="${svgH - padB + 16}" fill="var(--text-muted, #94a3b8)" font-size="11" text-anchor="middle" font-family="Poppins">${gx}</text>`;
+        }
+        for (let gy = -8; gy <= 8; gy += 4) {
+          const sy = toSvgY(gy);
+          svgHtml += `<line x1="${padL}" y1="${sy}" x2="${svgW - padR}" y2="${sy}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3,3" stroke-width="1" opacity="0.6"/>`;
+          svgHtml += `<text x="${padL - 10}" y="${sy + 4}" fill="var(--text-muted, #94a3b8)" font-size="11" text-anchor="end" font-family="Poppins">${gy}</text>`;
+        }
+
+        // Origin axes
+        svgHtml += `<line x1="${padL}" y1="${originY}" x2="${svgW - padR}" y2="${originY}" stroke="var(--text-muted, #94a3b8)" stroke-width="1.2"/>`;
+        svgHtml += `<line x1="${originX}" y1="${padT}" x2="${originX}" y2="${svgH - padB}" stroke="var(--text-muted, #94a3b8)" stroke-width="1.2"/>`;
+
+        // Slope lines
+        const x1 = -2.5, x2 = 2.5;
+
+        // True / IV slope (solid primary accent)
+        const trueY1 = beta * x1;
+        const trueY2 = beta * x2;
+        svgHtml += `<line x1="${toSvgX(x1)}" y1="${toSvgY(trueY1)}" x2="${toSvgX(x2)}" y2="${toSvgY(trueY2)}" stroke="#2563eb" stroke-width="3"/>`;
+
+        // Attenuated OLS slope (dashed)
+        const olsY1 = expOLS * x1;
+        const olsY2 = expOLS * x2;
+        svgHtml += `<line x1="${toSvgX(x1)}" y1="${toSvgY(olsY1)}" x2="${toSvgX(x2)}" y2="${toSvgY(olsY2)}" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4"/>`;
+
+        // Label on the plot
+        svgHtml += `<text x="${toSvgX(2.2)}" y="${toSvgY(trueY2) - 10}" fill="#2563eb" font-size="12" font-weight="600" font-family="Poppins">True / IV (β = ${beta.toFixed(2)})</text>`;
+        svgHtml += `<text x="${toSvgX(2.2)}" y="${toSvgY(olsY2) + 16}" fill="#64748b" font-size="12" font-weight="500" font-family="Poppins">Attenuated OLS (λβ = ${expOLS.toFixed(2)})</text>`;
+
+        // Signal bar in corner
+        const barX = padL + 20;
+        const barY = padT + 20;
+        const barW = 140;
+        const barH = 14;
+        const sigW = barW * Math.max(0, Math.min(1, lambda));
+
+        svgHtml += `<rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" rx="4" fill="var(--border-subtle, #e2e8f0)"/>`;
+        svgHtml += `<rect x="${barX}" y="${barY}" width="${sigW}" height="${barH}" rx="4" fill="#2563eb"/>`;
+        svgHtml += `<text x="${barX}" y="${barY - 6}" fill="var(--text-primary, #0f172a)" font-size="11" font-weight="500" font-family="Poppins">Signal Ratio λ = ${(lambda * 100).toFixed(0)}%</text>`;
+
+        svg.innerHTML = svgHtml;
+      }
+
+      varXSlider.addEventListener('input', updateAttenuationLab);
+      varUSlider.addEventListener('input', updateAttenuationLab);
+      betaSlider.addEventListener('input', updateAttenuationLab);
+
+      // Initial render
+      updateAttenuationLab();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLab125);
+    } else {
+      initLab125();
+    }
+  </script>
+</body>
+</html>

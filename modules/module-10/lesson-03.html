@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10.3: Cluster-Robust Standard Errors — Econometrics with AI</title>
+  <meta name="description" content="Master cluster-robust standard errors in panel data, understand the block-diagonal covariance structure, and inspect sandwich variance formulas for Pooled OLS, Random Effects, and Fixed Effects.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-10" data-lesson="3">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 10</a>
+          <span class="module-nav-title">Panel Data II</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 5 &middot; Cluster-Robust Standard Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 10 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.1 The First Differences Model</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.2 First Differences vs Fixed Effects</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">10.3 Cluster-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">60%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 60%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Header Block -->
+    <header class="lesson-header-block">
+      <div class="lesson-badge-row">
+        <span class="academic-badge badge-tier">Tier 4 &middot; Panel &amp; Discrete</span>
+        <span class="academic-badge badge-module">Module 10 &middot; Lesson 3</span>
+        <span class="academic-badge badge-time">Est. 26 min</span>
+      </div>
+      <h1 class="lesson-title">Cluster-Robust Standard Errors</h1>
+      <p class="lesson-subtitle">
+        Correcting panel inference for within-group correlation and heteroskedasticity under a block-diagonal disturbance covariance structure.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      <ul class="objectives-list">
+        <li>Understand why conventional standard errors that assume cross-row independence fail in panel settings.</li>
+        <li>Define cluster-robust standard errors and identify valid grouping units (e.g., states, villages, households, firms).</li>
+        <li>Interpret the block-diagonal error structure with non-zero within-group covariance and zero cross-group covariance.</li>
+        <li>Deconstruct the sandwich variance formulas for Pooled OLS, Random Effects, and Fixed Effects estimators.</li>
+        <li>Recognize the fundamental large-sample requirement: asymptotic validity depends strictly on the number of clusters \(G \to \infty\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Panel Inference Challenge -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">1</span>
+        <h2 class="section-title">The Panel Inference Challenge</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          In cross-sectional econometrics, observations are frequently modeled as independent draws. In panel data, however, multiple observations belong to the <strong>same unit</strong> over time. Unobserved shocks that hit a state, firm, or individual in period \(t\) often persist into period \(t+1\).
+        </p>
+
+        <div class="definition-card" style="margin-top: var(--space-md);">
+          <div class="definition-header">
+            <span class="definition-icon">🛡️</span>
+            <span class="definition-title">Cluster-Robust Standard Errors (CRSE)</span>
+          </div>
+          <p class="definition-text">
+            Cluster-robust standard errors adjust inference simultaneously for:
+          </p>
+          <ul style="margin: var(--space-2xs) 0 0 var(--space-md); padding: 0; color: var(--text-secondary);">
+            <li><strong>Heteroskedasticity:</strong> Non-constant error variance across units and time periods.</li>
+            <li><strong>Within-Group Correlation:</strong> Arbitrary autocorrelation and serial dependence among observations belonging to the same cluster (e.g., state, village, household, individual, firm).</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top: var(--space-md);">
+          <strong>The Danger of Ignoring Clustering:</strong> Standard OLS variance formulas assume all \(N \times T\) observations are mutually independent. When positive serial correlation exists within units, this assumption artificially inflates the effective sample size, severely underestimating standard errors, inflating \(t\)-statistics, and producing spurious statistical significance.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Block-Diagonal Covariance Structure -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">2</span>
+        <h2 class="section-title">The Block-Diagonal Disturbance Structure</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          The cluster-robust framework structures the full disturbance covariance matrix \(\boldsymbol{\Omega}\) into a <strong>block-diagonal matrix</strong> based on two foundational assumptions:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid var(--accent-primary);">
+            <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.95rem;">1. WITHIN-CLUSTER DEPENDENCE</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              Errors within the same group \(i\) (e.g., California over years 1 to \(T\)) are permitted to have <em>arbitrary autocorrelation and heteroskedasticity</em>.
+            </p>
+          </div>
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-weight: 700; color: #059669; font-size: 0.95rem;">2. ACROSS-CLUSTER INDEPENDENCE</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              Disturbances belonging to different clusters (e.g., California vs. New York) are assumed to have <em>zero correlation</em>: \(\mathbb{E}[\mathbf{u}_i \mathbf{u}_j'] = \mathbf{0}\) for \(i \neq j\).
+            </p>
+          </div>
+        </div>
+
+        <div class="math-card" style="margin-top: var(--space-md);">
+          <div class="math-card-label">BLOCK-DIAGONAL DISTURBANCE COVARIANCE MATRIX</div>
+          <div class="math-display-wrapper">
+            \[
+            \boldsymbol{\Omega}_{\text{cluster}} =
+            \begin{bmatrix}
+            \mathbf{V}_1 & \mathbf{0} & \cdots & \mathbf{0} \\
+            \mathbf{0} & \mathbf{V}_2 & \cdots & \mathbf{0} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            \mathbf{0} & \mathbf{0} & \cdots & \mathbf{V}_G
+            \end{bmatrix}
+            \]
+          </div>
+          <p class="math-card-note">
+            where each \(\mathbf{V}_i\) is a \(T_i \times T_i\) covariance block for cluster \(i\), and all off-diagonal blocks are identically zero.
+          </p>
+        </div>
+
+        <div class="callout callout-info" style="margin-top: var(--space-md);">
+          <strong>Critical Asymptotic Condition:</strong>
+          Cluster-robust inference is valid asymptotically as the <strong>number of clusters \(G \to \infty\)</strong>. Having a massive number of time periods \(T\) within a tiny number of clusters does <em>not</em> fulfill this condition; consistent estimation of the cluster sandwich meat requires a large number of independent cluster blocks.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Sandwich Variance Formulas -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">3</span>
+        <h2 class="section-title">Cluster-Robust Variance Formulas Across Estimators</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          Just as in heteroskedasticity-robust inference, cluster-robust variance estimates take a canonical <strong>Bread \(\times\) Meat \(\times\) Bread</strong> sandwich form. Switch between tabs to inspect the formulas for Pooled OLS, Random Effects, and Fixed Effects:
+        </p>
+
+        <!-- Tabs -->
+        <div class="btn-group" role="group" aria-label="Estimator Formula Tabs" style="margin-bottom: var(--space-md);">
+          <button type="button" class="btn btn-sm btn-primary" id="btnTabFormPooled">Pooled OLS</button>
+          <button type="button" class="btn btn-sm btn-outline" id="btnTabFormRE">Random Effects</button>
+          <button type="button" class="btn btn-sm btn-outline" id="btnTabFormFE">Fixed Effects</button>
+        </div>
+
+        <!-- Formula Display Card -->
+        <div id="formCardPooled" class="card card-bordered" style="padding: var(--space-md); background: var(--surface);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 1rem; margin-bottom: var(--space-xs);">
+            Pooled OLS Cluster-Robust Asymptotic Variance (Wooldridge)
+          </div>
+          <div class="math-display-wrapper" style="overflow-x: auto; font-size: 1.05rem; padding: var(--space-sm) 0;">
+            \[
+            \widehat{\text{Avar}}(\widehat{\boldsymbol{\beta}}_{\text{pooled}}) = 
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\mathbf{X}_i\right)^{-1}}_{\text{Bread}}
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\widehat{\mathbf{u}}_i\widehat{\mathbf{u}}_i'\mathbf{X}_i\right)}_{\text{Cluster Meat}}
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\mathbf{X}_i\right)^{-1}}_{\text{Bread}}
+            \]
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+            where \(\widehat{\mathbf{u}}_i = \mathbf{y}_i - \mathbf{X}_i\widehat{\boldsymbol{\beta}}_{\text{pooled}}\) is the \(T_i \times 1\) residual vector for cluster \(i\). The meat term sums the outer products of cluster score vectors \(\mathbf{s}_i = \mathbf{X}_i'\widehat{\mathbf{u}}_i\).
+          </p>
+        </div>
+
+        <div id="formCardRE" class="card card-bordered" style="display: none; padding: var(--space-md); background: var(--surface);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 1rem; margin-bottom: var(--space-xs);">
+            Random Effects Cluster-Robust Asymptotic Variance
+          </div>
+          <div class="math-display-wrapper" style="overflow-x: auto; font-size: 1.05rem; padding: var(--space-sm) 0;">
+            \[
+            \widehat{\text{Avar}}(\widehat{\boldsymbol{\beta}}_{\text{RE}}) = 
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\widehat{\boldsymbol{\Sigma}}^{-1}\mathbf{X}_i\right)^{-1}}_{\text{GLS Bread}}
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\widehat{\boldsymbol{\Sigma}}^{-1}\widehat{\mathbf{u}}_i\widehat{\mathbf{u}}_i'\widehat{\boldsymbol{\Sigma}}^{-1}\mathbf{X}_i\right)}_{\text{Cluster Meat}}
+            \underbrace{\left(\sum_{i=1}^N \mathbf{X}_i'\widehat{\boldsymbol{\Sigma}}^{-1}\mathbf{X}_i\right)^{-1}}_{\text{GLS Bread}}
+            \]
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+            where \(\widehat{\mathbf{u}}_i = \mathbf{y}_i - \mathbf{X}_i\widehat{\boldsymbol{\beta}}_{\text{RE}}\), and \(\widehat{\boldsymbol{\Sigma}}\) is the \(T \times T\) working covariance matrix. Protects RE inference against misspecification of the error variance-covariance structure.
+          </p>
+        </div>
+
+        <div id="formCardFE" class="card card-bordered" style="display: none; padding: var(--space-md); background: var(--surface);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 1rem; margin-bottom: var(--space-xs);">
+            Fixed Effects (Within) Cluster-Robust Asymptotic Variance
+          </div>
+          <div class="math-display-wrapper" style="overflow-x: auto; font-size: 1.05rem; padding: var(--space-sm) 0;">
+            \[
+            \widehat{\text{Avar}}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) = 
+            \underbrace{(\ddot{\mathbf{X}}'\ddot{\mathbf{X}})^{-1}}_{\text{Within Bread}}
+            \underbrace{\left(\sum_{i=1}^N \ddot{\mathbf{X}}_i'\widehat{\mathbf{u}}_i\widehat{\mathbf{u}}_i'\ddot{\mathbf{X}}_i\right)}_{\text{Cluster Meat}}
+            \underbrace{(\ddot{\mathbf{X}}'\ddot{\mathbf{X}})^{-1}}_{\text{Within Bread}}
+            \]
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+            where \(\ddot{\mathbf{X}}_i = (\mathbf{X}_{it} - \bar{\mathbf{X}}_i)\) are the time-demeaned regressors for cluster \(i\), and \(\widehat{\mathbf{u}}_i\) are the FE residuals. Robustifies FE against arbitrary serial correlation and heteroskedasticity within clusters.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 10.3 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">4</span>
+        <h2 class="section-title">Interactive Lab 10.3: Cluster Dependence &amp; Matrix Explorer</h2>
+      </div>
+
+      <div class="interactive-lab-card" id="lab103">
+        <div class="lab-header">
+          <div class="lab-title-wrap">
+            <span class="lab-badge">INTERACTIVE LAB 10.3</span>
+            <h3 class="lab-title">Block-Diagonal Disturbance Heatmap</h3>
+          </div>
+          <p class="lab-desc">
+            Vary the within-cluster correlation and number of clusters. Observe how the diagonal covariance blocks intensify while off-diagonal blocks remain strictly zero.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls-panel">
+          <div class="control-group">
+            <label class="control-label">Within-Cluster Correlation (\(\rho\))</label>
+            <div class="btn-group" role="group" aria-label="Correlation Settings">
+              <button type="button" class="btn btn-sm btn-outline" id="btnRhoLow">Low (0.15)</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnRhoMed">Medium (0.50)</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnRhoHigh">High (0.85)</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Number of Clusters (\(G\))</label>
+            <div class="btn-group" role="group" aria-label="Cluster Settings">
+              <button type="button" class="btn btn-sm btn-outline" id="btnG6">6 (Small)</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnG20">20 (Moderate)</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnG50">50 (Large)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">WITHIN CORRELATION</div>
+            <div class="metric-value" id="metricRho">ρ = 0.50</div>
+            <div class="metric-sub">Intra-cluster dependence</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">CLUSTER COUNT (G)</div>
+            <div class="metric-value" id="metricG">20 Clusters</div>
+            <div class="metric-sub">Independent blocks</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">ASYMPTOTIC RELIABILITY</div>
+            <div class="metric-value" id="metricAsy">Good</div>
+            <div class="metric-sub" id="metricAsySub">G &ge; 20 adequate</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">SE ADJUSTMENT RATIO</div>
+            <div class="metric-value" id="metricRatio">1.48×</div>
+            <div class="metric-sub">CRSE / Conventional SE</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: rgba(37,99,235,0.9);"></span>
+            <span>High Covariance Block</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: rgba(37,99,235,0.3);"></span>
+            <span>Moderate Covariance</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--surface); border: 1px solid var(--border-subtle);"></span>
+            <span>Zero Covariance (Off-Diagonal)</span>
+          </div>
+        </div>
+
+        <!-- SVG Heatmap Canvas -->
+        <div class="graph-container" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); text-align: center;">
+          <svg id="lab103Svg" viewBox="0 0 540 280" style="width: 100%; max-width: 540px; height: auto; display: inline-block;">
+            <!-- Rendered by JS -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div class="lab-insight-box" id="lab103Insight" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37,99,235,0.06); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem;" id="lab103InsightTitle">
+            MODERATE CLUSTERING: 20 Clusters with ρ = 0.50
+          </div>
+          <div style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);" id="lab103InsightText">
+            Notice how within each cluster block (diagonal), temporal covariance is positive. Because observations move together within units, the true sampling variability is 1.48× larger than naive OLS formulas report.
+          </div>
+        </div>
+
+        <!-- Visual Explanation Grid -->
+        <div class="visual-explanation-grid" style="margin-top: var(--space-lg);">
+          <div class="grid-card seeing">
+            <div class="grid-card-label">WHAT YOU ARE SEEING</div>
+            <p>
+              A schematic heatmap of the disturbance covariance matrix \(\boldsymbol{\Omega}\). Shaded square blocks along the main diagonal represent within-cluster covariance; unshaded white space represents zero cross-cluster covariance.
+            </p>
+          </div>
+
+          <div class="grid-card notice">
+            <div class="grid-card-label">WHAT TO NOTICE</div>
+            <p>
+              Off-diagonal blocks are completely empty! The framework assumes that state A gives zero information about state B's idiosyncratic disturbances.
+            </p>
+          </div>
+
+          <div class="grid-card matters">
+            <div class="grid-card-label">WHY IT MATTERS</div>
+            <p>
+              Higher within-cluster correlation (\(\rho\)) inflates the SE ratio significantly. Failing to cluster when \(\rho = 0.85\) results in standard errors that are less than half their true size.
+            </p>
+          </div>
+
+          <div class="grid-card interpretation">
+            <div class="grid-card-label">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              CRSE does not change \(\widehat{\boldsymbol{\beta}}\); it recalculates \(\widehat{\text{Var}}(\widehat{\boldsymbol{\beta}})\) to provide honest confidence intervals and hypothesis tests in clustered environments.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-label">TRY THIS</div>
+            <p>
+              Select <strong>6 (Small)</strong> clusters and notice the reliability warning. When \(G\) is very small, asymptotic approximations break down, leading into Lesson 10.4.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check 10.3 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">5</span>
+        <h2 class="section-title">Concept Check</h2>
+      </div>
+
+      <div class="quick-check-container quick-check-card">
+        <div class="quick-check-header">
+          <span class="academic-badge badge-check">CHECK 10.3</span>
+          <span class="quick-check-subtitle">Panel Error Structure</span>
+        </div>
+
+        <h3 class="quick-check-question">
+          Why can multiple time-series observations belonging to the same panel unit not be treated as fully independent in standard error calculations?
+        </h3>
+
+        <div class="quick-check-actions">
+          <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint103">Show Hint</button>
+          <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol103">Show Solution</button>
+        </div>
+
+        <div class="hint-content" id="hint103" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-sm);">
+          <strong>Hint:</strong> Think about unobserved shocks to an individual or state over time. Are they completely reset to zero in every new period?
+        </div>
+
+        <div class="solution-content" id="sol103" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: #059669; margin-bottom: var(--space-xs);">ANSWER:</div>
+          <p style="margin-bottom: var(--space-xs);">
+            Because unobserved shocks can be <strong>correlated within that unit over time</strong> (within-group persistence, serial correlation, or state-specific policies).
+          </p>
+          <div style="font-weight: 700; color: #059669; margin-top: var(--space-sm); margin-bottom: var(--space-xs);">WHY?</div>
+          <p style="margin-bottom: 0;">
+            Treating repeated observations as independent assumes each new period provides completely fresh, uncorrelated information. When shocks persist, each observation carries less independent information than a true new unit would. Assuming independence understates variance, leading to artificially narrow confidence intervals and over-rejection of the null hypothesis.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Dual Protection:</strong> Cluster-robust standard errors correct simultaneously for heteroskedasticity and arbitrary within-cluster serial correlation.</li>
+        <li><strong>Block-Diagonal Structure:</strong> The error covariance matrix \(\boldsymbol{\Omega}\) is block-diagonal: non-zero within-cluster covariance blocks along the diagonal, and zeros across different clusters.</li>
+        <li><strong>Sandwich Form:</strong> Formulae for Pooled OLS, RE, and FE all take the Bread \(\times\) Meat \(\times\) Bread form, summing outer products of cluster score vectors.</li>
+        <li><strong>Cluster Asymptotics:</strong> Asymptotic validity requires the number of clusters \(G \to \infty\), not just the number of observations \(N \times T\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-02.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">10.2 First Differences vs Fixed Effects</span>
+      </a>
+      <a href="lesson-04.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 10.3 Script -->
+  <script>
+    (function() {
+      // Formula tab switches
+      const btnTabFormPooled = document.getElementById('btnTabFormPooled');
+      const btnTabFormRE = document.getElementById('btnTabFormRE');
+      const btnTabFormFE = document.getElementById('btnTabFormFE');
+      const formCardPooled = document.getElementById('formCardPooled');
+      const formCardRE = document.getElementById('formCardRE');
+      const formCardFE = document.getElementById('formCardFE');
+
+      btnTabFormPooled.addEventListener('click', () => {
+        btnTabFormPooled.className = 'btn btn-sm btn-primary';
+        btnTabFormRE.className = 'btn btn-sm btn-outline';
+        btnTabFormFE.className = 'btn btn-sm btn-outline';
+        formCardPooled.style.display = 'block';
+        formCardRE.style.display = 'none';
+        formCardFE.style.display = 'none';
+      });
+
+      btnTabFormRE.addEventListener('click', () => {
+        btnTabFormPooled.className = 'btn btn-sm btn-outline';
+        btnTabFormRE.className = 'btn btn-sm btn-primary';
+        btnTabFormFE.className = 'btn btn-sm btn-outline';
+        formCardPooled.style.display = 'none';
+        formCardRE.style.display = 'block';
+        formCardFE.style.display = 'none';
+      });
+
+      btnTabFormFE.addEventListener('click', () => {
+        btnTabFormPooled.className = 'btn btn-sm btn-outline';
+        btnTabFormRE.className = 'btn btn-sm btn-outline';
+        btnTabFormFE.className = 'btn btn-sm btn-primary';
+        formCardPooled.style.display = 'none';
+        formCardRE.style.display = 'none';
+        formCardFE.style.display = 'block';
+      });
+
+      // Lab 10.3 State
+      let curRho = 0.50;
+      let curG = 20;
+
+      const btnRhoLow = document.getElementById('btnRhoLow');
+      const btnRhoMed = document.getElementById('btnRhoMed');
+      const btnRhoHigh = document.getElementById('btnRhoHigh');
+
+      const btnG6 = document.getElementById('btnG6');
+      const btnG20 = document.getElementById('btnG20');
+      const btnG50 = document.getElementById('btnG50');
+
+      const metricRho = document.getElementById('metricRho');
+      const metricG = document.getElementById('metricG');
+      const metricAsy = document.getElementById('metricAsy');
+      const metricAsySub = document.getElementById('metricAsySub');
+      const metricRatio = document.getElementById('metricRatio');
+
+      const lab103InsightTitle = document.getElementById('lab103InsightTitle');
+      const lab103InsightText = document.getElementById('lab103InsightText');
+      const svg = document.getElementById('lab103Svg');
+
+      function updateLab() {
+        metricRho.textContent = 'ρ = ' + curRho.toFixed(2);
+        metricG.textContent = curG + ' Clusters';
+
+        // Ratio estimation: sqrt(1 + (T-1)*rho) with T=4
+        const ratio = Math.sqrt(1 + 3 * curRho);
+        metricRatio.textContent = ratio.toFixed(2) + '×';
+
+        if (curG === 6) {
+          metricAsy.textContent = 'Severe Warning';
+          metricAsy.style.color = '#ef4444';
+          metricAsySub.textContent = 'G = 6 violates G → ∞';
+          lab103InsightTitle.textContent = 'SMALL CLUSTER ALERT: G = 6 Induces Downward Bias in CRSE';
+          lab103InsightText.textContent = 'With only 6 clusters, conventional cluster-robust formulas underestimate standard errors by 20–40%, leading to over-rejection. Specialized wild-cluster or robust bootstrap methods cited in Lesson 10.4 become necessary.';
+        } else if (curG === 20) {
+          metricAsy.textContent = 'Good';
+          metricAsy.style.color = 'var(--text-primary)';
+          metricAsySub.textContent = 'G = 20 standard threshold';
+          lab103InsightTitle.textContent = 'MODERATE CLUSTERING: 20 Clusters with ρ = ' + curRho.toFixed(2);
+          lab103InsightText.textContent = 'With 20 clusters, the diagonal blocks dominate the score variance calculation. Standard errors are adjusted by ' + ratio.toFixed(2) + '× relative to naive OLS.';
+        } else {
+          metricAsy.textContent = 'Excellent';
+          metricAsy.style.color = '#059669';
+          metricAsySub.textContent = 'G = 50 robust asymptotic';
+          lab103InsightTitle.textContent = 'LARGE CLUSTER REGIME: 50 Clusters with ρ = ' + curRho.toFixed(2);
+          lab103InsightText.textContent = 'With G = 50, cluster asymptotics operate with high precision. Confidence intervals and hypothesis tests reflect honest coverage.';
+        }
+
+        renderHeatmap();
+      }
+
+      function renderHeatmap() {
+        svg.innerHTML = '';
+        const size = 260;
+        const leftOffset = 140;
+        const topOffset = 10;
+
+        // Draw outer matrix border
+        const matrixBorder = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        matrixBorder.setAttribute('x', leftOffset);
+        matrixBorder.setAttribute('y', topOffset);
+        matrixBorder.setAttribute('width', size);
+        matrixBorder.setAttribute('height', size);
+        matrixBorder.setAttribute('fill', 'var(--surface)');
+        matrixBorder.setAttribute('stroke', 'var(--border-strong)');
+        matrixBorder.setAttribute('stroke-width', '1.5');
+        svg.appendChild(matrixBorder);
+
+        // Represent 4 cluster blocks schematically along diagonal
+        const nBlocks = 4;
+        const bSize = size / nBlocks;
+
+        for (let b = 0; b < nBlocks; b++) {
+          const bx = leftOffset + b * bSize;
+          const by = topOffset + b * bSize;
+
+          // Block container
+          const blockRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          blockRect.setAttribute('x', bx);
+          blockRect.setAttribute('y', by);
+          blockRect.setAttribute('width', bSize);
+          blockRect.setAttribute('height', bSize);
+          const alpha = 0.2 + curRho * 0.7;
+          blockRect.setAttribute('fill', 'rgba(37, 99, 235, ' + alpha + ')');
+          blockRect.setAttribute('stroke', 'var(--accent-primary)');
+          blockRect.setAttribute('stroke-width', '1.5');
+          svg.appendChild(blockRect);
+
+          // Diagonal sub-elements inside block (T x T = 3 x 3)
+          const subN = 3;
+          const subSize = bSize / subN;
+          for (let si = 0; si < subN; si++) {
+            for (let sj = 0; sj < subN; sj++) {
+              if (si === sj) {
+                const diagCell = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                diagCell.setAttribute('x', bx + si * subSize + 1);
+                diagCell.setAttribute('y', by + sj * subSize + 1);
+                diagCell.setAttribute('width', subSize - 2);
+                diagCell.setAttribute('height', subSize - 2);
+                diagCell.setAttribute('fill', 'var(--accent-primary)');
+                diagCell.setAttribute('opacity', '0.8');
+                svg.appendChild(diagCell);
+              }
+            }
+          }
+
+          // Block label
+          const bLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          bLabel.setAttribute('x', bx + bSize / 2);
+          bLabel.setAttribute('y', by + bSize / 2 + 4);
+          bLabel.setAttribute('font-family', 'var(--font-mono)');
+          bLabel.setAttribute('font-size', '10');
+          bLabel.setAttribute('font-weight', '700');
+          bLabel.setAttribute('fill', '#ffffff');
+          bLabel.setAttribute('text-anchor', 'middle');
+          bLabel.textContent = 'V_' + (b + 1);
+          svg.appendChild(bLabel);
+        }
+
+        // Off-diagonal zero labels
+        const zero1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        zero1.setAttribute('x', leftOffset + size * 0.75);
+        zero1.setAttribute('y', topOffset + size * 0.25 + 6);
+        zero1.setAttribute('font-family', 'var(--font-mono)');
+        zero1.setAttribute('font-size', '18');
+        zero1.setAttribute('font-weight', '700');
+        zero1.setAttribute('fill', 'var(--text-muted)');
+        zero1.setAttribute('text-anchor', 'middle');
+        zero1.textContent = '0';
+        svg.appendChild(zero1);
+
+        const zero2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        zero2.setAttribute('x', leftOffset + size * 0.25);
+        zero2.setAttribute('y', topOffset + size * 0.75 + 6);
+        zero2.setAttribute('font-family', 'var(--font-mono)');
+        zero2.setAttribute('font-size', '18');
+        zero2.setAttribute('font-weight', '700');
+        zero2.setAttribute('fill', 'var(--text-muted)');
+        zero2.setAttribute('text-anchor', 'middle');
+        zero2.textContent = '0';
+        svg.appendChild(zero2);
+
+        // Matrix brackets
+        const bLeft = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        bLeft.setAttribute('d', 'M ' + (leftOffset - 12) + ' ' + (topOffset - 4) + ' L ' + (leftOffset - 22) + ' ' + (topOffset - 4) + ' L ' + (leftOffset - 22) + ' ' + (topOffset + size + 4) + ' L ' + (leftOffset - 12) + ' ' + (topOffset + size + 4));
+        bLeft.setAttribute('fill', 'none');
+        bLeft.setAttribute('stroke', 'var(--text-primary)');
+        bLeft.setAttribute('stroke-width', '2.5');
+        svg.appendChild(bLeft);
+
+        const bRight = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        bRight.setAttribute('d', 'M ' + (leftOffset + size + 12) + ' ' + (topOffset - 4) + ' L ' + (leftOffset + size + 22) + ' ' + (topOffset - 4) + ' L ' + (leftOffset + size + 22) + ' ' + (topOffset + size + 4) + ' L ' + (leftOffset + size + 12) + ' ' + (topOffset + size + 4));
+        bRight.setAttribute('fill', 'none');
+        bRight.setAttribute('stroke', 'var(--text-primary)');
+        bRight.setAttribute('stroke-width', '2.5');
+        svg.appendChild(bRight);
+
+        // Matrix label
+        const mLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        mLabel.setAttribute('x', 50);
+        mLabel.setAttribute('y', topOffset + size / 2);
+        mLabel.setAttribute('font-family', 'var(--font-mono)');
+        mLabel.setAttribute('font-size', '14');
+        mLabel.setAttribute('font-weight', '700');
+        mLabel.setAttribute('fill', 'var(--text-primary)');
+        mLabel.setAttribute('text-anchor', 'middle');
+        mLabel.textContent = 'Ω_cluster =';
+        svg.appendChild(mLabel);
+      }
+
+      btnRhoLow.addEventListener('click', () => {
+        curRho = 0.15;
+        btnRhoLow.className = 'btn btn-sm btn-primary';
+        btnRhoMed.className = 'btn btn-sm btn-outline';
+        btnRhoHigh.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+      btnRhoMed.addEventListener('click', () => {
+        curRho = 0.50;
+        btnRhoLow.className = 'btn btn-sm btn-outline';
+        btnRhoMed.className = 'btn btn-sm btn-primary';
+        btnRhoHigh.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+      btnRhoHigh.addEventListener('click', () => {
+        curRho = 0.85;
+        btnRhoLow.className = 'btn btn-sm btn-outline';
+        btnRhoMed.className = 'btn btn-sm btn-outline';
+        btnRhoHigh.className = 'btn btn-sm btn-primary';
+        updateLab();
+      });
+
+      btnG6.addEventListener('click', () => {
+        curG = 6;
+        btnG6.className = 'btn btn-sm btn-primary';
+        btnG20.className = 'btn btn-sm btn-outline';
+        btnG50.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+      btnG20.addEventListener('click', () => {
+        curG = 20;
+        btnG6.className = 'btn btn-sm btn-outline';
+        btnG20.className = 'btn btn-sm btn-primary';
+        btnG50.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+      btnG50.addEventListener('click', () => {
+        curG = 50;
+        btnG6.className = 'btn btn-sm btn-outline';
+        btnG20.className = 'btn btn-sm btn-outline';
+        btnG50.className = 'btn btn-sm btn-primary';
+        updateLab();
+      });
+
+      // Quick check
+      const btnHint = document.getElementById('btnHint103');
+      const hint = document.getElementById('hint103');
+      const btnSol = document.getElementById('btnSol103');
+      const sol = document.getElementById('sol103');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

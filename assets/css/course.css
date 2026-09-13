@@ -279,10 +279,23 @@
 /* --------------------------------------------------------------------------
    LEARNING PATH
    -------------------------------------------------------------------------- */
+::-webkit-scrollbar:horizontal {
+  height: 0px !important;
+  display: none !important;
+}
+
 .learning-path-wrapper {
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding-bottom: var(--space-sm);
   -webkit-overflow-scrolling: touch;
+}
+
+.learning-path-wrapper::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 .learning-path-track {
@@ -1110,11 +1123,12 @@
 
 .learning-path-pill {
   background: var(--color-bg, var(--background));
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border, var(--border-subtle));
   color: var(--text-primary);
   white-space: nowrap;
+  font-size: var(--text-sm);
 }
 
 .learning-path-pill.highlight {
@@ -1127,6 +1141,34 @@
   color: var(--color-text-secondary, var(--text-muted));
   font-weight: 600;
   user-select: none;
+}
+
+@media (max-width: 640px) {
+  .module-learning-path-flow {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .learning-path-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 280px;
+    gap: 0;
+  }
+  .learning-path-pill {
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+    padding: 10px 14px;
+  }
+  .learning-path-arrow {
+    transform: rotate(90deg);
+    display: block;
+    line-height: 1;
+    padding: 6px 0;
+  }
 }
 
 /* Module Lessons Section & Canonical Single-Column Cards */
@@ -1406,10 +1448,21 @@
 
 @media (max-width: 768px) {
   .study-section,
-  .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)) {
+  .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)),
+  .interactive-lab-card,
+  .interactive-lab {
     padding: 20px 22px;
     margin-bottom: 24px;
     border-radius: var(--radius-md, 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  .study-section,
+  .lesson-section:not(#labSection):not(.lesson-section--plain):not(:has(.interactive-lab-card)),
+  .interactive-lab-card,
+  .interactive-lab {
+    padding: 16px 18px;
   }
 }
 
@@ -1435,6 +1488,11 @@
   font-size: 0.98rem;
   line-height: 1.7;
   color: var(--color-text, var(--text-primary, #334155));
+  max-width: 920px;
+}
+
+.study-section-body p + p {
+  margin-top: 14px;
 }
 
 .study-section-body > p,
@@ -1615,6 +1673,81 @@
   margin: 0;
 }
 
+/* Further Reading Callout */
+.further-reading {
+  margin-top: 22px;
+  padding: 18px 20px;
+  background: var(--surface-secondary);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 10px;
+  max-width: 920px;
+}
+
+.further-reading-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+}
+
+.further-reading-list {
+  line-height: 1.55;
+  margin: 10px 0 0;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.further-reading-list li + li {
+  margin-top: 8px;
+}
+
+.further-reading-list .ref-title {
+  color: var(--text-muted);
+}
+
+.further-reading-list .ref-journal {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* Key Takeaway Callout (Semantic Green Accent) */
+.key-takeaway-card {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: var(--success-soft);
+  border-left: 4px solid var(--success);
+  border-radius: 10px;
+  max-width: 920px;
+}
+
+.key-takeaway-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--success);
+  margin-bottom: 4px;
+}
+
+.key-takeaway-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .further-reading {
+    padding: 14px 16px;
+  }
+  .key-takeaway-card {
+    padding: 14px 16px;
+  }
+}
+
 /* Nested Study Cards inside Study Sections (2-level hierarchy contrast) */
 .study-section .study-card,
 .lesson-section:not(#labSection) .study-card {
@@ -1666,7 +1799,25 @@
 }
 
 [data-theme="dark"] .key-idea-text {
-  color: #f1f5f9;
+  color: var(--color-text, #cbd5e1);
+}
+
+[data-theme="dark"] .further-reading {
+  background: var(--surface-secondary);
+  border-left-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .further-reading-list {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .key-takeaway-card {
+  background: var(--success-soft);
+  border-left-color: var(--success);
+}
+
+[data-theme="dark"] .key-takeaway-text {
+  color: var(--text-primary);
 }
 
 /* --------------------------------------------------------------------------
@@ -1864,6 +2015,5 @@
 [data-theme="dark"] .study-section .derivation-why-label {
   color: #60a5fa;
 }
-
 
 

@@ -64,7 +64,8 @@ LESSON SUMMARY
 7. **Module 7: Endogeneity and Causal Inference** — Omitted variable bias, simultaneity, instrumental variables (IV/2SLS), and natural experiments.
 8. **Module 8: Time Series Econometrics** — Trends, stationarity, autocorrelation, AR/MA modeling, distributed lags, unit roots, and forecasting.
 9. **Module 9: Panel Data** — Pooled OLS, fixed effects, random effects, individual heterogeneity, and Hausman diagnostics.
-10. **Module 10: Modern Econometrics and AI** — Prediction vs. causality, LASSO, ridge regression, double machine learning, and ethical use of AI.
+10. **Module 10: Panel Data II** — First differences, cluster-robust standard errors, choosing the cluster level, small-cluster issues, and the Hausman test.
+11. **Module 11: Instrumental Variables & Two-Stage Least Squares (2SLS)** — Endogeneity, instrument validity/relevance/monotonicity, supply-demand simultaneity, matrix formulation, and 2SLS projection matrix $P_Z$.
 
 ---
 

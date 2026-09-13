@@ -866,37 +866,45 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">08</span>
-                  <span class="module-group-tag">Diagnostics</span>
+                  <span class="module-group-tag">Robust Inference</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Diagnostics Gauge -->
+                <!-- Topic-Specific Micro Visual: Non-Spherical Errors & Robust Covariance Sandwich -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <!-- Diagnostic Bar -->
-                    <rect x="15" y="16" width="90" height="12" rx="3" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1" />
-                    <!-- Weak zone -->
-                    <rect x="15" y="16" width="35" height="12" rx="2" fill="var(--mistake-border)" opacity="0.35" />
-                    <!-- Strong zone -->
-                    <rect x="50" y="16" width="55" height="12" rx="2" fill="var(--ai-box-border)" opacity="0.35" />
-                    <!-- Cutoff line at F=10 -->
-                    <line x1="50" y1="12" x2="50" y2="32" stroke="var(--mistake-accent)" stroke-width="1.5" />
-                    <!-- Needle marker at F=24 -->
-                    <polygon points="76,14 73,8 79,8" fill="var(--accent-primary)" />
-                    <text x="50" y="9" font-size="6" font-family="var(--font-mono)" fill="var(--mistake-accent)" text-anchor="middle">F=10</text>
-                    <text x="76" y="38" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold" text-anchor="middle">F = 24.8 (Strong)</text>
+                    <!-- Fanning Heteroskedastic Spread -->
+                    <line x1="12" y1="22" x2="108" y2="22" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Regression line -->
+                    <line x1="15" y1="30" x2="105" y2="14" stroke="var(--accent-primary)" stroke-width="1.6" />
+                    <!-- Enveloping variance cone -->
+                    <line x1="15" y1="28" x2="105" y2="6" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="2 2" opacity="0.6" />
+                    <line x1="15" y1="32" x2="105" y2="22" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="2 2" opacity="0.6" />
+                    <!-- Residual Points with increasing variance -->
+                    <circle cx="25" cy="28" r="1.5" fill="var(--accent-primary)" opacity="0.7" />
+                    <circle cx="35" cy="27" r="1.5" fill="var(--accent-primary)" opacity="0.7" />
+                    <circle cx="50" cy="21" r="1.8" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="65" cy="24" r="2.0" fill="var(--accent-primary)" opacity="0.8" />
+                    <circle cx="80" cy="12" r="2.2" fill="var(--accent-primary)" opacity="0.9" />
+                    <circle cx="95" cy="7" r="2.5" fill="#d97706" />
+                    <circle cx="98" cy="21" r="2.5" fill="#d97706" />
+                    <!-- Formula label -->
+                    <text x="108" y="38" font-size="5.5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">E[εε'|X]=σ²Ω</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">08 Instrument Diagnostics & Measurement Error</h3>
-                <p class="module-desc">Weak instrument tests, Stock-Yogo critical values, Sargan-Hansen overidentification, and classical errors-in-variables.</p>
+                <h3 class="module-title">08 Non-Spherical Errors, Robust Inference &amp; Efficient Estimation</h3>
+                <p class="module-desc">Learn what happens when the classical spherical-error assumption fails, how OLS variance changes under heteroskedasticity or autocorrelation, how GLS and FGLS transform the model, how robust standard errors preserve inference under heteroskedasticity, and how WLS and bootstrap methods address unequal uncertainty.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Weak Instruments (F &gt; 10)</li>
-                    <li class="module-topic-tag">Sargan-Hansen Test</li>
-                    <li class="module-topic-tag">Attenuation Bias</li>
-                    <li class="module-topic-tag">LIML Estimator</li>
+                    <li class="module-topic-tag">Non-Spherical Errors (Ω ≠ I)</li>
+                    <li class="module-topic-tag">Generalized Least Squares (GLS)</li>
+                    <li class="module-topic-tag">Feasible GLS (FGLS)</li>
+                    <li class="module-topic-tag">White Robust Standard Errors</li>
+                    <li class="module-topic-tag">Breusch–Pagan &amp; White Tests</li>
+                    <li class="module-topic-tag">Weighted Least Squares (WLS)</li>
+                    <li class="module-topic-tag">Bootstrap Standard Errors</li>
                   </ul>
                 </div>
 
@@ -910,14 +918,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-08" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 08"
-                    data-mod-group="Causal Identification"
-                    data-mod-title="Instrument Diagnostics & Measurement Error"
-                    data-mod-desc="Diagnose IV limitations: weak instrument bias toward OLS, first-stage F diagnostics, Sargan and Hansen J tests for overidentifying restrictions, and classical errors-in-variables attenuation bias."
-                    data-mod-topics="Weak Instrument Pathology & Finite Sample Bias|Stock-Yogo First-Stage F-Statistic Benchmarks|Limited Information Maximum Likelihood (LIML)|Sargan & Hansen J Overidentification Tests|Classical Errors-in-Variables & Attenuation Bias|Non-Classical Measurement Error in Economics">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-08/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 8</a>
                 </div>
               </article>
 
@@ -925,41 +926,46 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">09</span>
-                  <span class="module-group-tag">Quasi-Exp</span>
+                  <span class="module-group-tag">Time Series</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: RD Cutoff Jump -->
+                <!-- Topic-Specific Micro Visual: AR(1) Persistence & Newey-West HAC Bartlett Kernel -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <!-- Threshold c -->
-                    <line x1="60" y1="6" x2="60" y2="38" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1.2" />
-                    <!-- Left local linear fit -->
-                    <line x1="15" y1="32" x2="58" y2="24" stroke="var(--text-secondary)" stroke-width="1.8" stroke-linecap="round" />
-                    <circle cx="24" cy="30" r="1.8" fill="var(--text-muted)" />
-                    <circle cx="40" cy="27" r="1.8" fill="var(--text-muted)" />
-                    <circle cx="54" cy="25" r="1.8" fill="var(--text-muted)" />
-                    <!-- Discontinuous Jump -->
-                    <line x1="62" y1="14" x2="105" y2="8" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
-                    <circle cx="66" cy="13" r="1.8" fill="var(--accent-primary)" />
-                    <circle cx="82" cy="11" r="1.8" fill="var(--accent-primary)" />
-                    <circle cx="98" cy="9" r="1.8" fill="var(--accent-primary)" />
-                    <!-- Jump arrow tau -->
-                    <line x1="60" y1="24" x2="60" y2="14" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <text x="65" y="21" font-size="6.5" font-family="var(--font-mono)" fill="var(--accent-primary)" font-weight="bold">τ_RD</text>
-                    <text x="60" y="42" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Cutoff c</text>
+                    <!-- Zero baseline -->
+                    <line x1="12" y1="22" x2="108" y2="22" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- Bartlett kernel weights (HAC bars) -->
+                    <line x1="30" y1="22" x2="30" y2="17" stroke="#d97706" stroke-width="2.5" opacity="0.4" />
+                    <line x1="45" y1="22" x2="45" y2="12" stroke="#d97706" stroke-width="2.5" opacity="0.6" />
+                    <line x1="60" y1="22" x2="60" y2="7" stroke="#d97706" stroke-width="2.5" opacity="0.9" />
+                    <line x1="75" y1="22" x2="75" y2="12" stroke="#d97706" stroke-width="2.5" opacity="0.6" />
+                    <line x1="90" y1="22" x2="90" y2="17" stroke="#d97706" stroke-width="2.5" opacity="0.4" />
+                    <!-- AR(1) persistent residual curve -->
+                    <path d="M 15 32 Q 28 34 40 26 T 65 14 T 90 10 T 105 18" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Residual nodes -->
+                    <circle cx="15" cy="32" r="1.8" fill="var(--accent-primary)" />
+                    <circle cx="40" cy="26" r="2" fill="var(--accent-primary)" />
+                    <circle cx="65" cy="14" r="2.2" fill="var(--accent-primary)" />
+                    <circle cx="90" cy="10" r="2.2" fill="var(--accent-primary)" />
+                    <circle cx="105" cy="18" r="1.8" fill="var(--accent-primary)" />
+                    <!-- Heuristic label -->
+                    <text x="108" y="38" font-size="5.5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">DW ≈ 2(1-ρ)</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">09 Regression Discontinuity Design</h3>
-                <p class="module-desc">Sharp and fuzzy cutoffs, local average treatment effects, running variables, and identification at the threshold.</p>
+                <h3 class="module-title">09 Time-Ordered Data, Autocorrelation &amp; HAC Inference</h3>
+                <p class="module-desc">Study what happens when regression errors are correlated across time. Learn the AR(1) model, detect serial correlation using the Durbin–Watson statistic, transform autocorrelated models using GLS, compare Prais–Winsten and Cochrane–Orcutt procedures, and perform robust inference using Newey–West HAC standard errors.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Sharp RDD</li>
-                    <li class="module-topic-tag">Fuzzy RDD & IV</li>
-                    <li class="module-topic-tag">Bandwidth Selection</li>
-                    <li class="module-topic-tag">McCrary Density Test</li>
+                    <li class="module-topic-tag">Time-Ordered Data &amp; AR(1)</li>
+                    <li class="module-topic-tag">Serial Correlation</li>
+                    <li class="module-topic-tag">Durbin–Watson Test</li>
+                    <li class="module-topic-tag">GLS with Known ρ</li>
+                    <li class="module-topic-tag">Prais–Winsten &amp; Cochrane–Orcutt</li>
+                    <li class="module-topic-tag">Newey–West HAC SEs</li>
+                    <li class="module-topic-tag">GLS vs FGLS vs HAC vs WLS</li>
                   </ul>
                 </div>
 
@@ -973,14 +979,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-09" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 09"
-                    data-mod-group="Causal Identification"
-                    data-mod-title="Regression Discontinuity Design"
-                    data-mod-desc="Explore one of the most credible quasi-experimental methods in modern microeconometrics: Sharp and Fuzzy RD, continuity assumptions, optimal bandwidth algorithms, and manipulation tests."
-                    data-mod-topics="The RDD Intuition & Running (Forcing) Variables|Sharp vs Fuzzy Regression Discontinuity Identification|Nonparametric Kernel & Local Polynomial Estimation|Optimal Bandwidth Selection (Calonico-Cattaneo-Titiunik)|McCrary Sorting & Manipulation Diagnostic Tests|Placebo Thresholds & Balance Checks">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-09/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 9</a>
                 </div>
               </article>
             </div>
@@ -992,7 +991,7 @@
           <div class="curriculum-tier">
             <div class="tier-header">
               <span class="tier-pill">Tier 4</span>
-              <span class="tier-title">Discrete & Limited Outcomes</span>
+              <span class="tier-title">Advanced Panel, IV &amp; Diagnostics</span>
               <span class="tier-count">Modules 10 – 12</span>
             </div>
 
@@ -1001,38 +1000,39 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">10</span>
-                  <span class="module-group-tag">Binary Choice</span>
+                  <span class="module-group-tag">Panel Data</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Sigmoid S-Curve -->
+                <!-- Topic-Specific Micro Visual: Block-Diagonal Cluster Covariance -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <!-- Bounds 0 and 1 -->
-                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
-                    <line x1="12" y1="8" x2="108" y2="8" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="1" />
-                    <!-- S-Curve -->
-                    <path d="M 15 35 C 45 35, 52 9, 105 9" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" />
-                    <!-- Binary outcome dots -->
-                    <circle cx="22" cy="35" r="2" fill="var(--accent-primary)" />
-                    <circle cx="35" cy="35" r="2" fill="var(--accent-primary)" />
-                    <circle cx="85" cy="9" r="2" fill="var(--accent-primary)" />
-                    <circle cx="98" cy="9" r="2" fill="var(--accent-primary)" />
-                    <text x="110" y="11" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">P=1</text>
-                    <text x="110" y="37" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">P=0</text>
-                    <text x="60" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">Logit/Probit</text>
+                    <!-- Matrix Border -->
+                    <rect x="25" y="4" width="70" height="36" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="0.8" rx="2" />
+                    <!-- Cluster Blocks along diagonal -->
+                    <rect x="29" y="8" width="18" height="10" fill="var(--accent-primary)" opacity="0.8" rx="1" />
+                    <rect x="51" y="20" width="18" height="10" fill="var(--accent-primary)" opacity="0.8" rx="1" />
+                    <rect x="73" y="32" width="18" height="6" fill="var(--accent-primary)" opacity="0.8" rx="1" />
+                    <!-- Off-diagonal zero labels -->
+                    <text x="70" y="15" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">0</text>
+                    <text x="40" y="31" font-size="6" font-family="var(--font-mono)" fill="var(--text-muted)">0</text>
+                    <!-- Formula label -->
+                    <text x="108" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="start">Ω_cl</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">10 Binary Choice Models: LPM, Logit & Probit</h3>
-                <p class="module-desc">Linear probability model limitations, Maximum Likelihood estimation, logistic odds ratios, and probit marginal effects.</p>
+                <h3 class="module-title">10 Advanced Panel Data II: First Differences, Clustered SEs &amp; Hausman Test</h3>
+                <p class="module-desc">Master advanced panel data methods: formulate First Differences models, compare FD and Fixed Effects transformations, compute cluster-robust standard errors under block-diagonal disturbance covariances, diagnose small-cluster asymptotics, and execute the Hausman specification test.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">LPM Deficiencies</li>
-                    <li class="module-topic-tag">Maximum Likelihood (MLE)</li>
-                    <li class="module-topic-tag">Logit Odds Ratios</li>
-                    <li class="module-topic-tag">Average Marginal Effects</li>
+                    <li class="module-topic-tag">First Differences (FD)</li>
+                    <li class="module-topic-tag">FD vs Fixed Effects (T=2)</li>
+                    <li class="module-topic-tag">Cluster-Robust SEs</li>
+                    <li class="module-topic-tag">Block-Diagonal Covariance</li>
+                    <li class="module-topic-tag">Choosing Cluster Levels</li>
+                    <li class="module-topic-tag">Wild Cluster Bootstrap</li>
+                    <li class="module-topic-tag">Hausman Specification Test</li>
                   </ul>
                 </div>
 
@@ -1046,14 +1046,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-10" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 10"
-                    data-mod-group="Discrete Outcomes"
-                    data-mod-title="Binary Choice Models: LPM, Logit & Probit"
-                    data-mod-desc="Model binary economic decisions (work, invest, purchase). Understand Linear Probability Model pitfalls, Cumulative Distribution Functions (Logistic and Standard Normal), and marginal effects."
-                    data-mod-topics="Why OLS Fails for Binary Outcomes (Predictions Outside [0, 1])|The Latent Index Framework (y* = Xβ + ε)|Logit Formulation & Odds Ratio Interpretation|Probit Normal Distribution Integral Specification|Maximum Likelihood Estimation & Convergence|Marginal Effects: APE vs MEM Comparison">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-10/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 10</a>
                 </div>
               </article>
 
@@ -1061,34 +1054,38 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">11</span>
-                  <span class="module-group-tag">Limited Outcomes</span>
+                  <span class="module-group-tag">IV &amp; 2SLS</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Censored/Truncated Distribution -->
+                <!-- Topic-Specific Micro Visual: Ballantine Venn Diagram -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="1" />
-                    <!-- Censoring mass point at 0 -->
-                    <rect x="25" y="14" width="6" height="22" fill="var(--accent-primary)" rx="1.5" />
-                    <!-- Density curve -->
-                    <path d="M 31 16 C 45 16, 60 22, 100 36" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
-                    <!-- Threshold indicator -->
-                    <line x1="28" y1="8" x2="28" y2="36" stroke="var(--accent-secondary)" stroke-dasharray="2 2" stroke-width="1" />
-                    <text x="28" y="7" font-size="6" font-family="var(--font-mono)" fill="var(--accent-secondary)" text-anchor="middle">c=0</text>
-                    <text x="64" y="24" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-muted)">Tobit / Latent y*</text>
+                    <!-- Instrument Z circle -->
+                    <circle cx="35" cy="22" r="14" fill="rgba(124, 58, 237, 0.15)" stroke="#7c3aed" stroke-width="1.2" />
+                    <!-- Endogenous X circle -->
+                    <circle cx="55" cy="22" r="14" fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <!-- Outcome Y circle -->
+                    <circle cx="75" cy="22" r="14" fill="rgba(5, 150, 105, 0.12)" stroke="#059669" stroke-width="1.2" />
+                    <!-- Labels -->
+                    <text x="30" y="24" font-size="6" font-family="var(--font-mono)" fill="#7c3aed">Z</text>
+                    <text x="55" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)">X</text>
+                    <text x="80" y="24" font-size="6" font-family="var(--font-mono)" fill="#059669">Y</text>
+                    <text x="60" y="41" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">IV • 2SLS Projection</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">11 Limited Dependent Variable Models</h3>
-                <p class="module-desc">Censored and truncated regression, latent variable indices, Tobit estimation, and Heckman sample selection correction.</p>
+                <h3 class="module-title">11 Instrumental Variables &amp; Two-Stage Least Squares</h3>
+                <p class="module-desc">Learn how instrumental variables address endogeneity, identify what makes an instrument valid and relevant, understand two-stage least squares, and use IV methods to estimate causal relationships when ordinary least squares is inconsistent.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Censoring vs Truncation</li>
-                    <li class="module-topic-tag">Tobit Type I Model</li>
-                    <li class="module-topic-tag">Inverse Mills Ratio</li>
-                    <li class="module-topic-tag">Heckman Two-Step</li>
+                    <li class="module-topic-tag">Endogeneity &amp; OLS Bias</li>
+                    <li class="module-topic-tag">Validity, Relevance &amp; Monotonicity</li>
+                    <li class="module-topic-tag">Supply-Demand Simultaneity</li>
+                    <li class="module-topic-tag">General Two-Stage Procedure</li>
+                    <li class="module-topic-tag">Matrix Form: Exactly Identified</li>
+                    <li class="module-topic-tag">2SLS &amp; Projection Matrix P_Z</li>
                   </ul>
                 </div>
 
@@ -1102,14 +1099,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-11" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 11"
-                    data-mod-group="Limited Outcomes"
-                    data-mod-title="Limited Dependent Variable Models"
-                    data-mod-desc="Address corner solution responses and sample selection: distinguishing censoring from truncation, the Tobit likelihood function, decomposition of marginal effects, and Heckman's selection correction."
-                    data-mod-topics="Corner Solutions & Censored Observation Mechanisms|Truncated Distribution Properties & Moments|Tobit (Type I) Specification & Likelihood Function|McDonald-Moffitt Decomposition of Marginal Effects|Incidental Truncation & Sample Selection Bias|Heckman Two-Step Procedure & Inverse Mills Ratio">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-11/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 11</a>
                 </div>
               </article>
 
@@ -1117,40 +1107,40 @@
               <article class="module-card">
                 <div class="module-card-header">
                   <span class="module-number">12</span>
-                  <span class="module-group-tag">Multinomial</span>
+                  <span class="module-group-tag">IV Diagnostics</span>
                 </div>
 
-                <!-- Topic-Specific Micro Visual: Multinomial Choice Branches -->
+                <!-- Topic-Specific Micro Visual: Diagnostics & Attenuation Curve -->
                 <div class="module-micro-viz" aria-hidden="true">
                   <svg viewBox="0 0 120 44">
-                    <!-- Origin Decision Node -->
-                    <circle cx="20" cy="22" r="5" fill="var(--surface)" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <!-- Alternative 1 -->
-                    <line x1="25" y1="20" x2="80" y2="10" stroke="var(--accent-primary)" stroke-width="1.5" />
-                    <circle cx="80" cy="10" r="4" fill="var(--accent-primary)" />
-                    <text x="90" y="13" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 1</text>
-                    <!-- Alternative 2 -->
-                    <line x1="25" y1="22" x2="80" y2="22" stroke="var(--accent-secondary)" stroke-width="1.5" />
-                    <circle cx="80" cy="22" r="4" fill="var(--accent-secondary)" />
-                    <text x="90" y="25" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 2</text>
-                    <!-- Alternative 3 -->
-                    <line x1="25" y1="24" x2="80" y2="34" stroke="var(--text-muted)" stroke-width="1.5" />
-                    <circle cx="80" cy="34" r="4" fill="var(--text-muted)" />
-                    <text x="90" y="37" font-size="6.5" font-family="var(--font-mono)" fill="var(--text-primary)">j = 3</text>
-                    <text x="50" y="42" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)">IIA • Discrete Choice</text>
+                    <!-- Axis -->
+                    <line x1="15" y1="36" x2="105" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <line x1="15" y1="8" x2="15" y2="36" stroke="var(--border-strong)" stroke-width="1" />
+                    <!-- True Slope line -->
+                    <line x1="15" y1="36" x2="95" y2="12" stroke="var(--accent-primary)" stroke-width="1.8" />
+                    <!-- Attenuated OLS line -->
+                    <line x1="15" y1="36" x2="95" y2="24" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3 2" />
+                    <!-- Labels -->
+                    <text x="100" y="14" font-size="5" font-family="var(--font-mono)" fill="var(--accent-primary)">β_IV</text>
+                    <text x="100" y="26" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">λβ</text>
+                    <text x="60" y="42" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Hausman • Weak IV • Attenuation</text>
                   </svg>
                 </div>
 
-                <h3 class="module-title">12 Multinomial Choice Models</h3>
-                <p class="module-desc">Multinomial logit, conditional logit, Independence of Irrelevant Alternatives (IIA), and discrete consumer choice.</p>
+                <h3 class="module-title">12 IV Diagnostics, Weak Instruments &amp; Measurement Error</h3>
+                <p class="module-desc">Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.</p>
 
                 <div class="module-topics-preview">
                   <div class="module-topics-title">Key Themes</div>
                   <ul class="module-topics-list">
-                    <li class="module-topic-tag">Random Utility (RUM)</li>
-                    <li class="module-topic-tag">Multinomial Logit</li>
-                    <li class="module-topic-tag">McFadden Choice</li>
-                    <li class="module-topic-tag">Hausman-McFadden IIA</li>
+                    <li class="module-topic-tag">Hausman &amp; Wu Exogeneity Tests</li>
+                    <li class="module-topic-tag">Sargan Overidentification (L &gt; K)</li>
+                    <li class="module-topic-tag">LATE &amp; Heterogeneous Returns</li>
+                    <li class="module-topic-tag">First-Stage F &ge; 10 &amp; F &ge; 16 Rules</li>
+                    <li class="module-topic-tag">Stock-Yogo &amp; Kleibergen-Paap</li>
+                    <li class="module-topic-tag">Classical Measurement Error in y &amp; x</li>
+                    <li class="module-topic-tag">Attenuation Factor &lambda; &amp; Bias to Zero</li>
+                    <li class="module-topic-tag">IV Solution &amp; Error Propagation</li>
                   </ul>
                 </div>
 
@@ -1164,14 +1154,7 @@
                       <div class="progress-bar-fill" id="progress-fill-module-12" style="width: 0%;"></div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm open-syllabus-modal" style="width: 100%;"
-                    data-mod-num="Module 12"
-                    data-mod-group="Multinomial Choice"
-                    data-mod-title="Multinomial Choice Models"
-                    data-mod-desc="Model economic choices among multiple unordered alternatives (transport, occupation, school choice). Master Random Utility Models, McFadden's conditional logit, and tests of IIA."
-                    data-mod-topics="Random Utility Maximization (RUM) Foundations|Multinomial Logit (Individual-Specific Characteristics)|McFadden's Conditional Logit (Alternative-Specific Attributes)|Independence of Irrelevant Alternatives (IIA) Assumption|Hausman-McFadden Test for IIA Violations|Nested Logit & Mixed Logit Extensions">
-                    Explore Curriculum
-                  </button>
+                  <a href="modules/module-12/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 12</a>
                 </div>
               </article>
             </div>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10.5: The Hausman Test &amp; Panel-Model Choice — Econometrics with AI</title>
+  <meta name="description" content="Derive the Hausman specification test statistic comparing Fixed Effects and Random Effects, evaluate finite-sample power limitations, and master the complete panel model selection flowchart.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-10" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 10</a>
+          <span class="module-nav-title">Panel Data II</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 5 &middot; The Hausman Test &amp; Panel-Model Choice</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 10 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.1 The First Differences Model</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.2 First Differences vs Fixed Effects</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.3 Cluster-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Header Block -->
+    <header class="lesson-header-block">
+      <div class="lesson-badge-row">
+        <span class="academic-badge badge-tier">Tier 4 &middot; Panel &amp; Discrete</span>
+        <span class="academic-badge badge-module">Module 10 &middot; Lesson 5</span>
+        <span class="academic-badge badge-time">Est. 28 min</span>
+      </div>
+      <h1 class="lesson-title">The Hausman Test &amp; Panel-Model Choice</h1>
+      <p class="lesson-subtitle">
+        Formulating the specification test statistic comparing Fixed Effects and Random Effects, diagnosing power limitations, and navigating the panel estimation decision tree.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      <ul class="objectives-list">
+        <li>Understand the econometric logic of the Hausman (1978) specification test comparing consistent vs. efficient estimators.</li>
+        <li>Derive the quadratic form test statistic \(H = \mathbf{q}' [\widehat{\text{Var}}(\mathbf{q})]^{-1} \mathbf{q}\) and its asymptotic \(\chi^2(k)\) distribution.</li>
+        <li>Identify critical caveats: why non-rejection of \(H_0\) does not prove unobserved heterogeneity is orthogonal to regressors, and when finite-sample power is low.</li>
+        <li>Synthesize the entire Module 10 curriculum into an actionable econometric decision framework for choosing between Pooled OLS, RE, FE, and FD with cluster-robust inference.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Hausman Principle -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">1</span>
+        <h2 class="section-title">The Hausman Specification Principle</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          When estimating panel data, applied researchers face a fundamental tension between <strong>Fixed Effects (FE)</strong> and <strong>Random Effects (RE)</strong>:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid var(--accent-primary);">
+            <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.95rem;">Fixed Effects Estimator (\(\widehat{\boldsymbol{\beta}}_{\text{FE}}\))</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              <strong>Always consistent</strong> regardless of whether \(\text{Cov}(c_i, \mathbf{x}_{it}) = \mathbf{0}\) or \(\text{Cov}(c_i, \mathbf{x}_{it}) \neq \mathbf{0}\), but less efficient when orthogonality holds, and cannot estimate time-invariant regressors.
+            </p>
+          </div>
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-weight: 700; color: #059669; font-size: 0.95rem;">Random Effects Estimator (\(\widehat{\boldsymbol{\beta}}_{\text{RE}}\))</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              <strong>Fully efficient (BLUE/GLS)</strong> under the null hypothesis \(H_0: \text{Cov}(c_i, \mathbf{x}_{it}) = \mathbf{0}\), but <strong>inconsistent</strong> under the alternative \(H_1: \text{Cov}(c_i, \mathbf{x}_{it}) \neq \mathbf{0}\).
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-info" style="margin-top: var(--space-md);">
+          <strong>The Hausman Core Question:</strong> Do \(\widehat{\boldsymbol{\beta}}_{\text{FE}}\) and \(\widehat{\boldsymbol{\beta}}_{\text{RE}}\) differ by more than what would be expected from random sampling variation alone?
+          \[
+          \mathbf{q} \equiv \widehat{\boldsymbol{\beta}}_{\text{FE}} - \widehat{\boldsymbol{\beta}}_{\text{RE}}
+          \]
+          Under \(H_0\), both estimators converge to the true parameter \(\boldsymbol{\beta}\), so \(\text{plim}(\mathbf{q}) = \mathbf{0}\). Under \(H_1\), \(\widehat{\boldsymbol{\beta}}_{\text{RE}}\) diverges due to omitted variable bias, making \(\mathbf{q}\) systematically non-zero.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Mathematical Derivation & Test Statistic -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">2</span>
+        <h2 class="section-title">The Hausman Test Statistic</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          To test whether the difference vector \(\mathbf{q}\) is statistically indistinguishable from zero, we require its sampling variance \(\text{Var}(\mathbf{q})\). By elementary probability:
+          \[
+          \text{Var}(\mathbf{q}) = \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) + \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{RE}}) - 2\text{Cov}(\widehat{\boldsymbol{\beta}}_{\text{FE}}, \widehat{\boldsymbol{\beta}}_{\text{RE}})
+          \]
+        </p>
+
+        <div class="definition-card" style="margin-top: var(--space-md);">
+          <div class="definition-header">
+            <span class="definition-icon">💡</span>
+            <span class="definition-title">Hausman's (1978) Fundamental Lemma</span>
+          </div>
+          <p class="definition-text">
+            Under the null hypothesis where \(\widehat{\boldsymbol{\beta}}_{\text{RE}}\) is the asymptotically efficient estimator, the covariance between the efficient estimator and the difference between itself and any other consistent estimator is identically zero:
+            \[
+            \text{Cov}(\widehat{\boldsymbol{\beta}}_{\text{RE}}, \widehat{\boldsymbol{\beta}}_{\text{FE}} - \widehat{\boldsymbol{\beta}}_{\text{RE}}) = \mathbf{0} \implies \text{Cov}(\widehat{\boldsymbol{\beta}}_{\text{FE}}, \widehat{\boldsymbol{\beta}}_{\text{RE}}) = \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{RE}})
+            \]
+            Substituting this back into the variance of \(\mathbf{q}\) yields the famous result:
+            \[
+            \text{Var}(\mathbf{q}) = \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) - \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{RE}})
+            \]
+          </p>
+        </div>
+
+        <div class="math-card" style="margin-top: var(--space-md);">
+          <div class="math-card-label">THE HAUSMAN TEST STATISTIC FORMULA</div>
+          <div class="math-display-wrapper">
+            \[
+            H = (\widehat{\boldsymbol{\beta}}_{\text{FE}} - \widehat{\boldsymbol{\beta}}_{\text{RE}})' \left[\widehat{\text{Var}}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) - \widehat{\text{Var}}(\widehat{\boldsymbol{\beta}}_{\text{RE}})\right]^{-1} (\widehat{\boldsymbol{\beta}}_{\text{FE}} - \widehat{\boldsymbol{\beta}}_{\text{RE}}) \xrightarrow{d} \chi^2(k)
+            \]
+          </div>
+          <p class="math-card-note">
+            where \(k\) is the number of time-varying explanatory variables compared between the two models. If \(H > \chi^2_{1-\alpha}(k)\), we reject \(H_0\) and conclude that Random Effects is inconsistent.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Critical Caveats & Low Power -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">3</span>
+        <h2 class="section-title">Critical Caveats: Low Power &amp; Non-Positive Definiteness</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          Applied economists must interpret Hausman test outcomes with extreme methodological caution:
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-md); margin-top: var(--space-md);">
+          <div class="callout callout-warning">
+            <div class="callout-title" style="font-weight: 700; margin-bottom: var(--space-xs);">
+              ⚠️ 1. Non-Rejection Does NOT Equal Orthogonality
+            </div>
+            <p style="margin-bottom: 0;">
+              The Hausman test frequently exhibits <strong>low statistical power</strong> in finite samples, particularly when the correlation between \(c_i\) and \(\mathbf{x}_{it}\) is weak or when within-unit variation is small relative to between-unit variation. <em>Failing to reject \(H_0\) does NOT prove that \(c_i\) is uncorrelated with \(\mathbf{x}_{it}\); it only means the data lacked sufficient power to detect the discrepancy.</em>
+            </p>
+          </div>
+
+          <div class="callout callout-danger" style="background: rgba(239,68,68,0.06); border-left: 4px solid #ef4444;">
+            <div class="callout-title" style="font-weight: 700; color: #ef4444; margin-bottom: var(--space-xs);">
+              ⚠️ 2. Finite-Sample Matrix Inversion Failures
+            </div>
+            <p style="margin-bottom: 0;">
+              In finite samples, the difference matrix \([\widehat{\text{Var}}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) - \widehat{\text{Var}}(\widehat{\boldsymbol{\beta}}_{\text{RE}})]\) is not guaranteed to be positive definite, occasionally yielding negative test statistics or inversion crashes. In modern practice, researchers often substitute artificial regression tests (Mundlak approach or Wooldridge auxiliary regressions) which are numerically stable and robust to clustering.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The Panel Model Decision Guide -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">4</span>
+        <h2 class="section-title">The Complete Panel-Model Decision Guide</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          Follow this structured econometric workflow when deciding among panel estimators:
+        </p>
+
+        <!-- Decision Flowchart Box -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <!-- Step 1 -->
+          <div class="card card-bordered" style="padding: var(--space-md); border-left: 4px solid var(--accent-primary);">
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent-primary);">STAGE 1: EVALUATE UNOBSERVED HETEROGENEITY (c_i)</div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              Is \(c_i\) likely correlated with any regressor \(\mathbf{x}_{it}\)? In microeconomic settings (ability, managerial skill, firm culture), correlation is virtually ubiquitous.
+              <br>&rarr; If correlation is likely, Pooled OLS and Random Effects are <strong>inconsistent</strong>. Proceed to purge \(c_i\).
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card card-bordered" style="padding: var(--space-md); border-left: 4px solid #059669;">
+            <div style="font-weight: 700; font-size: 0.95rem; color: #059669;">STAGE 2: CHOOSE BETWEEN FIXED EFFECTS &amp; FIRST DIFFERENCES</div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              Both eliminate \(c_i\). If \(T = 2\), they are algebraically identical. If \(T > 2\):
+              <br>&bull; Choose <strong>Fixed Effects</strong> if idiosyncratic errors \(\varepsilon_{it}\) are serially uncorrelated (FE is BLUE).
+              <br>&bull; Choose <strong>First Differences</strong> if idiosyncratic errors \(\varepsilon_{it}\) exhibit strong persistence or unit roots (differencing purges the random walk).
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card card-bordered" style="padding: var(--space-md); border-left: 4px solid #d97706;">
+            <div style="font-weight: 700; font-size: 0.95rem; color: #d97706;">STAGE 3: SPECIFY CLUSTER-ROBUST INFERENCE</div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: var(--space-xs); margin-bottom: 0;">
+              Always account for within-unit serial correlation and heteroskedasticity.
+              <br>&bull; If number of clusters \(G \ge 40\) &rarr; Apply standard <strong>Cluster-Robust Standard Errors</strong>.
+              <br>&bull; If number of clusters is small (\(G < 30\)) &rarr; Apply the <strong>Wild Cluster Bootstrap</strong> (Cameron et al. 2008, Roodman et al. 2019) to avoid severe downward bias.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 10.5 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">5</span>
+        <h2 class="section-title">Interactive Lab 10.5: Hausman Test Simulator</h2>
+      </div>
+
+      <div class="interactive-lab-card" id="lab105">
+        <div class="lab-header">
+          <div class="lab-title-wrap">
+            <span class="lab-badge">INTERACTIVE LAB 10.5</span>
+            <h3 class="lab-title">Hausman Specification Calculator</h3>
+          </div>
+          <p class="lab-desc">
+            Vary the gap between the Fixed Effects estimate (\(\widehat{\beta}_{\text{FE}}\)) and Random Effects estimate (\(\widehat{\beta}_{\text{RE}}\)), adjust estimation precision, and observe the resulting \(\chi^2(1)\) statistic and decision outcome.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls-panel">
+          <div class="control-group">
+            <label for="sliderBetaDiff" class="control-label">
+              Difference \(|\widehat{\beta}_{\text{FE}} - \widehat{\beta}_{\text{RE}}|\): <span id="betaDiffBadge" class="math-val">0.35</span>
+            </label>
+            <input type="range" id="sliderBetaDiff" min="0.00" max="1.00" step="0.05" value="0.35" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <label for="sliderVarPrecision" class="control-label">
+              Standard Error Difference \(\sqrt{\text{Var}(\widehat{\beta}_{\text{FE}}) - \text{Var}(\widehat{\beta}_{\text{RE}})}\): <span id="varPrecBadge" class="math-val">0.15</span>
+            </label>
+            <input type="range" id="sliderVarPrecision" min="0.05" max="0.30" step="0.01" value="0.15" class="range-slider">
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">COEFFICIENT GAP (q)</div>
+            <div class="metric-value" id="metricQ">0.350</div>
+            <div class="metric-sub">β_FE - β_RE</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">HAUSMAN STATISTIC (H)</div>
+            <div class="metric-value" id="metricH">5.44</div>
+            <div class="metric-sub">~ χ²(1), crit = 3.84</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">P-VALUE</div>
+            <div class="metric-value" id="metricPVal">0.0197</div>
+            <div class="metric-sub">Under H0 orthogonality</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">RECOMMENDED MODEL</div>
+            <div class="metric-value" id="metricDecision" style="color: #ef4444;">Fixed Effects</div>
+            <div class="metric-sub" id="metricDecisionSub">H0 Rejected (p &lt; 0.05)</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-line" style="background: var(--accent-primary); height: 2px;"></span>
+            <span>Theoretical χ²(1) Density</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line" style="background: #ef4444; height: 2px; border-top: 2px dashed #ef4444;"></span>
+            <span>Critical Value (3.84, α = 0.05)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span>
+            <span>Current Test Statistic (H)</span>
+          </div>
+        </div>
+
+        <!-- SVG Plot Canvas -->
+        <div class="graph-container" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <svg id="lab105Svg" viewBox="0 0 700 280" style="width: 100%; height: auto; display: block;">
+            <!-- Rendered by JS -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div class="lab-insight-box" id="lab105Insight" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37,99,235,0.06); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem;" id="lab105InsightTitle">
+            REJECT H0: Evidence of Correlation Between c_i and Regressors
+          </div>
+          <div style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);" id="lab105InsightText">
+            The Hausman statistic H = 5.44 exceeds the 5% critical threshold of 3.84 (p = 0.0197). The coefficient difference is too large to be explained by sampling noise alone. Random Effects is deemed inconsistent; Fixed Effects or First Differences must be used.
+          </div>
+        </div>
+
+        <!-- Visual Explanation Grid -->
+        <div class="visual-explanation-grid" style="margin-top: var(--space-lg);">
+          <div class="grid-card seeing">
+            <div class="grid-card-label">WHAT YOU ARE SEEING</div>
+            <p>
+              The asymptotic \(\chi^2(1)\) distribution plotted against the critical threshold of \(3.84\) (\(\alpha = 0.05\)). The vertical line indicates your current test statistic \(H = q^2 / \text{Var}(q)\).
+            </p>
+          </div>
+
+          <div class="grid-card notice">
+            <div class="grid-card-label">WHAT TO NOTICE</div>
+            <p>
+              As the coefficient gap \(q\) shrinks or the standard error difference grows, \(H\) drops below 3.84 into the non-rejection zone.
+            </p>
+          </div>
+
+          <div class="grid-card matters">
+            <div class="grid-card-label">WHY IT MATTERS</div>
+            <p>
+              When \(H\) is non-significant, researchers might consider Random Effects to gain efficiency and estimate coefficients for time-invariant traits.
+            </p>
+          </div>
+
+          <div class="grid-card interpretation">
+            <div class="grid-card-label">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              Remember that non-rejection is not proof of zero endogeneity. Small sample size or noisy estimation can prevent rejection even when true omitted variable bias is present.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-label">TRY THIS</div>
+            <p>
+              Set the difference to \(0.10\) and precision to \(0.15\). Notice \(H = 0.44\) and \(p = 0.50\). We fail to reject \(H_0\), rendering Random Effects a viable candidate specification.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check 10.5 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">6</span>
+        <h2 class="section-title">Concept Check</h2>
+      </div>
+
+      <div class="quick-check-container quick-check-card">
+        <div class="quick-check-header">
+          <span class="academic-badge badge-check">CHECK 10.5</span>
+          <span class="quick-check-subtitle">Model Specification Choice</span>
+        </div>
+
+        <h3 class="quick-check-question">
+          If the Hausman test decisively rejects the null hypothesis at \(p < 0.001\), which estimator should the econometrician select, and why?
+        </h3>
+
+        <div class="quick-check-actions">
+          <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint105">Show Hint</button>
+          <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol105">Show Solution</button>
+        </div>
+
+        <div class="hint-content" id="hint105" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-sm);">
+          <strong>Hint:</strong> Which estimator maintains consistency regardless of whether \(c_i\) is correlated with the regressors?
+        </div>
+
+        <div class="solution-content" id="sol105" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: #059669; margin-bottom: var(--space-xs);">ANSWER:</div>
+          <p style="margin-bottom: var(--space-xs);">
+            Select <strong>Fixed Effects (or First Differences)</strong>.
+          </p>
+          <div style="font-weight: 700; color: #059669; margin-top: var(--space-sm); margin-bottom: var(--space-xs);">WHY?</div>
+          <p style="margin-bottom: 0;">
+            A rejection of the null hypothesis demonstrates that the difference \(\widehat{\boldsymbol{\beta}}_{\text{FE}} - \widehat{\boldsymbol{\beta}}_{\text{RE}}\) is statistically significant, indicating that unobserved individual heterogeneity \(c_i\) is correlated with the explanatory variables. Under this condition, the Random Effects estimator is <strong>inconsistent</strong> due to omitted variable bias. Fixed Effects (or First Differences) purges \(c_i\) and remains consistent.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>The Hausman Principle:</strong> Compares a consistently robust estimator (\(\widehat{\boldsymbol{\beta}}_{\text{FE}}\)) with an efficient estimator under orthogonality (\(\widehat{\boldsymbol{\beta}}_{\text{RE}}\)).</li>
+        <li><strong>Zero Covariance Lemma:</strong> Hausman's lemma establishes \(\text{Var}(\mathbf{q}) = \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{FE}}) - \text{Var}(\widehat{\boldsymbol{\beta}}_{\text{RE}})\), enabling the quadratic form \(\chi^2(k)\) test statistic.</li>
+        <li><strong>Power Caveat:</strong> Non-rejection does not prove absence of endogeneity; weak variation or small samples frequently lead to low test power.</li>
+        <li><strong>Panel Decision Rule:</strong> Use Fixed Effects or First Differences whenever \(c_i\) may correlate with regressors, and always apply cluster-robust standard errors (or wild cluster bootstrap if \(G < 30\)).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+      </a>
+      <a href="index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Module Overview &rarr;</span>
+        <span class="nav-btn-title">Module 10: Panel Data II &amp; Hausman Test</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 10.5 Script -->
+  <script>
+    (function() {
+      let diffQ = 0.35;
+      let seDiff = 0.15;
+
+      const sliderBetaDiff = document.getElementById('sliderBetaDiff');
+      const sliderVarPrecision = document.getElementById('sliderVarPrecision');
+
+      const betaDiffBadge = document.getElementById('betaDiffBadge');
+      const varPrecBadge = document.getElementById('varPrecBadge');
+
+      const metricQ = document.getElementById('metricQ');
+      const metricH = document.getElementById('metricH');
+      const metricPVal = document.getElementById('metricPVal');
+      const metricDecision = document.getElementById('metricDecision');
+      const metricDecisionSub = document.getElementById('metricDecisionSub');
+
+      const lab105InsightTitle = document.getElementById('lab105InsightTitle');
+      const lab105InsightText = document.getElementById('lab105InsightText');
+      const svg = document.getElementById('lab105Svg');
+
+      // Chi-squared 1-df p-value approximation: 1 - erf(sqrt(x/2))
+      function chiSquarePVal(h) {
+        if (h <= 0) return 1.0;
+        const z = Math.sqrt(h);
+        // Standard normal CDF approximation
+        const t = 1.0 / (1.0 + 0.2316419 * z);
+        const poly = t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + 1.330274429 * t))));
+        const pOneTail = (1.0 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * z * z) * poly;
+        return 2 * pOneTail;
+      }
+
+      function updateUI() {
+        betaDiffBadge.textContent = diffQ.toFixed(2);
+        varPrecBadge.textContent = seDiff.toFixed(2);
+
+        metricQ.textContent = diffQ.toFixed(3);
+
+        const hStat = Math.pow(diffQ / seDiff, 2);
+        metricH.textContent = hStat.toFixed(2);
+
+        const pVal = chiSquarePVal(hStat);
+        metricPVal.textContent = pVal < 0.0001 ? '< 0.0001' : pVal.toFixed(4);
+
+        if (hStat > 3.841) {
+          metricDecision.textContent = 'Fixed Effects';
+          metricDecision.style.color = '#ef4444';
+          metricDecisionSub.textContent = 'H0 Rejected (p < 0.05)';
+          lab105InsightTitle.textContent = 'REJECT H0: Evidence of Endogeneity in c_i';
+          lab105InsightText.textContent = 'The Hausman statistic H = ' + hStat.toFixed(2) + ' exceeds the critical threshold of 3.84 (p = ' + (pVal < 0.0001 ? '< 0.0001' : pVal.toFixed(4)) + '). Random Effects is inconsistent; use Fixed Effects or First Differences.';
+        } else {
+          metricDecision.textContent = 'Random Effects';
+          metricDecision.style.color = '#059669';
+          metricDecisionSub.textContent = 'Fail to Reject H0 (p ≥ 0.05)';
+          lab105InsightTitle.textContent = 'FAIL TO REJECT H0: Differences Consistent with Sampling Variation';
+          lab105InsightText.textContent = 'The Hausman statistic H = ' + hStat.toFixed(2) + ' is below 3.84 (p = ' + pVal.toFixed(4) + '). The data do not provide statistical evidence to reject orthogonality. Random Effects remains a viable, efficient choice.';
+        }
+
+        renderPlot(hStat);
+      }
+
+      function renderPlot(hStat) {
+        svg.innerHTML = '';
+        const width = 700;
+        const height = 280;
+        const pad = { top: 25, right: 40, bottom: 40, left: 60 };
+
+        const minX = 0;
+        const maxX = 12;
+        const minY = 0;
+        const maxY = 1.0;
+
+        function scaleX(x) {
+          return pad.left + ((x - minX) / (maxX - minX)) * (width - pad.left - pad.right);
+        }
+        function scaleY(y) {
+          return height - pad.bottom - ((y - minY) / (maxY - minY)) * (height - pad.top - pad.bottom);
+        }
+
+        // Axes
+        const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        axisGroup.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.setAttribute('stroke-width', '1.5');
+
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', pad.left);
+        xAxis.setAttribute('x2', width - pad.right);
+        xAxis.setAttribute('y1', height - pad.bottom);
+        xAxis.setAttribute('y2', height - pad.bottom);
+        axisGroup.appendChild(xAxis);
+
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', pad.left);
+        yAxis.setAttribute('x2', pad.left);
+        yAxis.setAttribute('y1', pad.top);
+        yAxis.setAttribute('y2', height - pad.bottom);
+        axisGroup.appendChild(yAxis);
+        svg.appendChild(axisGroup);
+
+        // Labels
+        const lblGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        lblGroup.setAttribute('font-family', 'var(--font-mono)');
+        lblGroup.setAttribute('font-size', '11');
+        lblGroup.setAttribute('fill', 'var(--text-muted)');
+
+        const xLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLbl.setAttribute('x', width - pad.right);
+        xLbl.setAttribute('y', height - 12);
+        xLbl.setAttribute('text-anchor', 'end');
+        xLbl.textContent = 'Hausman Statistic H';
+        lblGroup.appendChild(xLbl);
+
+        const yLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLbl.setAttribute('x', pad.left);
+        yLbl.setAttribute('y', 16);
+        yLbl.setAttribute('text-anchor', 'start');
+        yLbl.textContent = 'Density f(H)';
+        lblGroup.appendChild(yLbl);
+        svg.appendChild(lblGroup);
+
+        // Chi-squared 1-df curve: (1 / sqrt(2*pi*x)) * exp(-x/2)
+        let pathD = '';
+        const steps = 150;
+        for (let s = 1; s <= steps; s++) {
+          const x = minX + (s / steps) * (maxX - minX);
+          if (x < 0.05) continue;
+          let y = (1.0 / Math.sqrt(2 * Math.PI * x)) * Math.exp(-x / 2.0);
+          if (y > maxY) y = maxY;
+          const px = scaleX(x);
+          const py = scaleY(y);
+          if (pathD === '') {
+            pathD = `M ${px} ${py}`;
+          } else {
+            pathD += ` L ${px} ${py}`;
+          }
+        }
+
+        const chiPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        chiPath.setAttribute('d', pathD);
+        chiPath.setAttribute('fill', 'none');
+        chiPath.setAttribute('stroke', 'var(--accent-primary)');
+        chiPath.setAttribute('stroke-width', '2.5');
+        svg.appendChild(chiPath);
+
+        // Critical value line at 3.841
+        const critX = scaleX(3.841);
+        const critLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        critLine.setAttribute('x1', critX);
+        critLine.setAttribute('x2', critX);
+        critLine.setAttribute('y1', pad.top);
+        critLine.setAttribute('y2', height - pad.bottom);
+        critLine.setAttribute('stroke', '#ef4444');
+        critLine.setAttribute('stroke-width', '2');
+        critLine.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(critLine);
+
+        const critTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        critTxt.setAttribute('x', critX + 4);
+        critTxt.setAttribute('y', pad.top + 14);
+        critTxt.setAttribute('font-family', 'var(--font-mono)');
+        critTxt.setAttribute('font-size', '10');
+        critTxt.setAttribute('font-weight', '700');
+        critTxt.setAttribute('fill', '#ef4444');
+        critTxt.textContent = 'Crit = 3.84 (α=0.05)';
+        svg.appendChild(critTxt);
+
+        // Current H line
+        const clampedH = Math.min(Math.max(hStat, minX), maxX);
+        const hX = scaleX(clampedH);
+
+        const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        hLine.setAttribute('x1', hX);
+        hLine.setAttribute('x2', hX);
+        hLine.setAttribute('y1', pad.top);
+        hLine.setAttribute('y2', height - pad.bottom);
+        hLine.setAttribute('stroke', hStat > 3.841 ? '#ef4444' : '#059669');
+        hLine.setAttribute('stroke-width', '3');
+        svg.appendChild(hLine);
+
+        const hDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        hDot.setAttribute('cx', hX);
+        hDot.setAttribute('cy', height - pad.bottom);
+        hDot.setAttribute('r', '6');
+        hDot.setAttribute('fill', hStat > 3.841 ? '#ef4444' : '#059669');
+        svg.appendChild(hDot);
+
+        const hTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        hTxt.setAttribute('x', hX);
+        hTxt.setAttribute('y', height - pad.bottom - 12);
+        hTxt.setAttribute('font-family', 'var(--font-mono)');
+        hTxt.setAttribute('font-size', '11');
+        hTxt.setAttribute('font-weight', '700');
+        hTxt.setAttribute('text-anchor', hX > width - 100 ? 'end' : 'middle');
+        hTxt.setAttribute('fill', hStat > 3.841 ? '#ef4444' : '#059669');
+        hTxt.textContent = 'H = ' + hStat.toFixed(2);
+        svg.appendChild(hTxt);
+      }
+
+      sliderBetaDiff.addEventListener('input', (e) => {
+        diffQ = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      sliderVarPrecision.addEventListener('input', (e) => {
+        seDiff = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      // Quick check
+      const btnHint = document.getElementById('btnHint105');
+      const hint = document.getElementById('hint105');
+      const btnSol = document.getElementById('btnSol105');
+      const sol = document.getElementById('sol105');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

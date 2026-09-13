@@ -308,13 +308,25 @@
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
+  }
+  .chart-svg-shell::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
   }
 }
 
-/* Global overflow protection */
+/* Global overflow protection & scrollbar elimination */
 html, body {
   overflow-x: clip;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 0px !important;
+  display: none !important;
 }
 
 /* --------------------------------------------------------------------------

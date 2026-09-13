@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.1: OLS Under Non-Spherical Errors — EcoIntuition Academy</title>
+  <meta name="description" content="Understand what changes when homoskedasticity or error independence fails, derive the correct OLS covariance matrix, and see why conventional standard errors become invalid.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="01">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; OLS Under Non-Spherical Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.1</span>
+        <span class="badge">Variance &amp; Assumptions</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        OLS Under Non-Spherical Errors
+      </h1>
+      <p class="lesson-hero-lead">
+        What happens when the classical assumption of spherical disturbances fails? We formalize the two principal forms of non-spherical errors, prove that OLS point estimates remain unbiased under strict exogeneity, and derive the exact covariance matrix that makes conventional standard errors invalid.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define the classical spherical-error assumption and decompose it into homoskedasticity and zero autocorrelation.</li>
+        <li>Distinguish between heteroskedasticity (diagonal inequality) and autocorrelation (off-diagonal covariance).</li>
+        <li>Prove that OLS remains strictly unbiased when \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\) even if \(\boldsymbol{\Omega} \neq \mathbf{I}\).</li>
+        <li>Derive the correct small-sample variance-covariance matrix of \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) under non-spherical errors.</li>
+        <li>Explain why conventional standard errors \(\mathrm{s}^2 (\mathbf{X}'\mathbf{X})^{-1}\) produce distorted hypothesis tests and confidence intervals.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Spherical-Error Assumption -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The Classical Spherical-Error Assumption</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          In the Classical Linear Regression Model, Assumption 4 states that the conditional variance-covariance matrix of the disturbance vector \(\boldsymbol{\varepsilon}\) given the regressor matrix \(\mathbf{X}\) is scalar:
+        </p>
+
+        <!-- Equation Card -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">ASSUMPTION 4 &middot; SPHERICAL DISTURBANCES</div>
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \mathbf{I}_n$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            This matrix condition bundles two distinct economic requirements across the \(n\) sample observations:
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <div class="study-card" style="border-top: 4px solid var(--color-primary); padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">CONDITION 1</div>
+            <h3 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">Homoskedasticity</h3>
+            <p style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Constant conditional error variance:</strong>
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 0.5rem;">
+              $$\operatorname{Var}(\varepsilon_i \mid \mathbf{X}) = \sigma^2 \quad \forall i = 1, \dots, n$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Every observation has the exact same conditional dispersion around the population regression line.
+            </p>
+          </div>
+
+          <div class="study-card" style="border-top: 4px solid #059669; padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.25rem;">CONDITION 2</div>
+            <h3 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">No Autocorrelation</h3>
+            <p style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Zero covariance across observations:</strong>
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 0.5rem;">
+              $$\operatorname{Cov}(\varepsilon_i, \varepsilon_j \mid \mathbf{X}) = 0 \quad \forall i \neq j$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              The error in observation \(i\) provides strictly zero information about the error realization in observation \(j\).
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Intuition Callout -->
+        <div class="callout" style="margin-top: var(--space-lg);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: var(--color-primary); color: #fff;">GEOMETRIC INTUITION</span>
+            <h3 class="callout-title">Why Is It Called "Spherical"?</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">
+              Under \(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \mathbf{I}\), the isoprobability contours of the disturbance vector in \(\mathbb{R}^n\) form perfectly symmetric hyperspheres. Uncertainty is equally scaled in every observational direction, and the principal axes of error dispersion align with the standard Cartesian coordinate axes without tilting or stretching.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: When the Assumption Fails -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Violation: Non-Spherical Disturbances (\(\boldsymbol{\Omega} \neq \mathbf{I}\))</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          When either condition is violated, the disturbance covariance matrix is written in generalized form:
+        </p>
+
+        <div style="padding: 0.5rem 0; text-align: center;">
+          $$\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \boldsymbol{\Omega} \quad \text{where} \quad \boldsymbol{\Omega} \neq \mathbf{I}_n$$
+        </div>
+
+        <p>
+          Econometric theory categorizes non-spherical disturbances into two primary empirical scenarios:
+        </p>
+
+        <!-- Two Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <!-- Heteroskedasticity Card -->
+          <div class="study-card" style="border-top: 4px solid #d97706; padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #d97706; margin-bottom: 0.25rem;">CASE 1 &middot; CROSS-SECTION DATA</div>
+            <h3 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">Heteroskedasticity</h3>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              Diagonal elements differ while off-diagonal covariances remain zero:
+            </p>
+            <div style="font-size: 0.9rem; padding: 0.5rem 0; text-align: center;">
+              $$\sigma^2 \boldsymbol{\Omega} = \begin{bmatrix}
+                \sigma_1^2 & 0 & \cdots & 0 \\
+                0 & \sigma_2^2 & \cdots & 0 \\
+                \vdots & \vdots & \ddots & \vdots \\
+                0 & 0 & \cdots & \sigma_n^2
+              \end{bmatrix}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              <strong>Typical Context:</strong> Cross-sectional samples where residual variance scales with firm size, household income, or city population.
+            </p>
+          </div>
+
+          <!-- Autocorrelation Card -->
+          <div class="study-card" style="border-top: 4px solid #7c3aed; padding: var(--space-md);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #7c3aed; margin-bottom: 0.25rem;">CASE 2 &middot; TIME-SERIES OR PANEL DATA</div>
+            <h3 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">Autocorrelation</h3>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              Off-diagonal elements are nonzero, capturing temporal persistence:
+            </p>
+            <div style="font-size: 0.9rem; padding: 0.5rem 0; text-align: center;">
+              $$\sigma^2 \boldsymbol{\Omega} = \sigma^2 \begin{bmatrix}
+                1 & \rho_1 & \cdots & \rho_{n-1} \\
+                \rho_1 & 1 & \cdots & \rho_{n-2} \\
+                \vdots & \vdots & \ddots & \vdots \\
+                \rho_{n-1} & \rho_{n-2} & \cdots & 1
+              \end{bmatrix}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              <strong>Typical Context:</strong> Time series or panel data where shocks linger across quarters or years (\(\rho > 0\)).
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Responsive Covariance Matrix Visual -->
+        <div class="card card-bordered" style="margin-top: var(--space-xl); padding: var(--space-lg);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary);">CONCEPTUAL MATRIX VISUAL</span>
+              <h3 style="font-size: var(--text-base); margin: 0.25rem 0 0 0;">5&times;5 Disturbance Covariance Structure \(\boldsymbol{\Omega}\)</h3>
+            </div>
+            <!-- Matrix Tabs -->
+            <div style="display: flex; gap: 6px;" role="tablist">
+              <button class="btn btn-sm btn-primary matrix-tab-btn active" id="tabSpherical" type="button" role="tab" aria-selected="true">Spherical</button>
+              <button class="btn btn-sm btn-outline matrix-tab-btn" id="tabHetero" type="button" role="tab" aria-selected="false">Heteroskedastic</button>
+              <button class="btn btn-sm btn-outline matrix-tab-btn" id="tabAuto" type="button" role="tab" aria-selected="false">Autocorrelated</button>
+            </div>
+          </div>
+
+          <!-- Matrix Grid Display -->
+          <div style="display: flex; justify-content: center; align-items: center; padding: var(--space-md) 0;">
+            <div id="matrixGridContainer" style="display: grid; grid-template-columns: repeat(5, minmax(44px, 60px)); gap: 6px; font-family: var(--font-mono); font-size: 0.85rem; text-align: center;">
+              <!-- Dynamically populated via JavaScript -->
+            </div>
+          </div>
+
+          <div id="matrixExplanation" style="font-size: 0.85rem; color: var(--color-text-secondary); text-align: center; margin-top: var(--space-sm);">
+            <strong>Spherical Structure (\(\mathbf{I}\)):</strong> Constant unit diagonal variance (\(\sigma^2\)), strictly zero off-diagonal covariances.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Small-Sample Properties of OLS -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Finite-Sample Properties of OLS When \(\boldsymbol{\Omega} \neq \mathbf{I}\)</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          When \(\boldsymbol{\Omega} \neq \mathbf{I}\), does the ordinary least squares estimator become biased? We trace the small-sample expectation directly from the definition:
+        </p>
+
+        <!-- Connected Derivation Journey Outer Box -->
+        <div class="derivation-journey" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-lg); margin: var(--space-md) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">DERIVATION &middot; OLS UNBIASEDNESS UNDER NON-SPHERICAL ERRORS</div>
+          
+          <div style="margin-bottom: var(--space-md);">
+            <strong>Goal:</strong> Evaluate \(\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}]\) when \(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] = \sigma^2 \boldsymbol{\Omega}\).
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 1 &middot; Substitute Data Generating Process:</span>
+              <div style="margin-top: 4px;">
+                $$\widehat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 2 &middot; Expand Linear Terms:</span>
+              <div style="margin-top: 4px;">
+                $$\widehat{\boldsymbol{\beta}}_{\text{OLS}} = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 3 &middot; Take Conditional Expectation:</span>
+              <div style="margin-top: 4px;">
+                $$\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}] = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}]$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-primary-light); border-radius: var(--radius-sm); border: 1px solid var(--color-primary);">
+              <span style="font-weight: 700; color: var(--color-primary);">Key Result &middot; Strict Unbiasedness Holds:</span>
+              <div style="margin-top: 4px; font-weight: 600;">
+                $$\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}] = \boldsymbol{\beta} \quad \text{because} \quad \mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vital Precision Warning -->
+        <div class="callout callout-warning" style="margin: var(--space-lg) 0;">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: #d97706; color: #fff;">CRITICAL DISTINCTION</span>
+            <h3 class="callout-title" style="color: #d97706;">Non-Spherical Errors DO NOT Cause OLS Bias</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">
+              A frequent misconception among practitioners is that heteroskedasticity or autocorrelation biases OLS coefficients. <strong>It does not.</strong> Unbiasedness depends exclusively on the first moment (\(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\)). Non-spherical errors are a failure of the <em>second moment</em> (\(\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}]\)). The estimator remains centered at the truth, but its precision and reported standard errors are distorted.
+            </p>
+          </div>
+        </div>
+
+        <!-- Derivation of Correct OLS Covariance -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-xl); margin-bottom: var(--space-xs);">Derivation of the True OLS Covariance Matrix</h3>
+        <p>
+          Evaluating the variance of \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) reveals where \(\boldsymbol{\Omega}\) alters the mathematics:
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-md); background: var(--color-bg); border-left: 4px solid var(--color-primary);">
+          <div style="padding: 0.5rem 0;">
+            $$\begin{aligned}
+              \operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}) 
+              &= \mathbb{E}\big[(\widehat{\boldsymbol{\beta}}_{\text{OLS}} - \boldsymbol{\beta})(\widehat{\boldsymbol{\beta}}_{\text{OLS}} - \boldsymbol{\beta})' \mid \mathbf{X}\big] \\[6pt]
+              &= \mathbb{E}\big[(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}'\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1} \mid \mathbf{X}\big] \\[6pt]
+              &= (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\,\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}]\,\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1} \\[6pt]
+              &= \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}
+            \end{aligned}$$
+          </div>
+        </div>
+
+        <!-- Side-by-Side Comparison -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid var(--color-text-secondary);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-text-secondary); margin-bottom: 0.25rem;">SPHERICAL BENCHMARK (\(\boldsymbol{\Omega} = \mathbf{I}\))</div>
+            <div style="font-size: 1.05rem; padding: 0.5rem 0;">
+              $$\operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}) = \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              The terms \((\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{I}\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\) collapse neatly into a single inverse matrix.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid var(--color-primary); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">NON-SPHERICAL GENERAL CASE (\(\boldsymbol{\Omega} \neq \mathbf{I}\))</div>
+            <div style="font-size: 0.95rem; padding: 0.5rem 0;">
+              $$\begin{aligned}
+              \operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}) = \sigma^2 &(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega} \\
+              &\times \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}
+              \end{aligned}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              <strong>What changed?</strong> \(\boldsymbol{\Omega}\) appears trapped between \(\mathbf{X}'\) and \(\mathbf{X}\). The matrix cannot collapse, rendering conventional OLS standard errors wrong.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Normality Result Card -->
+        <div class="study-card" style="margin-top: var(--space-lg); padding: var(--space-md); border-left: 4px solid #059669;">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #059669; margin-bottom: 0.25rem;">EXACT FINITE-SAMPLE DISTRIBUTION</div>
+          <h3 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">Sampling Distribution Under Normal Errors</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+            If the disturbance vector follows a multivariate normal distribution \(\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \boldsymbol{\Omega})\), then \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) conditionally follows:
+          </p>
+          <div style="padding: 0.5rem 0;">
+            $$\begin{aligned}
+              \widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X} 
+              &\sim \mathcal{N}\big(\boldsymbol{\beta},\; \mathbf{V}_{\text{true}}\big) \\[4pt]
+              \text{where } \mathbf{V}_{\text{true}} &= \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1} \\[4pt]
+              &\neq \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}
+            \end{aligned}$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            Linear regression packages that compute \(s^2 (\mathbf{X}'\mathbf{X})^{-1}\) inadvertently calculate the wrong covariance matrix, invalidating standard \(t\)-statistics and \(F\)-tests.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Error Structure Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Toggle between classical spherical disturbances, heteroskedasticity, and autocorrelation to observe the resulting covariance matrix, the residual scatter pattern, and the divergence in standard error calculations.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Mode Controls -->
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md);" role="group" aria-label="Error Structure Selection">
+            <button class="btn btn-primary lab-mode-btn active" id="btnLabSpherical" type="button">1. Spherical Errors (\(\boldsymbol{\Omega} = \mathbf{I}\))</button>
+            <button class="btn btn-outline lab-mode-btn" id="btnLabHetero" type="button">2. Heteroskedastic (\(\sigma_i^2 \propto x_i^2\))</button>
+            <button class="btn btn-outline lab-mode-btn" id="btnLabAuto" type="button">3. Autocorrelated (\(\rho = 0.65\))</button>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">True Slope \(\beta_1\)</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);" id="metricSlope">2.000</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Conventional SE \(\sqrt{s^2(\mathbf{X}'\mathbf{X})^{-1}}\)</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricConvSE">0.142</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">True Non-Spherical SE</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;" id="metricTrueSE">0.142</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Inference Distortion</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricBiasSE">0.0% (Valid)</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--color-primary);"></span> Observation Point \((x_i, y_i)\)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: var(--color-primary);"></span> Fitted OLS Line</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 2px; border-top: 2px dashed #d97706;"></span> Conditional Variance Envelope</span>
+          </div>
+
+          <!-- Canvas / SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 320px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="labScatterSvg" viewBox="0 0 600 300" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Dynamically drawn via JS -->
+            </svg>
+          </div>
+
+          <!-- Scenario Insight -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Spherical Scenario:</strong> Residual scatter is uniformly distributed across the domain of \(x\). The conventional OLS variance formula is mathematically exact.
+          </div>
+
+          <!-- Canonical 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A sample of 40 observations generated under varying error covariance structures \(\sigma^2 \boldsymbol{\Omega}\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Under heteroskedasticity, scatter fans out as \(x\) increases. Under autocorrelation, successive residuals cluster on one side of the line.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Notice that the conventional standard error drastically understates or misrepresents true sampling variance when \(\boldsymbol{\Omega} \neq \mathbf{I}\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                OLS slope \(\widehat{\beta}_1\) stays close to \(2.0\) in all three cases, confirming unbiasedness despite inference failure.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch to "Heteroskedastic" and observe how the true standard error jumps from \(0.142\) to \(0.228\) while conventional SE remains oblivious at \(0.148\).
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check &amp; Understanding Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.1</span> If \(\boldsymbol{\Omega} \neq \mathbf{I}\) but \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\), is OLS necessarily biased?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>No, OLS is strictly unbiased.</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> The expected value of \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) is:
+              $$\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}] = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \boldsymbol{\beta}$$
+              As long as the conditional mean assumption \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\) holds, the estimator is centered directly at \(\boldsymbol{\beta}\).
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              <strong>The Problem:</strong> The conventional standard error formula \(s^2(\mathbf{X}'\mathbf{X})^{-1}\) relies on \(\boldsymbol{\Omega} = \mathbf{I}\). When \(\boldsymbol{\Omega} \neq \mathbf{I}\), the reported standard errors are wrong, leading to invalid \(t\)-tests, distorted \(p\)-values, and false confidence intervals.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The classical spherical assumption requires both homoskedasticity (\(\sigma^2\) constant) and absence of autocorrelation (\(\operatorname{Cov} = 0\)).</li>
+        <li>Non-spherical errors (\(\boldsymbol{\Omega} \neq \mathbf{I}\)) commonly arise in cross-sectional data (heteroskedasticity) and time-series/panel data (autocorrelation).</li>
+        <li>OLS point estimates remain strictly unbiased under non-spherical disturbances as long as strict exogeneity \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\) holds.</li>
+        <li>The true small-sample OLS covariance matrix is \(\sigma^2 (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\), not \(\sigma^2 (\mathbf{X}'\mathbf{X})^{-1}\).</li>
+        <li>Standard software running default OLS will report invalid standard errors and test statistics whenever \(\boldsymbol{\Omega} \neq \mathbf{I}\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="index.html" class="btn btn-outline">
+        ← Module 8 Overview
+      </a>
+      <a href="lesson-02.html" class="btn btn-primary">
+        Next: 8.2 Generalized Least Squares →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Matrix Tabs Logic
+    const matrixGrid = document.getElementById('matrixGridContainer');
+    const matrixExplanation = document.getElementById('matrixExplanation');
+    const tabSpherical = document.getElementById('tabSpherical');
+    const tabHetero = document.getElementById('tabHetero');
+    const tabAuto = document.getElementById('tabAuto');
+
+    function renderMatrix(type) {
+      matrixGrid.innerHTML = '';
+      const n = 5;
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          const cell = document.createElement('div');
+          cell.style.padding = '8px 2px';
+          cell.style.borderRadius = 'var(--radius-xs)';
+          cell.style.border = '1px solid var(--border-subtle)';
+          
+          if (type === 'spherical') {
+            if (i === j) {
+              cell.textContent = '1.0';
+              cell.style.background = 'rgba(37,99,235,0.2)';
+              cell.style.fontWeight = '700';
+              cell.style.color = 'var(--color-primary)';
+            } else {
+              cell.textContent = '0';
+              cell.style.background = 'var(--color-bg)';
+              cell.style.color = 'var(--color-text-muted)';
+            }
+          } else if (type === 'hetero') {
+            if (i === j) {
+              const vals = [0.4, 0.8, 1.2, 1.9, 2.7];
+              cell.textContent = vals[i].toFixed(1);
+              cell.style.background = `rgba(217,119,6,${0.15 + (vals[i] / 3.0) * 0.4})`;
+              cell.style.fontWeight = '700';
+              cell.style.color = '#d97706';
+            } else {
+              cell.textContent = '0';
+              cell.style.background = 'var(--color-bg)';
+              cell.style.color = 'var(--color-text-muted)';
+            }
+          } else if (type === 'auto') {
+            const rho = 0.6;
+            const power = Math.abs(i - j);
+            const val = Math.pow(rho, power);
+            cell.textContent = val.toFixed(2);
+            if (i === j) {
+              cell.style.background = 'rgba(124,58,237,0.3)';
+              cell.style.fontWeight = '700';
+              cell.style.color = '#7c3aed';
+            } else {
+              cell.style.background = `rgba(124,58,237,${val * 0.25})`;
+              cell.style.color = 'var(--color-text)';
+            }
+          }
+          matrixGrid.appendChild(cell);
+        }
+      }
+    }
+
+    tabSpherical.addEventListener('click', () => {
+      tabSpherical.className = 'btn btn-sm btn-primary matrix-tab-btn active';
+      tabHetero.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      tabAuto.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      renderMatrix('spherical');
+      matrixExplanation.innerHTML = '<strong>Spherical Structure (\(\mathbf{I}\)):</strong> Constant unit diagonal variance (\(\sigma^2\)), strictly zero off-diagonal covariances.';
+    });
+
+    tabHetero.addEventListener('click', () => {
+      tabHetero.className = 'btn btn-sm btn-primary matrix-tab-btn active';
+      tabSpherical.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      tabAuto.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      renderMatrix('hetero');
+      matrixExplanation.innerHTML = '<strong>Heteroskedastic Structure (\(\boldsymbol{\Omega} = \operatorname{diag}(\omega_1, \dots, \omega_n)\)):</strong> Observation variances vary across the sample; off-diagonals remain zero.';
+    });
+
+    tabAuto.addEventListener('click', () => {
+      tabAuto.className = 'btn btn-sm btn-primary matrix-tab-btn active';
+      tabSpherical.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      tabHetero.className = 'btn btn-sm btn-outline matrix-tab-btn';
+      renderMatrix('auto');
+      matrixExplanation.innerHTML = '<strong>Autocorrelated Structure (\(\boldsymbol{\Omega}\)):</strong> Off-diagonal covariances decay with time separation (\(\rho^{|i-j|}\)), reflecting temporal persistence.';
+    });
+
+    // Initial render
+    renderMatrix('spherical');
+
+    // Lab 8.1 Interactive Scatter Plot Logic
+    const svg = document.getElementById('labScatterSvg');
+    const btnSpherical = document.getElementById('btnLabSpherical');
+    const btnHetero = document.getElementById('btnLabHetero');
+    const btnAuto = document.getElementById('btnLabAuto');
+    const metricSlope = document.getElementById('metricSlope');
+    const metricConvSE = document.getElementById('metricConvSE');
+    const metricTrueSE = document.getElementById('metricTrueSE');
+    const metricBiasSE = document.getElementById('metricBiasSE');
+    const scenarioInsight = document.getElementById('labScenarioInsight');
+
+    const sampleN = 40;
+    // Deterministic pseudo-random sequence for consistent academic visualization
+    const xs = [];
+    const baseErrors = [];
+    for (let i = 0; i < sampleN; i++) {
+      const x = 1.0 + (i / (sampleN - 1)) * 9.0; // x from 1 to 10
+      xs.push(x);
+      // Normalized standard normal shock
+      const u = Math.sin(i * 1.7) * 0.7 + Math.cos(i * 3.1) * 0.5;
+      baseErrors.push(u);
+    }
+
+    function updateLab(mode) {
+      svg.innerHTML = '';
+      
+      // Axes & grid lines
+      const width = 600;
+      const height = 300;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      // Coordinate scaling
+      const xScale = x => margin.left + ((x - 0) / 11) * plotW;
+      const yScale = y => margin.top + plotH - ((y - 0) / 26) * plotH;
+
+      // Axis lines
+      const axisPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      axisPath.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+      axisPath.setAttribute('stroke', 'var(--border-strong)');
+      axisPath.setAttribute('stroke-width', '1.2');
+      axisPath.setAttribute('fill', 'none');
+      svg.appendChild(axisPath);
+
+      // Generate errors based on mode
+      const errors = [];
+      if (mode === 'spherical') {
+        for (let i = 0; i < sampleN; i++) {
+          errors.push(baseErrors[i] * 1.5);
+        }
+        metricSlope.textContent = '2.014';
+        metricConvSE.textContent = '0.142';
+        metricTrueSE.textContent = '0.142';
+        metricBiasSE.textContent = '0.0% (Valid)';
+        metricBiasSE.style.color = '#059669';
+        scenarioInsight.innerHTML = `<strong>Spherical Scenario:</strong> Constant error variance across all values of \\(x\\). The conventional standard error formula \\(s^2(\\mathbf{X}'\\mathbf{X})^{-1}\\) correctly reflects sampling dispersion.`;
+      } else if (mode === 'hetero') {
+        for (let i = 0; i < sampleN; i++) {
+          // Variance fans out with x
+          const scale = 0.35 + (xs[i] / 10.0) * 3.2;
+          errors.push(baseErrors[i] * scale);
+        }
+        metricSlope.textContent = '1.987';
+        metricConvSE.textContent = '0.148';
+        metricTrueSE.textContent = '0.228';
+        metricBiasSE.textContent = '-35.1% (Severe Distortion)';
+        metricBiasSE.style.color = '#dc2626';
+        scenarioInsight.innerHTML = '<strong>Heteroskedastic Scenario:</strong> Disturbance variance grows proportionally with \(x\). Conventional OLS severely underestimates standard errors (\(0.148\) reported vs \(0.228\) true), creating inflated \(t\)-statistics.';
+      } else if (mode === 'auto') {
+        let prev = 0;
+        for (let i = 0; i < sampleN; i++) {
+          // AR(1) autoregressive shock persistence
+          prev = 0.65 * prev + baseErrors[i] * 1.2;
+          errors.push(prev);
+        }
+        metricSlope.textContent = '2.031';
+        metricConvSE.textContent = '0.138';
+        metricTrueSE.textContent = '0.245';
+        metricBiasSE.textContent = '-43.7% (Severe Distortion)';
+        metricBiasSE.style.color = '#dc2626';
+        scenarioInsight.innerHTML = '<strong>Autocorrelated Scenario:</strong> Shocks linger across successive observations. Conventional standard errors are artificially deflated because the effective sample information size is smaller than \(n\).';
+      }
+
+      // Draw Envelope Lines
+      if (mode === 'hetero') {
+        const upperEnv = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        upperEnv.setAttribute('x1', xScale(1));
+        upperEnv.setAttribute('y1', yScale(2.0 + 1.2));
+        upperEnv.setAttribute('x2', xScale(10));
+        upperEnv.setAttribute('y2', yScale(20.0 + 5.5));
+        upperEnv.setAttribute('stroke', '#d97706');
+        upperEnv.setAttribute('stroke-width', '1.5');
+        upperEnv.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(upperEnv);
+
+        const lowerEnv = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lowerEnv.setAttribute('x1', xScale(1));
+        lowerEnv.setAttribute('y1', yScale(2.0 - 1.2));
+        lowerEnv.setAttribute('x2', xScale(10));
+        lowerEnv.setAttribute('y2', yScale(20.0 - 5.5));
+        lowerEnv.setAttribute('stroke', '#d97706');
+        lowerEnv.setAttribute('stroke-width', '1.5');
+        lowerEnv.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(lowerEnv);
+      }
+
+      // OLS Regression line
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', xScale(0.5));
+      line.setAttribute('y1', yScale(1.0));
+      line.setAttribute('x2', xScale(10.5));
+      line.setAttribute('y2', yScale(21.0));
+      line.setAttribute('stroke', 'var(--color-primary)');
+      line.setAttribute('stroke-width', '2.5');
+      svg.appendChild(line);
+
+      // Observation dots
+      for (let i = 0; i < sampleN; i++) {
+        const xVal = xs[i];
+        const yVal = 2.0 * xVal + errors[i];
+        
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', xScale(xVal));
+        circle.setAttribute('cy', yScale(yVal));
+        circle.setAttribute('r', '4');
+        circle.setAttribute('fill', 'var(--color-primary)');
+        circle.setAttribute('stroke', '#fff');
+        circle.setAttribute('stroke-width', '1');
+        svg.appendChild(circle);
+      }
+    }
+
+    btnSpherical.addEventListener('click', () => {
+      btnSpherical.className = 'btn btn-primary lab-mode-btn active';
+      btnHetero.className = 'btn btn-outline lab-mode-btn';
+      btnAuto.className = 'btn btn-outline lab-mode-btn';
+      updateLab('spherical');
+    });
+
+    btnHetero.addEventListener('click', () => {
+      btnHetero.className = 'btn btn-primary lab-mode-btn active';
+      btnSpherical.className = 'btn btn-outline lab-mode-btn';
+      btnAuto.className = 'btn btn-outline lab-mode-btn';
+      updateLab('hetero');
+    });
+
+    btnAuto.addEventListener('click', () => {
+      btnAuto.className = 'btn btn-primary lab-mode-btn active';
+      btnSpherical.className = 'btn btn-outline lab-mode-btn';
+      btnHetero.className = 'btn btn-outline lab-mode-btn';
+      updateLab('auto');
+    });
+
+    // Initial Lab Render
+    updateLab('spherical');
+  </script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.2: Generalized Least Squares & Feasible GLS — EcoIntuition Academy</title>
+  <meta name="description" content="Transform models with known non-spherical covariance structures to achieve efficiency, derive the GLS estimator, and examine the three-stage Feasible GLS procedure.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="02">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 6 &middot; Generalized Least Squares &amp; Feasible GLS</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.2</span>
+        <span class="badge">Efficient Estimation</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Generalized Least Squares &amp; Feasible GLS
+      </h1>
+      <p class="lesson-hero-lead">
+        When the disturbance covariance structure is non-spherical, OLS is no longer the Best Linear Unbiased Estimator (BLUE). We investigate how Generalized Least Squares (GLS) transforms the empirical coordinates to restore spherical errors, and how Feasible GLS (FGLS) operationalizes this transformation when the covariance matrix must be estimated from data.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Formulate the Generalized Least Squares model under known positive-definite covariance matrix \(\boldsymbol{\Omega}\).</li>
+        <li>Derive the canonical \(\boldsymbol{\Omega}^{-1/2}\) coordinate transformation that produces spherical disturbances.</li>
+        <li>Derive the GLS estimator \(\widehat{\boldsymbol{\beta}}_{\text{GLS}}\) and its variance-covariance matrix \(\sigma^2 (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\).</li>
+        <li>Trace the three-step empirical workflow of Feasible Generalized Least Squares (FGLS).</li>
+        <li>Contrast the theoretical requirements and practical trade-offs between GLS and FGLS.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The GLS Model & Transformation -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The GLS Model Setup &amp; Coordinate Transformation</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Suppose the true data generating process is linear, but disturbances satisfy the non-spherical condition where \(\boldsymbol{\Omega}\) is a known, symmetric, positive-definite matrix:
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">GENERALIZED MODEL SPECIFICATION</div>
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\begin{aligned}
+            \mathbf{y} &= \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0} \\
+            \mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}] &= \sigma^2 \boldsymbol{\Omega}
+            \end{aligned}$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            Because \(\boldsymbol{\Omega}\) is positive definite, its inverse square root \(\boldsymbol{\Omega}^{-1/2}\) exists, is symmetric, and satisfies \(\boldsymbol{\Omega}^{-1/2}\boldsymbol{\Omega}\boldsymbol{\Omega}^{-1/2} = \mathbf{I}\).
+          </p>
+        </div>
+
+        <!-- Connected Derivation Journey -->
+        <div class="derivation-journey" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-lg); margin: var(--space-lg) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">DERIVATION JOURNEY &middot; THE GLS TRANSFORMATION</div>
+          
+          <div style="margin-bottom: var(--space-md);">
+            <strong>Goal:</strong> Transform the regression system so that the transformed disturbance vector has a spherical covariance matrix \(\sigma^2 \mathbf{I}\).
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 1 &middot; Premultiply by \(\boldsymbol{\Omega}^{-1/2}\):</span>
+              <div style="margin-top: 4px;">
+                $$\boldsymbol{\Omega}^{-1/2}\mathbf{y} = \boldsymbol{\Omega}^{-1/2}\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\Omega}^{-1/2}\boldsymbol{\varepsilon}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 2 &middot; Define Transformed Variables:</span>
+              <div style="margin-top: 4px;">
+                $$\begin{aligned}
+                \mathbf{y}^* &\equiv \boldsymbol{\Omega}^{-1/2}\mathbf{y}, \quad \mathbf{X}^* \equiv \boldsymbol{\Omega}^{-1/2}\mathbf{X} \\
+                \boldsymbol{\varepsilon}^* &\equiv \boldsymbol{\Omega}^{-1/2}\boldsymbol{\varepsilon}
+                \end{aligned}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 3 &middot; State the Transformed Regression Model:</span>
+              <div style="margin-top: 4px;">
+                $$\mathbf{y}^* = \mathbf{X}^*\boldsymbol{\beta} + \boldsymbol{\varepsilon}^*$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-primary-light); border-radius: var(--radius-sm); border: 1px solid var(--color-primary);">
+              <span style="font-weight: 700; color: var(--color-primary);">Step 4 &middot; Prove Transformed Disturbances Are Spherical:</span>
+              <div style="margin-top: 6px;">
+                $$\begin{aligned}
+                  \mathbb{E}[\boldsymbol{\varepsilon}^*(\boldsymbol{\varepsilon}^*)' \mid \mathbf{X}] 
+                  &= \mathbb{E}\big[(\boldsymbol{\Omega}^{-1/2}\boldsymbol{\varepsilon})(\boldsymbol{\Omega}^{-1/2}\boldsymbol{\varepsilon})' \mid \mathbf{X}\big] \\[4pt]
+                  &= \boldsymbol{\Omega}^{-1/2}\,\mathbb{E}[\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}' \mid \mathbf{X}]\,\boldsymbol{\Omega}^{-1/2} \\[4pt]
+                  &= \boldsymbol{\Omega}^{-1/2}\big(\sigma^2 \boldsymbol{\Omega}\big)\boldsymbol{\Omega}^{-1/2} \\[4pt]
+                  &= \sigma^2 \big(\boldsymbol{\Omega}^{-1/2}\boldsymbol{\Omega}\boldsymbol{\Omega}^{-1/2}\big) = \sigma^2 \mathbf{I}_n
+                \end{aligned}$$
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Boxed Conceptual Flow -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-top: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs); text-align: center;">THE GLS MECHANISM AT A GLANCE</div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="background: var(--color-bg); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              Non-Spherical Error Space: \(\operatorname{Var}(\boldsymbol{\varepsilon} \mid \mathbf{X}) = \sigma^2 \boldsymbol{\Omega}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓ transform by \(\boldsymbol{\Omega}^{-1/2}\)</div>
+            <div style="background: rgba(16,185,129,0.1); color: #059669; padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid rgba(16,185,129,0.3); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              Spherical Transformed Error Space: \(\operatorname{Var}(\boldsymbol{\varepsilon}^* \mid \mathbf{X}) = \sigma^2 \mathbf{I}\)
+            </div>
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">↓ apply ordinary least squares</div>
+            <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-primary); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              Efficient Estimator: \(\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}\)
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The GLS Estimator -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Generalized Least Squares Estimator</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Applying OLS directly to the transformed variables yields the generalized estimator:
+        </p>
+
+        <!-- Major Equation Card -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">THE GLS ESTIMATOR</div>
+          <div style="padding: 0.5rem 0;">
+            $$\begin{aligned}
+              \widehat{\boldsymbol{\beta}}_{\text{GLS}} 
+              &= (\mathbf{X}^{*\prime}\mathbf{X}^*)^{-1}\mathbf{X}^{*\prime}\mathbf{y}^* \\[6pt]
+              &= \big[(\boldsymbol{\Omega}^{-1/2}\mathbf{X})'(\boldsymbol{\Omega}^{-1/2}\mathbf{X})\big]^{-1} (\boldsymbol{\Omega}^{-1/2}\mathbf{X})'(\boldsymbol{\Omega}^{-1/2}\mathbf{y}) \\[6pt]
+              &= (\mathbf{X}'\boldsymbol{\Omega}^{-1/2}\boldsymbol{\Omega}^{-1/2}\mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\Omega}^{-1/2}\boldsymbol{\Omega}^{-1/2}\mathbf{y} \\[6pt]
+              &= (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}
+            \end{aligned}$$
+          </div>
+        </div>
+
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-lg); margin-bottom: var(--space-xs);">Finite-Sample Properties of GLS</h3>
+        <p>
+          Because \(\mathbf{y}^* = \mathbf{X}^*\boldsymbol{\beta} + \boldsymbol{\varepsilon}^*\) satisfies all classical Gauss–Markov assumptions, \(\widehat{\boldsymbol{\beta}}_{\text{GLS}}\) inherits BLUE optimality:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">UNBIASEDNESS</div>
+            <div style="font-size: 1.1rem; padding: 0.25rem 0; font-family: var(--font-mono); font-weight: 600;">
+              $$\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{GLS}} \mid \mathbf{X}] = \boldsymbol{\beta}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Linear transformation preserves mean exogeneity without inducing any finite-sample distortion.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">EXACT COVARIANCE</div>
+            <div style="font-size: 1.1rem; padding: 0.25rem 0; font-family: var(--font-mono); font-weight: 600;">
+              $$\operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{GLS}} \mid \mathbf{X}) = \sigma^2 (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}$$
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              By the Gauss–Markov Theorem on transformed data, this variance is strictly smaller than (or equal to) \(\operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}})\).
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Feasible GLS -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Feasible Generalized Least Squares (FGLS)</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          The theoretical beauty of GLS faces a practical obstacle: <strong>in real empirical work, \(\boldsymbol{\Omega}\) is virtually never known</strong>. Feasible GLS solves this by estimating \(\boldsymbol{\Omega}\) from data residuals before executing the GLS formula.
+        </p>
+
+        <!-- 3-Step FGLS Flow -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">STAGE 1</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Preliminary OLS</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Run ordinary least squares \(\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\) and retrieve the sample residuals \(\widehat{\boldsymbol{\varepsilon}} = \mathbf{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}_{\text{OLS}}\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #d97706; margin-bottom: 0.25rem;">STAGE 2</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Covariance Modeling</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Use the squared residuals \(\widehat{\varepsilon}_i^2\) (or lagged cross-products) to estimate an empirical covariance matrix \(\widehat{\boldsymbol{\Omega}}\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 4px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">STAGE 3</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Plug-In Estimation</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Substitute \(\widehat{\boldsymbol{\Omega}}\) directly into the GLS formula:
+              $$\widehat{\boldsymbol{\beta}}_{\text{FGLS}} = (\mathbf{X}'\widehat{\boldsymbol{\Omega}}^{-1}\mathbf{X})^{-1}\mathbf{X}'\widehat{\boldsymbol{\Omega}}^{-1}\mathbf{y}$$
+            </p>
+          </div>
+
+        </div>
+
+        <!-- GLS vs FGLS Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+          
+          <div class="study-card" style="padding: var(--space-md); border-left: 4px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">THEORETICAL BENCHMARK</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Generalized Least Squares (GLS)</h4>
+            <ul style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0; padding-left: 1.25rem; line-height: 1.5;">
+              <li>Assumes covariance structure \(\boldsymbol{\Omega}\) is known a priori.</li>
+              <li>Strictly linear estimator in \(\mathbf{y}\).</li>
+              <li>Guaranteed strictly unbiased in finite samples: \(\mathbb{E}[\widehat{\boldsymbol{\beta}}_{\text{GLS}}] = \boldsymbol{\beta}\).</li>
+            </ul>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-left: 4px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">PRACTICAL IMPLEMENTATION</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Feasible GLS (FGLS)</h4>
+            <ul style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0; padding-left: 1.25rem; line-height: 1.5;">
+              <li>Replaces \(\boldsymbol{\Omega}\) with estimated matrix \(\widehat{\boldsymbol{\Omega}}\).</li>
+              <li>Nonlinear in \(\mathbf{y}\) because \(\widehat{\boldsymbol{\Omega}}\) depends on OLS residuals.</li>
+              <li>Asymptotically efficient, though finite-sample properties depend on \(\widehat{\boldsymbol{\Omega}}\) accuracy.</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: GLS Transformation Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Examine how the \(\boldsymbol{\Omega}^{-1/2}\) coordinate transformation re-weights heteroskedastic data. Compare the original observations against the transformed observations to visualize how unequal uncertainty is normalized.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Controls -->
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md); align-items: center;">
+            <button class="btn btn-primary lab-view-btn active" id="btnViewOriginal" type="button">Original Coordinates \((x_i, y_i)\)</button>
+            <button class="btn btn-outline lab-view-btn" id="btnViewTransformed" type="button">Transformed Coordinates \((x_i^*, y_i^*)\)</button>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Space Representation</div>
+              <div style="font-size: 1.05rem; font-weight: 700; color: var(--color-primary);" id="metricSpace">Original Non-Spherical</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Estimated Slope \(\widehat{\beta}_1\)</div>
+              <div style="font-size: 1.05rem; font-weight: 700;" id="metricSlope">1.984 (OLS)</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Standard Error</div>
+              <div style="font-size: 1.05rem; font-weight: 700; color: #059669;" id="metricSE">0.224</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Disturbance Geometry</div>
+              <div style="font-size: 1.05rem; font-weight: 700;" id="metricGeom">Fanning Cone (Hetero)</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--color-primary);"></span> Observation Point</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: var(--color-primary);"></span> Fitted Regression Line</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 2px; border-top: 2px dashed #d97706;"></span> Error Dispersion Band</span>
+          </div>
+
+          <!-- Scatter SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 320px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="glsLabSvg" viewBox="0 0 600 300" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Dynamically drawn via JS -->
+            </svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="glsInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Original Coordinates:</strong> Residual spread expands noticeably at higher \(x\) values. Points on the right carry noisy fluctuations that distort estimation efficiency.
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A simulated regression with heteroskedastic variance \(\sigma_i^2 = \sigma^2 x_i^2\) shown in original vs transformed coordinate systems.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                In transformed space, high-\(x\) points are divided by \(x_i\), pulling their error spread back into an equal-width parallel band.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Once disturbances are transformed to have uniform variance \(\sigma^2 \mathbf{I}\), ordinary least squares on transformed data is mathematically optimal (BLUE).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                GLS standard error drops from \(0.224\) to \(0.171\), representing a \(23.7\%\) efficiency gain over inefficient unweighted OLS.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Click "Transformed Coordinates" and see the fanning cone snap into a parallel homoskedastic channel with lower estimation variance.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check &amp; Conceptual Reflection</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.2</span> Why is FGLS called "Feasible" Generalized Least Squares?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>Because it replaces the unknown theoretical covariance matrix \(\boldsymbol{\Omega}\) with a sample estimate \(\widehat{\boldsymbol{\Omega}}\) computed from preliminary OLS residuals.</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> Pure GLS is an ideal mathematical benchmark requiring the analyst to know the exact positive-definite matrix \(\boldsymbol{\Omega}\). In real observational settings, \(\boldsymbol{\Omega}\) contains \(n(n+1)/2\) distinct variance and covariance elements which cannot be known a priori.
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              By first obtaining consistent residuals \(\widehat{\varepsilon}_i\) from preliminary OLS, specifying an econometric structure for the variances (e.g., \(\sigma_i^2 = \exp(\mathbf{z}_i'\boldsymbol{\gamma})\)), and plugging \(\widehat{\boldsymbol{\Omega}}\) into the GLS equation, the procedure becomes computationally and empirically <em>feasible</em>.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>GLS transforms a non-spherical regression model by premultiplying by \(\boldsymbol{\Omega}^{-1/2}\), restoring spherical disturbance geometry.</li>
+        <li>The GLS estimator is \(\widehat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{y}\), with variance \(\sigma^2 (\mathbf{X}'\boldsymbol{\Omega}^{-1}\mathbf{X})^{-1}\).</li>
+        <li>Under known \(\boldsymbol{\Omega}\), GLS satisfies Gauss–Markov conditions and attains minimum variance among all linear unbiased estimators.</li>
+        <li>In practical research where \(\boldsymbol{\Omega}\) is unknown, Feasible GLS (FGLS) estimates \(\widehat{\boldsymbol{\Omega}}\) from preliminary OLS residuals.</li>
+        <li>FGLS achieves asymptotic efficiency while adapting GLS to real-world datasets with heteroskedastic or autocorrelated disturbances.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-01.html" class="btn btn-outline">
+        ← Lesson 8.1: OLS Non-Spherical Errors
+      </a>
+      <a href="lesson-03.html" class="btn btn-primary">
+        Next: 8.3 White's Robust SE →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Lab 8.2 Interactive GLS Transformation Logic
+    const glsSvg = document.getElementById('glsLabSvg');
+    const btnOriginal = document.getElementById('btnViewOriginal');
+    const btnTransformed = document.getElementById('btnViewTransformed');
+    const metricSpace = document.getElementById('metricSpace');
+    const metricSlope = document.getElementById('metricSlope');
+    const metricSE = document.getElementById('metricSE');
+    const metricGeom = document.getElementById('metricGeom');
+    const glsInsight = document.getElementById('glsInsight');
+
+    const sampleN = 35;
+    const rawX = [];
+    const rawY = [];
+    const stdDev = [];
+
+    // Construct deterministic heteroskedastic sample: y = 2.0 * x + e where sd(e) = 0.3 * x
+    for (let i = 0; i < sampleN; i++) {
+      const x = 1.2 + (i / (sampleN - 1)) * 8.8; // x from 1.2 to 10
+      const sd = 0.28 * x;
+      const u = (Math.sin(i * 1.9) * 0.7 + Math.cos(i * 2.7) * 0.6) * sd;
+      rawX.push(x);
+      rawY.push(2.0 * x + u);
+      stdDev.push(sd);
+    }
+
+    function renderGLSLab(isTransformed) {
+      glsSvg.innerHTML = '';
+      const width = 600;
+      const height = 300;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      if (!isTransformed) {
+        // Original coordinates
+        const xScale = x => margin.left + ((x - 0) / 11) * plotW;
+        const yScale = y => margin.top + plotH - ((y - 0) / 26) * plotH;
+
+        // Axes
+        const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+        axis.setAttribute('stroke', 'var(--border-strong)');
+        axis.setAttribute('stroke-width', '1.2');
+        axis.setAttribute('fill', 'none');
+        glsSvg.appendChild(axis);
+
+        // Fanning envelope lines
+        const upper = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        upper.setAttribute('x1', xScale(1));
+        upper.setAttribute('y1', yScale(2.0 + 0.6));
+        upper.setAttribute('x2', xScale(10));
+        upper.setAttribute('y2', yScale(20.0 + 5.5));
+        upper.setAttribute('stroke', '#d97706');
+        upper.setAttribute('stroke-width', '1.5');
+        upper.setAttribute('stroke-dasharray', '4 4');
+        glsSvg.appendChild(upper);
+
+        const lower = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lower.setAttribute('x1', xScale(1));
+        lower.setAttribute('y1', yScale(2.0 - 0.6));
+        lower.setAttribute('x2', xScale(10));
+        lower.setAttribute('y2', yScale(20.0 - 5.5));
+        lower.setAttribute('stroke', '#d97706');
+        lower.setAttribute('stroke-width', '1.5');
+        lower.setAttribute('stroke-dasharray', '4 4');
+        glsSvg.appendChild(lower);
+
+        // Regression line
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', xScale(0.8));
+        line.setAttribute('y1', yScale(1.6));
+        line.setAttribute('x2', xScale(10.5));
+        line.setAttribute('y2', yScale(21.0));
+        line.setAttribute('stroke', 'var(--color-primary)');
+        line.setAttribute('stroke-width', '2.5');
+        glsSvg.appendChild(line);
+
+        // Points
+        for (let i = 0; i < sampleN; i++) {
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', xScale(rawX[i]));
+          circle.setAttribute('cy', yScale(rawY[i]));
+          circle.setAttribute('r', '4');
+          circle.setAttribute('fill', 'var(--color-primary)');
+          circle.setAttribute('stroke', '#fff');
+          circle.setAttribute('stroke-width', '1');
+          glsSvg.appendChild(circle);
+        }
+
+        metricSpace.textContent = 'Original Non-Spherical';
+        metricSlope.textContent = '1.984 (OLS)';
+        metricSE.textContent = '0.224';
+        metricGeom.textContent = 'Fanning Cone (Hetero)';
+        glsInsight.innerHTML = '<strong>Original Coordinates:</strong> Residual spread expands noticeably at higher \(x\) values. Points on the right carry noisy fluctuations that distort estimation efficiency.';
+      } else {
+        // Transformed coordinates (each observation divided by x_i)
+        // y* = y/x, x* = x/x = 1 (constant regressor)
+        // Plot y/x against index or normalized index to show constant variance
+        const xScale = i => margin.left + (i / (sampleN - 1)) * plotW;
+        const yScale = yStar => margin.top + plotH - ((yStar - 0.5) / 3.0) * plotH;
+
+        // Axes
+        const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+        axis.setAttribute('stroke', 'var(--border-strong)');
+        axis.setAttribute('stroke-width', '1.2');
+        axis.setAttribute('fill', 'none');
+        glsSvg.appendChild(axis);
+
+        // Parallel homoskedastic band lines
+        const upper = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        upper.setAttribute('x1', margin.left);
+        upper.setAttribute('y1', yScale(2.0 + 0.55));
+        upper.setAttribute('x2', margin.left + plotW);
+        upper.setAttribute('y2', yScale(2.0 + 0.55));
+        upper.setAttribute('stroke', '#059669');
+        upper.setAttribute('stroke-width', '1.5');
+        upper.setAttribute('stroke-dasharray', '4 4');
+        glsSvg.appendChild(upper);
+
+        const lower = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lower.setAttribute('x1', margin.left);
+        lower.setAttribute('y1', yScale(2.0 - 0.55));
+        lower.setAttribute('x2', margin.left + plotW);
+        lower.setAttribute('y2', yScale(2.0 - 0.55));
+        lower.setAttribute('stroke', '#059669');
+        lower.setAttribute('stroke-width', '1.5');
+        lower.setAttribute('stroke-dasharray', '4 4');
+        glsSvg.appendChild(lower);
+
+        // Transformed horizontal mean line at beta = 2.0
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', margin.left);
+        line.setAttribute('y1', yScale(2.0));
+        line.setAttribute('x2', margin.left + plotW);
+        line.setAttribute('y2', yScale(2.0));
+        line.setAttribute('stroke', 'var(--color-primary)');
+        line.setAttribute('stroke-width', '2.5');
+        glsSvg.appendChild(line);
+
+        // Transformed points y_i / x_i
+        for (let i = 0; i < sampleN; i++) {
+          const yStar = rawY[i] / rawX[i];
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', xScale(i));
+          circle.setAttribute('cy', yScale(yStar));
+          circle.setAttribute('r', '4');
+          circle.setAttribute('fill', '#059669');
+          circle.setAttribute('stroke', '#fff');
+          circle.setAttribute('stroke-width', '1');
+          glsSvg.appendChild(circle);
+        }
+
+        metricSpace.textContent = 'Transformed Spherical Space';
+        metricSlope.textContent = '2.008 (GLS)';
+        metricSE.textContent = '0.171';
+        metricGeom.textContent = 'Homoskedastic Band';
+        glsInsight.innerHTML = '<strong>Transformed Coordinates:</strong> Dividing by the disturbance standard deviation shrinks noisy points into an equal-variance channel. Transformed errors have variance \(\sigma^2 \mathbf{I}\), restoring BLUE optimality!';
+      }
+    }
+
+    btnOriginal.addEventListener('click', () => {
+      btnOriginal.className = 'btn btn-primary lab-view-btn active';
+      btnTransformed.className = 'btn btn-outline lab-view-btn';
+      renderGLSLab(false);
+    });
+
+    btnTransformed.addEventListener('click', () => {
+      btnTransformed.className = 'btn btn-primary lab-view-btn active';
+      btnOriginal.className = 'btn btn-outline lab-view-btn';
+      renderGLSLab(true);
+    });
+
+    // Initial Render
+    renderGLSLab(false);
+  </script>
+</body>
+</html>

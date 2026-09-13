@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11.5: General IV / 2SLS &amp; Identification — Econometrics with AI</title>
+  <meta name="description" content="Generalize IV estimation to multiple endogenous regressors and included controls, classify models into underidentified, exactly identified, and overidentified, and trace the multi-stage procedure.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-11" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 11: Instrumental Variables &amp; 2SLS</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 11</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0 1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 11</a>
+          <span class="module-nav-title">Instrumental Variables &amp; 2SLS</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 7 &middot; General IV / 2SLS &amp; Identification</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 11 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.1 Endogeneity &amp; Why OLS Can Fail</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.2 Instrumental Variables &amp; the Three Criteria</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.3 Simple IV Examples &amp; Two-Stage Intuition</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.4 Simultaneity: Supply, Demand &amp; Price IV</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">11.5 General IV / 2SLS &amp; Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.6 IV in Matrix Form: Exactly Identified</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.7 2SLS, Projection Matrices &amp; Overidentification</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 70%;"></div>
+          </div>
+          <span class="progress-text">70%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 11.5</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Identification &amp; Procedure</span>
+      </div>
+      <h1 class="lesson-hero-title">The General IV / 2SLS Procedure &amp; Identification</h1>
+      <p class="lesson-hero-lead">
+        Generalize instrumental variables estimation to multiple endogenous regressors and included exogenous controls, master the order condition for identification, and trace the general multi-stage procedure.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Define the general regressor partition: endogenous regressors \(X\), included controls \(Z_C\), and excluded instruments \(Z_E\).</li>
+        <li>State and interpret the counting rule for identification (the order condition).</li>
+        <li>Classify econometric specifications into underidentified, exactly identified, and overidentified models.</li>
+        <li>Specify the general First Stage: regressing each endogenous regressor on all included controls and excluded instruments.</li>
+        <li>Specify the general Second Stage: regressing outcome \(y\) on fitted regressors \(\hat{X}\) and included controls \(Z_C\).</li>
+        <li>Recognize why excluded instruments \(Z_E\) must never enter directly into the second-stage structural outcome equation.</li>
+      </ul>
+    </div>
+
+    <!-- Study Section 1: General Setup & Variable Definitions -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Model Generalization</span>
+          <h2 class="section-title">The General Econometric Specification</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          In applied empirical research, regression specifications rarely contain just a single regressor. Real-world models incorporate multiple explanatory variables, baseline covariates, and multiple instruments.
+        </p>
+
+        <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: var(--surface); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left-width: 4px;">
+          <h4 style="margin: 0 0 0.5rem 0; color: var(--accent-primary);">DEFINING THE THREE VARIABLE GROUPS</h4>
+          <p style="margin: 0 0 0.75rem 0;">
+            Following the lecture notes, we partition all variables in the system into three distinct classes:
+          </p>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.8; color: var(--text-secondary);">
+            <li><strong style="color: #ef4444;">\(X\) (Endogenous Regressors):</strong> Explanatory variables that correlate with the regression error \(\varepsilon\) (\(\mathbb{E}[X\varepsilon] \ne 0\)). There are \(K\) such regressors.</li>
+            <li><strong style="color: #2563eb;">\(Z_C\) (Included Exogenous Controls):</strong> Covariates that belong directly in the outcome equation and are orthogonal to \(\varepsilon\) (e.g., age, gender, regional dummies).</li>
+            <li><strong style="color: #7c3aed;">\(Z_E\) (Excluded Instruments):</strong> External exogenous variables that predict \(X\) but do <em>not</em> belong directly in the outcome equation.</li>
+          </ul>
+        </div>
+
+        <p>
+          The full set of exogenous instruments available to the econometrician is the combined matrix \(Z = [Z_C, \; Z_E]\) with dimension \(n \times L\), where \(L = \dim(Z_C) + \dim(Z_E)\).
+        </p>
+      </div>
+    </section>
+
+    <!-- Study Section 2: Identification: The Counting Rule -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Order Condition</span>
+          <h2 class="section-title">Identification: The Counting Rule</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Can the causal parameters on endogenous regressors \(X\) be recovered? The fundamental necessary requirement is the <strong>order condition for identification</strong>:
+        </p>
+
+        <div class="key-idea-card" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-sm); text-align: center;">
+          <h4 style="margin: 0 0 0.4rem 0; color: var(--color-primary);">THE ORDER CONDITION</h4>
+          <p style="margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">
+            The system must have at least as many excluded instruments (\(Z_E\)) as endogenous regressors (\(X\)).
+          </p>
+          <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 1.1rem; color: #2563eb;">
+            \[\dim(Z_E) \ge \dim(X) \quad \iff \quad L \ge K\]
+          </div>
+        </div>
+
+        <p>
+          Based on this dimensional comparison, econometric models fall into three categories:
+        </p>
+
+        <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+          
+          <!-- Underidentified -->
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid #ef4444; border-radius: var(--radius-sm);">
+            <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; font-weight: 600;">UNDERIDENTIFIED</span>
+            <div style="margin: 0.5rem 0; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: #dc2626;">
+              \[L < K \quad (\# Z_E < \# X)\]
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              Fewer excluded instruments than endogenous regressors. There are more unknowns than moment conditions. <strong>IV estimation is mathematically impossible</strong>.
+            </p>
+          </div>
+
+          <!-- Exactly Identified -->
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid #2563eb; border-radius: var(--radius-sm);">
+            <span class="badge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">EXACTLY IDENTIFIED</span>
+            <div style="margin: 0.5rem 0; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: #2563eb;">
+              \[L = K \quad (\# Z_E = \# X)\]
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              Number of excluded instruments exactly equals the number of endogenous regressors. There is a unique solution given by the simple IV estimator.
+            </p>
+          </div>
+
+          <!-- Overidentified -->
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid #059669; border-radius: var(--radius-sm);">
+            <span class="badge" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: 600;">OVERIDENTIFIED</span>
+            <div style="margin: 0.5rem 0; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: #059669;">
+              \[L > K \quad (\# Z_E > \# X)\]
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              More excluded instruments than endogenous regressors. Provides extra identifying information to improve efficiency; requires Two-Stage Least Squares (2SLS).
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 3: The General Two-Stage Procedure -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Estimation Algorithm</span>
+          <h2 class="section-title">The General Two-Stage Procedure</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          When the order condition is satisfied (\(L \ge K\)), the general two-stage procedure is executed as follows:
+        </p>
+
+        <!-- Stage 1 Box -->
+        <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--surface-subtle); border-left: 4px solid #7c3aed; border-radius: var(--radius-sm);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <h4 style="margin: 0; color: #7c3aed;">FIRST STAGE (Executed for EACH endogenous regressor \(x_i\))</h4>
+            <span class="badge" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed; font-weight: 600;">Regress on ALL Exogenous Variables</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+            Regress each endogenous variable \(x_i\) on <em>all included controls \(Z_C\) and all excluded instruments \(Z_E\)</em>:
+          </p>
+          <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary); margin: 0.75rem 0;">
+            \[x_i = Z_C \pi_1 + Z_E \pi_2 + \nu_i \implies \hat{x}_i\]
+          </div>
+          <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+            Calculate the fitted values \(\hat{x}_i\) for each endogenous variable. These fitted values represent the portion of \(x_i\) generated purely by exogenous variation.
+          </p>
+        </div>
+
+        <!-- Stage 2 Box -->
+        <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--surface-subtle); border-left: 4px solid #059669; border-radius: var(--radius-sm);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <h4 style="margin: 0; color: #059669;">SECOND STAGE (Structural Outcome Equation)</h4>
+            <span class="badge" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: 600;">Regress y on Fitted \(\hat{x}\) and \(Z_C\)</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+            Regress outcome variable \(y\) on all fitted values \(\hat{x}_1, \dots, \hat{x}_K\) alongside the included controls \(Z_C\):
+          </p>
+          <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary); margin: 0.75rem 0;">
+            \[y = \beta_1 \hat{x}_1 + \cdots + \beta_K \hat{x}_K + \delta Z_C + \varepsilon\]
+          </div>
+        </div>
+
+        <!-- Critical Rule Callout -->
+        <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-sm);">
+          <h4 style="margin: 0 0 0.4rem 0; color: #dc2626;">CRITICAL RULE: EXCLUDED INSTRUMENTS NEVER ENTER STAGE 2</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Notice that <strong>\(Z_E\) does not appear directly in the second stage</strong>. By the exclusion restriction, \(Z_E\) affects \(y\) only through its influence on \(\hat{x}\). If \(Z_E\) were included in the second stage, it would eliminate identification because \(\hat{x}\) is a linear combination of \(Z_E\) and \(Z_C\), causing exact multicollinearity.
+          </p>
+        </div>
+
+        <!-- Software Caution -->
+        <div class="caution-card" style="padding: 1.25rem; background: rgba(217, 119, 6, 0.06); border-left: 4px solid #d97706; border-radius: var(--radius-sm); border: 1px solid rgba(217, 119, 6, 0.25); border-left-width: 4px;">
+          <h4 style="margin: 0 0 0.4rem 0; color: #d97706;">PROPER SOFTWARE ESTIMATION IS MANDATORY</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Standard errors in the second stage must use proper IV/2SLS estimation routines (such as <code>ivreg</code> in Stata or <code>IV2SLS</code> in Python/R) &mdash; never ordinary OLS on \(\hat{X}\). Manual OLS fails to account for first-stage estimation uncertainty and computes residuals from \(\hat{X}\) rather than original \(X\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 4: Interactive Lab — Identification Classifier -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Interactive Simulation</span>
+          <h2 class="section-title">Interactive Lab: Identification Classifier &amp; Model Builder</h2>
+        </div>
+      </div>
+
+      <div class="interactive-lab-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+        
+        <!-- Controls Header -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Endogenous Regressors (K)</label>
+            <div style="display: flex; gap: 0.4rem;">
+              <button type="button" class="btn btn-sm btn-outline" id="btnK1">K = 1</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnK2">K = 2</button>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Excluded Instruments (L_E)</label>
+            <div style="display: flex; gap: 0.4rem;">
+              <button type="button" class="btn btn-sm btn-outline" id="btnL1">1 Inst</button>
+              <button type="button" class="btn btn-sm btn-primary" id="btnL2">2 Inst</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnL3">3 Inst</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Output Cards -->
+        <div class="metric-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">CLASSIFICATION</div>
+            <div id="metricIdentClass" style="font-size: 1.3rem; font-weight: 700; color: #2563eb; font-family: var(--font-mono); margin: 0.25rem 0;">Exactly Identified</div>
+            <div id="metricIdentSub" style="font-size: 0.75rem; color: var(--text-secondary);">L_E = K (2 = 2)</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">ESTIMATION METHOD</div>
+            <div id="metricMethod" style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono); margin: 0.25rem 0;">Simple IV / 2SLS</div>
+            <div id="metricMethodSub" style="font-size: 0.75rem; color: var(--text-secondary);">Unique solution</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">OVERIDENTIFYING RESTRICTIONS</div>
+            <div id="metricDof" style="font-size: 1.3rem; font-weight: 700; color: #059669; font-family: var(--font-mono); margin: 0.25rem 0;">0 extra moments</div>
+            <div id="metricDofSub" style="font-size: 0.75rem; color: var(--text-secondary);">Exact identification</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Stage Equations Preview -->
+        <div style="padding: 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Constructed Regression Specification</div>
+          <div id="specPreview" style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-primary); line-height: 1.8;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Dynamic Lab Insight -->
+        <div class="lab-insight-box" style="padding: 1rem 1.25rem; background: rgba(37, 99, 235, 0.05); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-xs);">
+          <h4 id="labIdentTitle" style="margin: 0 0 0.25rem 0; font-size: 0.95rem; color: var(--accent-primary);">EXACT IDENTIFICATION</h4>
+          <p id="labIdentText" style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+            With 2 endogenous regressors and 2 excluded instruments, the order condition holds exactly. The system has just enough moment equations to solve for the unknown parameters.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 5: Quick Check -->
+    <div class="quick-check-card" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <span style="font-size: 1.1rem;">💡</span>
+        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">QUICK CHECK</h3>
+      </div>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+        If an econometric model contains 2 endogenous regressors but only 1 excluded instrument, how is the model classified, and can it be estimated via IV?
+      </p>
+
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint115">Hint</button>
+        <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol115">Show Solution</button>
+      </div>
+
+      <div class="hint-content" id="hint115" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <strong>HINT:</strong> Compare the number of excluded instruments (\(L\)) to the number of endogenous variables (\(K\)) in the order condition.
+      </div>
+
+      <div class="solution-content" id="sol115" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.4rem;">
+          <strong>ANSWER:</strong> The model is underidentified; IV estimation is not possible.
+        </p>
+        <p style="margin: 0; color: var(--text-secondary);">
+          <strong>WHY?</strong> Identification requires at least as many excluded instruments as endogenous regressors (\(L \ge K\)). Here, \(L = 1\) while \(K = 2\), leaving fewer empirical moment conditions than structural parameters to estimate. The model is underidentified, and the causal parameters cannot be recovered.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The general IV model partitions variables into endogenous regressors \(X\), included controls \(Z_C\), and excluded instruments \(Z_E\).</li>
+        <li>The order condition states that identification requires at least as many excluded instruments as endogenous variables (\(L \ge K\)).</li>
+        <li>Models are underidentified if \(L < K\), exactly identified if \(L = K\), and overidentified if \(L > K\).</li>
+        <li>In the first stage, each endogenous regressor is regressed on all included controls and excluded instruments to generate \(\hat{X}\).</li>
+        <li>In the second stage, outcome \(y\) is regressed on \(\hat{X}\) and \(Z_C\); excluded instruments \(Z_E\) are strictly omitted from the second stage.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">11.4 Simultaneity: Supply, Demand &amp; Price IV</span>
+      </a>
+      <a href="lesson-06.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">11.6 IV in Matrix Form: Exactly Identified</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 11.5 Script -->
+  <script>
+    (function() {
+      let numK = 2; // 1 or 2
+      let numL = 2; // 1, 2, or 3
+
+      const btnK1 = document.getElementById('btnK1');
+      const btnK2 = document.getElementById('btnK2');
+      const btnL1 = document.getElementById('btnL1');
+      const btnL2 = document.getElementById('btnL2');
+      const btnL3 = document.getElementById('btnL3');
+
+      const metricIdentClass = document.getElementById('metricIdentClass');
+      const metricIdentSub = document.getElementById('metricIdentSub');
+      const metricMethod = document.getElementById('metricMethod');
+      const metricMethodSub = document.getElementById('metricMethodSub');
+      const metricDof = document.getElementById('metricDof');
+      const metricDofSub = document.getElementById('metricDofSub');
+
+      const specPreview = document.getElementById('specPreview');
+      const labIdentTitle = document.getElementById('labIdentTitle');
+      const labIdentText = document.getElementById('labIdentText');
+
+      function updateClassifier() {
+        btnK1.className = numK === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnK2.className = numK === 2 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        btnL1.className = numL === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnL2.className = numL === 2 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnL3.className = numL === 3 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        metricIdentSub.textContent = 'L_E = ' + numL + ', K = ' + numK;
+
+        if (numL < numK) {
+          metricIdentClass.textContent = 'Underidentified';
+          metricIdentClass.style.color = '#dc2626';
+          metricMethod.textContent = 'Not Possible';
+          metricMethod.style.color = '#dc2626';
+          metricMethodSub.textContent = 'Fewer moments than unknowns';
+          metricDof.textContent = (numL - numK) + ' moments';
+          metricDof.style.color = '#dc2626';
+          metricDofSub.textContent = 'Parameters cannot be solved';
+
+          labIdentTitle.textContent = 'UNDERIDENTIFIED: IV ESTIMATION FAILS';
+          labIdentTitle.style.color = '#dc2626';
+          labIdentText.textContent = 'You have ' + numK + ' endogenous regressors but only ' + numL + ' excluded instrument. The order condition fails (L < K). Additional valid instruments must be acquired before estimation.';
+
+          specPreview.innerHTML = `
+            <strong>Status:</strong> <span style="color:#dc2626;">Underidentified (Order condition violated)</span><br>
+            <strong>First Stage:</strong> Unable to solve unique projection coefficients for ${numK} regressors.<br>
+            <strong>Second Stage:</strong> Structural parameters cannot be identified.
+          `;
+        } else if (numL === numK) {
+          metricIdentClass.textContent = 'Exactly Identified';
+          metricIdentClass.style.color = '#2563eb';
+          metricMethod.textContent = 'Simple IV / 2SLS';
+          metricMethod.style.color = '#2563eb';
+          metricMethodSub.textContent = 'Unique parameter solution';
+          metricDof.textContent = '0 extra moments';
+          metricDof.style.color = '#2563eb';
+          metricDofSub.textContent = 'Just-identified system';
+
+          labIdentTitle.textContent = 'EXACT IDENTIFICATION: UNIQUE IV SOLUTION';
+          labIdentTitle.style.color = '#2563eb';
+          labIdentText.textContent = 'With ' + numK + ' endogenous regressors and ' + numL + ' excluded instruments, the order condition holds with equality. 2SLS reduces to the classical just-identified IV formula.';
+
+          let stage1Text = '';
+          for (let i = 1; i <= numK; i++) {
+            stage1Text += `x_${i} = Z_C π_${i}1 + ` + Array.from({length: numL}, (_, j) => `z_${j+1} π_${i}${j+2}`).join(' + ') + ` + ν_${i} &rarr; <strong>x̂_${i}</strong><br>`;
+          }
+
+          specPreview.innerHTML = `
+            <strong>First Stage:</strong><br>${stage1Text}
+            <strong>Second Stage:</strong><br>
+            y = ` + Array.from({length: numK}, (_, i) => `β_${i+1}<strong>x̂_${i+1}</strong>`).join(' + ') + ` + δ Z_C + ε
+          `;
+        } else {
+          metricIdentClass.textContent = 'Overidentified';
+          metricIdentClass.style.color = '#059669';
+          metricMethod.textContent = 'Two-Stage Least Squares (2SLS)';
+          metricMethod.style.color = '#059669';
+          metricMethodSub.textContent = 'P_Z projection combines moments';
+          metricDof.textContent = '+' + (numL - numK) + ' extra moments';
+          metricDof.style.color = '#059669';
+          metricDofSub.textContent = 'Testable overidentification';
+
+          labIdentTitle.textContent = 'OVERIDENTIFICATION: 2SLS COMBINES INSTRUMENTS';
+          labIdentTitle.style.color = '#059669';
+          labIdentText.textContent = 'With ' + numL + ' excluded instruments for ' + numK + ' endogenous regressors, you have ' + (numL - numK) + ' overidentifying restriction(s). 2SLS uses the projection matrix P_Z to weight and combine all instruments for efficiency.';
+
+          let stage1Text = '';
+          for (let i = 1; i <= numK; i++) {
+            stage1Text += `x_${i} = Z_C π_${i}1 + ` + Array.from({length: numL}, (_, j) => `z_${j+1} π_${i}${j+2}`).join(' + ') + ` + ν_${i} &rarr; <strong>x̂_${i}</strong><br>`;
+          }
+
+          specPreview.innerHTML = `
+            <strong>First Stage:</strong><br>${stage1Text}
+            <strong>Second Stage:</strong><br>
+            y = ` + Array.from({length: numK}, (_, i) => `β_${i+1}<strong>x̂_${i+1}</strong>`).join(' + ') + ` + δ Z_C + ε
+          `;
+        }
+      }
+
+      btnK1.addEventListener('click', () => { numK = 1; updateClassifier(); });
+      btnK2.addEventListener('click', () => { numK = 2; updateClassifier(); });
+
+      btnL1.addEventListener('click', () => { numL = 1; updateClassifier(); });
+      btnL2.addEventListener('click', () => { numL = 2; updateClassifier(); });
+      btnL3.addEventListener('click', () => { numL = 3; updateClassifier(); });
+
+      // Quick Check toggles
+      const btnHint = document.getElementById('btnHint115');
+      const hint = document.getElementById('hint115');
+      const btnSol = document.getElementById('btnSol115');
+      const sol = document.getElementById('sol115');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateClassifier();
+    })();
+  </script>
+</body>
+</html>

@@ -93,6 +93,11 @@
   --color-primary-light: var(--accent-primary-light);
   --color-text: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
+  --border: var(--border-subtle);
+  --success: #059669;
+  --success-soft: rgba(5, 150, 105, 0.08);
+  --warning: #d97706;
+  --warning-soft: rgba(217, 119, 6, 0.08);
 
   /* Visualization Study Grid Theming */
   --viz-card-bg: #ffffff;
@@ -183,6 +188,11 @@
   --border-light: #1e293b;
   --border-subtle: #293548;
   --border-strong: #3b4c68;
+  --border: var(--border-subtle);
+  --success: #10b981;
+  --success-soft: rgba(16, 185, 129, 0.14);
+  --warning: #f59e0b;
+  --warning-soft: rgba(245, 158, 11, 0.14);
 
   --accent-primary: #3b82f6;
   --accent-primary-hover: #60a5fa;
@@ -194,6 +204,15 @@
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.55);
+
+  /* Theme color aliases for dark mode */
+  --color-surface: var(--surface);
+  --color-border: var(--border-subtle);
+  --color-bg: var(--bg-body);
+  --color-primary: var(--accent-primary);
+  --color-primary-light: var(--accent-primary-light);
+  --color-text: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
 
   /* Pedagogical Components in Dark Mode */
   --equation-bg: #111827;

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12.3: Instrument Strength &amp; Weak-Instrument Diagnostics — Econometrics with AI</title>
+  <meta name="description" content="Discover why relevance is vital for IV precision, examine finite-sample problems associated with weak instruments, interpret first-stage diagnostic rules of thumb, and survey Stock-Yogo, Cragg-Donald, and Kleibergen-Paap diagnostics.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-12" data-lesson="3">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 12</a>
+          <span class="module-nav-title">IV Diagnostics &amp; Measurement Error</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 6 &middot; Instrument Strength &amp; Weak IVs</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 12 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.1 Do We Need IV? Hausman &amp; Wu Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.2 Testing Instrument Validity: Sargan</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">12.3 Instrument Strength &amp; Weak IVs</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.4 Measurement Error in y and x</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.5 Attenuation Bias &amp; IV Solution</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.6 Propagation of Error &amp; Review</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 50%;"></div>
+          </div>
+          <span class="progress-text">50%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 12.3</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Instrument Strength</span>
+      </div>
+      <h1 class="lesson-hero-title">Instrument Strength &amp; Weak-Instrument Diagnostics</h1>
+      <p class="lesson-hero-lead">
+        Explore why instrument validity is insufficient without strong relevance, evaluate finite-sample problems associated with weak instruments, and interpret first-stage diagnostic rules of thumb.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Explain why IV precision deteriorates when instruments weakly predict \(X\).</li>
+        <li>Recognize the major finite-sample problems associated with weak instruments.</li>
+        <li>Interpret first-stage \(F\)-statistics as strength diagnostics at the source's level.</li>
+        <li>Distinguish strength diagnostics from instrument validity.</li>
+      </ul>
+    </div>
+
+    <!-- Core Takeaway -->
+    <div class="callout callout-info" style="margin-bottom: var(--space-xl);">
+      <div class="callout-header">
+        <span class="callout-badge">FOUNDATIONAL PREMISE</span>
+        <h4 class="callout-title">Relevance Is Indispensable</h4>
+      </div>
+      <div class="callout-body">
+        Weak instruments can produce large variance and severe finite-sample problems. When an instrument satisfies orthogonality with the structural error but correlates weakly with the endogenous regressor, 2SLS precision deteriorates rapidly.
+      </div>
+    </div>
+
+    <!-- Study Section 1: Instrument Relevance & Asymptotic Variance -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 1</span>
+        <h2 class="study-section-title">1. Instrument Relevance &amp; Asymptotic Variance</h2>
+      </div>
+
+      <div class="definition-card">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-size: var(--text-xs); margin-bottom: 0.5rem;">DEFINITION</span>
+        <h3 class="definition-title">Instrument Relevance</h3>
+        <p class="definition-body">
+          An instrument must predict the endogenous regressor. Weak relevance means the first stage provides little independent variation in \(X\).
+        </p>
+      </div>
+
+      <div class="equation-card" style="margin-top: var(--space-md);">
+        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.5rem;">ASYMPTOTIC VARIANCE</span>
+        <h3 class="equation-title">Asymptotic Variance of the IV Estimator</h3>
+        <div class="equation-display">
+          $$\text{AsyVar}(\hat{\beta}_{\text{IV}}) = \frac{\sigma^2}{n} \left[ \left(\frac{X'Z}{n}\right) \left(\frac{Z'Z}{n}\right)^{-1} \left(\frac{Z'X}{n}\right) \right]^{-1}$$
+        </div>
+        <p class="equation-note">
+          Notice the sample covariance term \(\frac{Z'X}{n}\) appearing inside the matrix inverse.
+        </p>
+      </div>
+
+      <div class="comparison-card" style="background: var(--surface); border-left: 3px solid var(--accent-primary); border-radius: var(--radius-xs); padding: var(--space-md); margin: var(--space-md) 0;">
+        <div style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.35rem;">AS RELEVANCE WEAKENS</div>
+        <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary);">
+          Information from \(Z\) about \(X\) decreases &nbsp;&rarr;&nbsp; IV variance increases &nbsp;&rarr;&nbsp; estimates become less precise.
+        </p>
+      </div>
+
+      <!-- Five Problems Responsive Grid -->
+      <div style="margin-top: var(--space-lg);">
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: var(--space-md); color: var(--text-primary);">Five Major Finite-Sample Problems of Weak Instruments</h3>
+        <div class="problems-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">1. LARGE VARIANCE</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Imprecise Estimates</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              IV estimates become imprecise with wide confidence intervals as the denominator covariance approaches zero.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">2. FINITE-SAMPLE BIAS</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Shift Toward OLS</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Weak instruments can generate substantial finite-sample bias, pulling 2SLS estimates directly toward the OLS estimate.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">3. MANY WEAK INSTRUMENTS</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Compounding Bias</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Adding weak instruments can make the finite-sample problem worse, as fitted values \(\hat{X}\) overfit sample noise in the disturbance.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">4. SENSITIVITY TO VIOLATIONS</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Magnified departures</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Weak relevance can magnify the effect of small departures from instrument validity.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md); grid-column: 1 / -1;">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">5. POOR NORMAL APPROXIMATION</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Distorted Inference</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Conventional large-sample Gaussian approximations can perform poorly, producing heavy tails and distorted Wald test coverage.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validity-Violation Sensitivity Formula Card -->
+      <div class="equation-card" style="margin-top: var(--space-md);">
+        <span class="badge" style="background: #fef3c7; color: #b45309; font-size: var(--text-xs); margin-bottom: 0.5rem;">SENSITIVITY TO VALIDITY VIOLATIONS</span>
+        <div class="equation-display">
+          $$\text{plim}(\hat{\beta}_{\text{IV}}) - \beta = \frac{\text{Cov}(z, \varepsilon)}{\text{Cov}(z, x)}$$
+        </div>
+        <p class="equation-note">
+          When \(\text{Cov}(z, x)\) is small, a given \(\text{Cov}(z, \varepsilon)\) can have a larger effect on the IV estimate.
+        </p>
+      </div>
+    </section>
+
+    <!-- Study Section 2: First-Stage Regression & Diagnostics -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 2</span>
+        <h2 class="study-section-title">2. First-Stage Regression &amp; Diagnostic Thresholds</h2>
+      </div>
+
+      <div class="equation-card">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-size: var(--text-xs); margin-bottom: 0.5rem;">FIRST-STAGE REGRESSION</span>
+        <div class="equation-display">
+          $$X = Z_C \Theta + Z_E \theta + \nu$$
+        </div>
+        <p class="equation-note">
+          Regress endogenous regressor \(X\) on included controls \(Z_C\) and excluded instruments \(Z_E\). Test joint significance:
+          $$H_0: \theta = 0$$
+        </p>
+      </div>
+
+      <div class="callout callout-warning" style="margin-top: var(--space-md);">
+        <div class="callout-header">
+          <span class="callout-badge" style="background: #fef3c7; color: #b45309;">COURSE RULES OF THUMB</span>
+          <h4 class="callout-title">First-Stage F-Statistic Thresholds</h4>
+        </div>
+        <div class="callout-body">
+          <ul style="margin: 0.35rem 0 0 1.25rem; line-height: 1.6;">
+            <li><strong>Multiple Instruments (\(L > 1\)):</strong> The first-stage \(F\)-statistic satisfies <strong>\(F \ge 10\)</strong>.</li>
+            <li><strong>Single Instrument (\(L = 1\)):</strong> The first-stage \(F\)-statistic satisfies <strong>\(F \ge 16\)</strong>, which implies <strong>\(|t| \ge 4\)</strong> (since \(F = t^2\)).</li>
+          </ul>
+          <p style="margin-top: 0.5rem; font-size: var(--text-xs); color: var(--text-secondary);">
+            These thresholds are empirical rules of thumb from this module, not universal mathematical laws. Instrument relevance and validity are distinct: a strong first stage does not verify exogeneity.
+          </p>
+        </div>
+      </div>
+
+      <!-- Diagnostic Cards Grid -->
+      <div style="margin-top: var(--space-lg);">
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: var(--space-md); color: var(--text-primary);">Weak-Identification Diagnostic Tools</h3>
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-size: var(--text-xs); margin-bottom: 0.35rem;">CRITICAL VALUES</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Stock–Yogo</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0 0 0.5rem 0; line-height: 1.5;">
+              Critical values used to assess weak-instrument concerns based on maximum allowable relative bias or size distortion.
+            </p>
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary);">USE WHEN: Evaluating relative bias or test size under homoskedasticity.</div>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">HOMOSKEDASTIC TEST</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Cragg–Donald</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0 0 0.5rem 0; line-height: 1.5;">
+              A weak-identification diagnostic discussed for the classical setting with multiple endogenous regressors.
+            </p>
+            <div style="font-size: 0.75rem; font-weight: 600; color: #3730a3;">USE WHEN: Testing matrix rank with multiple regressors under homoskedasticity.</div>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--accent-primary); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #ede9fe; color: #6d28d9; font-size: var(--text-xs); margin-bottom: 0.35rem;">ROBUST INFERENCE</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Kleibergen–Paap</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0 0 0.5rem 0; line-height: 1.5;">
+              A robust weak-identification diagnostic mentioned for settings with heteroskedasticity, autocorrelation, or clustering.
+            </p>
+            <div style="font-size: 0.75rem; font-weight: 600; color: #6d28d9;">USE WHEN: Assessing instrument rank under non-spherical or clustered errors.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What If Instruments Are Weak? Action Cards -->
+      <div style="margin-top: var(--space-lg);">
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: var(--space-md); color: var(--text-primary);">What If Instruments Are Weak?</h3>
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md);">
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: var(--text-xs); margin-bottom: 0.35rem;">OPTION 1</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Reconsider OLS</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Use only in the stated context when IV finite-sample bias and variance exceed OLS bias.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: var(--text-xs); margin-bottom: 0.35rem;">OPTION 2</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Find Stronger Instruments</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Seek instruments with stronger first-stage relevance through sharper institutional or policy variation.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: var(--text-xs); margin-bottom: 0.35rem;">OPTION 3</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Use Robust Inference</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Apply weak-IV-robust confidence intervals such as the Anderson–Rubin or Moreira conditional likelihood ratio tests.
+            </p>
+          </div>
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: var(--text-xs); margin-bottom: 0.35rem;">OPTION 4</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-sm); font-weight: 600;">Reduce Weak Instruments</h4>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Avoid relying on many weak predictors when stronger individual instruments are available.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 3: Interactive Lab 12.3 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <span class="study-section-badge">Section 3</span>
+        <h2 class="study-section-title">3. Interactive Lab: Instrument Strength &amp; IV Dispersion</h2>
+      </div>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-header-badge">Interactive Simulation</div>
+          <h3 class="lab-title">First-Stage Relevance vs. Second-Stage IV Uncertainty</h3>
+          <p class="lab-desc">
+            Explore how stronger first-stage relevance is associated with improved IV precision in this illustrative simulation.
+          </p>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="lab-controls-bar">
+          <label style="font-size: var(--text-xs); text-transform: uppercase; font-weight: 600; color: var(--text-muted);">
+            First-Stage Strength Mode:
+          </label>
+          <div class="btn-group-segmented" role="group">
+            <button type="button" class="btn btn-sm btn-outline" id="btnWeak">Weak (F = 3.2)</button>
+            <button type="button" class="btn btn-sm btn-outline" id="btnBorder">Moderate (F = 9.8)</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btnStrong">Strong (F = 28.5)</button>
+          </div>
+        </div>
+
+        <!-- 2x2 Metric Grid -->
+        <div class="metric-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">FIRST-STAGE F</div>
+            <div id="readoutF" style="font-size: 1.4rem; font-weight: 700; color: #059669; margin: 0.25rem 0;">F = 28.5</div>
+            <div id="readoutFDesc" style="font-size: 0.8rem; color: #059669;">Exceeds F &ge; 10 rule</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">IV STANDARD ERROR</div>
+            <div id="readoutSe" style="font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); margin: 0.25rem 0;">0.08</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Sampling dispersion</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">BIAS INDICATOR</div>
+            <div id="readoutBias" style="font-size: 1.25rem; font-weight: 700; color: #059669; margin: 0.25rem 0;">Lower weak-IV concern</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Qualitative finite-sample risk</div>
+          </div>
+          <div class="metric-card" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">STRENGTH STATUS</div>
+            <div id="readoutInf" style="font-size: 1.25rem; font-weight: 700; color: #059669; margin: 0.25rem 0;">Strong</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">In this illustrative scenario</div>
+          </div>
+        </div>
+
+        <!-- External Chart Legend -->
+        <div class="outside-chart-legend" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: var(--space-sm); font-size: var(--text-xs); color: var(--text-secondary);">
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2563eb;"></span> First-stage observations</div>
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; background: #2563eb;"></span> Fitted first stage</div>
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; background: #6d28d9;"></span> IV sampling distribution</div>
+          <div style="display: flex; align-items: center; gap: 0.35rem;"><span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed #dc2626;"></span> True β</div>
+        </div>
+
+        <!-- SVG Shell -->
+        <div class="chart-svg-shell" style="background: var(--surface-secondary, rgba(0,0,0,0.02)); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.5rem; overflow-x: auto;">
+          <svg id="strengthSvg" viewBox="0 0 680 260" width="100%" height="260" style="display: block; min-width: 500px;"></svg>
+        </div>
+
+        <!-- Caution Callout -->
+        <div class="callout callout-info" style="margin-top: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge" id="strengthInsightBadge" style="background: #d1fae5; color: #065f46;">STRONG FIRST STAGE</span>
+            <h4 class="callout-title" id="strengthInsightTitle">F = 28.5: High Relevance, Narrow Sampling Distribution</h4>
+          </div>
+          <div class="callout-body" id="strengthInsightBody">
+            Strong first-stage association provides clear variation in \(X\). The resulting IV sampling distribution is centered accurately near true \(\beta = 1.00\) with narrow dispersion (\(\text{SE} = 0.08\)). Remember: instrument strength does not establish instrument validity.
+          </div>
+        </div>
+
+        <!-- Canonical 5-card Explanation Grid -->
+        <div class="chart-explanations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT YOU ARE SEEING</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              On the left, the first-stage regression scatter of \(X\) against \(Z\). On the right, the resulting second-stage sampling distribution of \(\hat{\beta}_{\text{IV}}\).
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHAT TO NOTICE</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              As \(F\) falls from 28.5 to 3.2, the first-stage scatter flattens, and the IV sampling distribution widens with increased dispersion and finite-sample shift toward OLS.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">WHY IT MATTERS</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Reporting an IV estimate without reporting first-stage diagnostics leaves the estimator's precision and finite-sample stability unknown.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">ECONOMETRIC INTERPRETATION</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              The first-stage \(F\)-statistic measures independent variation injected by the instruments. When \(F\) is low, finite-sample bias can dominate asymptotic consistency.
+            </p>
+          </div>
+          <div class="explanation-box" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); grid-column: 1 / -1;">
+            <h4 style="font-size: var(--text-sm); margin-bottom: 0.4rem; color: var(--accent-primary);">TRY THIS</h4>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Switch between Weak, Moderate, and Strong modes. Observe how the slope of the first-stage fitted line directly impacts the tightness of the sampling curve.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 4: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Does obtaining a very high first-stage \(F\)-statistic (e.g., \(F = 85\)) prove that an instrumental variable is valid?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Distinguish carefully between the two fundamental IV criteria: instrument relevance and instrument validity (exclusion).
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> No, a strong first stage does not prove that an instrument is valid.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> A high first-stage \(F\)-statistic evaluates only <strong>instrument relevance</strong>: \(\text{Cov}(Z, X) \neq 0\). It provides zero empirical proof of <strong>instrument validity</strong>: \(\text{Cov}(Z, \varepsilon) = 0\). An invalid instrument (such as an omitted confounder) can have strong explanatory power for \(X\) while violating the exclusion restriction.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Valid instruments must also be sufficiently relevant.</li>
+        <li>Weak instruments can produce large variance and serious finite-sample problems.</li>
+        <li>First-stage diagnostics assess relevance, not instrument validity.</li>
+        <li>The module presents \(F\)-statistic rules of thumb as diagnostics rather than universal laws.</li>
+        <li>Stronger instruments generally provide more informative IV estimation.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-02.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">12.2 Testing Instrument Validity: Sargan</span>
+      </a>
+      <a href="lesson-04.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">12.4 Measurement Error in y &amp; x</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 12.3 Script -->
+  <script>
+    (function() {
+      function initLab() {
+        let currentLevel = 'strong'; // 'weak', 'border', 'strong'
+
+        const btnWeak = document.getElementById('btnWeak');
+        const btnBorder = document.getElementById('btnBorder');
+        const btnStrong = document.getElementById('btnStrong');
+
+        const readoutF = document.getElementById('readoutF');
+        const readoutFDesc = document.getElementById('readoutFDesc');
+        const readoutSe = document.getElementById('readoutSe');
+        const readoutBias = document.getElementById('readoutBias');
+        const readoutInf = document.getElementById('readoutInf');
+
+        const insightBadge = document.getElementById('strengthInsightBadge');
+        const insightTitle = document.getElementById('strengthInsightTitle');
+        const insightBody = document.getElementById('strengthInsightBody');
+        const svg = document.getElementById('strengthSvg');
+
+        function updateLab() {
+          if (!btnWeak || !btnBorder || !btnStrong) return;
+          if (!readoutF || !readoutSe || !readoutBias || !readoutInf) return;
+
+        btnWeak.className = currentLevel === 'weak' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnBorder.className = currentLevel === 'border' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnStrong.className = currentLevel === 'strong' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        if (currentLevel === 'weak') {
+          readoutF.textContent = 'F = 3.2';
+          readoutF.style.color = '#dc2626';
+          readoutFDesc.textContent = 'Below F = 10 rule';
+          readoutFDesc.style.color = '#dc2626';
+          readoutSe.textContent = '0.38';
+          readoutBias.textContent = 'High weak-IV concern';
+          readoutBias.style.color = '#dc2626';
+          readoutInf.textContent = 'Weak';
+          readoutInf.style.color = '#dc2626';
+
+          insightBadge.textContent = 'WEAK FIRST STAGE';
+          insightBadge.style.background = '#fee2e2';
+          insightBadge.style.color = '#dc2626';
+          insightTitle.textContent = 'F = 3.2: Low Relevance, Large Dispersion';
+          insightBody.textContent = 'First-stage correlation is weak. The sampling distribution flattens into an uninformative spread (SE = 0.38) with substantial finite-sample shift toward the OLS estimate. Conventional Wald tests suffer from severe size distortion.';
+        } else if (currentLevel === 'border') {
+          readoutF.textContent = 'F = 9.8';
+          readoutF.style.color = '#d97706';
+          readoutFDesc.textContent = 'Near F = 10 threshold';
+          readoutFDesc.style.color = '#d97706';
+          readoutSe.textContent = '0.17';
+          readoutBias.textContent = 'Moderate weak-IV concern';
+          readoutBias.style.color = '#d97706';
+          readoutInf.textContent = 'Borderline';
+          readoutInf.style.color = '#d97706';
+
+          insightBadge.textContent = 'BORDERLINE RELEVANCE';
+          insightBadge.style.background = '#fef3c7';
+          insightBadge.style.color = '#b45309';
+          insightTitle.textContent = 'F = 9.8: Borderline Relevance, Moderate Dispersion';
+          insightBody.textContent = 'The first-stage F-statistic hovers near the conventional rule-of-thumb threshold. While noticeably tighter than F = 3.2, nominal confidence intervals may still exhibit modest size distortion.';
+        } else {
+          readoutF.textContent = 'F = 28.5';
+          readoutF.style.color = '#059669';
+          readoutFDesc.textContent = 'Exceeds F ≥ 10 rule';
+          readoutFDesc.style.color = '#059669';
+          readoutSe.textContent = '0.08';
+          readoutBias.textContent = 'Lower weak-IV concern';
+          readoutBias.style.color = '#059669';
+          readoutInf.textContent = 'Strong';
+          readoutInf.style.color = '#059669';
+
+          insightBadge.textContent = 'STRONG FIRST STAGE';
+          insightBadge.style.background = '#d1fae5';
+          insightBadge.style.color = '#065f46';
+          insightTitle.textContent = 'F = 28.5: High Relevance, Narrow Sampling Distribution';
+          insightBody.textContent = 'Strong first-stage association provides clear variation in X. The resulting IV sampling distribution is centered accurately near true β = 1.00 with narrow dispersion (SE = 0.08). Remember: instrument strength does not establish instrument validity.';
+        }
+
+        renderGraphics();
+      }
+
+      function renderGraphics() {
+        if (!svg) return;
+        svg.innerHTML = '';
+        const width = 680;
+        const height = 260;
+
+        // Divider between first stage (left) and sampling distribution (right)
+        const divider = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        divider.setAttribute('x1', '330');
+        divider.setAttribute('y1', '20');
+        divider.setAttribute('x2', '330');
+        divider.setAttribute('y2', '240');
+        divider.setAttribute('stroke', 'var(--border-subtle)');
+        divider.setAttribute('stroke-dasharray', '4 3');
+        svg.appendChild(divider);
+
+        // Titles for left and right panels
+        const titleLeft = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        titleLeft.setAttribute('x', '165');
+        titleLeft.setAttribute('y', '25');
+        titleLeft.setAttribute('font-size', '12');
+        titleLeft.setAttribute('font-weight', '700');
+        titleLeft.setAttribute('fill', '#2563eb');
+        titleLeft.setAttribute('text-anchor', 'middle');
+        titleLeft.textContent = 'First Stage: Regressor X on IV Z';
+        svg.appendChild(titleLeft);
+
+        const titleRight = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        titleRight.setAttribute('x', '505');
+        titleRight.setAttribute('y', '25');
+        titleRight.setAttribute('font-size', '12');
+        titleRight.setAttribute('font-weight', '700');
+        titleRight.setAttribute('fill', '#6d28d9');
+        titleRight.setAttribute('text-anchor', 'middle');
+        titleRight.textContent = 'IV Sampling Distribution: β̂_IV';
+        svg.appendChild(titleRight);
+
+        // --- LEFT PANEL: First-stage scatter & line ---
+        const axLeftX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axLeftX.setAttribute('x1', '40');
+        axLeftX.setAttribute('y1', '210');
+        axLeftX.setAttribute('x2', '300');
+        axLeftX.setAttribute('y2', '210');
+        axLeftX.setAttribute('stroke', 'var(--border-strong)');
+        svg.appendChild(axLeftX);
+
+        const axLeftY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axLeftY.setAttribute('x1', '40');
+        axLeftY.setAttribute('y1', '50');
+        axLeftY.setAttribute('x2', '40');
+        axLeftY.setAttribute('y2', '210');
+        axLeftY.setAttribute('stroke', 'var(--border-strong)');
+        svg.appendChild(axLeftY);
+
+        const lblZ = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lblZ.setAttribute('x', '170');
+        lblZ.setAttribute('y', '230');
+        lblZ.setAttribute('font-size', '11');
+        lblZ.setAttribute('fill', 'var(--text-muted)');
+        lblZ.setAttribute('text-anchor', 'middle');
+        lblZ.textContent = 'Instrument Z';
+        svg.appendChild(lblZ);
+
+        const lblX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lblX.setAttribute('x', '28');
+        lblX.setAttribute('y', '50');
+        lblX.setAttribute('font-size', '11');
+        lblX.setAttribute('fill', 'var(--text-muted)');
+        lblX.setAttribute('text-anchor', 'middle');
+        lblX.textContent = 'X';
+        svg.appendChild(lblX);
+
+        // Deterministic points generator based on strength
+        let slope = 0.75;
+        let noiseScale = 15;
+        if (currentLevel === 'weak') {
+          slope = 0.15;
+          noiseScale = 35;
+        } else if (currentLevel === 'border') {
+          slope = 0.45;
+          noiseScale = 22;
+        }
+
+        const pseudoPoints = [
+          [-3, -2.4], [-2.5, -2.0], [-2, -1.8], [-1.5, -0.9], [-1, -1.2],
+          [-0.5, -0.3], [0, 0.2], [0.5, 0.4], [1, 0.8], [1.5, 1.4],
+          [2, 1.7], [2.5, 2.3], [3, 2.6], [-1.8, 0.5], [1.2, -0.4]
+        ];
+
+        pseudoPoints.forEach(pt => {
+          const zVal = pt[0];
+          const rawNoise = pt[1] - pt[0] * 0.75;
+          const xVal = zVal * slope + (rawNoise * noiseScale) / 30;
+
+          const px = 170 + zVal * 38;
+          const py = 130 - xVal * 32;
+
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', Math.max(45, Math.min(295, px)));
+          dot.setAttribute('cy', Math.max(55, Math.min(205, py)));
+          dot.setAttribute('r', '3');
+          dot.setAttribute('fill', '#2563eb');
+          dot.setAttribute('opacity', '0.7');
+          svg.appendChild(dot);
+        });
+
+        // Fitted regression line
+        const fitLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        const x1 = 50;
+        const y1 = 130 - (50 - 170) * (slope * 32 / 38);
+        const x2 = 290;
+        const y2 = 130 - (290 - 170) * (slope * 32 / 38);
+        fitLine.setAttribute('x1', x1);
+        fitLine.setAttribute('y1', Math.max(55, Math.min(205, y1)));
+        fitLine.setAttribute('x2', x2);
+        fitLine.setAttribute('y2', Math.max(55, Math.min(205, y2)));
+        fitLine.setAttribute('stroke', '#2563eb');
+        fitLine.setAttribute('stroke-width', '2');
+        svg.appendChild(fitLine);
+
+        // --- RIGHT PANEL: IV Sampling distribution ---
+        const axRight = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axRight.setAttribute('x1', '370');
+        axRight.setAttribute('y1', '210');
+        axRight.setAttribute('x2', '640');
+        axRight.setAttribute('y2', '210');
+        axRight.setAttribute('stroke', 'var(--border-strong)');
+        svg.appendChild(axRight);
+
+        for (let b = 0.0; b <= 2.0; b += 0.5) {
+          const bx = 370 + (b / 2.0) * 270;
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          tick.setAttribute('x1', bx);
+          tick.setAttribute('y1', '210');
+          tick.setAttribute('x2', bx);
+          tick.setAttribute('y2', '215');
+          tick.setAttribute('stroke', 'var(--border-strong)');
+          svg.appendChild(tick);
+
+          const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          lbl.setAttribute('x', bx);
+          lbl.setAttribute('y', '228');
+          lbl.setAttribute('font-size', '10');
+          lbl.setAttribute('fill', 'var(--text-muted)');
+          lbl.setAttribute('text-anchor', 'middle');
+          lbl.setAttribute('font-family', 'var(--font-mono)');
+          lbl.textContent = b.toFixed(1);
+          svg.appendChild(lbl);
+        }
+
+        // True parameter marker at beta = 1.0 (bx = 505)
+        const trueLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        trueLine.setAttribute('x1', '505');
+        trueLine.setAttribute('y1', '45');
+        trueLine.setAttribute('x2', '505');
+        trueLine.setAttribute('y2', '210');
+        trueLine.setAttribute('stroke', '#dc2626');
+        trueLine.setAttribute('stroke-width', '1.5');
+        trueLine.setAttribute('stroke-dasharray', '3 2');
+        svg.appendChild(trueLine);
+
+        const trueLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        trueLbl.setAttribute('x', '505');
+        trueLbl.setAttribute('y', '40');
+        trueLbl.setAttribute('font-size', '11');
+        trueLbl.setAttribute('font-weight', '700');
+        trueLbl.setAttribute('fill', '#dc2626');
+        trueLbl.setAttribute('text-anchor', 'middle');
+        trueLbl.textContent = 'True β = 1.00';
+        svg.appendChild(trueLbl);
+
+        // Parameters for distribution
+        let mu = 1.00;
+        let sigma = 0.08;
+        let amp = 140;
+
+        if (currentLevel === 'weak') {
+          mu = 1.25; // Biased toward OLS
+          sigma = 0.38;
+          amp = 45;
+        } else if (currentLevel === 'border') {
+          mu = 1.08;
+          sigma = 0.17;
+          amp = 85;
+        }
+
+        let polyPoints = [];
+        for (let bx = 370; bx <= 640; bx += 3) {
+          const bVal = ((bx - 370) / 270) * 2.0;
+          const z = (bVal - mu) / sigma;
+          const pdf = Math.exp(-0.5 * z * z);
+          const by = 210 - pdf * amp;
+          polyPoints.push(`${bx},${by}`);
+        }
+
+        const polyArea = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        polyArea.setAttribute('points', `370,210 ${polyPoints.join(' ')} 640,210`);
+        polyArea.setAttribute('fill', 'rgba(109, 40, 217, 0.15)');
+        svg.appendChild(polyArea);
+
+        const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        poly.setAttribute('points', polyPoints.join(' '));
+        poly.setAttribute('fill', 'none');
+        poly.setAttribute('stroke', '#6d28d9');
+        poly.setAttribute('stroke-width', '2.5');
+        svg.appendChild(poly);
+      }
+
+      if (btnWeak) btnWeak.addEventListener('click', () => { currentLevel = 'weak'; updateLab(); });
+      if (btnBorder) btnBorder.addEventListener('click', () => { currentLevel = 'border'; updateLab(); });
+      if (btnStrong) btnStrong.addEventListener('click', () => { currentLevel = 'strong'; updateLab(); });
+
+      // Quick check toggles using canonical selector
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const hint = card ? card.querySelector('.quick-check-hint') : null;
+          if (hint) {
+            const isHidden = hint.style.display === 'none' || !hint.style.display;
+            hint.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const sol = card ? card.querySelector('.quick-check-solution') : null;
+          if (sol) {
+            const isHidden = sol.style.display === 'none' || !sol.style.display;
+            sol.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+          }
+        });
+      });
+
+        // Initial render
+        updateLab();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLab);
+      } else {
+        initLab();
+      }
+    })();
+  </script>
+</body>
+</html>

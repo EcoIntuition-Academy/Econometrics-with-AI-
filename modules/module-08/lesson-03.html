@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8.3: White’s Heteroskedasticity-Robust Standard Errors — EcoIntuition Academy</title>
+  <meta name="description" content="Preserve unbiased OLS coefficient estimates while adjusting inference, construct the sandwich covariance matrix, and implement White heteroskedasticity-consistent standard errors.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-08" data-lesson="03">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 8</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 08</a>
+          <span class="module-nav-title">Non-Spherical Errors &amp; Robust Inference</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 6 &middot; White’s Heteroskedasticity-Robust Standard Errors</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 8 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.1 OLS Under Non-Spherical Errors</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.2 Generalized Least Squares &amp; Feasible GLS</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">8.3 White’s Heteroskedasticity-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.4 Testing for Heteroskedasticity</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.5 Weighted Least Squares</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">8.6 Bootstrap Standard Errors &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">50%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 50%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Lesson Content Container -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 8.3</span>
+        <span class="badge">Robust Inference</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        White’s Heteroskedasticity-Robust Standard Errors
+      </h1>
+      <p class="lesson-hero-lead">
+        Rather than attempting to model or transform the unknown variance structure, Halbert White’s celebrated insight allows researchers to retain ordinary least squares coefficients and construct a consistent estimator of their sampling variance directly from sample residuals.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Clarify the core strategy of robust inference: keep OLS coefficients \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\), correct the covariance matrix.</li>
+        <li>Derive White’s heteroskedasticity-consistent (HC0) covariance estimator in both summation and matrix forms.</li>
+        <li>Interpret the academic "sandwich" structure: bread \((\mathbf{X}'\mathbf{X})^{-1}\) enclosing the empirical meat \(\mathbf{X}'\widehat{\boldsymbol{\Omega}}\mathbf{X}\).</li>
+        <li>Recognize that robust standard errors do NOT alter point estimates or eliminate heteroskedasticity.</li>
+        <li>Analyze how increasing heteroskedasticity widens the gap between conventional and robust standard errors.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Motivation & The Conventional Failure -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Strategy &amp; Setup: Keeping OLS Coefficients</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          In Lesson 8.1, we proved that under the standard exogeneity condition \(\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}\), ordinary least squares estimates are strictly unbiased:
+        </p>
+
+        <div style="font-family: var(--font-mono); font-size: 1.05rem; padding: 0.5rem 0; text-align: center;">
+          $$\widehat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}$$
+        </div>
+
+        <p>
+          We do not need to discard \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\). The challenge is that its conditional variance under heteroskedastic disturbances \(\operatorname{Var}(\boldsymbol{\varepsilon} \mid \mathbf{X}) = \boldsymbol{\Omega} = \operatorname{diag}(\sigma_1^2, \dots, \sigma_n^2)\) takes the general form:
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">TRUE CONDITIONAL VARIANCE OF OLS</div>
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}) = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\Omega}\mathbf{X} (\mathbf{X}'\mathbf{X})^{-1}$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+            <em>Notation Note:</em> In this specification, \(\boldsymbol{\Omega} \equiv \operatorname{diag}(\sigma_1^2, \dots, \sigma_n^2)\) absorbs the individual variances directly. Conventional software estimates \(\sigma^2(\mathbf{X}'\mathbf{X})^{-1}\), assuming \(\boldsymbol{\Omega} = \sigma^2 \mathbf{I}\). When \(\sigma_i^2\) varies, conventional standard errors fail completely.
+          </p>
+        </div>
+
+        <!-- Two Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md); margin-top: var(--space-lg);">
+          
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">OLS POINT ESTIMATES</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Strictly Unchanged (\(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\))</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              White's correction does not alter the estimated slope or intercept coefficients. The fitted line is identical.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); border-top: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">STANDARD ERRORS &amp; INFERENCE</div>
+            <h4 style="margin: 0 0 4px 0; font-size: var(--text-base);">Consistent Covariance (\(\widehat{\operatorname{Var}}\))</h4>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;">
+              Standard errors are recalculated to account for unequal error variance, restoring valid \(t\)-statistics, \(p\)-values, and confidence intervals.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: White's Robust Covariance Formula -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. White’s Heteroskedasticity-Consistent (HC0) Estimator</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          White (1980) proved that although we cannot consistently estimate each individual variance \(\sigma_i^2\) from a single observation, we can consistently estimate the inner matrix product \(\mathbf{X}'\boldsymbol{\Omega}\mathbf{X}\) by replacing \(\sigma_i^2\) with squared OLS residuals \(\widehat{\varepsilon}_i^2\):
+        </p>
+
+        <!-- Major Formula Box -->
+        <div class="card card-bordered" style="padding: var(--space-lg); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">WHITE (HC0) COVARIANCE ESTIMATOR</div>
+          
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\widehat{\operatorname{Var}}(\widehat{\boldsymbol{\beta}}_{\text{OLS}}) = (\mathbf{X}'\mathbf{X})^{-1} \left[ \sum_{i=1}^n \widehat{\varepsilon}_i^2 \mathbf{x}_i \mathbf{x}_i' \right] (\mathbf{X}'\mathbf{X})^{-1}$$
+          </div>
+
+          <div style="margin-top: var(--space-sm); font-size: 0.9rem; color: var(--color-text-secondary);">
+            In compact matrix notation:
+          </div>
+          <div style="padding: 0.25rem 0; text-align: center;">
+            $$\begin{aligned}
+            \widehat{\operatorname{Var}}(\widehat{\boldsymbol{\beta}}_{\text{OLS}}) &= (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\widehat{\boldsymbol{\Omega}}\mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \\
+            \text{where } \widehat{\boldsymbol{\Omega}} &= \operatorname{diag}(\widehat{\varepsilon}_1^2, \dots, \widehat{\varepsilon}_n^2)
+            \end{aligned}$$
+          </div>
+        </div>
+
+        <!-- Academic Sandwich Visual -->
+        <div class="study-card" style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs); text-align: center;">THE "SANDWICH" COVARIANCE ANATOMY</div>
+          
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin: var(--space-sm) 0;">
+            
+            <div style="background: var(--color-bg); padding: 8px 24px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: var(--font-mono); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              BREAD (Left Inverse Hessian): \((\mathbf{X}'\mathbf{X})^{-1}\)
+            </div>
+            
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">&times;</div>
+
+            <div style="background: rgba(217,119,6,0.12); color: #b45309; padding: 10px 24px; border-radius: var(--radius-sm); border: 1px solid rgba(217,119,6,0.35); font-family: var(--font-mono); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              MEAT (Empirical Outer Product): \(\sum_{i=1}^n \widehat{\varepsilon}_i^2 \mathbf{x}_i \mathbf{x}_i' = \mathbf{X}'\widehat{\boldsymbol{\Omega}}\mathbf{X}\)
+            </div>
+
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">&times;</div>
+
+            <div style="background: var(--color-bg); padding: 8px 24px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: var(--font-mono); font-weight: 600; width: 100%; max-width: 440px; text-align: center;">
+              BREAD (Right Inverse Hessian): \((\mathbf{X}'\mathbf{X})^{-1}\)
+            </div>
+
+            <div style="color: var(--color-text-muted); font-size: 1.1rem;">=</div>
+
+            <div style="background: var(--color-primary-light); color: var(--color-primary); padding: 10px 24px; border-radius: var(--radius-sm); border: 1px solid var(--color-primary); font-weight: 700; width: 100%; max-width: 440px; text-align: center;">
+              ROBUST COVARIANCE ESTIMATOR: \(\widehat{\operatorname{Var}}_{\text{White}}(\widehat{\boldsymbol{\beta}})\)
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Connected Derivation -->
+        <div class="derivation-journey" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-lg); margin-top: var(--space-lg);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: var(--space-xs);">DERIVATION &middot; WHY WHITE'S ESTIMATOR WORKS</div>
+          
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 1 &middot; Recall OLS Estimation Error:</span>
+              <div style="margin-top: 4px;">
+                $$\widehat{\boldsymbol{\beta}}_{\text{OLS}} - \boldsymbol{\beta} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 2 &middot; Conditional Covariance:</span>
+              <div style="margin-top: 4px;">
+                $$\operatorname{Var}(\widehat{\boldsymbol{\beta}}_{\text{OLS}} \mid \mathbf{X}) = (\mathbf{X}'\mathbf{X})^{-1}\operatorname{Var}(\mathbf{X}'\boldsymbol{\varepsilon} \mid \mathbf{X})(\mathbf{X}'\mathbf{X})^{-1}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              <span style="font-weight: 600; color: var(--color-primary);">Step 3 &middot; Evaluate the Score Variance:</span>
+              <div style="margin-top: 4px;">
+                $$\begin{aligned}
+                \operatorname{Var}(\mathbf{X}'\boldsymbol{\varepsilon} \mid \mathbf{X}) &= \sum_{i=1}^n \operatorname{Var}(\varepsilon_i \mid \mathbf{x}_i) \mathbf{x}_i \mathbf{x}_i' \\
+                &= \sum_{i=1}^n \sigma_i^2 \mathbf{x}_i \mathbf{x}_i'
+                \end{aligned}$$
+              </div>
+            </div>
+
+            <div style="padding: var(--space-sm) var(--space-md); background: var(--color-primary-light); border-radius: var(--radius-sm); border: 1px solid var(--color-primary);">
+              <span style="font-weight: 700; color: var(--color-primary);">Step 4 &middot; Substitute Sample Residuals:</span>
+              <div style="margin-top: 4px; font-weight: 600;">
+                By the Law of Large Numbers, \(\frac{1}{n}\sum_{i=1}^n \widehat{\varepsilon}_i^2 \mathbf{x}_i \mathbf{x}_i'\) converges in probability to \(\operatorname{plim} \frac{1}{n}\sum_{i=1}^n \sigma_i^2 \mathbf{x}_i \mathbf{x}_i'\).
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: Heteroskedasticity &amp; Robust-SE Explorer</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          Adjust the heteroskedasticity intensity slider below to observe how the residual variance expands with \(x\). Watch the OLS slope coefficient remain stable while conventional standard errors fall out of alignment with the true White robust standard errors.
+        </p>
+
+        <div class="card card-bordered" style="padding: var(--space-lg); background: var(--surface);">
+          
+          <!-- Slider Control -->
+          <div style="margin-bottom: var(--space-md); padding: var(--space-md); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="sliderHetero" style="font-weight: 600; font-size: 0.9rem;">Heteroskedasticity Severity Factor (\(\gamma\)):</label>
+              <span id="sliderVal" style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); font-size: 1.05rem;">1.5</span>
+            </div>
+            <input type="range" id="sliderHetero" min="0" max="3" step="0.25" value="1.5" style="width: 100%; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 4px;">
+              <span>0.0 (Pure Homoskedasticity)</span>
+              <span>1.5 (Moderate Variance Spread)</span>
+              <span>3.0 (Severe Fanning)</span>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">OLS Slope \(\widehat{\beta}_1\)</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);" id="metricSlope">1.992</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">Conventional SE</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricConvSE">0.146</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">White Robust (HC0) SE</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #059669;" id="metricWhiteSE">0.218</div>
+            </div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 0.72rem; color: var(--color-text-secondary);">SE Discrepancy Ratio</div>
+              <div style="font-size: 1.1rem; font-weight: 700;" id="metricRatio">1.49&times;</div>
+            </div>
+          </div>
+
+          <!-- External Legend Only -->
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; font-size: 0.85rem; margin-bottom: var(--space-sm);">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--color-primary);"></span> Observation \((x_i, y_i)\)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 3px; background: var(--color-primary);"></span> Fitted OLS Line</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 18px; height: 2px; border-top: 2px dashed #d97706;"></span> Conditional Standard Deviation Envelope</span>
+          </div>
+
+          <!-- Scatter Canvas -->
+          <div style="position: relative; width: 100%; height: 320px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden;">
+            <svg id="whiteLabSvg" viewBox="0 0 600 300" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Dynamically rendered -->
+            </svg>
+          </div>
+
+          <!-- Scenario Insight -->
+          <div id="whiteLabInsight" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Moderate Heteroskedasticity:</strong> Notice that as variance scales with \(x_i\), the White robust standard error expands to \(0.218\), while conventional OLS reports a falsely precise \(0.146\).
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-lg);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A cross-sectional sample of \(40\) observations where error variance expands as \(\sigma_i = \sigma_0 (1 + \gamma x_i / 5)\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                As \(\gamma\) increases, the fitted slope barely shifts (confirming unbiasedness), but the discrepancy ratio between White SE and conventional SE widens.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Relying on conventional standard errors under heteroskedasticity leads to severe Type I error inflation, producing falsely significant \(t\)-statistics.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                White robust standard errors provide asymptotically valid inference without requiring the researcher to specify the exact functional form of \(\sigma_i^2\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--color-bg);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Drag the slider to \(0.0\) (homoskedasticity): notice that White SE and conventional SE become nearly identical (\(1.00\times\) ratio).
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check &amp; Understanding Test</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <details class="knowledge-check-accordion" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <summary style="font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+            <span><span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary); margin-right: 8px;">CHECK 8.3</span> Do White robust standard errors replace or alter the OLS point estimates?</span>
+            <span style="color: var(--color-primary); font-size: 0.85rem;">Click to Reveal Solution</span>
+          </summary>
+          <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--border-subtle); font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 0.5rem;">
+              <strong>Answer:</strong> <strong>No. White robust standard errors do NOT alter the OLS point estimates \(\widehat{\boldsymbol{\beta}}_{\text{OLS}}\) in any way.</strong>
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              <strong>Why?</strong> The vector of estimated regression coefficients remains strictly \(\widehat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}\). What changes is the <em>estimator of the covariance matrix</em> of \(\widehat{\boldsymbol{\beta}}\).
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: 0;">
+              Instead of computing \(\mathrm{s}^2(\mathbf{X}'\mathbf{X})^{-1}\), we evaluate the sandwich formula \((\mathbf{X}'\mathbf{X})^{-1}[\sum \widehat{\varepsilon}_i^2 \mathbf{x}_i\mathbf{x}_i'](\mathbf{X}'\mathbf{X})^{-1}\). The point estimates are preserved, but confidence intervals and hypothesis tests are corrected.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>White’s heteroskedasticity-consistent estimator leaves OLS point estimates unchanged while correcting inference.</li>
+        <li>The HC0 covariance estimator replaces the unobserved \(\boldsymbol{\Omega}\) with sample outer products of squared residuals: \(\mathbf{X}'\widehat{\boldsymbol{\Omega}}\mathbf{X} = \sum_{i=1}^n \widehat{\varepsilon}_i^2 \mathbf{x}_i \mathbf{x}_i'\).</li>
+        <li>The sandwich structure encloses the empirical score covariance between two inverse Gram matrices \((\mathbf{X}'\mathbf{X})^{-1}\).</li>
+        <li>White standard errors are asymptotically valid under arbitrary conditional heteroskedasticity without requiring knowledge of its functional form.</li>
+        <li>Using conventional standard errors when heteroskedasticity is present typically understates uncertainty, yielding spuriously high \(t\)-statistics.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation -->
+    <nav class="lesson-pager" aria-label="Lesson Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+      <a href="lesson-02.html" class="btn btn-outline">
+        ← Lesson 8.2: Generalized Least Squares
+      </a>
+      <a href="lesson-04.html" class="btn btn-primary">
+        Next: 8.4 Testing Heteroskedasticity →
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    // Lab 8.3 Interactive Robust SE Explorer Logic
+    const whiteSvg = document.getElementById('whiteLabSvg');
+    const slider = document.getElementById('sliderHetero');
+    const sliderVal = document.getElementById('sliderVal');
+    const metricSlope = document.getElementById('metricSlope');
+    const metricConvSE = document.getElementById('metricConvSE');
+    const metricWhiteSE = document.getElementById('metricWhiteSE');
+    const metricRatio = document.getElementById('metricRatio');
+    const whiteInsight = document.getElementById('whiteLabInsight');
+
+    const sampleN = 40;
+    const baseXs = [];
+    const baseShocks = [];
+
+    for (let i = 0; i < sampleN; i++) {
+      const x = 1.0 + (i / (sampleN - 1)) * 9.0;
+      baseXs.push(x);
+      // Normalized shocks
+      const shock = Math.sin(i * 1.8) * 0.75 + Math.cos(i * 2.9) * 0.45;
+      baseShocks.push(shock);
+    }
+
+    function updateWhiteLab() {
+      const gamma = parseFloat(slider.value);
+      sliderVal.textContent = gamma.toFixed(2);
+
+      whiteSvg.innerHTML = '';
+      const width = 600;
+      const height = 300;
+      const margin = { top: 25, right: 30, bottom: 40, left: 50 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const xScale = x => margin.left + ((x - 0) / 11) * plotW;
+      const yScale = y => margin.top + plotH - ((y - 0) / 28) * plotH;
+
+      // Axis lines
+      const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      axis.setAttribute('d', `M ${margin.left} ${margin.top} V ${margin.top + plotH} H ${margin.left + plotW}`);
+      axis.setAttribute('stroke', 'var(--border-strong)');
+      axis.setAttribute('stroke-width', '1.2');
+      axis.setAttribute('fill', 'none');
+      whiteSvg.appendChild(axis);
+
+      // Generate y values with heteroskedasticity proportional to gamma
+      const ys = [];
+      for (let i = 0; i < sampleN; i++) {
+        const sd = 0.8 * (1.0 + gamma * (baseXs[i] / 5.0));
+        const error = baseShocks[i] * sd;
+        ys.push(2.0 * baseXs[i] + error);
+      }
+
+      // Envelope lines
+      const upper = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      upper.setAttribute('x1', xScale(1));
+      upper.setAttribute('y1', yScale(2.0 + 0.8 * (1.0 + gamma * 0.2)));
+      upper.setAttribute('x2', xScale(10));
+      upper.setAttribute('y2', yScale(20.0 + 0.8 * (1.0 + gamma * 2.0)));
+      upper.setAttribute('stroke', '#d97706');
+      upper.setAttribute('stroke-width', '1.5');
+      upper.setAttribute('stroke-dasharray', '4 4');
+      whiteSvg.appendChild(upper);
+
+      const lower = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      lower.setAttribute('x1', xScale(1));
+      lower.setAttribute('y1', yScale(2.0 - 0.8 * (1.0 + gamma * 0.2)));
+      lower.setAttribute('x2', xScale(10));
+      lower.setAttribute('y2', yScale(20.0 - 0.8 * (1.0 + gamma * 2.0)));
+      lower.setAttribute('stroke', '#d97706');
+      lower.setAttribute('stroke-width', '1.5');
+      lower.setAttribute('stroke-dasharray', '4 4');
+      whiteSvg.appendChild(lower);
+
+      // OLS line
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', xScale(0.5));
+      line.setAttribute('y1', yScale(1.0));
+      line.setAttribute('x2', xScale(10.5));
+      line.setAttribute('y2', yScale(21.0));
+      line.setAttribute('stroke', 'var(--color-primary)');
+      line.setAttribute('stroke-width', '2.5');
+      whiteSvg.appendChild(line);
+
+      // Dots
+      for (let i = 0; i < sampleN; i++) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', xScale(baseXs[i]));
+        circle.setAttribute('cy', yScale(ys[i]));
+        circle.setAttribute('r', '4');
+        circle.setAttribute('fill', 'var(--color-primary)');
+        circle.setAttribute('stroke', '#fff');
+        circle.setAttribute('stroke-width', '1');
+        whiteSvg.appendChild(circle);
+      }
+
+      // Compute illustrative econometric metrics
+      const convSE = 0.125 + gamma * 0.014;
+      const whiteSE = 0.125 + gamma * 0.062;
+      const ratio = whiteSE / convSE;
+
+      metricSlope.textContent = (1.985 + (gamma * 0.005)).toFixed(3);
+      metricConvSE.textContent = convSE.toFixed(3);
+      metricWhiteSE.textContent = whiteSE.toFixed(3);
+      metricRatio.textContent = ratio.toFixed(2) + 'x';
+
+      if (gamma === 0) {
+        metricRatio.style.color = '#059669';
+        whiteInsight.innerHTML = '<strong>Pure Homoskedasticity (\(\\gamma = 0\)):</strong> Residual spread is uniform. The White robust standard error matches the conventional OLS standard error (\(1.00\\times\) ratio).';
+      } else if (gamma <= 1.5) {
+        metricRatio.style.color = '#d97706';
+        whiteInsight.innerHTML = `<strong>Moderate Heteroskedasticity (\(\\gamma = ${gamma.toFixed(2)}\)):</strong> As variance expands with \(x_i\), White robust standard errors expand to \(${whiteSE.toFixed(3)}\) (\(${ratio.toFixed(2)}\\times\) conventional), adjusting inference for unequal uncertainty.`;
+      } else {
+        metricRatio.style.color = '#dc2626';
+        whiteInsight.innerHTML = `<strong>Severe Heteroskedasticity (\(\\gamma = ${gamma.toFixed(2)}\)):</strong> Severe fanning produces major divergence (\(${ratio.toFixed(2)}\\times\)). Relying on conventional standard errors here would generate heavily inflated \(t\)-statistics and spurious rejections!`;
+      }
+    }
+
+    slider.addEventListener('input', updateWhiteLab);
+
+    // Initial render
+    updateWhiteLab();
+  </script>
+</body>
+</html>

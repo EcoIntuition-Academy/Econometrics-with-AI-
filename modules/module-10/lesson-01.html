@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10.1: The First Differences Model — Econometrics with AI</title>
+  <meta name="description" content="Formulate the unobserved effects model, eliminate time-invariant unobserved heterogeneity through first differencing, and understand the induced serial correlation in differenced disturbances.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-10" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 10</a>
+          <span class="module-nav-title">Panel Data II</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 5 &middot; The First Differences Model</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 10 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">10.1 The First Differences Model</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.2 First Differences vs Fixed Effects</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.3 Cluster-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">20%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Header Block -->
+    <header class="lesson-header-block">
+      <div class="lesson-badge-row">
+        <span class="academic-badge badge-tier">Tier 4 &middot; Panel &amp; Discrete</span>
+        <span class="academic-badge badge-module">Module 10 &middot; Lesson 1</span>
+        <span class="academic-badge badge-time">Est. 22 min</span>
+      </div>
+      <h1 class="lesson-title">The First Differences Model</h1>
+      <p class="lesson-subtitle">
+        Purging time-invariant unobserved heterogeneity \(c_i\) through adjacent temporal differencing and analyzing the resulting disturbance properties.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      <ul class="objectives-list">
+        <li>Formulate the unobserved effects panel data model \(y_{it} = c_i + \mathbf{x}_{it}'\boldsymbol{\beta} + \varepsilon_{it}\).</li>
+        <li>Derive the first-difference transformation and prove that \(c_i - c_i = 0\), eliminating time-invariant unobserved heterogeneity.</li>
+        <li>Understand why no assumptions regarding the level of \(c_i\) are required once differencing eliminates the unobserved component.</li>
+        <li>Analyze the differenced disturbance structure \(\Delta \varepsilon_{it}\) and understand how shared underlying errors induce negative serial correlation across adjacent periods.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Removing the Time-Invariant Effect -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Removing the Time-Invariant Effect</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          In empirical microeconomics and policy evaluation, panel data track the same cross-sectional units across multiple time periods \(t = 1, 2, \dots, T\).
+        </p>
+
+        <div class="math-card">
+          <div class="math-card-label">PANEL DATA SPECIFICATION WITH UNOBSERVED HETEROGENEITY</div>
+          <div class="math-display-wrapper">
+            \[
+            y_{it} = c_i + \mathbf{x}_{it}'\boldsymbol{\beta} + \varepsilon_{it}
+            \]
+          </div>
+          <p class="math-card-note">
+            where \(y_{it}\) is the dependent variable for unit \(i\) at time \(t\), \(\mathbf{x}_{it}\) is a vector of time-varying explanatory variables, \(\boldsymbol{\beta}\) is the structural coefficient vector, and \(\varepsilon_{it}\) is the idiosyncratic time-varying disturbance. The term \(c_i\) represents unobserved time-invariant individual heterogeneity (e.g., innate ability or fixed geographic features).
+          </p>
+        </div>
+
+        <p style="margin-top: var(--space-md); margin-bottom: var(--space-sm); color: var(--text-primary);">
+          If \(c_i\) is correlated with any regressor in \(\mathbf{x}_{it}\), leaving \(c_i\) in the composite error term induces endogeneity (\(\mathbb{E}[\mathbf{x}_{it}(c_i + \varepsilon_{it})] \neq \mathbf{0}\)), rendering Pooled Ordinary Least Squares inconsistent.
+        </p>
+
+        <div class="callout callout-info" style="margin-top: var(--space-sm); margin-bottom: var(--space-md);">
+          <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-primary); margin-bottom: 4px;">CORE STRATEGY</div>
+          <p style="margin: 0;">
+            Subtract the previous period from the current period. Because \(c_i\) is constant over time, it drops out completely: \(c_i - c_i = 0\).
+          </p>
+        </div>
+
+        <div class="math-display-wrapper">
+          \[
+          \Delta y_{it} = \Delta \mathbf{x}_{it}'\boldsymbol{\beta} + \Delta \varepsilon_{it}
+          \]
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Derivation Journey: First Differencing -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Derivation Journey: The First-Difference Transformation</h2>
+      </div>
+
+      <div class="derivation-journey">
+        <div class="derivation-journey-header">
+          <span class="derivation-journey-tag">ALGEBRAIC DERIVATION</span>
+          <h3 class="derivation-journey-title">Eliminating Unobserved Individual Effects</h3>
+        </div>
+
+        <div class="derivation-goal">
+          <span class="derivation-goal-label">GOAL:</span>
+          <span class="derivation-goal-text">Purge the unobserved, time-invariant individual heterogeneity \(c_i\) to achieve consistent OLS estimation.</span>
+        </div>
+
+        <div class="derivation-timeline">
+          <!-- Step 1 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">1</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Specify the Current Period Model</h4>
+              </div>
+              <p class="derivation-step-desc">Write the structural linear relation for unit \(i\) at time \(t\):</p>
+              <div class="derivation-step-math">
+                \[
+                y_{it} = c_i + \mathbf{x}_{it}'\boldsymbol{\beta} + \varepsilon_{it}
+                \]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">2</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Specify the Previous Period Model</h4>
+              </div>
+              <p class="derivation-step-desc">Write the relationship for the immediately preceding period \(t-1\):</p>
+              <div class="derivation-step-math">
+                \[
+                y_{i,t-1} = c_i + \mathbf{x}_{i,t-1}'\boldsymbol{\beta} + \varepsilon_{i,t-1}
+                \]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">3</div>
+              <div class="derivation-step-line"></div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Subtract the Two Equations</h4>
+              </div>
+              <p class="derivation-step-desc">Subtract the lagged equation directly from the current equation:</p>
+              <div class="derivation-step-math">
+                \[
+                (y_{it} - y_{i,t-1}) = (c_i - c_i) + (\mathbf{x}_{it} - \mathbf{x}_{i,t-1})'\boldsymbol{\beta} + (\varepsilon_{it} - \varepsilon_{i,t-1})
+                \]
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="derivation-step-node">
+            <div class="derivation-rail-col">
+              <div class="derivation-step-badge">4</div>
+            </div>
+            <div class="derivation-step-body">
+              <div class="derivation-step-head">
+                <h4 class="derivation-step-title">Cancellation: \(c_i - c_i = 0\)</h4>
+              </div>
+              <p class="derivation-step-desc">
+                Because \(c_i\) does not change across periods, \(c_i - c_i = 0\). Using difference notation \(\Delta\):
+              </p>
+              <div class="derivation-step-math">
+                \[
+                \Delta y_{it} = \Delta \mathbf{x}_{it}'\boldsymbol{\beta} + \Delta \varepsilon_{it}
+                \]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-success" style="margin-top: var(--space-md);">
+          <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">KEY RESULT</div>
+          The unobserved individual effect \(c_i\) has dropped out completely from the differenced equation.
+        </div>
+
+        <div class="big-picture-card" style="margin-top: var(--space-md);">
+          <div class="big-picture-header">
+            <span class="academic-badge" style="background: rgba(37,99,235,0.15); color: #2563eb; font-weight: 700;">BIG PICTURE</span>
+            <span class="big-picture-title">Identical Terms Cancel</span>
+          </div>
+          <p class="big-picture-text">
+            First differencing removes every component that is constant over time for a given unit. Once \(c_i\) is eliminated through differencing, assumptions directly concerning the level of \(c_i\) are no longer needed for estimating the differenced equation in the same way as models that leave it in the composite error.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Differenced Errors & Serial Correlation -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. The Differenced Disturbance &amp; Induced Serial Correlation</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          While first differencing purges the unobserved heterogeneity \(c_i\), it fundamentally alters the dynamic error structure. Let us examine adjacent differenced disturbance terms:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid var(--accent-primary);">
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Differenced Error in Period \(t\)</div>
+            <div style="margin-top: var(--space-xs); font-family: var(--font-mono); font-size: 1.1rem;">
+              \(\Delta \varepsilon_{it} = \mathbf{+\varepsilon_{it}} - \varepsilon_{i,t-1}\)
+            </div>
+            <p style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);">
+              Contains the current shock \(\mathbf{+\varepsilon_{it}}\) with positive sign.
+            </p>
+          </div>
+
+          <div class="card card-bordered" style="padding: var(--space-md); border-top: 3px solid #d97706;">
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Differenced Error in Period \(t+1\)</div>
+            <div style="margin-top: var(--space-xs); font-family: var(--font-mono); font-size: 1.1rem;">
+              \(\Delta \varepsilon_{i,t+1} = \varepsilon_{i,t+1} \mathbf{-\varepsilon_{it}}\)
+            </div>
+            <p style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);">
+              Contains the exact same shock \(\mathbf{-\varepsilon_{it}}\) with negative sign!
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top: var(--space-lg);">
+          <div class="callout-title" style="font-weight: 700; margin-bottom: var(--space-xs);">
+            The Source Intuition for Negative Serial Correlation
+          </div>
+          <p style="margin-bottom: 0;">
+            The differenced error terms can become <strong>negatively serially correlated</strong> because adjacent differences contain the same original disturbance \(\varepsilon_{it}\) with opposite signs (\(+\varepsilon_{it}\) in \(\Delta \varepsilon_{it}\) and \(-\varepsilon_{it}\) in \(\Delta \varepsilon_{i,t+1}\)). If the original \(\varepsilon_{it}\) are i.i.d. white noise:
+            \[
+            \text{Cov}(\Delta \varepsilon_{it}, \Delta \varepsilon_{i,t+1}) = \mathbb{E}[(\varepsilon_{it} - \varepsilon_{i,t-1})(\varepsilon_{i,t+1} - \varepsilon_{it})] = -\sigma_\varepsilon^2 < 0
+            \]
+            yielding an autocorrelation of \(\text{Corr}(\Delta \varepsilon_{it}, \Delta \varepsilon_{i,t+1}) = -0.5\). Therefore, standard OLS variance formulas after differencing require adjustment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 10.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab 10.1: First-Difference Explorer</h2>
+      </div>
+
+      <div class="interactive-lab-card" id="lab101">
+        <div class="lab-header">
+          <div class="lab-title-wrap">
+            <span class="lab-badge">INTERACTIVE LAB 10.1</span>
+            <h3 class="lab-title">Unobserved Heterogeneity &amp; Differencing in Action</h3>
+          </div>
+          <p class="lab-desc">
+            Observe a single unit \(i\) across \(T=4\) time periods. Shift the unobserved individual heterogeneity \(c_i\) in levels, then toggle to first differences to witness \(c_i\) completely vanishing from the estimation space.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls-panel">
+          <div class="control-group">
+            <label class="control-label" for="sliderCi">
+              Unobserved Heterogeneity (\(c_i\)): <span class="control-value" id="valCi">0.00</span>
+            </label>
+            <input type="range" class="control-range" id="sliderCi" min="-5" max="8" step="0.5" value="0.0">
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">View Mode</label>
+            <div class="btn-group" role="group" aria-label="Transformation View">
+              <button type="button" class="btn btn-sm btn-primary" id="btnModeLevels">Original Levels (\(y_{it}\))</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnModeFD">First Differences (\(\Delta y_{it}\))</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">ACTIVE VIEW</div>
+            <div class="metric-value" id="metricView">Levels</div>
+            <div class="metric-sub" id="metricViewSub">Contains \(c_i\) shift</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">TRUE SLOPE (\(\beta\))</div>
+            <div class="metric-value">1.50</div>
+            <div class="metric-sub">Structural parameter</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">ESTIMATED SLOPE (\(\hat{\beta}\))</div>
+            <div class="metric-value" id="metricSlope">1.50</div>
+            <div class="metric-sub" id="metricSlopeSub">Unbiased across views</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">STATUS OF \(c_i\)</div>
+            <div class="metric-value" id="metricCiStatus" style="color: #d97706;">Present</div>
+            <div class="metric-sub" id="metricCiSub">Active intercept bias</div>
+          </div>
+        </div>
+
+        <!-- SVG Plot Canvas -->
+        <div class="graph-container" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-top: var(--space-md);">
+          <svg id="lab101Svg" viewBox="0 0 700 320" style="width: 100%; height: auto; display: block;">
+            <!-- Rendered by JS -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div class="lab-insight-box" id="lab101InsightBox" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37,99,235,0.06); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem;" id="labInsightTitle">
+            LEVELS VIEW: Individual Effect Shifts All Points Vertically
+          </div>
+          <div style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);" id="labInsightText">
+            Adjusting \(c_i\) translates all 4 points uniformly upward or downward. If \(c_i\) correlates with \(x_{it}\), OLS on levels produces omitted variable bias because it mistakes \(c_i\) for the causal effect of \(x\).
+          </div>
+        </div>
+
+        <!-- Visual Explanation Grid -->
+        <div class="visual-explanation-grid" style="margin-top: var(--space-lg);">
+          <div class="grid-card seeing">
+            <div class="grid-card-label">WHAT YOU ARE SEEING</div>
+            <p>
+              Four observations for unit \(i\) across \(t = 1, 2, 3, 4\). In levels, changing \(c_i\) shifts every data point vertically by the exact same amount.
+            </p>
+          </div>
+
+          <div class="grid-card notice">
+            <div class="grid-card-label">WHAT TO NOTICE</div>
+            <p>
+              When you switch to <strong>First Differences</strong>, the 4 level points collapse into 3 adjacent velocity vectors \((t=2, 3, 4)\). Notice how adjusting \(c_i\) has zero visual effect on the differenced points!
+            </p>
+          </div>
+
+          <div class="grid-card matters">
+            <div class="grid-card-label">WHY IT MATTERS</div>
+            <p>
+              Even if \(c_i\) is massively correlated with \(\mathbf{x}_{it}\), differencing physically removes \(c_i\) from the estimation equation.
+            </p>
+          </div>
+
+          <div class="grid-card interpretation">
+            <div class="grid-card-label">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              Differencing purges time-invariant confounders at the cost of sacrificing \(N \times 1\) observations (the baseline period \(t=1\) is lost).
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-label">TRY THIS</div>
+            <p>
+              Switch to <strong>First Differences</strong>, then drag the \(c_i\) slider from \(-5\) to \(+8\). Verify visually that the differenced data points and slope remain completely unchanged!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Check -->
+    <div class="quick-check-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-lg) 0;">
+      <div style="margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-quiz">QUICK CHECK</span>
+      </div>
+
+      <h3 style="font-size: 1.25rem; font-weight: 600; line-height: 1.4; color: var(--text-primary); margin-top: 0; margin-bottom: var(--space-xs);">
+        Why does first differencing eliminate \(c_i\)?
+      </h3>
+
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint101">Hint</button>
+        <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol101">Show Solution</button>
+      </div>
+
+      <div class="hint-content" id="hint101" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <strong>HINT:</strong> Consider whether \(c_i\) varies over time or stays constant across adjacent periods \(t\) and \(t-1\).
+      </div>
+
+      <div class="solution-content" id="sol101" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.4rem;">
+          <strong>ANSWER:</strong> Because \(c_i\) is time-invariant for each unit \(i\).
+        </p>
+        <p style="margin: 0; color: var(--text-secondary);">
+          <strong>WHY?</strong> When subtracting period \(t-1\) from period \(t\), the term becomes \(c_i - c_i = 0\), completely removing the unobserved effect regardless of whether it is correlated with explanatory variables.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The panel model separates the time-invariant unit effect \(c_i\) from the idiosyncratic error \(\varepsilon_{it}\).</li>
+        <li>First differencing subtracts adjacent observations and eliminates \(c_i\) because it is constant over time.</li>
+        <li>
+          The resulting model is:
+          <div style="margin: 6px 0; font-family: var(--font-mono); font-size: 1rem; color: var(--text-primary);">
+            \[\Delta y_{it} = \Delta \mathbf{x}_{it}'\boldsymbol{\beta} + \Delta \varepsilon_{it}\]
+          </div>
+        </li>
+        <li>Adjacent differenced disturbances can become serially correlated because they share an underlying error term with opposite signs.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="index.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Module Overview</span>
+        <span class="nav-btn-title">Module 10: Panel Data II &amp; Hausman Test</span>
+      </a>
+      <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">10.2 First Differences vs Fixed Effects</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 10.1 Script -->
+  <script>
+    (function() {
+      let isDiffMode = false;
+      let currentCi = 3.0;
+
+      // Data for a single unit over 4 periods
+      const baseData = [
+        { t: 1, x: 2.0, eps:  0.4 },
+        { t: 2, x: 3.5, eps: -0.3 },
+        { t: 3, x: 5.0, eps:  0.5 },
+        { t: 4, x: 7.0, eps: -0.6 }
+      ];
+      const beta = 1.5;
+
+      const btnModeLevels = document.getElementById('btnModeLevels');
+      const btnModeFD = document.getElementById('btnModeFD');
+      const sliderCi = document.getElementById('sliderCi');
+      const valCi = document.getElementById('valCi');
+
+      const metricView = document.getElementById('metricView');
+      const metricViewSub = document.getElementById('metricViewSub');
+      const metricSlope = document.getElementById('metricSlope');
+      const metricSlopeSub = document.getElementById('metricSlopeSub');
+      const metricCiStatus = document.getElementById('metricCiStatus');
+      const metricCiSub = document.getElementById('metricCiSub');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightText = document.getElementById('labInsightText');
+      const svg = document.getElementById('lab101Svg');
+
+      function updateUI() {
+        if (valCi) {
+          valCi.textContent = (currentCi >= 0 ? '+' : '') + currentCi.toFixed(2);
+        }
+
+        if (!isDiffMode) {
+          if (btnModeLevels) btnModeLevels.className = 'btn btn-sm btn-primary';
+          if (btnModeFD) btnModeFD.className = 'btn btn-sm btn-outline';
+          if (metricView) metricView.textContent = 'Levels';
+          if (metricViewSub) metricViewSub.textContent = 'Contains c_i = ' + currentCi.toFixed(1) + ' shift';
+          if (metricSlope) metricSlope.textContent = '1.50';
+          if (metricSlopeSub) metricSlopeSub.textContent = 'OLS Intercept biased';
+          if (metricCiStatus) {
+            metricCiStatus.textContent = 'Present (' + (currentCi >= 0 ? '+' : '') + currentCi.toFixed(1) + ')';
+            metricCiStatus.style.color = '#d97706';
+          }
+          if (metricCiSub) metricCiSub.textContent = 'Active intercept bias';
+          if (labInsightTitle) labInsightTitle.textContent = 'LEVELS VIEW: Individual Effect Shifts All Points Vertically';
+          if (labInsightText) labInsightText.textContent = 'Adjusting c_i translates all 4 points uniformly upward or downward. If c_i correlates with x_it, OLS on levels produces omitted variable bias because it mistakes c_i for the causal effect of x.';
+        } else {
+          if (btnModeLevels) btnModeLevels.className = 'btn btn-sm btn-outline';
+          if (btnModeFD) btnModeFD.className = 'btn btn-sm btn-primary';
+          if (metricView) metricView.textContent = 'First Differences';
+          if (metricViewSub) metricViewSub.textContent = '3 differences: Δt = 2-1, 3-2, 4-3';
+          if (metricSlope) metricSlope.textContent = '1.50';
+          if (metricSlopeSub) metricSlopeSub.textContent = 'Unbiased across views';
+          if (metricCiStatus) {
+            metricCiStatus.textContent = 'Eliminated (0.00)';
+            metricCiStatus.style.color = '#059669';
+          }
+          if (metricCiSub) metricCiSub.textContent = 'c_i - c_i = 0 completely purged';
+          if (labInsightTitle) labInsightTitle.textContent = 'FIRST DIFFERENCES VIEW: c_i Has Completely Disappeared!';
+          if (labInsightText) labInsightText.textContent = 'Moving the c_i slider causes ZERO movement in the differenced data points. Because c_i - c_i = 0, first differencing provides pure identification of β without any contamination from unobserved time-constant traits.';
+        }
+
+        renderPlot();
+      }
+
+      function renderPlot() {
+        svg.innerHTML = '';
+
+        const width = 700;
+        const height = 320;
+        const pad = { top: 30, right: 40, bottom: 45, left: 60 };
+
+        let xVals, yVals;
+
+        if (!isDiffMode) {
+          xVals = baseData.map(d => d.x);
+          yVals = baseData.map(d => currentCi + beta * d.x + d.eps);
+        } else {
+          xVals = [];
+          yVals = [];
+          for (let i = 1; i < baseData.length; i++) {
+            const dx = baseData[i].x - baseData[i - 1].x;
+            const dy = (beta * dx) + (baseData[i].eps - baseData[i - 1].eps);
+            xVals.push(dx);
+            yVals.push(dy);
+          }
+        }
+
+        const minX = !isDiffMode ? 0 : 0;
+        const maxX = !isDiffMode ? 8.5 : 3.0;
+        const minY = !isDiffMode ? -3 : -1;
+        const maxY = !isDiffMode ? 22 : 5;
+
+        function scaleX(val) {
+          return pad.left + ((val - minX) / (maxX - minX)) * (width - pad.left - pad.right);
+        }
+        function scaleY(val) {
+          return height - pad.bottom - ((val - minY) / (maxY - minY)) * (height - pad.top - pad.bottom);
+        }
+
+        // Grid lines & Axes
+        const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        axisGroup.setAttribute('stroke', 'var(--border-subtle)');
+        axisGroup.setAttribute('stroke-width', '1');
+
+        // Zero lines
+        const zeroY = scaleY(0);
+        if (zeroY >= pad.top && zeroY <= height - pad.bottom) {
+          const zeroLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          zeroLine.setAttribute('x1', pad.left);
+          zeroLine.setAttribute('x2', width - pad.right);
+          zeroLine.setAttribute('y1', zeroY);
+          zeroLine.setAttribute('y2', zeroY);
+          zeroLine.setAttribute('stroke', 'var(--border-strong)');
+          zeroLine.setAttribute('stroke-dasharray', '3 3');
+          axisGroup.appendChild(zeroLine);
+        }
+
+        // Horizontal axes
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', pad.left);
+        xAxis.setAttribute('x2', width - pad.right);
+        xAxis.setAttribute('y1', height - pad.bottom);
+        xAxis.setAttribute('y2', height - pad.bottom);
+        xAxis.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.appendChild(xAxis);
+
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', pad.left);
+        yAxis.setAttribute('x2', pad.left);
+        yAxis.setAttribute('y1', pad.top);
+        yAxis.setAttribute('y2', height - pad.bottom);
+        yAxis.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.appendChild(yAxis);
+        svg.appendChild(axisGroup);
+
+        // Labels
+        const labelsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        labelsGroup.setAttribute('font-family', 'var(--font-mono)');
+        labelsGroup.setAttribute('font-size', '11');
+        labelsGroup.setAttribute('fill', 'var(--text-muted)');
+
+        const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLabel.setAttribute('x', width - pad.right);
+        xLabel.setAttribute('y', height - 12);
+        xLabel.setAttribute('text-anchor', 'end');
+        xLabel.textContent = !isDiffMode ? 'Regressor x_it' : 'Differenced Regressor Δx_it';
+        labelsGroup.appendChild(xLabel);
+
+        const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLabel.setAttribute('x', pad.left);
+        yLabel.setAttribute('y', 18);
+        yLabel.setAttribute('text-anchor', 'start');
+        yLabel.textContent = !isDiffMode ? 'Outcome y_it' : 'Differenced Outcome Δy_it';
+        labelsGroup.appendChild(yLabel);
+        svg.appendChild(labelsGroup);
+
+        // Regression line
+        const regLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        if (!isDiffMode) {
+          regLine.setAttribute('x1', scaleX(minX));
+          regLine.setAttribute('y1', scaleY(currentCi + beta * minX));
+          regLine.setAttribute('x2', scaleX(maxX));
+          regLine.setAttribute('y2', scaleY(currentCi + beta * maxX));
+        } else {
+          regLine.setAttribute('x1', scaleX(minX));
+          regLine.setAttribute('y1', scaleY(beta * minX));
+          regLine.setAttribute('x2', scaleX(maxX));
+          regLine.setAttribute('y2', scaleY(beta * maxX));
+        }
+        regLine.setAttribute('stroke', 'var(--accent-primary)');
+        regLine.setAttribute('stroke-width', '2');
+        regLine.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(regLine);
+
+        // Plot points
+        for (let i = 0; i < xVals.length; i++) {
+          const cx = scaleX(xVals[i]);
+          const cy = scaleY(yVals[i]);
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', cx);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '6');
+          circle.setAttribute('fill', 'var(--accent-primary)');
+          circle.setAttribute('stroke', '#ffffff');
+          circle.setAttribute('stroke-width', '2');
+          svg.appendChild(circle);
+
+          const tLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          tLabel.setAttribute('x', cx + 10);
+          tLabel.setAttribute('y', cy + 4);
+          tLabel.setAttribute('font-family', 'var(--font-mono)');
+          tLabel.setAttribute('font-size', '10');
+          tLabel.setAttribute('font-weight', '600');
+          tLabel.setAttribute('fill', 'var(--text-primary)');
+          tLabel.textContent = !isDiffMode ? 't=' + (i + 1) : 'Δt=' + (i + 2) + '-' + (i + 1);
+          svg.appendChild(tLabel);
+        }
+      }
+
+      // Event Listeners
+      if (btnModeLevels) {
+        btnModeLevels.addEventListener('click', function() {
+          isDiffMode = false;
+          updateUI();
+        });
+      }
+
+      if (btnModeFD) {
+        btnModeFD.addEventListener('click', function() {
+          isDiffMode = true;
+          updateUI();
+        });
+      }
+
+      if (sliderCi) {
+        sliderCi.addEventListener('input', function(e) {
+          currentCi = parseFloat(e.target.value);
+          updateUI();
+        });
+      }
+
+      // Quick check toggles
+      const btnHint = document.getElementById('btnHint101');
+      const hint = document.getElementById('hint101');
+      const btnSol = document.getElementById('btnSol101');
+      const sol = document.getElementById('sol101');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      // Initial Render
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

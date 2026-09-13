@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12.1: Do We Need IV? Hausman &amp; Wu Tests for Endogeneity — Econometrics with AI</title>
+  <meta name="description" content="Test whether regressors are endogenous using the Hausman IV-vs-OLS contrast test and the Wu residual-augmentation regression before incurring the efficiency cost of IV.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-12" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 12</a>
+          <span class="module-nav-title">IV Diagnostics &amp; Measurement Error</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; Hausman &amp; Wu Tests</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 12 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">12.1 Do We Need IV? Hausman &amp; Wu Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.2 Testing Instrument Validity: Sargan</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.3 Instrument Strength &amp; Weak IVs</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.4 Measurement Error in y &amp; x</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.5 Attenuation Bias &amp; IV Solution</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">12.6 Propagation of Error &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 12.1</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Exogeneity Testing</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Do We Need IV? Hausman &amp; Wu Tests for Endogeneity
+      </h1>
+      <p class="lesson-hero-lead">
+        Before paying the precision price of instrumental variables, economists test whether ordinary least squares is actually inconsistent. Learn how the Hausman contrast and Wu residual regression detect endogeneity.
+      </p>
+    </div>
+
+    <!-- Bridge from Module 11 -->
+    <div class="callout" style="margin-bottom: var(--space-lg); border-left: 4px solid var(--color-primary);">
+      <div class="callout-header">
+        <span class="academic-badge badge-objectives">MODULE 11 REMINDER</span>
+        <h3 class="callout-title">The Starting Question: Do We Actually Need IV?</h3>
+      </div>
+      <div class="callout-body">
+        <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+          In Module 11, we saw that instrumental variables cure endogeneity bias. But IV estimators have substantially higher variance than OLS. If explanatory variables are actually exogenous, OLS is consistent and more efficient. Therefore, the first operational question in empirical research is: <strong>Do we need IV at all?</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>State the exogeneity hypotheses and explain why OLS is preferred under \(H_0\) due to efficiency.</li>
+        <li>Understand the Hausman test logic under the maintained assumption that the IV estimator is consistent.</li>
+        <li>Compute the Hausman test statistic \(W\) and interpret its degrees of freedom \(K^*\).</li>
+        <li>Distinguish the IV-vs-OLS Hausman test from the Module 10 Fixed Effects vs. Random Effects Hausman test.</li>
+        <li>Explain why imprecise IV estimates lead to low statistical power against endogeneity.</li>
+        <li>Implement the Wu auxiliary regression test using first-stage residuals \(\hat{u}\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Hausman Test for Exogeneity -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Hausman Test for Exogeneity</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <!-- Definition Component -->
+        <div class="study-card" style="border-left: 4px solid var(--color-primary); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: var(--color-primary); margin-bottom: 0.25rem;">DEFINITION</div>
+          <h3 style="font-size: 1.15rem; margin: 0 0 0.5rem 0;">Hausman Test for Exogeneity</h3>
+          <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            The Hausman test checks whether regressors are exogenous by evaluating whether the difference between the OLS estimator \(\hat{\beta}_{\text{OLS}}\) and the IV estimator \(\hat{\beta}_{\text{IV}}\) is statistically distinguishable from zero, under the maintained hypothesis that the IV estimator is consistent.
+          </p>
+        </div>
+
+        <!-- Hypotheses Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          
+          <div class="study-card" style="border-top: 4px solid #059669; padding: var(--space-md);">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: #059669; margin-bottom: 0.25rem;">NULL HYPOTHESIS</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">\(H_0: \mathbb{E}[x_i \varepsilon_i] = 0\)</h3>
+            <p style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Interpretation:</strong> \(X\) is exogenous.
+            </p>
+            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+              Under \(H_0\), \(\hat{\beta}_{\text{IV}} - \hat{\beta}_{\text{OLS}} \approx 0\). Both OLS and IV are consistent.
+            </p>
+            <div style="background: rgba(5, 150, 105, 0.08); padding: 0.5rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: #059669;">
+              Decision: Prefer OLS (more efficient; lower variance)
+            </div>
+          </div>
+
+          <div class="study-card" style="border-top: 4px solid #dc2626; padding: var(--space-md);">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: #dc2626; margin-bottom: 0.25rem;">ALTERNATIVE HYPOTHESIS</div>
+            <h3 style="font-size: 1.05rem; margin: 0 0 0.5rem 0;">\(H_1: \mathbb{E}[x_i \varepsilon_i] \neq 0\)</h3>
+            <p style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Interpretation:</strong> \(X\) is endogenous.
+            </p>
+            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+              Under \(H_1\), \(\hat{\beta}_{\text{IV}} - \hat{\beta}_{\text{OLS}} \neq 0\). OLS is biased and inconsistent, while IV remains consistent.
+            </p>
+            <div style="background: rgba(220, 38, 38, 0.08); padding: 0.5rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: #dc2626;">
+              Decision: Prefer IV (consistent despite higher variance)
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hausman Test Statistic Equation Card -->
+        <div class="card card-bordered" style="padding: var(--space-md); margin: var(--space-md) 0; border-left: 4px solid var(--color-primary); background: var(--color-surface);">
+          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: var(--color-primary); margin-bottom: 0.25rem;">HAUSMAN TEST STATISTIC</div>
+          <div style="padding: 0.5rem 0; text-align: center;">
+            $$\begin{align*}
+            W &= (\hat{\beta}_{\text{IV}} - \hat{\beta}_{\text{OLS}})' \left[ \operatorname{Var}(\hat{\beta}_{\text{IV}}) - \operatorname{Var}(\hat{\beta}_{\text{OLS}}) \right]^{-1} (\hat{\beta}_{\text{IV}} - \hat{\beta}_{\text{OLS}})
+            \end{align*}$$
+          </div>
+          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-xs); font-size: 0.86rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span><strong>Reference Distribution:</strong> \(W \sim \chi^2_{K^*}\)</span>
+            <span><strong>Where:</strong> \(K^* =\) number of endogenous regressors tested</span>
+          </div>
+        </div>
+
+        <!-- Module 10 vs Module 12 Comparison -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          <div class="study-card" style="padding: var(--space-md); background: var(--surface);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">MODULE 10 HAUSMAN</div>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-base);">FE vs. RE</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              <strong>Question:</strong> Is individual effect \(c_i\) uncorrelated with regressors? Compares \(\hat{\beta}_{\text{FE}}\) (consistent) against \(\hat{\beta}_{\text{RE}}\) (efficient under \(H_0\)).
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-md); background: var(--surface); border: 1.5px solid var(--accent-primary);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.25rem;">MODULE 12 HAUSMAN</div>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: var(--text-base);">IV vs. OLS</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              <strong>Question:</strong> Is \(X\) exogenous, or is IV needed? Compares \(\hat{\beta}_{\text{IV}}\) (maintained consistent) against \(\hat{\beta}_{\text{OLS}}\) (efficient under \(H_0\)).
+            </p>
+          </div>
+        </div>
+
+        <!-- Power Caution Card -->
+        <div class="callout" style="border-left: 4px solid #d97706; margin-top: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: #fef3c7; color: #b45309;">POWER CAUTION</span>
+            <h3 class="callout-title">Imprecise IV and Low Test Power</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: 0.88rem; line-height: 1.6; margin: 0;">
+              IV estimators are typically much less precise than OLS. When \(\operatorname{Var}(\hat{\beta}_{\text{IV}})\) is large, the denominator \([\operatorname{Var}(\hat{\beta}_{\text{IV}}) - \operatorname{Var}(\hat{\beta}_{\text{OLS}})]\) is large, which can give the Hausman test low statistical power. Failing to reject exogeneity does not prove that endogeneity is zero; it may simply reflect noisy IV estimates.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Wu Test -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Wu Test</h2>
+      </div>
+      <div class="study-section-body">
+
+        <!-- Definition Component -->
+        <div class="study-card" style="border-left: 4px solid var(--color-primary); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: var(--color-primary); margin-bottom: 0.25rem;">DEFINITION</div>
+          <h3 style="font-size: 1.15rem; margin: 0 0 0.5rem 0;">Wu Test</h3>
+          <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            The Wu test asks: <em>Does the portion of \(X\) not explained by the instruments still help explain \(y\)?</em> If the first-stage residuals add no explanatory power to the structural equation, evidence is consistent with exogenous \(X\).
+          </p>
+        </div>
+
+        <!-- Derivation Journey -->
+        <div class="derivation-journey">
+          <div class="derivation-journey-header">
+            <span class="derivation-journey-tag">ALGEBRAIC DERIVATION</span>
+            <h3 class="derivation-journey-title">Why IV Minus OLS Depends on Residuals</h3>
+            <div class="derivation-goal">
+              <span class="derivation-goal-label">Goal</span>
+              <p class="derivation-goal-text">
+                Understand why the difference between IV and OLS is related to the correlation between instruments and OLS residuals.
+              </p>
+            </div>
+          </div>
+
+          <div class="derivation-timeline">
+            
+            <!-- Step 1 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">1</div>
+                <div class="derivation-step-rail"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Recall Estimator Formulas</h4>
+                </div>
+                <div class="derivation-step-math">
+                  $$\hat{\beta}_{\text{OLS}} = (X'X)^{-1}X'y, \quad \hat{\beta}_{\text{IV}} = (Z'X)^{-1}Z'y$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">Why?</span>
+                  We want to compare the estimators directly.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">2</div>
+                <div class="derivation-step-rail"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Decompose \(y\) Using OLS Fit</h4>
+                </div>
+                <div class="derivation-step-math">
+                  $$y = X\hat{\beta}_{\text{OLS}} + \hat{\varepsilon}_{\text{OLS}}$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">Why?</span>
+                  Decomposing \(y\) isolates the OLS fitted part from the residual variation.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">3</div>
+                <div class="derivation-step-rail"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Substitute into IV Estimator</h4>
+                </div>
+                <div class="derivation-step-math">
+                  $$\hat{\beta}_{\text{IV}} = (Z'X)^{-1}Z'(X\hat{\beta}_{\text{OLS}} + \hat{\varepsilon}_{\text{OLS}})$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">Why?</span>
+                  Distributes the instrument matrix \(Z'\) across both components.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="derivation-step-node">
+              <div class="derivation-rail-col">
+                <div class="derivation-step-badge">4</div>
+                <div class="derivation-step-rail"></div>
+              </div>
+              <div class="derivation-step-body">
+                <div class="derivation-step-head">
+                  <h4 class="derivation-step-title">Simplify</h4>
+                </div>
+                <div class="derivation-step-math">
+                  $$\hat{\beta}_{\text{IV}} = \hat{\beta}_{\text{OLS}} + (Z'X)^{-1}Z'\hat{\varepsilon}_{\text{OLS}}$$
+                </div>
+                <div class="derivation-why">
+                  <span class="derivation-why-label">Key Result</span>
+                  $$\hat{\beta}_{\text{IV}} - \hat{\beta}_{\text{OLS}} = (Z'X)^{-1}Z'\hat{\varepsilon}_{\text{OLS}}$$
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Big Picture Synthesis -->
+          <div class="big-picture-card" style="margin-top: var(--space-md); padding: var(--space-md); background: #eff6ff; border-radius: var(--radius-sm); border: 1px solid #bfdbfe;">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; color: #1d4ed8; margin-bottom: 0.2rem;">BIG PICTURE</div>
+            <p style="margin: 0; font-size: 0.9rem; color: #1e3a8a; line-height: 1.5;">
+              If the instruments \(Z\) are orthogonal to the OLS residual component (\(Z'\hat{\varepsilon}_{\text{OLS}} \approx 0\)), the two estimators are close under the maintained assumptions.
+            </p>
+          </div>
+        </div>
+
+        <!-- General Wu Test Implementation -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-lg); margin-bottom: var(--space-xs);">General Wu Test Procedure</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--space-sm);">
+          In structural model \(y = X\beta + Z_C \Gamma + \varepsilon\) with included controls \(Z_C\) and excluded instruments \(Z_E\):
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-primary);">STEP 1 &middot; FIRST STAGE</div>
+            <p style="font-size: 0.85rem; margin: 4px 0;">
+              Regress each suspected \(X\) on controls \(Z_C\) and excluded IVs \(Z_E\):
+            </p>
+            <div style="font-size: 0.82rem; font-family: var(--font-mono); text-align: center; background: var(--color-bg); padding: 4px; border-radius: 4px;">
+              \(x = Z_C \theta_1 + Z_E \theta_2 + u\)
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Obtain residuals \(\hat{u}\).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-primary);">STEP 2 &middot; AUGMENTED REGRESSION</div>
+            <p style="font-size: 0.85rem; margin: 4px 0;">
+              Add \(\hat{u}\) back into the structural model:
+            </p>
+            <div style="font-size: 0.82rem; font-family: var(--font-mono); text-align: center; background: var(--color-bg); padding: 4px; border-radius: 4px;">
+              \(y = X\beta + Z_C \Gamma + \hat{u}\pi + \varepsilon^*\)
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Estimate by OLS.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--accent-primary);">STEP 3 &middot; HYPOTHESIS TEST</div>
+            <p style="font-size: 0.85rem; margin: 4px 0;">
+              Test \(H_0: \pi = 0\):
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              &bull; \(\pi = 0\): residual adds no explanatory power \(\to\) consistent with exogeneity.<br>
+              &bull; \(\pi \neq 0\): leftover variation in \(X\) explains \(y\) \(\to\) endogeneity.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Robustness Note -->
+        <div class="callout" style="border-left: 4px solid #d97706; margin-top: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge" style="background: #fef3c7; color: #b45309;">ROBUSTNESS NOTE</span>
+            <h3 class="callout-title">Heteroskedasticity Warning</h3>
+          </div>
+          <div class="callout-body">
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Classical versions of these tests assume homoskedasticity. Use an appropriate heteroskedasticity-robust version when required.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: OLS vs. IV Endogeneity Diagnostic</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">ILLUSTRATIVE SIMULATION</span>
+            <h3 class="lab-title">Estimator Gap &amp; Decision Diagnostic</h3>
+            <p class="lab-desc">
+              Explore how the statistical distance between \(\hat{\beta}_{\text{OLS}}\) and \(\hat{\beta}_{\text{IV}}\) drives the Hausman statistic and choice between estimators.
+            </p>
+          </div>
+
+          <!-- Controls -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Estimator Gap Scenario:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnGapSmall">Small Gap (0.08)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnGapMod">Moderate Gap (0.38)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnGapLarge">Large Gap (0.85)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">OLS Estimate</div>
+              <div class="metric-value" id="readoutOls" style="color: #2563eb;">1.04</div>
+              <div class="metric-sub">SE 0.05 (High precision)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">IV Estimate</div>
+              <div class="metric-value" id="readoutIv" style="color: #6d28d9;">1.12</div>
+              <div class="metric-sub">SE 0.16 (Lower precision)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Hausman W (\(\chi^2_1\))</div>
+              <div class="metric-value" id="readoutW" style="color: #059669;">0.28</div>
+              <div class="metric-sub" id="readoutPval">Fail to reject exogeneity</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Decision (Illustrative)</div>
+              <div class="metric-value" id="readoutDecision" style="color: #2563eb;">PREFER OLS</div>
+              <div class="metric-sub" id="readoutReason">More efficient; no endogeneity</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 3px;"></span> OLS</div>
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 3px;"></span> IV</div>
+            <div class="legend-item"><span class="legend-line" style="background: #dc2626; height: 2px;"></span> ↔ Estimator Gap</div>
+          </div>
+
+          <!-- SVG Visualizer (300px height) -->
+          <div style="position: relative; width: 100%; height: 280px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="hausmanSvg" viewBox="0 0 680 240" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Scenario Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Small Gap:</strong> <span id="labInsightBody">The difference between OLS (1.04) and IV (1.12) is small relative to sampling uncertainty (\(W = 0.28\)). Fail to reject exogeneity; OLS is preferred for efficiency.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Two sampling distributions: narrow OLS and wide IV, with the distance between their point estimates highlighted.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                As the gap widens, the test statistic \(W\) scales quadratically with the distance between \(\hat{\beta}_{\text{IV}}\) and \(\hat{\beta}_{\text{OLS}}\).
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Using IV unnecessarily inflates confidence intervals and sacrifices statistical power without offering bias reduction.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The Hausman test is an efficiency-versus-consistency diagnostic: prefer OLS unless empirical evidence of endogeneity forces IV.
+              </p>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch between Moderate and Large gaps to see how a larger discrepancy justifies the efficiency cost of IV.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why might OLS be preferred when the exogeneity null hypothesis is not rejected?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider the trade-off between consistency and variance (efficiency) under exogeneity.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Under the exogeneity null hypothesis, both OLS and IV are consistent, but OLS is more efficient.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> When regressors are exogenous, OLS achieves the minimum variance among linear unbiased estimators. The IV estimator only utilizes the fraction of variation in \(X\) explained by \(Z\), producing substantially higher variance without providing any bias reduction.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The IV-vs-OLS Hausman test asks whether \(X\) appears exogenous under a maintained valid-IV assumption.</li>
+        <li>Under exogeneity, OLS and IV should estimate the same parameter asymptotically.</li>
+        <li>A large estimator difference provides evidence against OLS exogeneity.</li>
+        <li>The test can have low power when IV estimates are imprecise.</li>
+        <li>The Wu test offers an alternative residual-augmentation approach to testing endogeneity.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="index.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Module Overview</span>
+        <span class="nav-btn-title">Module 12: IV Diagnostics &amp; Measurement Error</span>
+      </a>
+      <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">12.2 Testing Instrument Validity: Sargan</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 12.1 Script -->
+  <script>
+    (function() {
+      let currentGap = 'small'; // 'small', 'mod', 'large'
+
+      const btnSmall = document.getElementById('btnGapSmall');
+      const btnMod = document.getElementById('btnGapMod');
+      const btnLarge = document.getElementById('btnGapLarge');
+
+      const readoutOls = document.getElementById('readoutOls');
+      const readoutIv = document.getElementById('readoutIv');
+      const readoutW = document.getElementById('readoutW');
+      const readoutPval = document.getElementById('readoutPval');
+      const readoutDecision = document.getElementById('readoutDecision');
+      const readoutReason = document.getElementById('readoutReason');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('hausmanSvg');
+
+      function updateLab() {
+        btnSmall.className = currentGap === 'small' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnMod.className = currentGap === 'mod' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnLarge.className = currentGap === 'large' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        let olsVal = 1.04;
+        let ivVal = 1.12;
+        let wVal = 0.28;
+        let decision = 'PREFER OLS';
+        let decColor = '#2563eb';
+        let decReason = 'More efficient; no endogeneity';
+
+        if (currentGap === 'small') {
+          ivVal = 1.12;
+          wVal = 0.28;
+          decision = 'PREFER OLS';
+          decColor = '#2563eb';
+          decReason = 'More efficient; no endogeneity';
+
+          labInsightTitle.textContent = 'Small Gap:';
+          labInsightBody.textContent = 'The difference between OLS (1.04) and IV (1.12) is small relative to sampling uncertainty (W = 0.28). Fail to reject exogeneity; OLS is preferred for efficiency.';
+        } else if (currentGap === 'mod') {
+          ivVal = 1.42;
+          wVal = 6.27;
+          decision = 'PREFER IV';
+          decColor = '#6d28d9';
+          decReason = 'Significant gap; reject exogeneity';
+
+          labInsightTitle.textContent = 'Moderate Gap:';
+          labInsightBody.textContent = 'The gap between OLS (1.04) and IV (1.42) produces W = 6.27. In this illustrative scenario, we reject the exogeneity null and adopt IV to ensure consistency.';
+        } else {
+          ivVal = 1.89;
+          wVal = 31.42;
+          decision = 'PREFER IV';
+          decColor = '#dc2626';
+          decReason = 'Severe gap; reject exogeneity';
+
+          labInsightTitle.textContent = 'Large Gap:';
+          labInsightBody.textContent = 'A substantial gap exists between OLS (1.04) and IV (1.89), driving W = 31.42. Strong evidence against exogeneity warrants adopting the IV estimator.';
+        }
+
+        readoutOls.textContent = olsVal.toFixed(2);
+        readoutIv.textContent = ivVal.toFixed(2);
+        readoutW.textContent = wVal.toFixed(2);
+        readoutPval.textContent = currentGap === 'small' ? 'Fail to reject exogeneity' : 'Reject H0 (exogeneity)';
+        readoutDecision.textContent = decision;
+        readoutDecision.style.color = decColor;
+        readoutReason.textContent = decReason;
+
+        renderChart(olsVal, ivVal);
+      }
+
+      function renderChart(ols, iv) {
+        svg.innerHTML = '';
+        const width = 680;
+        const height = 240;
+        const baseLineY = 190;
+
+        const minBeta = 0.7;
+        const maxBeta = 2.2;
+        function scaleX(val) {
+          return 60 + ((val - minBeta) / (maxBeta - minBeta)) * (width - 120);
+        }
+
+        // Axis line
+        const axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axis.setAttribute('x1', '40');
+        axis.setAttribute('y1', baseLineY);
+        axis.setAttribute('x2', '640');
+        axis.setAttribute('y2', baseLineY);
+        axis.setAttribute('stroke', 'var(--border-strong, #94a3b8)');
+        axis.setAttribute('stroke-width', '1.5');
+        svg.appendChild(axis);
+
+        // Tick marks
+        for (let b = 0.8; b <= 2.1; b += 0.2) {
+          const x = scaleX(b);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          tick.setAttribute('x1', x);
+          tick.setAttribute('y1', baseLineY);
+          tick.setAttribute('x2', x);
+          tick.setAttribute('y2', baseLineY + 6);
+          tick.setAttribute('stroke', 'var(--border-strong, #94a3b8)');
+          svg.appendChild(tick);
+
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', baseLineY + 18);
+          text.setAttribute('font-size', '11');
+          text.setAttribute('fill', 'var(--text-muted, #64748b)');
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('font-family', 'var(--font-mono, monospace)');
+          text.textContent = b.toFixed(1);
+          svg.appendChild(text);
+        }
+
+        function drawCurve(center, se, strokeColor, fillColor) {
+          const points = [];
+          const step = 0.02;
+          for (let b = minBeta; b <= maxBeta; b += step) {
+            const z = (b - center) / se;
+            const pdf = Math.exp(-0.5 * z * z);
+            const peakHeight = 140 * (0.05 / Math.max(se, 0.05));
+            const y = baseLineY - (pdf * Math.min(peakHeight, 140));
+            points.push(`${scaleX(b)},${y}`);
+          }
+
+          const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+          poly.setAttribute('points', points.join(' '));
+          poly.setAttribute('fill', 'none');
+          poly.setAttribute('stroke', strokeColor);
+          poly.setAttribute('stroke-width', '2.5');
+          svg.appendChild(poly);
+
+          const areaPoints = [`40,${baseLineY}`, ...points, `640,${baseLineY}`];
+          const area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          area.setAttribute('points', areaPoints.join(' '));
+          area.setAttribute('fill', fillColor);
+          svg.appendChild(area);
+        }
+
+        // Draw IV curve first (wider)
+        drawCurve(iv, 0.16, '#6d28d9', 'rgba(109, 40, 217, 0.12)');
+
+        // Draw OLS curve (narrow)
+        drawCurve(ols, 0.05, '#2563eb', 'rgba(37, 99, 235, 0.18)');
+
+        const xOls = scaleX(ols);
+        const xIv = scaleX(iv);
+
+        // OLS dashed line
+        const olsLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        olsLine.setAttribute('x1', xOls);
+        olsLine.setAttribute('y1', baseLineY - 145);
+        olsLine.setAttribute('x2', xOls);
+        olsLine.setAttribute('y2', baseLineY);
+        olsLine.setAttribute('stroke', '#2563eb');
+        olsLine.setAttribute('stroke-width', '1.5');
+        olsLine.setAttribute('stroke-dasharray', '3 2');
+        svg.appendChild(olsLine);
+
+        // IV dashed line
+        const ivLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        ivLine.setAttribute('x1', xIv);
+        ivLine.setAttribute('y1', baseLineY - 145);
+        ivLine.setAttribute('x2', xIv);
+        ivLine.setAttribute('y2', baseLineY);
+        ivLine.setAttribute('stroke', '#6d28d9');
+        ivLine.setAttribute('stroke-width', '1.5');
+        ivLine.setAttribute('stroke-dasharray', '3 2');
+        svg.appendChild(ivLine);
+
+        // Gap dimension bracket
+        if (Math.abs(xIv - xOls) > 8) {
+          const bracketY = 40;
+          const bracket = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          bracket.setAttribute('x1', xOls);
+          bracket.setAttribute('y1', bracketY);
+          bracket.setAttribute('x2', xIv);
+          bracket.setAttribute('y2', bracketY);
+          bracket.setAttribute('stroke', '#dc2626');
+          bracket.setAttribute('stroke-width', '2');
+          svg.appendChild(bracket);
+
+          const bracketLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          bracketLabel.setAttribute('x', (xOls + xIv) / 2);
+          bracketLabel.setAttribute('y', bracketY - 8);
+          bracketLabel.setAttribute('font-size', '11');
+          bracketLabel.setAttribute('font-weight', '700');
+          bracketLabel.setAttribute('fill', '#dc2626');
+          bracketLabel.setAttribute('text-anchor', 'middle');
+          bracketLabel.setAttribute('font-family', 'var(--font-mono, monospace)');
+          bracketLabel.textContent = `Gap: ${(iv - ols).toFixed(2)}`;
+          svg.appendChild(bracketLabel);
+        }
+
+        // Center labels
+        const labelOls = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        labelOls.setAttribute('x', xOls);
+        labelOls.setAttribute('y', '26');
+        labelOls.setAttribute('font-size', '12');
+        labelOls.setAttribute('font-weight', '700');
+        labelOls.setAttribute('fill', '#2563eb');
+        labelOls.setAttribute('text-anchor', 'middle');
+        labelOls.setAttribute('font-family', 'var(--font-primary, Poppins)');
+        labelOls.textContent = `OLS (${ols.toFixed(2)})`;
+        svg.appendChild(labelOls);
+
+        const labelIv = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        labelIv.setAttribute('x', xIv);
+        labelIv.setAttribute('y', '26');
+        labelIv.setAttribute('font-size', '12');
+        labelIv.setAttribute('font-weight', '700');
+        labelIv.setAttribute('fill', '#6d28d9');
+        labelIv.setAttribute('text-anchor', 'middle');
+        labelIv.setAttribute('font-family', 'var(--font-primary, Poppins)');
+        labelIv.textContent = `IV (${iv.toFixed(2)})`;
+        svg.appendChild(labelIv);
+      }
+
+      btnSmall.addEventListener('click', () => { currentGap = 'small'; updateLab(); });
+      btnMod.addEventListener('click', () => { currentGap = 'mod'; updateLab(); });
+      btnLarge.addEventListener('click', () => { currentGap = 'large'; updateLab(); });
+
+      // Quick Check interactive toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            const isHidden = hint.style.display === 'none';
+            hint.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            const isHidden = sol.style.display === 'none';
+            sol.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+          }
+        });
+      });
+
+      // Initial render
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

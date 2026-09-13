@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 10: Panel Data II — EcoIntuition Academy</title>
-  <meta name="description" content="Extend the panel-data toolkit using first differences, understand how differencing removes time-invariant unobserved heterogeneity, learn why panel-data inference often requires cluster-robust standard errors, and use the Hausman test to compare Fixed Effects and Random Effects assumptions.">
+  <title>Module 12: IV Diagnostics, Weak Instruments &amp; Measurement Error — EcoIntuition Academy</title>
+  <meta name="description" content="Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
   <!-- Google Fonts: Poppins & JetBrains Mono -->
@@ -32,7 +32,7 @@
     });
   </script>
 </head>
-<body data-module="module-10">
+<body data-module="module-12">
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
@@ -61,11 +61,12 @@
               <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
               <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
               <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
-              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
               <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
             </div>
           </li>
-          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
             <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
@@ -93,24 +94,24 @@
     <!-- Hero Header -->
     <div class="module-hero">
       <div class="module-hero-badges">
-        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 10</span>
-        <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">Panel Data II</span>
-        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">5 Lessons</span>
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 12</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">IV Diagnostics &amp; Measurement Error</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">6 Lessons</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Advanced Econometric Methods</span>
       </div>
 
       <h1 class="module-hero-title">
-        First Differences, Cluster-Robust Inference &amp; the Hausman Test
+        IV Diagnostics, Weak Instruments &amp; Measurement Error
       </h1>
       
       <p class="module-hero-desc">
-        Extend the panel-data toolkit using first differences, cluster-aware inference, and model-selection diagnostics for Fixed Effects and Random Effects.
+        Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.
       </p>
 
       <!-- Action Buttons & Progress -->
       <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
-          Start Module 10 →
+          Start Module 12 →
         </a>
         <a href="../../index.html#modules" class="btn btn-outline btn-lg">
           Explore All Modules
@@ -120,11 +121,11 @@
       <!-- Module Progress Card -->
       <div class="module-progress-card">
         <div class="module-progress-labels">
-          <span>Module 10 Completion</span>
-          <span id="progress-text-module-10" class="module-progress-percent">0% Complete</span>
+          <span>Module 12 Completion</span>
+          <span id="progress-text-module-12" class="module-progress-percent">0% Complete</span>
         </div>
         <div class="module-progress-track">
-          <div class="module-progress-fill" id="progress-fill-module-10"></div>
+          <div class="module-progress-fill" id="progress-fill-module-12"></div>
         </div>
       </div>
     </div>
@@ -135,16 +136,17 @@
         MODULE LEARNING PATH
       </h3>
       <div class="module-learning-path-flow">
-        <span class="learning-path-step"><span class="learning-path-pill">Panel Model</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">First Differences</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Remove \(c_i\)</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">FD vs FE</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Within-Group Dependence</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Cluster-Robust SE</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Cluster Level</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Small-Cluster Issues</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Hausman Test</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">FE vs RE Choice</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Need IV?</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Hausman</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Wu Test</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Validity</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Sargan</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Relevance</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Weak IV</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Measurement Error</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Attenuation</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">IV Solution</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Propagation of Error</span></span>
       </div>
     </div>
 
@@ -156,19 +158,19 @@
 
       <div class="module-lessons-list">
         
-        <!-- Lesson 10.1 Card -->
+        <!-- Lesson 12.1 Card -->
         <a href="lesson-01.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 10.1</span>
-                <span class="badge badge-cat">First Differences</span>
+                <span class="badge badge-num">LESSON 12.1</span>
+                <span class="badge badge-cat">Exogeneity Tests</span>
               </div>
               <h2 class="lesson-card-title">
-                The First Differences Model
+                Do We Need IV? Hausman &amp; Wu Tests for Endogeneity
               </h2>
               <p class="lesson-card-desc">
-                Learn how subtracting adjacent panel observations removes the time-invariant individual effect \(c_i\) and examine the serial-correlation consequence of differencing.
+                Evaluate whether regressors are truly endogenous by comparing consistent IV estimates with efficient OLS, master the Hausman contrast statistic, and implement the auxiliary first-stage residual regression of the Wu test.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -177,19 +179,19 @@
           </div>
         </a>
 
-        <!-- Lesson 10.2 Card -->
+        <!-- Lesson 12.2 Card -->
         <a href="lesson-02.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 10.2</span>
-                <span class="badge badge-cat">Panel Transformations</span>
+                <span class="badge badge-num">LESSON 12.2</span>
+                <span class="badge badge-cat">Overidentification</span>
               </div>
               <h2 class="lesson-card-title">
-                First Differences vs Fixed Effects
+                Testing Instrument Validity: Sargan &amp; Overidentification
               </h2>
               <p class="lesson-card-desc">
-                Compare adjacent differencing with within-group demeaning, understand why FE and FD coincide when \(T = 2\), and see why they generally differ for longer panels.
+                Test the orthogonality of instrument sets using Sargan overidentification tests when instruments exceed regressors, understand why rejection can reflect heterogeneous treatment effects rather than invalid instruments, and connect to LATE intuition.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -198,19 +200,19 @@
           </div>
         </a>
 
-        <!-- Lesson 10.3 Card -->
+        <!-- Lesson 12.3 Card -->
         <a href="lesson-03.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 10.3</span>
-                <span class="badge badge-cat">Panel Inference</span>
+                <span class="badge badge-num">LESSON 12.3</span>
+                <span class="badge badge-cat">Weak Instruments</span>
               </div>
               <h2 class="lesson-card-title">
-                Cluster-Robust Standard Errors
+                Instrument Strength &amp; Weak-Instrument Diagnostics
               </h2>
               <p class="lesson-card-desc">
-                Learn how cluster-robust covariance estimation allows heteroskedasticity and within-unit dependence while assuming independence across clusters.
+                Discover why relevance is vital for IV precision, examine how weak instruments inflate variance and finite-sample bias, apply the first-stage rule of thumb thresholds, and survey Stock-Yogo, Cragg-Donald, and Kleibergen-Paap diagnostics.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -219,19 +221,19 @@
           </div>
         </a>
 
-        <!-- Lesson 10.4 Card -->
+        <!-- Lesson 12.4 Card -->
         <a href="lesson-04.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 10.4</span>
-                <span class="badge badge-cat">Clustering</span>
+                <span class="badge badge-num">LESSON 12.4</span>
+                <span class="badge badge-cat">Measurement Error</span>
               </div>
               <h2 class="lesson-card-title">
-                Choosing the Cluster Level &amp; Small-Cluster Issues
+                Measurement Error in Dependent and Independent Variables
               </h2>
               <p class="lesson-card-desc">
-                Understand how treatment assignment and policy variation guide clustering decisions and why inference becomes less reliable when the number of clusters is limited.
+                Analyze the classical errors-in-variables model, prove why measurement error in the dependent variable inflates disturbance variance without biasing OLS coefficients, and understand why measurement error in regressors induces endogeneity.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -240,19 +242,40 @@
           </div>
         </a>
 
-        <!-- Lesson 10.5 Card -->
+        <!-- Lesson 12.5 Card -->
         <a href="lesson-05.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 10.5</span>
-                <span class="badge badge-cat">Model Selection</span>
+                <span class="badge badge-num">LESSON 12.5</span>
+                <span class="badge badge-cat">Attenuation &amp; IV</span>
               </div>
               <h2 class="lesson-card-title">
-                The Hausman Test &amp; Panel-Model Choice
+                Attenuation Bias &amp; IV as a Measurement-Error Solution
               </h2>
               <p class="lesson-card-desc">
-                Use the Hausman statistic to compare Fixed Effects and Random Effects while recognizing the limits of treating non-rejection as proof that Random Effects is valid.
+                Derive the classical attenuation factor lambda that pulls estimated slopes toward zero, explore numerical examples of signal-to-noise ratios, and prove how valid instruments isolate true variation to restore estimator consistency.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 12.6 Card -->
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 12.6</span>
+                <span class="badge badge-cat">Synthesis &amp; Review</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Propagation of Error &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Examine how non-linear transformations and ratios propagate underlying measurement noise, synthesize the diagnostic workflow connecting endogeneity, validity, relevance, and data mismeasurement, and review core concepts.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -266,7 +289,6 @@
 
   </main>
 
-  <!-- Site Footer -->
   <!-- Shared Course Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">

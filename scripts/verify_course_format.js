@@ -8,7 +8,12 @@ const modules = [
   { id: 'module-04', num: 4, title: 'Large-Sample Theory, Asymptotic Inference & Nonlinear Functions', lessons: 8 },
   { id: 'module-05', num: 5, title: 'Hypothesis Testing, Linear Restrictions & Dummy Variables', lessons: 7 },
   { id: 'module-06', num: 6, title: 'Omitted Variable Bias, Randomized Experiments & Difference-in-Differences', lessons: 8 },
-  { id: 'module-07', num: 7, title: 'Advanced Difference-in-Differences: DDD, Triple Interactions & Controlled Comparisons', lessons: 5 }
+  { id: 'module-07', num: 7, title: 'Advanced Difference-in-Differences: DDD, Triple Interactions & Controlled Comparisons', lessons: 5 },
+  { id: 'module-08', num: 8, title: 'Non-Spherical Errors, Robust Inference & Efficient Estimation', lessons: 6 },
+  { id: 'module-09', num: 9, title: 'Time-Ordered Data, Autocorrelation & HAC Inference', lessons: 5 },
+  { id: 'module-10', num: 10, title: 'Panel Data II: First Differences, Cluster-Robust Inference & the Hausman Test', lessons: 5 },
+  { id: 'module-11', num: 11, title: 'Instrumental Variables & Two-Stage Least Squares', lessons: 7 },
+  { id: 'module-12', num: 12, title: 'IV Diagnostics, Weak Instruments & Measurement Error', lessons: 6 }
 ];
 
 let totalChecks = 0;

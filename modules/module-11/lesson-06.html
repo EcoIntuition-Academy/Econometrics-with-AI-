@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11.6: IV in Matrix Form: Exactly Identified — Econometrics with AI</title>
+  <meta name="description" content="Formulate the OLS and IV estimators in matrix notation for the square system where the number of instruments equals regressors, and prove consistency under instrument orthogonality.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-11" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 11: Instrumental Variables &amp; 2SLS</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 11</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 11</a>
+          <span class="module-nav-title">Instrumental Variables &amp; 2SLS</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 7 &middot; IV in Matrix Form: Exactly Identified</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 11 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.1 Endogeneity &amp; Why OLS Can Fail</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.2 Instrumental Variables &amp; the Three Criteria</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.3 Simple IV Examples &amp; Two-Stage Intuition</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.4 Simultaneity: Supply, Demand &amp; Price IV</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.5 General IV / 2SLS &amp; Identification</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">11.6 IV in Matrix Form: Exactly Identified</span>
+            </a>
+            <a href="lesson-07.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">11.7 2SLS, Projection Matrices &amp; Overidentification</span>
+            </a>
+          </div>
+        </div>
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 84%;"></div>
+          </div>
+          <span class="progress-text">84%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Hero -->
+    <header class="lesson-hero">
+      <div class="lesson-hero-meta">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 11.6</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Matrix Estimation</span>
+      </div>
+      <h1 class="lesson-hero-title">IV in Matrix Form: The Exactly Identified Case</h1>
+      <p class="lesson-hero-lead">
+        Formulate OLS and IV in matrix notation for the square system where the number of instruments equals the number of regressors, derive their bias terms, and prove consistency under instrument validity.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div class="objectives-header">
+        <span class="objectives-icon">🎯</span>
+        <h3 class="objectives-title">Learning Objectives</h3>
+      </div>
+      <ul class="objectives-list">
+        <li>Express the linear regression model in matrix notation: \(\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\).</li>
+        <li>Derive the OLS estimator \(\hat{\boldsymbol{\beta}}_{\text{OLS}} = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}\) and identify the OLS bias term.</li>
+        <li>Specify the exactly identified IV system (\(K = L\)) with square, invertible cross-product matrix \(\mathbf{Z}'\mathbf{X}\).</li>
+        <li>Derive the IV estimator \(\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y} = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\).</li>
+        <li>Prove that the IV estimator is consistent when the orthogonality condition \(\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}] = \mathbf{0}\) holds.</li>
+        <li>Compare the algebraic structure and bias terms of OLS versus IV side-by-side.</li>
+      </ul>
+    </div>
+
+    <!-- Study Section 1: Inconsistency and Bias of OLS in Matrix Form -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">OLS Foundation</span>
+          <h2 class="section-title">Matrix Formulation of OLS Bias</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Let the regression model be written in compact matrix notation:
+        </p>
+
+        <div class="equation-container" style="text-align: center; margin: 1.25rem 0;">
+          \[\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\]
+        </div>
+
+        <!-- Matrix Dimensions Card -->
+        <div style="padding: 1rem 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin: 1.25rem 0;">
+          <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Matrix Dimensions</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-primary);">
+            <span>\(\mathbf{y} \in \mathbb{R}^{n \times 1}\)</span>
+            <span>\(\mathbf{X} \in \mathbb{R}^{n \times K}\)</span>
+            <span>\(\boldsymbol{\beta} \in \mathbb{R}^{K \times 1}\)</span>
+            <span>\(\boldsymbol{\varepsilon} \in \mathbb{R}^{n \times 1}\)</span>
+          </div>
+        </div>
+
+        <p>
+          The standard Ordinary Least Squares estimator is:
+        </p>
+
+        <div class="equation-container" style="text-align: center; margin: 1rem 0;">
+          \[\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}\]
+        </div>
+
+        <p>
+          Substituting the true structural data generating process \(\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\) into the estimator yields:
+        </p>
+
+        <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 1rem; line-height: 2; color: var(--text-primary);">
+          \[\begin{aligned}
+            \hat{\boldsymbol{\beta}}_{\text{OLS}} &= (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}) \\
+            &= (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{X}\boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon} \\
+            &= \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}
+          \end{aligned}\]
+        </div>
+
+        <div class="definition-box" style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border-left: 4px solid #ef4444; border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2); border-left-width: 4px;">
+          <h4 style="margin: 0 0 0.4rem 0; color: #dc2626;">THE OLS PROBLEM: CORRELATED REGRESSOR ERROR</h4>
+          <p style="margin: 0; color: var(--text-secondary); line-height: 1.6;">
+            Taking the mathematical expectation:
+          </p>
+          <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: #dc2626; margin: 0.5rem 0;">
+            \[\mathbb{E}[\hat{\boldsymbol{\beta}}_{\text{OLS}}] = \boldsymbol{\beta} + \mathbb{E}[(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}]\]
+          </div>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+            The OLS estimator is unbiased if and only if \(\mathbb{E}[\mathbf{X}'\boldsymbol{\varepsilon}] = \mathbf{0}\). If regressors \(\mathbf{X}\) are endogenous (\(\mathbb{E}[\mathbf{X}'\boldsymbol{\varepsilon}] \ne \mathbf{0}\)), the bias term does not vanish, and OLS consistently fails to recover \(\boldsymbol{\beta}\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 2: IV Matrix Form when K = L -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Just-Identified Case</span>
+          <h2 class="section-title">The Exactly Identified IV Estimator (\(K = L\))</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Now suppose we have an instrument matrix \(\mathbf{Z}\) containing exactly the same number of columns as \(\mathbf{X}\) (\(K = L\)):
+        </p>
+
+        <div style="padding: 1rem 1.25rem; background: var(--surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin: 1.25rem 0;">
+          <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Matrix Dimensions (\(K = L\))</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-primary);">
+            <span>\(\mathbf{X} \in \mathbb{R}^{n \times K}\)</span>
+            <span>\(\mathbf{Z} \in \mathbb{R}^{n \times K}\)</span>
+            <span>\(\mathbf{Z}'\mathbf{X} \in \mathbb{R}^{K \times K}\) (Square)</span>
+            <span>\(\mathbf{Z}'\mathbf{y} \in \mathbb{R}^{K \times 1}\)</span>
+          </div>
+        </div>
+
+        <p>
+          Because \(\mathbf{Z}'\mathbf{X}\) is a square \(K \times K\) matrix, it can be directly inverted (provided the relevance assumption holds and \(\text{rank}(\mathbf{Z}'\mathbf{X}) = K\)).
+        </p>
+
+        <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: var(--surface); border-left: 4px solid #7c3aed; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); border-left-width: 4px;">
+          <h4 style="margin: 0 0 0.5rem 0; color: #7c3aed;">DEFINITION: EXACTLY IDENTIFIED IV ESTIMATOR</h4>
+          <p style="margin: 0;">
+            When \(K = L\), the Instrumental Variables estimator in matrix notation is:
+          </p>
+          <div style="text-align: center; font-family: var(--font-mono); font-size: 1.25rem; color: var(--text-primary); margin: 0.75rem 0;">
+            \[\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 3: Derivation Journey — Consistency of the IV Estimator -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Derivation Journey</span>
+          <h2 class="section-title">Deriving the Consistency of \(\hat{\boldsymbol{\beta}}_{\text{IV}}\)</h2>
+        </div>
+      </div>
+
+      <div class="derivation-journey-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+        
+        <div class="journey-goal" style="padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">DERIVATION GOAL</span>
+          <h3 style="margin: 0.25rem 0 0 0; color: var(--text-primary); font-size: 1.15rem;">Prove that \(\hat{\boldsymbol{\beta}}_{\text{IV}}\) is Consistent Under Instrument Validity</h3>
+        </div>
+
+        <div class="journey-steps" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #7c3aed; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #7c3aed; font-weight: 600;">STEP 1: SUBSTITUTE DATA GENERATING PROCESS</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Substitute \(\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\) into the IV estimator formula:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary);">
+              \[\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})\]
+            </div>
+          </div>
+
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #7c3aed; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #7c3aed; font-weight: 600;">STEP 2: EXPAND MATRIX PRODUCTS</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Distribute \(\mathbf{Z}'\) across the sum:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary);">
+              \[\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}(\mathbf{Z}'\mathbf{X})\boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\]
+            </div>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+              Since \((\mathbf{Z}'\mathbf{X})^{-1}(\mathbf{Z}'\mathbf{X}) = \mathbf{I}_K\), this simplifies immediately to:
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-primary); margin-top: 0.4rem;">
+              \[\hat{\boldsymbol{\beta}}_{\text{IV}} = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\]
+            </div>
+          </div>
+
+          <div class="journey-step" style="padding: 1rem; background: var(--surface-subtle); border-left: 3px solid #059669; border-radius: var(--radius-xs);">
+            <div style="font-size: 0.8rem; font-family: var(--font-mono); color: #059669; font-weight: 600;">STEP 3: TAKE EXPECTATION &amp; APPLY ORTHOGONALITY</div>
+            <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Taking the expectation conditional on instruments \(\mathbf{Z}\):
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary); margin: 0.5rem 0;">
+              \[\mathbb{E}[\hat{\boldsymbol{\beta}}_{\text{IV}}] = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}]\]
+            </div>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
+              Because the instruments are valid, \(\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}] = \mathbf{0}\):
+            </p>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 0.4rem;">
+              \[\mathbb{E}[\hat{\boldsymbol{\beta}}_{\text{IV}}] = \boldsymbol{\beta}\]
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Study Section 4: Side-by-Side Comparison: OLS vs IV -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <div class="section-title-wrap">
+          <span class="section-tag">Direct Contrast</span>
+          <h2 class="section-title">OLS vs IV: Side-by-Side Comparison</h2>
+        </div>
+      </div>
+
+      <div class="study-card">
+        <p>
+          Compare the two estimators directly to see how instrumental variables replaces endogenous regressors \(\mathbf{X}\) in the moment condition:
+        </p>
+
+        <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          
+          <!-- OLS Card -->
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #ef4444; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #dc2626;">OLS ESTIMATOR</h4>
+              <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; font-weight: 600;">Biased / Inconsistent</span>
+            </div>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary); margin: 0.75rem 0;">
+              \[\hat{\boldsymbol{\beta}}_{\text{OLS}} = \boldsymbol{\beta} + (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}\]
+            </div>
+            <ul style="margin: 0 0 0 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+              <li>Depends on cross-product \(\mathbf{X}'\boldsymbol{\varepsilon}\).</li>
+              <li>If \(\mathbf{X}\) is endogenous, \(\mathbf{X}'\boldsymbol{\varepsilon} \ne \mathbf{0}\).</li>
+              <li>Bias term persists even as sample size \(n \to \infty\).</li>
+            </ul>
+          </div>
+
+          <!-- IV Card -->
+          <div style="padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-subtle); border-left: 4px solid #059669; border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: #059669;">IV ESTIMATOR (\(K = L\))</h4>
+              <span class="badge" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: 600;">Consistent</span>
+            </div>
+            <div style="text-align: center; font-family: var(--font-mono); font-size: 1.05rem; color: var(--text-primary); margin: 0.75rem 0;">
+              \[\hat{\boldsymbol{\beta}}_{\text{IV}} = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\]
+            </div>
+            <ul style="margin: 0 0 0 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+              <li>Depends on cross-product \(\mathbf{Z}'\boldsymbol{\varepsilon}\).</li>
+              <li>If \(\mathbf{Z}\) is valid, \(\mathbf{Z}'\boldsymbol{\varepsilon} = \mathbf{0}\) in expectation.</li>
+              <li>Estimator converges to true \(\boldsymbol{\beta}\) as \(n \to \infty\).</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="intuition-box" style="padding: 1rem 1.25rem; background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-sm);">
+          <strong style="color: var(--color-primary);">Summary from Lecture Notes:</strong>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
+            <em>&ldquo;If X is endogenous, X&rsquo;&epsilon; &ne; 0 &implies; OLS is biased. If Z is valid, Z&rsquo;&epsilon; = 0 &implies; IV is consistent.&rdquo;</em>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Section 5: Quick Check -->
+    <div class="quick-check-card" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <span style="font-size: 1.1rem;">💡</span>
+        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">QUICK CHECK</h3>
+      </div>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+        What moment condition replaces the OLS exogeneity requirement in the exactly identified IV derivation?
+      </p>
+
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint116">Hint</button>
+        <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol116">Show Solution</button>
+      </div>
+
+      <div class="hint-content" id="hint116" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <strong>HINT:</strong> In the derivation \(\hat{\boldsymbol{\beta}}_{\text{IV}} = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\), what expectation must equal zero for the second term to vanish?
+      </div>
+
+      <div class="solution-content" id="sol116" style="display: none; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.9rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.4rem;">
+          <strong>ANSWER:</strong> The instrument orthogonality condition: \(\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}] = \mathbf{0}\).
+        </p>
+        <p style="margin: 0; color: var(--text-secondary);">
+          <strong>WHY?</strong> In OLS, consistency requires \(\mathbb{E}[\mathbf{X}'\boldsymbol{\varepsilon}] = \mathbf{0}\). When this fails because \(\mathbf{X}\) is endogenous, the IV estimator replaces the regressor matrix with instrument matrix \(\mathbf{Z}\) in the moment equation. If \(\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}] = \mathbf{0}\), the bias term \((\mathbf{Z}'\mathbf{X})^{-1}\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}]\) vanishes, guaranteeing consistent estimation.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>In matrix form, OLS decomposes into true \(\boldsymbol{\beta}\) plus the bias term \((\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon}\).</li>
+        <li>When \(K = L\), the cross-product \(\mathbf{Z}'\mathbf{X}\) is square and invertible, defining the estimator \(\hat{\boldsymbol{\beta}}_{\text{IV}} = (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\mathbf{y}\).</li>
+        <li>Substituting \(\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\) yields \(\hat{\boldsymbol{\beta}}_{\text{IV}} = \boldsymbol{\beta} + (\mathbf{Z}'\mathbf{X})^{-1}\mathbf{Z}'\boldsymbol{\varepsilon}\).</li>
+        <li>The orthogonality condition \(\mathbb{E}[\mathbf{Z}'\boldsymbol{\varepsilon}] = \mathbf{0}\) ensures that the IV bias term vanishes, establishing consistency.</li>
+        <li>IV trades off precision for consistency: while OLS has smaller standard errors under exogeneity, IV remains consistent when endogeneity corrupts OLS.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">11.5 General IV / 2SLS &amp; Identification</span>
+      </a>
+      <a href="lesson-07.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">11.7 2SLS, Projection Matrices &amp; Overidentification</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Quick Check Scripts -->
+  <script>
+    (function() {
+      const btnHint = document.getElementById('btnHint116');
+      const hint = document.getElementById('hint116');
+      const btnSol = document.getElementById('btnSol116');
+      const sol = document.getElementById('sol116');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+    })();
+  </script>
+</body>
+</html>

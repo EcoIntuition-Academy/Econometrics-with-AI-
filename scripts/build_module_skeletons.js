@@ -10,7 +10,7 @@ const modules = [
   { id: '07', num: '7', title: 'Endogeneity and Causal Inference', desc: 'Address omitted variable bias, simultaneity, and master instrumental variables and natural experiments.' },
   { id: '08', num: '8', title: 'Time Series Econometrics', desc: 'Analyze dynamic macroeconomic and financial data, trends, unit roots, stationarity, and forecasting.' },
   { id: '09', num: '9', title: 'Panel Data', desc: 'Control for unobserved individual heterogeneity using fixed effects, random effects, and difference-in-differences.' },
-  { id: '10', num: '10', title: 'Modern Econometrics and AI', desc: 'Bridge econometrics with machine learning: LASSO, regularization, double machine learning, and AI ethics.' }
+  { id: '10', num: '10', title: 'Panel Data II', desc: 'First Differences, Cluster-Robust Inference & the Hausman Test.' }
 ];
 
 modules.forEach(m => {

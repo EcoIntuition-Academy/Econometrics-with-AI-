@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10.2: First Differences vs Fixed Effects — Econometrics with AI</title>
+  <meta name="description" content="Compare the within-group time demeaning of Fixed Effects with adjacent period-to-period changes in First Differences, prove algebraic equivalence at T=2, and analyze model consistency tradeoffs.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-10" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 10: Panel Data II &amp; Hausman Test</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 10</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 10</a>
+          <span class="module-nav-title">Panel Data II</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 5 &middot; First Differences vs Fixed Effects</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 10 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">10.1 The First Differences Model</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">10.2 First Differences vs Fixed Effects</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.3 Cluster-Robust Standard Errors</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.4 Choosing the Cluster Level &amp; Small Clusters</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">10.5 The Hausman Test &amp; Panel-Model Choice</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">40%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 40%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Container -->
+  <main class="lesson-container">
+
+    <!-- Lesson Header Block -->
+    <header class="lesson-header-block">
+      <div class="lesson-badge-row">
+        <span class="academic-badge badge-tier">Tier 4 &middot; Panel &amp; Discrete</span>
+        <span class="academic-badge badge-module">Module 10 &middot; Lesson 2</span>
+        <span class="academic-badge badge-time">Est. 24 min</span>
+      </div>
+      <h1 class="lesson-title">First Differences vs Fixed Effects</h1>
+      <p class="lesson-subtitle">
+        Comparing within-group demeaning with adjacent differencing, establishing the \(T=2\) equivalence theorem, and evaluating consistency across panel estimators.
+      </p>
+    </header>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      <ul class="objectives-list">
+        <li>Distinguish the identifying variation used by the Fixed Effects (Within) transformation versus the First Differences (FD) transformation.</li>
+        <li>Prove that FD and FE yield mathematically identical coefficient estimates when \(T = 2\).</li>
+        <li>Understand why the estimators diverge when \(T > 2\) and recognize that relative efficiency depends on error autocorrelation.</li>
+        <li>Master the comprehensive panel data model summary comparing Pooled OLS, Random Effects, Fixed Effects, and First Differences under alternative endogeneity conditions.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Two Alternative Transformations -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">1</span>
+        <h2 class="section-title">Two Alternative Transformations to Eliminate \(c_i\)</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          Both the Fixed Effects (within) model and the First Differences model share the exact same primary objective: <strong>eliminating the time-invariant unobserved individual effect \(c_i\)</strong> without requiring strong orthogonality assumptions. However, they achieve this through fundamentally distinct algebraic operations.
+        </p>
+
+        <!-- Visual Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          
+          <!-- Fixed Effects Card -->
+          <div class="card card-bordered" style="border-top: 4px solid var(--accent-primary); padding: var(--space-md);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.05em;">TRANSFORMATION A</div>
+            <h3 style="margin-top: var(--space-2xs); font-size: 1.15rem; color: var(--text-primary);">Fixed Effects (Within Transformation)</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; font-style: italic; margin-bottom: var(--space-sm);">
+              &ldquo;Compare each observation with the unit's time average.&rdquo;
+            </p>
+            <div class="math-display-wrapper" style="font-size: 0.95rem; margin: var(--space-xs) 0;">
+              \[
+              (y_{it} - \bar{y}_i) = (\mathbf{x}_{it} - \bar{\mathbf{x}}_i)'\boldsymbol{\beta} + (\varepsilon_{it} - \bar{\varepsilon}_i)
+              \]
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0;">
+              Relies on deviations from the unit-specific time mean \(\bar{y}_i = \frac{1}{T}\sum_{t=1}^T y_{it}\). Uses all time periods simultaneously to construct the benchmark.
+            </p>
+          </div>
+
+          <!-- First Differences Card -->
+          <div class="card card-bordered" style="border-top: 4px solid #059669; padding: var(--space-md);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.05em;">TRANSFORMATION B</div>
+            <h3 style="margin-top: var(--space-2xs); font-size: 1.15rem; color: var(--text-primary);">First Differences (FD Transformation)</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; font-style: italic; margin-bottom: var(--space-sm);">
+              &ldquo;Compare each observation with the immediately previous period.&rdquo;
+            </p>
+            <div class="math-display-wrapper" style="font-size: 0.95rem; margin: var(--space-xs) 0;">
+              \[
+              (y_{it} - y_{i,t-1}) = (\mathbf{x}_{it} - \mathbf{x}_{i,t-1})'\boldsymbol{\beta} + (\varepsilon_{it} - \varepsilon_{i,t-1})
+              \]
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0;">
+              Relies on changes from the previous period. Uses purely local, adjacent temporal variation (\(t\) vs \(t-1\)).
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Equivalence at T=2 and Divergence at T>2 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">2</span>
+        <h2 class="section-title">The \(T=2\) Equivalence &amp; Divergence When \(T > 2\)</h2>
+      </div>
+
+      <div class="study-card">
+        <div class="callout callout-info" style="margin-bottom: var(--space-md);">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--accent-primary);">KEY SOURCE RESULT</div>
+          <p style="margin-bottom: 0;">
+            The First Difference estimator and the Fixed Effects estimator produce the <strong>exact same coefficient estimates when \(T = 2\)</strong>. When \(T > 2\), the models diverge and yield different estimates because they exploit different variation in the data.
+          </p>
+        </div>
+
+        <h3 class="card-title">Why Are They Identical When \(T = 2\)?</h3>
+        <p class="text-secondary">
+          With two time periods (\(t=1, 2\)), the individual time average for any variable \(w_{it}\) is simply \(\bar{w}_i = \frac{w_{i1} + w_{i2}}{2}\). The demeaned values in period 1 and period 2 are:
+        </p>
+
+        <div class="math-card">
+          <div class="math-display-wrapper">
+            \[
+            \begin{aligned}
+            w_{i1} - \bar{w}_i &= w_{i1} - \frac{w_{i1} + w_{i2}}{2} = -\frac{1}{2}(w_{i2} - w_{i1}) = -\frac{1}{2}\Delta w_{i2} \\
+            w_{i2} - \bar{w}_i &= w_{i2} - \frac{w_{i1} + w_{i2}}{2} = +\frac{1}{2}(w_{i2} - w_{i1}) = +\frac{1}{2}\Delta w_{i2}
+            \end{aligned}
+            \]
+          </div>
+          <p class="math-card-note">
+            Both demeaned observations are exact linear scalar multiples of the single first difference \(\Delta w_{i2}\). Consequently, the OLS slope computed on mean-deviated data is mathematically identical to the OLS slope computed on differenced data: \(\widehat{\boldsymbol{\beta}}_{\text{FE}} \equiv \widehat{\boldsymbol{\beta}}_{\text{FD}}\).
+          </p>
+        </div>
+
+        <!-- Divergence at T > 2 -->
+        <h3 class="card-title" style="margin-top: var(--space-lg);">Why Do They Diverge When \(T > 2\)?</h3>
+        <p class="text-secondary">
+          Consider \(T = 4\):
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin-top: var(--space-xs);">
+          <div class="card card-bordered" style="padding: var(--space-md); background: var(--surface);">
+            <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem;">FE Identification (T = 4)</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-2xs); margin-bottom: 0;">
+              Compares every observation against the 4-period mean: \((y_{i1} - \bar{y}_i), (y_{i2} - \bar{y}_i), (y_{i3} - \bar{y}_i), (y_{i4} - \bar{y}_i)\). Every data point is anchored to the global center of unit \(i\).
+            </p>
+          </div>
+          <div class="card card-bordered" style="padding: var(--space-md); background: var(--surface);">
+            <div style="font-weight: 700; color: #059669; font-size: 0.9rem;">FD Identification (T = 4)</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-2xs); margin-bottom: 0;">
+              Forms 3 adjacent transitions: \((y_{i2} - y_{i1})\), \((y_{i3} - y_{i2})\), and \((y_{i4} - y_{i3})\). Ignores distances from the global mean and focuses exclusively on period-to-period velocity.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Summary of Panel Data Models -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">3</span>
+        <h2 class="section-title">Summary of Panel Data Models</h2>
+      </div>
+
+      <div class="study-card">
+        <p class="lead-text">
+          The table below synthesizes the core properties of primary panel estimators under alternative relationships between unobserved heterogeneity \(c_i\) and regressors \(\mathbf{x}_{it}\), directly from the source lecture notes:
+        </p>
+
+        <!-- Semantic Responsive Table Wrapper -->
+        <div class="table-responsive-wrapper" style="margin-top: var(--space-md);">
+          <table class="academic-table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="text-align: left;">Model Run</th>
+                <th style="text-align: left;">Key Condition on \(c_i\)</th>
+                <th style="text-align: left;">When \(c_i\) Uncorrelated with \(\mathbf{x}_{it}\)</th>
+                <th style="text-align: left;">When \(c_i\) Correlated with \(\mathbf{x}_{it}\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Pooled OLS</strong></td>
+                <td>Requires \(c_i\) uncorrelated with \(\mathbf{x}_{it}\)</td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.1); color: #059669; font-weight: 600;">Consistent</span></td>
+                <td><span class="badge" style="background: rgba(239,68,68,0.1); color: #ef4444; font-weight: 600;">Inconsistent</span></td>
+              </tr>
+              <tr>
+                <td><strong>Random Effects (GLS)</strong></td>
+                <td>Requires \(\mathbb{E}[c_i \mid \mathbf{x}_{it}] = 0\)</td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.15); color: #059669; font-weight: 700;">Consistent &amp; Efficient</span></td>
+                <td><span class="badge" style="background: rgba(239,68,68,0.1); color: #ef4444; font-weight: 600;">Inconsistent</span></td>
+              </tr>
+              <tr>
+                <td><strong>Fixed Effects (Within, LSDV)</strong></td>
+                <td>Allows \(c_i\) arbitrarily correlated with \(\mathbf{x}_{it}\)</td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.1); color: #059669; font-weight: 600;">Consistent</span></td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.1); color: #059669; font-weight: 600;">Consistent<sup>&dagger;</sup></span></td>
+              </tr>
+              <tr>
+                <td><strong>First Differences (FD)</strong></td>
+                <td>Allows \(c_i\) arbitrarily correlated with \(\mathbf{x}_{it}\)</td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.1); color: #059669; font-weight: 600;">Consistent</span></td>
+                <td><span class="badge" style="background: rgba(5,150,105,0.1); color: #059669; font-weight: 600;">Consistent<sup>&dagger;</sup></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info" style="margin-top: var(--space-md);">
+          <strong>&dagger; Crucial Source Note on Relative Efficiency:</strong>
+          Whether Fixed Effects or First Differences is more efficient when \(T > 2\) depends strictly on the serial correlation structure of the idiosyncratic disturbances \(\varepsilon_{it}\):
+          <ul style="margin: var(--space-2xs) 0 0 var(--space-md); padding: 0;">
+            <li>If \(\varepsilon_{it}\) are serially uncorrelated, Fixed Effects is more efficient because within demeaning preserves spherical error properties better than differencing.</li>
+            <li>If \(\varepsilon_{it}\) follow a random walk (\(\varepsilon_{it} = \varepsilon_{i,t-1} + u_{it}\)), First Differences is more efficient because differencing purges the unit root, leaving i.i.d. innovations \(\Delta \varepsilon_{it} = u_{it}\).</li>
+          </ul>
+          <strong>There is NO universal ranking</strong> stating that FE is always superior or FD is always superior.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 10.2 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">4</span>
+        <h2 class="section-title">Interactive Lab 10.2: FD vs FE Transformation Explorer</h2>
+      </div>
+
+      <div class="interactive-lab-card" id="lab102">
+        <div class="lab-header">
+          <div class="lab-title-wrap">
+            <span class="lab-badge">INTERACTIVE LAB 10.2</span>
+            <h3 class="lab-title">Visualizing the Identifying Variation</h3>
+          </div>
+          <p class="lab-desc">
+            Explore a 4-period unit. Switch between original levels, Fixed Effects mean-deviations, and First Differences adjacent changes to see how identifying variation is reshaped.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls-panel">
+          <div class="control-group">
+            <label class="control-label">Select Transformation</label>
+            <div class="btn-group" role="group" aria-label="Transformation View">
+              <button type="button" class="btn btn-sm btn-primary" id="btnTabLevels">Original Levels</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnTabFE">FE Demeaned</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnTabFD">First Differences</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">ACTIVE VIEW</div>
+            <div class="metric-value" id="metricViewName">Levels</div>
+            <div class="metric-sub">Raw panel coordinates</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">SAMPLE SIZE USED</div>
+            <div class="metric-value" id="metricTransObs">4 obs</div>
+            <div class="metric-sub" id="metricTransSub">All T periods available</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">BENCHMARK CENTER</div>
+            <div class="metric-value" id="metricCenter">c_i + Mean</div>
+            <div class="metric-sub" id="metricCenterSub">Baseline intercept</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">ESTIMATED SLOPE (β)</div>
+            <div class="metric-value" id="metricEstBeta">1.50</div>
+            <div class="metric-sub">Slope estimate</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-primary);"></span>
+            <span>Transformed Coordinates</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line" style="background: var(--accent-primary); height: 2px;"></span>
+            <span>Fitted Transformation Line</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #059669;"></span>
+            <span>Origin (0,0) Reference</span>
+          </div>
+        </div>
+
+        <!-- SVG Plot Canvas -->
+        <div class="graph-container" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          <svg id="lab102Svg" viewBox="0 0 700 320" style="width: 100%; height: auto; display: block;">
+            <!-- Rendered by JS -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div class="lab-insight-box" id="lab102InsightBox" style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(37,99,235,0.06); border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem;" id="lab102InsightTitle">
+            ORIGINAL LEVELS: Point Coordinates Shifted by c_i
+          </div>
+          <div style="margin-top: var(--space-xs); font-size: 0.85rem; color: var(--text-secondary);" id="lab102InsightText">
+            In levels, points are anchored by the unit-specific intercept \(c_i\). OLS without transformation suffers from omitted variable bias if \(c_i\) correlates with \(x_{it}\).
+          </div>
+        </div>
+
+        <!-- Visual Explanation Grid -->
+        <div class="visual-explanation-grid" style="margin-top: var(--space-lg);">
+          <div class="grid-card seeing">
+            <div class="grid-card-label">WHAT YOU ARE SEEING</div>
+            <p>
+              How the same 4 underlying data points are repositioned across estimation spaces. <strong>FE</strong> centers observations around \((0,0)\) by subtracting unit means; <strong>FD</strong> plots adjacent transition vectors \(\Delta x\) vs \(\Delta y\).
+            </p>
+          </div>
+
+          <div class="grid-card notice">
+            <div class="grid-card-label">WHAT TO NOTICE</div>
+            <p>
+              In FE, there are 4 points centered on the origin. In FD, there are only 3 points because 1 observation is lost to form differences (\(T-1\)).
+            </p>
+          </div>
+
+          <div class="grid-card matters">
+            <div class="grid-card-label">WHY IT MATTERS</div>
+            <p>
+              Both methods eliminate \(c_i\), but with \(T > 2\), the distance of a point from the 4-period mean is not the same as its adjacent change from the previous year.
+            </p>
+          </div>
+
+          <div class="grid-card interpretation">
+            <div class="grid-card-label">ECONOMETRIC INTERPRETATION</div>
+            <p>
+              FD and FE estimate identical slopes at \(T=2\). At \(T > 2\), differing point estimates reflect their distinct weighting of short-run versus medium-run variations.
+            </p>
+          </div>
+
+          <div class="grid-card highlight">
+            <div class="grid-card-label">TRY THIS</div>
+            <p>
+              Click between <strong>FE Demeaned</strong> and <strong>First Differences</strong>. Notice how FE keeps all 4 observations balanced symmetrically around the origin, while FD forms 3 delta steps.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check 10.2 -->
+    <section class="study-section">
+      <div class="section-header">
+        <span class="section-number">5</span>
+        <h2 class="section-title">Concept Check</h2>
+      </div>
+
+      <div class="quick-check-container quick-check-card">
+        <div class="quick-check-header">
+          <span class="academic-badge badge-check">CHECK 10.2</span>
+          <span class="quick-check-subtitle">Equivalence Theorem</span>
+        </div>
+
+        <h3 class="quick-check-question">
+          Under what exact time-dimension condition are First Differences (FD) and Fixed Effects (FE) coefficient estimates guaranteed to be mathematically identical?
+        </h3>
+
+        <div class="quick-check-actions">
+          <button type="button" class="btn btn-sm btn-outline hint-toggle" id="btnHint102">Show Hint</button>
+          <button type="button" class="btn btn-sm btn-primary solution-toggle" id="btnSol102">Show Solution</button>
+        </div>
+
+        <div class="hint-content" id="hint102" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-sm);">
+          <strong>Hint:</strong> Think about the smallest number of time periods required to compute both a difference and a mean.
+        </div>
+
+        <div class="solution-content" id="sol102" style="display: none; margin-top: var(--space-md); padding: var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-sm);">
+          <div style="font-weight: 700; color: #059669; margin-bottom: var(--space-xs);">ANSWER:</div>
+          <p style="margin-bottom: var(--space-xs);">
+            They are identical when <strong>\(T = 2\)</strong>.
+          </p>
+          <div style="font-weight: 700; color: #059669; margin-top: var(--space-sm); margin-bottom: var(--space-xs);">WHY?</div>
+          <p style="margin-bottom: 0;">
+            With only two time periods, the deviation from the two-period mean is exactly half of the first difference: \((w_{i2} - \bar{w}_i) = \frac{1}{2}(w_{i2} - w_{i1})\). Because demeaned data is a constant scalar multiple of differenced data, the OLS regression slope is identical. When \(T > 2\), FE uses all time periods to demean while FD uses adjacent pairs, causing the estimates to diverge.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary / Takeaways Card -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header">
+        <span class="summary-takeaways-icon">📋</span>
+        <h3 class="summary-takeaways-title">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li><strong>Alternative Transformations:</strong> FE removes \(c_i\) by subtracting the unit time mean (\(x_{it} - \bar{x}_i\)); FD removes \(c_i\) by subtracting the adjacent period (\(x_{it} - x_{i,t-1}\)).</li>
+        <li><strong>T = 2 Equivalence:</strong> With two periods, demeaning and differencing contain equivalent identifying variation, yielding identical point estimates \(\widehat{\boldsymbol{\beta}}_{\text{FE}} \equiv \widehat{\boldsymbol{\beta}}_{\text{FD}}\).</li>
+        <li><strong>T > 2 Divergence:</strong> For \(T > 2\), FE and FD use different linear combinations of the data and yield different point estimates.</li>
+        <li><strong>Context-Dependent Efficiency:</strong> FE is more efficient if errors \(\varepsilon_{it}\) are serially uncorrelated; FD is more efficient if errors follow a unit root / random walk. Neither estimator is universally superior.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">10.1 The First Differences Model</span>
+      </a>
+      <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">10.3 Cluster-Robust Standard Errors</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Course Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Interactive Lab 10.2 Script -->
+  <script>
+    (function() {
+      let activeMode = 'levels'; // 'levels', 'fe', 'fd'
+
+      const rawData = [
+        { t: 1, x: 2.0, y: 5.8 },
+        { t: 2, x: 3.5, y: 7.9 },
+        { t: 3, x: 5.0, y: 10.5 },
+        { t: 4, x: 7.0, y: 13.6 }
+      ];
+
+      // Computations
+      const meanX = rawData.reduce((acc, d) => acc + d.x, 0) / rawData.length;
+      const meanY = rawData.reduce((acc, d) => acc + d.y, 0) / rawData.length;
+
+      const feData = rawData.map(d => ({
+        t: d.t,
+        x: d.x - meanX,
+        y: d.y - meanY
+      }));
+
+      const fdData = [];
+      for (let i = 1; i < rawData.length; i++) {
+        fdData.push({
+          t: i + 1,
+          x: rawData[i].x - rawData[i - 1].x,
+          y: rawData[i].y - rawData[i - 1].y
+        });
+      }
+
+      const btnTabLevels = document.getElementById('btnTabLevels');
+      const btnTabFE = document.getElementById('btnTabFE');
+      const btnTabFD = document.getElementById('btnTabFD');
+
+      const metricViewName = document.getElementById('metricViewName');
+      const metricTransObs = document.getElementById('metricTransObs');
+      const metricTransSub = document.getElementById('metricTransSub');
+      const metricCenter = document.getElementById('metricCenter');
+      const metricCenterSub = document.getElementById('metricCenterSub');
+      const metricEstBeta = document.getElementById('metricEstBeta');
+
+      const labInsightTitle = document.getElementById('lab102InsightTitle');
+      const labInsightText = document.getElementById('lab102InsightText');
+      const svg = document.getElementById('lab102Svg');
+
+      function updateUI() {
+        if (activeMode === 'levels') {
+          btnTabLevels.className = 'btn btn-sm btn-primary';
+          btnTabFE.className = 'btn btn-sm btn-outline';
+          btnTabFD.className = 'btn btn-sm btn-outline';
+
+          metricViewName.textContent = 'Levels';
+          metricTransObs.textContent = '4 obs';
+          metricTransSub.textContent = 'All T periods available';
+          metricCenter.textContent = 'c_i + Mean';
+          metricCenterSub.textContent = 'Baseline intercept';
+          metricEstBeta.textContent = '1.56';
+
+          labInsightTitle.textContent = 'ORIGINAL LEVELS: Point Coordinates Shifted by c_i';
+          labInsightText.textContent = 'In levels, points are anchored by the unit-specific intercept c_i. OLS without transformation suffers from omitted variable bias if c_i correlates with x_it.';
+        } else if (activeMode === 'fe') {
+          btnTabLevels.className = 'btn btn-sm btn-outline';
+          btnTabFE.className = 'btn btn-sm btn-primary';
+          btnTabFD.className = 'btn btn-sm btn-outline';
+
+          metricViewName.textContent = 'FE Demeaned';
+          metricTransObs.textContent = '4 obs';
+          metricTransSub.textContent = 'Preserves T rows';
+          metricCenter.textContent = '(0, 0)';
+          metricCenterSub.textContent = 'Centered around unit mean';
+          metricEstBeta.textContent = '1.56';
+
+          labInsightTitle.textContent = 'FIXED EFFECTS VIEW: Demeaning Centers Data Around (0,0)';
+          labInsightText.textContent = 'Subtracting unit means eliminates c_i because mean(c_i) = c_i. The demeaned points sum to exactly zero on both axes, anchoring the regression line through the origin.';
+        } else {
+          btnTabLevels.className = 'btn btn-sm btn-outline';
+          btnTabFE.className = 'btn btn-sm btn-outline';
+          btnTabFD.className = 'btn btn-sm btn-primary';
+
+          metricViewName.textContent = 'First Differences';
+          metricTransObs.textContent = '3 obs';
+          metricTransSub.textContent = 'T - 1 adjacent changes';
+          metricCenter.textContent = 'Δc_i = 0';
+          metricCenterSub.textContent = 'No intercept needed';
+          metricEstBeta.textContent = '1.54';
+
+          labInsightTitle.textContent = 'FIRST DIFFERENCES VIEW: Adjacent Steps Drop 1 Observation';
+          labInsightText.textContent = 'First differencing maps transitions between consecutive years. Notice there are only 3 data points. When T > 2, FE and FD exploit different combinations of data, leading to slightly different slope estimates.';
+        }
+
+        renderPlot();
+      }
+
+      function renderPlot() {
+        svg.innerHTML = '';
+        const width = 700;
+        const height = 320;
+        const pad = { top: 30, right: 40, bottom: 45, left: 60 };
+
+        let dataPoints;
+        let minX, maxX, minY, maxY;
+        let xLabelStr, yLabelStr;
+
+        if (activeMode === 'levels') {
+          dataPoints = rawData;
+          minX = 0; maxX = 8.5;
+          minY = 0; maxY = 16;
+          xLabelStr = 'Regressor x_it';
+          yLabelStr = 'Outcome y_it';
+        } else if (activeMode === 'fe') {
+          dataPoints = feData;
+          minX = -3.5; maxX = 3.5;
+          minY = -5; maxY = 5;
+          xLabelStr = 'Demeaned Regressor (x_it - x̄_i)';
+          yLabelStr = 'Demeaned Outcome (y_it - ȳ_i)';
+        } else {
+          dataPoints = fdData;
+          minX = 0; maxX = 3.0;
+          minY = 0; maxY = 5.0;
+          xLabelStr = 'First Difference Δx_it';
+          yLabelStr = 'First Difference Δy_it';
+        }
+
+        function scaleX(val) {
+          return pad.left + ((val - minX) / (maxX - minX)) * (width - pad.left - pad.right);
+        }
+        function scaleY(val) {
+          return height - pad.bottom - ((val - minY) / (maxY - minY)) * (height - pad.top - pad.bottom);
+        }
+
+        // Axes & Grid
+        const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        axisGroup.setAttribute('stroke', 'var(--border-subtle)');
+        axisGroup.setAttribute('stroke-width', '1');
+
+        // Zero reference lines
+        const zeroY = scaleY(0);
+        if (zeroY >= pad.top && zeroY <= height - pad.bottom) {
+          const zLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          zLineY.setAttribute('x1', pad.left);
+          zLineY.setAttribute('x2', width - pad.right);
+          zLineY.setAttribute('y1', zeroY);
+          zLineY.setAttribute('y2', zeroY);
+          zLineY.setAttribute('stroke', 'var(--border-strong)');
+          zLineY.setAttribute('stroke-dasharray', '3 3');
+          axisGroup.appendChild(zLineY);
+        }
+
+        const zeroX = scaleX(0);
+        if (zeroX >= pad.left && zeroX <= width - pad.right) {
+          const zLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          zLineX.setAttribute('x1', zeroX);
+          zLineX.setAttribute('x2', zeroX);
+          zLineX.setAttribute('y1', pad.top);
+          zLineX.setAttribute('y2', height - pad.bottom);
+          zLineX.setAttribute('stroke', 'var(--border-strong)');
+          zLineX.setAttribute('stroke-dasharray', '3 3');
+          axisGroup.appendChild(zLineX);
+        }
+
+        // Border Axes
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', pad.left);
+        xAxis.setAttribute('x2', width - pad.right);
+        xAxis.setAttribute('y1', height - pad.bottom);
+        xAxis.setAttribute('y2', height - pad.bottom);
+        xAxis.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.appendChild(xAxis);
+
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', pad.left);
+        yAxis.setAttribute('x2', pad.left);
+        yAxis.setAttribute('y1', pad.top);
+        yAxis.setAttribute('y2', height - pad.bottom);
+        yAxis.setAttribute('stroke', 'var(--border-strong)');
+        axisGroup.appendChild(yAxis);
+        svg.appendChild(axisGroup);
+
+        // Axis Labels
+        const labelsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        labelsGroup.setAttribute('font-family', 'var(--font-mono)');
+        labelsGroup.setAttribute('font-size', '11');
+        labelsGroup.setAttribute('fill', 'var(--text-muted)');
+
+        const xLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLbl.setAttribute('x', width - pad.right);
+        xLbl.setAttribute('y', height - 12);
+        xLbl.setAttribute('text-anchor', 'end');
+        xLbl.textContent = xLabelStr;
+        labelsGroup.appendChild(xLbl);
+
+        const yLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLbl.setAttribute('x', pad.left);
+        yLbl.setAttribute('y', 18);
+        yLbl.setAttribute('text-anchor', 'start');
+        yLbl.textContent = yLabelStr;
+        labelsGroup.appendChild(yLbl);
+        svg.appendChild(labelsGroup);
+
+        // Fitted Line
+        const regLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        if (activeMode === 'levels') {
+          regLine.setAttribute('x1', scaleX(minX));
+          regLine.setAttribute('y1', scaleY(2.6 + 1.56 * minX));
+          regLine.setAttribute('x2', scaleX(maxX));
+          regLine.setAttribute('y2', scaleY(2.6 + 1.56 * maxX));
+        } else if (activeMode === 'fe') {
+          regLine.setAttribute('x1', scaleX(minX));
+          regLine.setAttribute('y1', scaleY(1.56 * minX));
+          regLine.setAttribute('x2', scaleX(maxX));
+          regLine.setAttribute('y2', scaleY(1.56 * maxX));
+        } else {
+          regLine.setAttribute('x1', scaleX(minX));
+          regLine.setAttribute('y1', scaleY(1.54 * minX));
+          regLine.setAttribute('x2', scaleX(maxX));
+          regLine.setAttribute('y2', scaleY(1.54 * maxX));
+        }
+        regLine.setAttribute('stroke', 'var(--accent-primary)');
+        regLine.setAttribute('stroke-width', '2');
+        regLine.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(regLine);
+
+        // Data Points
+        dataPoints.forEach((d, idx) => {
+          const cx = scaleX(d.x);
+          const cy = scaleY(d.y);
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', cx);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '6');
+          circle.setAttribute('fill', 'var(--accent-primary)');
+          circle.setAttribute('stroke', '#ffffff');
+          circle.setAttribute('stroke-width', '2');
+          svg.appendChild(circle);
+
+          const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          txt.setAttribute('x', cx + 10);
+          txt.setAttribute('y', cy + 4);
+          txt.setAttribute('font-family', 'var(--font-mono)');
+          txt.setAttribute('font-size', '10');
+          txt.setAttribute('font-weight', '600');
+          txt.setAttribute('fill', 'var(--text-primary)');
+          txt.textContent = activeMode !== 'fd' ? 't=' + d.t : 'Δt=' + d.t + '-' + (d.t - 1);
+          svg.appendChild(txt);
+        });
+      }
+
+      btnTabLevels.addEventListener('click', () => { activeMode = 'levels'; updateUI(); });
+      btnTabFE.addEventListener('click', () => { activeMode = 'fe'; updateUI(); });
+      btnTabFD.addEventListener('click', () => { activeMode = 'fd'; updateUI(); });
+
+      // Quick Check
+      const btnHint = document.getElementById('btnHint102');
+      const hint = document.getElementById('hint102');
+      const btnSol = document.getElementById('btnSol102');
+      const sol = document.getElementById('sol102');
+
+      btnHint.addEventListener('click', function() {
+        const isHidden = hint.style.display === 'none';
+        hint.style.display = isHidden ? 'block' : 'none';
+        btnHint.textContent = isHidden ? 'Hide Hint' : 'Show Hint';
+      });
+
+      btnSol.addEventListener('click', function() {
+        const isHidden = sol.style.display === 'none';
+        sol.style.display = isHidden ? 'block' : 'none';
+        btnSol.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12.6: Propagation of Error &amp; Module Review — Econometrics with AI</title>
+  <meta name="description" content="Explore how variable transformations propagate measurement error across ratios, logs, and differences, and consolidate the complete Module 12 toolkit with a diagnostic synthesis map, comparison table, and review cards.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-12" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 12</a>
+          <span class="module-nav-title">IV Diagnostics &amp; Measurement Error</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; Propagation of Error &amp; Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 12 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.1 Do We Need IV? Hausman &amp; Wu Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.2 Testing Instrument Validity: Sargan</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.3 Instrument Strength &amp; Weak IVs</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.4 Measurement Error in y &amp; x</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">✓</span>
+              <span class="item-title">12.5 Attenuation Bias &amp; IV Solution</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">12.6 Propagation of Error &amp; Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lesson-progress-indicator">
+          <div class="progress-bar-track" style="width: 90px; height: 6px;">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+          </div>
+          <span class="progress-text">100%</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content -->
+  <main class="lesson-main">
+    <div class="container lesson-container">
+
+      <!-- Lesson Hero -->
+      <header class="lesson-hero">
+        <div class="lesson-hero-meta">
+          <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 12.6</span>
+          <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Synthesis &amp; Review</span>
+        </div>
+        <h1 class="lesson-hero-title">Propagation of Error &amp; Module Review</h1>
+        <p class="lesson-hero-lead">
+          Constructed variables inherit uncertainty from the measurements used to create them, and some transformations can make that uncertainty more consequential. Here we review error propagation and synthesize the complete Module 12 econometric toolkit.
+        </p>
+      </header>
+
+      <!-- Learning Objectives -->
+      <div class="objectives-card">
+        <div class="objectives-header">
+          <span class="objectives-icon">🎯</span>
+          <h3 class="objectives-title">Learning Objectives</h3>
+        </div>
+        <ul class="objectives-list">
+          <li>Understand how measurement error propagates through mathematical transformations into constructed variables.</li>
+          <li>Analyze three canonical transformations: ratio construction (wages), nonlinear scaling (log income), and differencing (test score gains).</li>
+          <li>Trace the sequential diagnostic questions in the IV decision architecture.</li>
+          <li>Synthesize the complete econometric toolkit of Module 12 using structured review cards and diagnostic flow maps.</li>
+        </ul>
+      </div>
+
+      <!-- Section 1: Propagation of Measurement Error -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 1</span>
+          <h2 class="study-section-title">1. Propagation of Measurement Error</h2>
+        </div>
+
+        <div class="callout callout-info" style="margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="callout-badge">BALANCED PERSPECTIVE</span>
+            <h4 class="callout-title">Transformation &amp; Inherited Noise</h4>
+          </div>
+          <div class="callout-body">
+            Derived variables inherit measurement error from their inputs, and some transformations can make the resulting uncertainty more consequential.
+          </div>
+        </div>
+
+        <!-- Flow Visual of Error Propagation -->
+        <div class="interactive-lab-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">
+            PROPAGATION FLOW ARCHITECTURE
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; text-align: center;">
+            <div style="flex: 1; min-width: 120px; padding: 0.65rem 0.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">STEP 1</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">RAW MEASURES</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">(e.g., \(y^*, x^*\))</div>
+            </div>
+            <div style="font-size: 1.1rem; color: var(--color-primary); font-weight: bold;">&rarr;</div>
+            <div style="flex: 1; min-width: 120px; padding: 0.65rem 0.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">STEP 2</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: #d97706; margin-top: 2px;">SURVEY NOISE</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">(e.g., \(+ u, + v\))</div>
+            </div>
+            <div style="flex: 1; min-width: 120px; padding: 0.65rem 0.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">STEP 3</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: var(--color-primary); margin-top: 2px;">TRANSFORMATION</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">(Ratio, Log, Diff)</div>
+            </div>
+            <div style="font-size: 1.1rem; color: var(--color-primary); font-weight: bold;">&rarr;</div>
+            <div style="flex: 1; min-width: 120px; padding: 0.65rem 0.5rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">STEP 4</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">CONSTRUCTED VAR</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">(New Regressor)</div>
+            </div>
+            <div style="font-size: 1.1rem; color: var(--color-primary); font-weight: bold;">&rarr;</div>
+            <div style="flex: 1; min-width: 120px; padding: 0.65rem 0.5rem; background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: #991b1b; font-weight: 600;">STEP 5</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: #dc2626; margin-top: 2px;">INHERITED NOISE</div>
+              <div style="font-size: 0.75rem; color: #b91c1c;">(Compressed \(\lambda\))</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Three Canonical Examples -->
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <!-- Example 1: Ratio -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">RATIO CONSTRUCTION</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Wage = Income / Hours</h4>
+            <div class="equation-display" style="padding: 0.4rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs); font-size: 0.85rem; margin-bottom: 0.5rem;">
+              \[\text{Wage} = \frac{\text{Income}^* + u_{\text{inc}}}{\text{Hours}^* + u_{\text{hrs}}}\]
+            </div>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Both numerator and denominator contain reporting noise. Mismeasurement in hours worked enters the denominator, destabilizing the computed wage quotient.
+            </p>
+          </div>
+
+          <!-- Example 2: Non-Linear Log -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fef3c7; color: #b45309; font-size: var(--text-xs); margin-bottom: 0.35rem;">LOGARITHMIC SCALING</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Log Income = \(\ln(y^* + v)\)</h4>
+            <div class="equation-display" style="padding: 0.4rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs); font-size: 0.85rem; margin-bottom: 0.5rem;">
+              \[\ln(y) \approx \ln y^* + \frac{v}{y^*}\]
+            </div>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              The effective measurement error becomes relative (\(v/y^*\)). For observations with low true income \(y^*\), modest absolute errors create large proportional distortions.
+            </p>
+          </div>
+
+          <!-- Example 3: Difference across Time -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">PANEL DIFFERENCING</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 600;">Difference in test scores = \(y_2 - y_1\)</h4>
+            <div class="equation-display" style="padding: 0.4rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs); font-size: 0.85rem; margin-bottom: 0.5rem;">
+              \[\text{Var}(\Delta v) = \sigma_{v_2}^2 + \sigma_{v_1}^2 = 2\sigma_v^2\]
+            </div>
+            <p style="margin: 0; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5;">
+              Differencing eliminates time-invariant fixed effects \(\alpha_i\), but doubles measurement-error variance while true signal variation shrinks, worsening attenuation bias.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Comprehensive Diagnostic & Remedy Comparison Table -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 2</span>
+          <h2 class="study-section-title">2. Diagnostic &amp; Remedy Comparison Table</h2>
+        </div>
+
+        <div style="overflow-x: auto; margin-top: var(--space-sm);">
+          <table style="width: 100%; border-collapse: collapse; font-size: var(--text-xs); background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+            <thead>
+              <tr style="background: var(--surface-secondary, rgba(0,0,0,0.03)); border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 10px 14px; font-weight: 700;">Econometric Challenge</th>
+                <th style="padding: 10px 14px; font-weight: 700;">Primary Diagnostic</th>
+                <th style="padding: 10px 14px; font-weight: 700;">Core Consequence</th>
+                <th style="padding: 10px 14px; font-weight: 700;">Recommended Econometric Remedy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 10px 14px; font-weight: 600;">Endogenous Regressors</td>
+                <td style="padding: 10px 14px;">Hausman (\(W\)) or Wu Test (\(\hat{u}\))</td>
+                <td style="padding: 10px 14px;">OLS is biased and inconsistent</td>
+                <td style="padding: 10px 14px;">Use 2SLS / Instrumental Variables</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 10px 14px; font-weight: 600;">Weak Instruments</td>
+                <td style="padding: 10px 14px;">First-stage \(F < 10\) (or \(16\)), Stock-Yogo, Cragg-Donald</td>
+                <td style="padding: 10px 14px;">Exploding variance; finite-sample bias toward OLS</td>
+                <td style="padding: 10px 14px;">Stronger instruments, or Anderson-Rubin robust inference</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 10px 14px; font-weight: 600;">Invalid Instrument Set</td>
+                <td style="padding: 10px 14px;">Sargan Test (\(n R_u^2 \sim \chi^2_{L-K}\)) when \(L > K\)</td>
+                <td style="padding: 10px 14px;">Rejection of mutual moment conditions</td>
+                <td style="padding: 10px 14px;">Re-evaluate exclusion restrictions; account for LATE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 10px 14px; font-weight: 600;">Measurement Error in \(y\)</td>
+                <td style="padding: 10px 14px;">Domain audit, residual variance inspection</td>
+                <td style="padding: 10px 14px;">Slope unbiased; standard errors inflated (\(\sigma_\varepsilon^2 + \sigma_v^2\))</td>
+                <td style="padding: 10px 14px;">Standard OLS remains valid; collect larger sample for precision</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 10px 14px; font-weight: 600;">Measurement Error in \(x\)</td>
+                <td style="padding: 10px 14px;">Hausman endogeneity test, reliability assessment</td>
+                <td style="padding: 10px 14px;">Attenuation bias toward zero: \(\mathbb{E}[\hat{\beta}_{\text{OLS}}] = \lambda\beta\)</td>
+                <td style="padding: 10px 14px;">Use an IV \(z\) uncorrelated with measurement error \(u\)</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 14px; font-weight: 600;">Propagation of Error</td>
+                <td style="padding: 10px 14px;">Formula audit (ratios, logs, differences)</td>
+                <td style="padding: 10px 14px;">Inherited input noise; reliability ratio collapses</td>
+                <td style="padding: 10px 14px;">Direct administrative measures; avoid unnecessary differencing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Quick Check -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 3</span>
+          <h2 class="study-section-title">3. Quick Check</h2>
+        </div>
+        <div class="study-section-body">
+          <div class="quick-check-card">
+            <div class="quick-check-header">
+              <span class="quick-check-badge">QUICK CHECK</span>
+            </div>
+            <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+              Why can taking differences of a variable across time (e.g., test score gains \(\Delta y = y_2 - y_1\)) worsen attenuation bias, even though it successfully eliminates unobserved individual fixed effects?
+            </p>
+            <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+              <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+              <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+            </div>
+            <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+              <strong>HINT:</strong> Examine what happens to the variance of the differenced noise \(\text{Var}(v_2 - v_1)\) relative to the true differenced signal \(\text{Var}(y_2^* - y_1^*)\) when variables are highly persistent.
+            </div>
+            <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+              <p style="margin: 0 0 0.4rem 0;">
+                <strong>ANSWER:</strong> Differencing doubles measurement error variance while reducing true signal variance, causing the reliability ratio \(\lambda\) to collapse.
+              </p>
+              <p style="margin: 0; color: var(--text-secondary);">
+                <strong>WHY?</strong> When variables are differenced across time, the error variance doubles: \(\text{Var}(v_2 - v_1) = \sigma_{v_1}^2 + \sigma_{v_2}^2 = 2\sigma_v^2\). Meanwhile, because persistent economic series have small differenced variation \(\text{Var}(\Delta y^*)\), the signal-to-noise ratio \(\lambda = \text{Var}(\Delta y^*)/[\text{Var}(\Delta y^*) + 2\sigma_v^2]\) plunges, creating much more severe attenuation bias than in levels regression.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Final Module Synthesis: Diagnostic Workflow -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 4</span>
+          <h2 class="study-section-title">4. Module 12 Diagnostic Workflow</h2>
+        </div>
+
+        <div class="interactive-lab-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem; text-align: center;">
+            MODULE 12 DIAGNOSTIC WORKFLOW
+          </div>
+
+          <div class="workflow-flow-grid" style="display: flex; flex-direction: column; gap: 0.45rem; max-width: 600px; margin: 0 auto; text-align: center;">
+            <!-- Stage 1 -->
+            <div style="padding: 0.65rem 0.85rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">DO WE NEED IV?</div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 2px 0;">Hausman / Wu Tests</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Assess evidence on regressor endogeneity; retain OLS if exogeneity holds.</div>
+            </div>
+
+            <div style="font-size: 1rem; color: var(--color-primary); line-height: 1; font-weight: bold;">&darr;</div>
+
+            <!-- Stage 2 -->
+            <div style="padding: 0.65rem 0.85rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">ARE THE INSTRUMENTS VALID?</div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 2px 0;">Overidentification / Sargan Test</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Evaluate joint compatibility of excluded instruments; consider LATE heterogeneity.</div>
+            </div>
+
+            <div style="font-size: 1rem; color: var(--color-primary); line-height: 1; font-weight: bold;">&darr;</div>
+
+            <!-- Stage 3 -->
+            <div style="padding: 0.65rem 0.85rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">ARE THE INSTRUMENTS STRONG?</div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 2px 0;">First-Stage Diagnostics</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">First-stage \(F\)-statistics and robust rank tests to guard against finite-sample bias.</div>
+            </div>
+
+            <div style="font-size: 1rem; color: var(--color-primary); line-height: 1; font-weight: bold;">&darr;</div>
+
+            <!-- Stage 4: Fork -->
+            <div style="padding: 0.65rem 0.85rem; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">IS THERE MEASUREMENT ERROR?</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.5rem; text-align: left;">
+                <div style="padding: 0.5rem 0.75rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs); border-left: 3px solid #2563eb;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #2563eb;">Error in \(y\)</div>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Lower precision; slope remains centered.</div>
+                </div>
+                <div style="padding: 0.5rem 0.75rem; background: var(--surface-secondary, rgba(0,0,0,0.02)); border-radius: var(--radius-xs); border-left: 3px solid #dc2626;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #dc2626;">Error in \(x\)</div>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Endogeneity &amp; attenuation bias toward zero.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 1rem; color: var(--color-primary); line-height: 1; font-weight: bold;">&darr;</div>
+
+            <!-- Stage 5 -->
+            <div style="padding: 0.65rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-xs);">
+              <div style="font-size: 0.75rem; color: #047857; font-weight: 700; text-transform: uppercase;">VALID IV MAY HELP</div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: #065f46; margin: 2px 0;">Possible Consistency Restoration Under Assumptions</div>
+              <div style="font-size: 0.75rem; color: #047857;">An instrument correlated with \(x^*\) and orthogonal to noise \(u\) bypasses contamination.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: 2 x 2 Review Grid -->
+      <section class="study-section">
+        <div class="study-section-header">
+          <span class="study-section-badge">Section 5</span>
+          <h2 class="study-section-title">5. Core Econometric Themes: At a Glance</h2>
+        </div>
+
+        <div class="comparison-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+          <!-- Card 1 -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">ENDOGENEITY</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 700;">Regressor Exogeneity</h4>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem;">
+              <strong>Question:</strong> Is \(x\) correlated with the structural disturbance?
+            </div>
+            <div style="font-size: var(--text-xs); color: var(--color-primary); font-weight: 600;">
+              <strong>Main tools:</strong> Hausman / Wu
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #e0e7ff; color: #3730a3; font-size: var(--text-xs); margin-bottom: 0.35rem;">INSTRUMENT VALIDITY</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 700;">Exclusion Restrictions</h4>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem;">
+              <strong>Question:</strong> Is the instrument set compatible with the structural model?
+            </div>
+            <div style="font-size: var(--text-xs); color: var(--color-primary); font-weight: 600;">
+              <strong>Main idea:</strong> Overidentification
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fef3c7; color: #b45309; font-size: var(--text-xs); margin-bottom: 0.35rem;">INSTRUMENT STRENGTH</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 700;">First-Stage Relevance</h4>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem;">
+              <strong>Question:</strong> Does \(z\) sufficiently predict \(x\)?
+            </div>
+            <div style="font-size: var(--text-xs); color: #b45309; font-weight: 600;">
+              <strong>Main idea:</strong> First-stage relevance
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="comparison-card" style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-md);">
+            <span class="badge" style="background: #fee2e2; color: #dc2626; font-size: var(--text-xs); margin-bottom: 0.35rem;">MEASUREMENT ERROR</span>
+            <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 700;">Noise Location</h4>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem;">
+              <strong>Question:</strong> Where does the noise enter?
+            </div>
+            <div style="font-size: var(--text-xs); color: #dc2626; line-height: 1.4;">
+              <strong>\(y\)-error:</strong> precision loss &middot; <strong>\(x\)-error:</strong> attenuation / endogeneity
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Module Completion Callout -->
+      <div class="callout callout-success" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
+        <div class="callout-header">
+          <span class="callout-badge" style="background: #d1fae5; color: #065f46;">MODULE 12 COMPLETE</span>
+          <h4 class="callout-title">Module 12 Complete: IV Diagnostics, Weak Instruments &amp; Measurement Error</h4>
+        </div>
+        <div class="callout-body">
+          You have completed all 6 lessons covering exogeneity tests, overidentification, weak instruments, measurement error in \(y\) and \(x\), attenuation bias, and error propagation.
+        </div>
+      </div>
+
+      <!-- What You Should Now Understand -->
+      <div class="summary-takeaways-card">
+        <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="academic-badge badge-summary">TAKEAWAYS</span>
+          <h3 class="summary-takeaways-title" style="margin: 0; font-size: 1.15rem;">What You Should Now Understand</h3>
+        </div>
+        <ul class="summary-takeaways-list" style="margin: 0 0 0 1.25rem; padding: 0; font-size: var(--text-sm); line-height: 1.6;">
+          <li style="margin-bottom: 0.5rem;">Hausman and Wu tests provide evidence about whether regressors appear endogenous under the maintained assumptions.</li>
+          <li style="margin-bottom: 0.5rem;">Overidentification tests such as Sargan assess whether an overidentified instrument set is jointly compatible with the model; rejection indicates tension with the maintained assumptions rather than identifying a specific failing instrument.</li>
+          <li style="margin-bottom: 0.5rem;">Instrument strength matters because weak instruments can make IV estimates highly imprecise and unreliable in finite samples; first-stage diagnostics help assess instrument relevance, while instrument strength and validity remain distinct concepts.</li>
+          <li style="margin-bottom: 0.5rem;">Classical measurement error in the outcome mainly reduces precision, while classical measurement error in a regressor creates endogeneity and attenuation bias toward zero.</li>
+          <li style="margin-bottom: 0;">A valid and relevant instrument can restore consistency in the classical measurement-error setting under the maintained assumptions; meanwhile, derived variables inherit measurement error from their inputs, and some transformations can make that uncertainty more consequential.</li>
+        </ul>
+      </div>
+
+      <!-- Lesson Navigation Pager -->
+      <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation" style="margin-top: 32px; margin-bottom: 48px; padding-top: var(--space-lg); border-top: 1px solid var(--border-subtle);">
+        <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">12.5 Attenuation Bias &amp; IV Solution</span>
+        </a>
+        <a href="index.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Return to Module &rarr;</span>
+          <span class="nav-btn-title">Module 12 Overview</span>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script>
+    function initQuickCheck126() {
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const hint = card ? card.querySelector('.quick-check-hint') : null;
+          if (hint) {
+            const isHidden = window.getComputedStyle(hint).display === 'none';
+            hint.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quick-check-card');
+          const sol = card ? card.querySelector('.quick-check-solution') : null;
+          if (sol) {
+            const isHidden = window.getComputedStyle(sol).display === 'none';
+            sol.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+          }
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuickCheck126);
+    } else {
+      initQuickCheck126();
+    }
+  </script>
+</body>
+</html>

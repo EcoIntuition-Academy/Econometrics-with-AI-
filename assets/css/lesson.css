@@ -849,6 +849,8 @@ h3,
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
   padding: 1.15rem 1rem;
   text-align: center;
@@ -859,6 +861,43 @@ h3,
   margin: 0.65rem 0 1rem 0;
   color: var(--text-primary);
   box-sizing: border-box;
+}
+
+/* Universally eliminate side-wise scrollbars across all components */
+::-webkit-scrollbar:horizontal {
+  height: 0px !important;
+  display: none !important;
+}
+
+.equation-body,
+.equation-main,
+.formula-main,
+.formula-math-render,
+.math-scroll-box,
+.math-display,
+.step-math,
+.table-responsive-wrapper,
+.matrix-annotated,
+.matrix-display,
+.chart-svg-shell {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.equation-body::-webkit-scrollbar,
+.equation-main::-webkit-scrollbar,
+.formula-main::-webkit-scrollbar,
+.formula-math-render::-webkit-scrollbar,
+.math-scroll-box::-webkit-scrollbar,
+.math-display::-webkit-scrollbar,
+.step-math::-webkit-scrollbar,
+.table-responsive-wrapper::-webkit-scrollbar,
+.matrix-annotated::-webkit-scrollbar,
+.matrix-display::-webkit-scrollbar,
+.chart-svg-shell::-webkit-scrollbar {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 /* Standalone math-scroll-box styling when used outside equation boxes */
@@ -876,11 +915,22 @@ mjx-container[jax="CHTML"] {
   box-sizing: border-box;
 }
 
-mjx-container[jax="CHTML"][display="true"] {
-  overflow-x: auto;
+mjx-container[jax="CHTML"][display="true"],
+mjx-container[display="true"],
+mjx-container {
+  overflow-x: visible !important;
   overflow-y: hidden;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
   padding: 4px 0;
   margin: 0.4em 0 !important;
+}
+
+mjx-container::-webkit-scrollbar,
+mjx-container *::-webkit-scrollbar {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 /* Ensure equation surfaces, study cards, and structured equation boxes show math directly without scrollbars */
@@ -891,29 +941,46 @@ mjx-container[jax="CHTML"][display="true"] {
 .study-section mjx-container[jax="CHTML"][display="true"] {
   overflow-x: visible;
   max-width: 100%;
+  scrollbar-width: none;
 }
 
 .equation-box .equation-body,
 .equation-box .equation-main {
   overflow-x: visible;
+  scrollbar-width: none;
 }
 
 @media (max-width: 480px) {
-  .equation-surface mjx-container[jax="CHTML"][display="true"],
-  .equation-card mjx-container[jax="CHTML"][display="true"],
-  .equation-box mjx-container[jax="CHTML"][display="true"],
-  .study-card mjx-container[jax="CHTML"][display="true"],
-  .study-section mjx-container[jax="CHTML"][display="true"],
-  .equation-box .equation-body,
-  .equation-box .equation-main {
-    overflow-x: auto;
+  mjx-container[jax="CHTML"][display="true"] {
+    font-size: 85% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+  .math-display-wrapper,
+  .derivation-step-math,
+  .math-card,
+  .equation-surface,
+  .equation-card,
+  .equation-box,
+  .study-card,
+  .study-section {
+    max-width: 100%;
+  }
+  .math-display-wrapper,
+  .derivation-step-math {
+    overflow-x: auto !important;
+    scrollbar-width: none;
   }
 }
 
-mjx-container[jax="CHTML"]:not([display="true"]) {
+mjx-container[jax="CHTML"]:not([display="true"]),
+mjx-container:not([display="true"]) {
   display: inline-block;
   vertical-align: -0.15em;
   line-height: 1;
+  margin: 0 0.12em !important;
+  padding: 0 !important;
 }
 
 /* Equation Explainer & Symbol Breakdown */
@@ -2235,8 +2302,10 @@ svg#ols-svg {
 }
 
 /* Responsive Table */
+.table-responsive,
 .table-responsive-wrapper {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: var(--space-md) 0;
@@ -3557,12 +3626,12 @@ svg#ols-svg {
    32. WHAT YOU SHOULD NOW UNDERSTAND REVISION CARD
    -------------------------------------------------------------------------- */
 .summary-takeaways-card {
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-subtle, #cbd5e1);
   border-radius: var(--radius-md, 8px);
   padding: 1.5rem 1.75rem;
   margin: var(--space-xl, 2.5rem) 0 var(--space-md, 1rem) 0;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
 }
 
 .summary-takeaways-header {
@@ -3571,7 +3640,7 @@ svg#ols-svg {
   gap: 0.5rem;
   margin-bottom: 0.85rem;
   padding-bottom: 0.65rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border-subtle, #e2e8f0);
 }
 
 .summary-takeaways-icon {
@@ -3583,7 +3652,7 @@ svg#ols-svg {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #0f172a;
+  color: var(--text-primary, #0f172a);
   margin: 0;
 }
 
@@ -3601,14 +3670,14 @@ svg#ols-svg {
   padding-left: 1.5rem;
   font-size: 0.92rem;
   line-height: 1.6;
-  color: #334155;
+  color: var(--text-secondary, #334155);
 }
 
 .summary-takeaways-list li::before {
   content: "•";
   position: absolute;
   left: 0.35rem;
-  color: #2563eb;
+  color: var(--accent-primary, #2563eb);
   font-weight: 800;
   font-size: 1.1rem;
   line-height: 1.4;
@@ -4515,18 +4584,186 @@ svg#ols-svg {
 }
 
 /* Responsive Lesson Pagination */
+.lesson-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.lesson-pager .btn {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
-  .lesson-pagination {
+  .lesson-pagination,
+  .lesson-pager {
     flex-direction: column !important;
     gap: 0.75rem !important;
   }
-  .lesson-pagination .lesson-nav-btn {
+  .lesson-pagination .lesson-nav-btn,
+  .lesson-pager .btn {
     max-width: 100% !important;
     width: 100% !important;
     min-width: unset !important;
+    white-space: normal !important;
+    text-align: center !important;
   }
   .lesson-pagination .lesson-nav-btn.btn-next {
     margin-left: 0 !important;
     text-align: left !important;
   }
 }
+
+/* Interactive Simulation Lab Component System */
+.interactive-lab-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.interactive-lab-card .lab-header {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.interactive-lab-card .lab-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(37, 99, 235, 0.1);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm, 6px);
+  margin-bottom: var(--space-2xs);
+}
+
+.interactive-lab-card .lab-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: var(--space-2xs);
+  margin-bottom: var(--space-xs);
+}
+
+.interactive-lab-card .lab-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.lab-controls-panel {
+  background: var(--surface-secondary, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm, 8px);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.lab-controls-panel .control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lab-controls-panel .control-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.lab-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.metric-card {
+  background: var(--surface-secondary, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm, 8px);
+  padding: 10px 14px;
+  text-align: center;
+  transition: border-color var(--transition-fast, 0.15s ease);
+}
+
+.metric-card:hover {
+  border-color: var(--accent-primary);
+}
+
+.metric-card .metric-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted, var(--text-secondary));
+  margin-bottom: 4px;
+}
+
+.metric-card .metric-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-card .metric-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.external-legend-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  margin-bottom: var(--space-sm);
+  background: var(--surface-secondary, rgba(0, 0, 0, 0.02));
+  border-radius: var(--radius-sm, 6px);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.external-legend-bar .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.external-legend-bar .legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.external-legend-bar .legend-line {
+  width: 20px;
+  height: 2px;
+  display: inline-block;
+}
+
