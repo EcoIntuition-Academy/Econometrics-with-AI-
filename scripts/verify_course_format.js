@@ -13,7 +13,9 @@ const modules = [
   { id: 'module-09', num: 9, title: 'Time-Ordered Data, Autocorrelation & HAC Inference', lessons: 5 },
   { id: 'module-10', num: 10, title: 'Panel Data II: First Differences, Cluster-Robust Inference & the Hausman Test', lessons: 5 },
   { id: 'module-11', num: 11, title: 'Instrumental Variables & Two-Stage Least Squares', lessons: 7 },
-  { id: 'module-12', num: 12, title: 'IV Diagnostics, Weak Instruments & Measurement Error', lessons: 6 }
+  { id: 'module-12', num: 12, title: 'IV Diagnostics, Weak Instruments & Measurement Error', lessons: 6 },
+  { id: 'module-13', num: 13, title: 'Field Experiments, Randomization & Experimental Design', lessons: 6 },
+  { id: 'module-14', num: 14, title: 'Field Experiments II: Estimation, Compliance & LATE', lessons: 6 }
 ];
 
 let totalChecks = 0;

@@ -21,7 +21,9 @@ const ProgressTracker = (function () {
     'module-09': 5,
     'module-10': 5,
     'module-11': 7,
-    'module-12': 6
+    'module-12': 6,
+    'module-13': 6,
+    'module-14': 6
   };
 
   function getProgressData() {

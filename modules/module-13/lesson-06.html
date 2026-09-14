@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13.6: Covariate Adjustment, Precision &amp; Best Practices — EcoIntuition Academy</title>
+  <meta name="description" content="Harness pre-treatment covariates in regression models to absorb residual variance and boost statistical power, avoid conditioning on post-treatment colliders, and apply essential experimental design principles from pre-registration to reporting.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-13" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 13: Field Experiments &amp; Randomization</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 13</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 13</a>
+          <span class="module-nav-title">Field Experiments, Randomization &amp; Experimental Design</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; Covariate Adjustment &amp; Synthesis</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 13 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.1 Field Experiments &amp; Selection Bias</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.2 Power Calculations &amp; Sample Size</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.3 Randomization Inference</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.4 Blocked Randomization &amp; Fisher Exact</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.5 Balance Tests in Experiments</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">13.6 Covariate Adjustment &amp; Best Practices</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 13.6</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Precision &amp; Practice</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Covariate Adjustment, Precision &amp; Best Practices
+      </h1>
+      <p class="lesson-hero-lead">
+        In randomized field experiments, random assignment ensures identification, so why control for pre-treatment covariates? Discover how baseline variables absorb residual variation to boost precision, avoid dangerous post-treatment controls, and master the end-to-end experimental workflow.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Formulate the covariate-adjusted regression model \(Y_i = \alpha + \beta_1 T_i + \beta_2 X_i + \varepsilon_i\).</li>
+        <li>Contrast the purpose of covariates in observational studies (identification) vs. experiments (precision).</li>
+        <li>Explain how predictive baseline covariates reduce residual variance and narrow standard errors.</li>
+        <li>State the fundamental rule against controlling for post-treatment variables or colliders.</li>
+        <li>Synthesize the four pillars of field experiment best practices from pre-registration to inference.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Covariate Adjustment & Precision Gains -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Covariate Adjustment: Precision over Identification</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          Consider estimating treatment effect \(\beta_1\) by augmenting the regression with pre-treatment covariate vector \(X_i\):
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">COVARIATE-ADJUSTED REGRESSION</div>
+          <div class="equation-math">
+            $$Y_i = \alpha + \beta_1 T_i + \beta_2 X_i + \varepsilon_i$$
+          </div>
+          <div class="equation-subtext">
+            where \(X_i\) represents baseline characteristics strictly measured <em>before</em> treatment assignment.
+          </div>
+        </div>
+
+        <!-- Side-by-side Architectural Comparison -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">WITHOUT PRE-TREATMENT COVARIATES</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem;">Unbiased but Higher Variance</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--color-text-secondary);">
+              The bivariate regression \(\hat{\beta}_1 = \bar{Y}_1 - \bar{Y}_0\) is protected from systematic selection bias by the randomized design. However, the residual disturbance \(\sigma^2\) includes all variation in \(Y\) explained by \(X\), leading to wider confidence intervals.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); background: #f0fdf4; border: 1px solid #bbf7d0;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #15803d; margin-bottom: var(--space-xs);">WITH PREDICTIVE BASELINE COVARIATES</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #166534;">Sharper Precision &amp; Narrower CIs</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: #14532d;">
+              Because \(X_i\) is pre-treatment, it cannot be affected by \(T\). Adding \(X_i\) absorbs predictable outcome variation, reducing the residual variance: \(\sigma^2_{\varepsilon} \approx \sigma^2(1 - R_X^2)\). This directly reduces \(\text{SE}(\hat{\beta}_1)\) and amplifies statistical power.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">METHODOLOGICAL DISTINCTION</span>
+            <h3 class="callout-title">Identification vs. Efficiency</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              In observational econometrics, control variables are required to achieve <strong>identification</strong> (satisfying unconfoundedness). In randomized field experiments, random assignment provides identification by design; pre-treatment covariates are included primarily for <strong>precision</strong>.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: What NOT to Control For: Post-Treatment Variables & Colliders -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. What NOT to Control For: Post-Treatment Variables</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md); background: #fef2f2; border-left: 4px solid #ef4444;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c; margin-bottom: var(--space-xs);">CRITICAL DANGER &middot; POST-TREATMENT CONTROLS</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #991b1b;">Never Control for Post-Treatment Variables</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: #7f1d1d;">
+              Variables measured <em>after</em> treatment assignment may themselves be affected by the intervention. Controlling for an intermediate outcome blocks part of the causal mechanism and introduces selection bias (bad controls).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); background: #fffbeb; border-left: 4px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-bottom: var(--space-xs);">METHODOLOGICAL CAUTION &middot; COLLIDER BIAS</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #92400e;">Conditioning on Colliders Induces Spurious Correlation</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: #78350f;">
+              If a post-treatment variable is mutually influenced by treatment and an unobserved outcome shock, conditioning on it opens a non-causal path (collider stratification), actively corrupting an otherwise valid experiment.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Field-Experiment Best Practices -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Four Pillars of Field-Experiment Best Practice</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface); border-top: 3px solid #2563eb;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #2563eb;">1. PRE-REGISTER</div>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0 0 0; line-height: 1.5;">
+              Specify primary outcomes, subgroup analyses, and regression specifications before collecting or unblinding experimental data.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface); border-top: 3px solid #6d28d9;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #6d28d9;">2. BLOCK WHEN USEFUL</div>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0 0 0; line-height: 1.5;">
+              Use stratified randomization on key prognostic baseline attributes to guarantee balance and absorb between-group variance.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface); border-top: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669;">3. RESPECT THE DESIGN</div>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0 0 0; line-height: 1.5;">
+              Account for strata indicators in estimation. Analyze the data in alignment with how random assignment was administered.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface); border-top: 3px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #d97706;">4. COVARIATES FOR PRECISION</div>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0 0 0; line-height: 1.5;">
+              Select baseline covariates that predict the outcome to reduce residual variance and narrow standard errors.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">INTERNAL VALIDITY PRINCIPLE</span>
+            <h3 class="callout-title">Proper Random Assignment Supports Internal Validity</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Proper random assignment supports internal validity by breaking systematic treatment selection under the experimental design. However, researchers must remain vigilant regarding downstream experimental threats such as differential attrition, non-compliance, and spillovers.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 13.6 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Covariate Adjustment Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">INTERACTIVE LAB 13.6</span>
+            <h3 class="lab-title">Covariate Adjustment &amp; Precision Simulator</h3>
+            <p class="lab-desc">
+              Compare the unadjusted treatment effect estimate against the covariate-adjusted model as you vary the predictive strength of baseline covariate \(X\).
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Regression Specification:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnSpecUnadj">Unadjusted Model (\(Y = \alpha + \beta_1 T\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnSpecAdj">Adjusted Model (\(Y = \alpha + \beta_1 T + \beta_2 X\))</button>
+              </div>
+            </div>
+
+            <div class="control-group" id="predPowerGroup" style="display: none;">
+              <span class="control-label">Predictive Strength of Baseline Covariate \(X\) (\(R^2_X\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnR2Low">Weak (\(R^2 = 0.10\))</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnR2Med">Moderate (\(R^2 = 0.35\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnR2High">Strong (\(R^2 = 0.60\))</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Estimated Treatment Effect (\(\hat{\beta}_1\))</div>
+              <div class="metric-value" id="readoutBeta" style="color: #2563eb;">+2.08</div>
+              <div class="metric-sub">True causal effect: +2.00</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Residual Variance (\(\hat{\sigma}^2\))</div>
+              <div class="metric-value" id="readoutResVar" style="color: #6d28d9;">16.00</div>
+              <div class="metric-sub" id="subResVar">Unexplained outcome noise</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Standard Error \(\text{SE}(\hat{\beta}_1)\)</div>
+              <div class="metric-value" id="readoutSE" style="color: #dc2626;">0.566</div>
+              <div class="metric-sub" id="subSE">Sampling uncertainty</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">95% Confidence Interval Width</div>
+              <div class="metric-value" id="readoutCI" style="color: #059669;">2.218</div>
+              <div class="metric-sub" id="subCI">\([+0.97, +3.19]\)</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 3px;"></span> Sampling Distribution Density</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 10px; width: 10px; border-radius: 50%;"></span> Point Estimate (\(\hat{\beta}_1\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 3px;"></span> 95% Confidence Interval Span</div>
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 2px; border-style: dashed;"></span> True Effect Benchmark (+2.00)</div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 240px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="covSvg" viewBox="0 0 680 200" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Unadjusted Specification:</strong> <span id="labInsightBody">The simple difference in means is unbiased (\(\hat{\beta}_1 = 2.08\)), but standard error is 0.566 with a wide 95% confidence interval of [0.97, 3.19].</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The estimated treatment effect sampling distribution and 95% confidence interval with and without baseline controls.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Adding a predictive covariate does not change the point estimate dramatically, but sharpens the sampling distribution.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Narrower standard errors directly translate into higher statistical power, allowing detection of subtle policy impacts.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Controlling for pre-treatment \(X\) removes residual variance, achieving the precision benefits of an expanded sample size.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch to Adjusted Model with Strong (\(R^2 = 0.60\)) predictive strength to see standard error shrink from 0.566 to 0.358.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Module 13 Final Synthesis -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Module 13 Complete Experimental Synthesis</h2>
+      </div>
+      <div class="study-section-body">
+
+        <!-- Connected Diagnostic Workflow -->
+        <h4 style="font-size: var(--text-base); margin-top: 0; margin-bottom: var(--space-xs);">The End-to-End Experimental Design Workflow</h4>
+        
+        <div class="module-learning-path-card" style="margin-bottom: var(--space-md);">
+          <div class="module-learning-path-flow">
+            <span class="learning-path-step"><span class="learning-path-pill">Self-Selection</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Selection Bias</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Random Assignment</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Difference in Means</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Sample Size (4n)</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Randomization Inference</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Stratified Blocking</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Balance Diagnostics</span><span class="learning-path-arrow">&rarr;</span></span>
+            <span class="learning-path-step"><span class="learning-path-pill">Covariate Adjustment</span></span>
+          </div>
+        </div>
+
+        <!-- Comprehensive Synthesis Table -->
+        <div style="overflow-x: auto; margin-bottom: var(--space-md);">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs);">
+            <thead>
+              <tr style="background: var(--color-bg); border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 8px 12px;">Concept</th>
+                <th style="padding: 8px 12px;">Role in Experimental Design</th>
+                <th style="padding: 8px 12px;">Key Mathematical / Econometric Idea</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Random Assignment</td>
+                <td style="padding: 8px 12px;">Eliminates systematic selection bias</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">\(\text{Cov}(T, \omega) = 0 \implies \hat{\beta}_1 \xrightarrow{p} \beta_1\)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Power &amp; Precision</td>
+                <td style="padding: 8px 12px;">Determines necessary sample size</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">\(\text{Var}(\hat{\beta}_1) = 2\sigma^2/n\); 4n to halve SE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Randomization Inference</td>
+                <td style="padding: 8px 12px;">Distribution-free hypothesis testing</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">Permutes assignments under sharp null \(H_0: Y_i(1) = Y_i(0)\)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Blocked Randomization</td>
+                <td style="padding: 8px 12px;">Guarantees baseline balance in strata</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">\(Y_i = \alpha + \beta_1 T_i + \sum \gamma_b D_{ib} + \varepsilon_i\)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Fisher's Exact Test</td>
+                <td style="padding: 8px 12px;">Exact test for \(2 \times 2\) binary tables</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">Hypergeometric distribution with fixed marginals</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Balance Tests</td>
+                <td style="padding: 8px 12px;">Diagnoses realization &amp; protocol</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">\(X_i = \alpha + \delta T_i + \varepsilon_i\); standardized differences</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; font-weight: 600; color: #2563eb;">Covariate Adjustment</td>
+                <td style="padding: 8px 12px;">Increases estimation precision</td>
+                <td style="padding: 8px 12px; font-family: var(--font-mono); font-size: 0.82rem;">Pre-treatment \(X\) reduces residual \(\sigma^2\); avoid colliders</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 17 Core Concept Review Cards Grid -->
+        <h4 style="font-size: var(--text-base); margin-top: var(--space-md); margin-bottom: var(--space-xs);">Module 13 Concept Dictionary</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Field Experiment:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Real-world study with randomly assigned interventions.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Treatment Group:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Units receiving the experimental intervention.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Control Group:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Unexposed counterfactual benchmark units.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Selection Bias:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Distortion caused by self-selection into treatment.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Random Assignment:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Lottery assignment breaking link to omitted factors.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Difference in Means:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">\(\hat{\beta}_1 = \bar{Y}_1 - \bar{Y}_0\), the OLS slope.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Power:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Probability of detecting a true nonzero effect.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Sample Size (4n):</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Quadrupling group sample size cuts SE in half.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Randomization Dist.:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Distribution generated by reassigning treatments.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Sharp Null:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Zero effect for every single individual.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Blocked Randomization:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Lottery conducted separately within subgroups.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Strata:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Homogeneous baseline subgroups for blocking.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Fisher Exact Test:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Hypergeometric test on \(2 \times 2\) tables.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Balance:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Comparability of pre-treatment distributions.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Standardized Diff.:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Mean gap normalized by pooled standard deviation.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-size: 0.8rem;">Pre-Treatment Covariate:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Baseline variable measured before assignment.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #dc2626; font-size: 0.8rem;">Post-Treatment Variable:</span> <span style="font-size: 0.78rem; color: var(--color-text-secondary);">Variable affected by treatment; never control.</span></div>
+        </div>
+
+        <!-- Module Completion Callout -->
+        <div class="callout" style="border-left: 4px solid #059669; background: #ecfdf5; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #a7f3d0; color: #065f46;">MODULE COMPLETE</span>
+            <h3 class="callout-title" style="color: #065f46;">Congratulations! You Have Mastered Module 13</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: #064e3b;">
+              You have completed all 6 lessons of Module 13: Field Experiments, Randomization &amp; Experimental Design. From decomposing selection bias to sample size calculations, randomization inference, blocked designs, balance diagnostics, and covariate adjustment, you now possess the complete econometric toolkit for experimental design.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">6. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why should researchers NOT control for variables measured after treatment is assigned?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider whether the variable itself could be an outcome of the treatment or a collider.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because variables measured after treatment may themselves be affected by treatment, and conditioning on them introduces selection bias or collider stratification bias.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Controlling for an intermediate outcome blocks part of the causal channel linking treatment to the final outcome. Furthermore, if the post-treatment variable is influenced by unobserved factors that also affect the outcome, conditioning on it opens a non-causal spurious pathway (collider bias), ruining the experimental identification guaranteed by randomization.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>In experiments, pre-treatment covariates are included to improve precision rather than achieve identification.</li>
+        <li>Predictive baseline variables absorb outcome variation, lowering residual variance \(\sigma^2\) and shrinking SEs.</li>
+        <li>Never control for post-treatment variables or intermediate outcomes, which introduce bad control bias.</li>
+        <li>Conditioning on variables affected by treatment can open spurious non-causal paths via collider bias.</li>
+        <li>Adhere to the four pillars: pre-register, block when useful, respect strata in analysis, and control for precision.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">13.5 Balance Tests in Experiments</span>
+      </a>
+      <a href="../module-14/index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Module &rarr;</span>
+        <span class="nav-btn-title">Module 14: Estimation, Compliance &amp; LATE</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 13.6 Script -->
+  <script>
+    (function() {
+      let isAdjusted = false;
+      let r2Val = 0.35; // 0.10, 0.35, 0.60
+
+      const btnSpecUnadj = document.getElementById('btnSpecUnadj');
+      const btnSpecAdj = document.getElementById('btnSpecAdj');
+      const predPowerGroup = document.getElementById('predPowerGroup');
+
+      const btnR2Low = document.getElementById('btnR2Low');
+      const btnR2Med = document.getElementById('btnR2Med');
+      const btnR2High = document.getElementById('btnR2High');
+
+      const readoutBeta = document.getElementById('readoutBeta');
+      const readoutResVar = document.getElementById('readoutResVar');
+      const subResVar = document.getElementById('subResVar');
+      const readoutSE = document.getElementById('readoutSE');
+      const subSE = document.getElementById('subSE');
+      const readoutCI = document.getElementById('readoutCI');
+      const subCI = document.getElementById('subCI');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('covSvg');
+
+      function updateLab() {
+        btnSpecUnadj.className = !isAdjusted ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnSpecAdj.className = isAdjusted ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        predPowerGroup.style.display = isAdjusted ? 'block' : 'none';
+
+        btnR2Low.className = r2Val === 0.10 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnR2Med.className = r2Val === 0.35 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnR2High.className = r2Val === 0.60 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        // Base parameters: true beta = 2.00, N = 100 (50 per arm), sigma^2_Y = 16.0
+        // Unadjusted SE = sqrt(2 * 16 / 50) = sqrt(0.64) = 0.800 (let's use concrete realistic parameters)
+        // Let N=100 (50 per arm), sigma^2 = 16.0
+        const trueBeta = 2.00;
+        let betaEst = 2.08;
+        let resVar = 16.0;
+        let se = Math.sqrt((2 * resVar) / 50); // 0.800
+
+        if (isAdjusted) {
+          resVar = 16.0 * (1 - r2Val);
+          se = Math.sqrt((2 * resVar) / 50);
+          betaEst = 2.04; // slight sample shift toward true beta
+        }
+
+        const ciHalf = 1.96 * se;
+        const ciLow = betaEst - ciHalf;
+        const ciHigh = betaEst + ciHalf;
+        const ciWidth = ciHigh - ciLow;
+
+        readoutBeta.textContent = (betaEst >= 0 ? '+' : '') + betaEst.toFixed(2);
+        readoutResVar.textContent = resVar.toFixed(2);
+        readoutSE.textContent = se.toFixed(3);
+        readoutCI.textContent = ciWidth.toFixed(3);
+        subCI.textContent = `[+${ciLow.toFixed(2)}, +${ciHigh.toFixed(2)}]`;
+
+        if (!isAdjusted) {
+          subResVar.textContent = 'Unexplained outcome noise';
+          subSE.textContent = 'Unadjusted sampling uncertainty';
+          labInsightTitle.textContent = 'Unadjusted Model (Bivariate):';
+          labInsightBody.textContent = `Without controls, SE is ${se.toFixed(3)} and 95% CI is [+${ciLow.toFixed(2)}, +${ciHigh.toFixed(2)}]. Point estimate (+${betaEst.toFixed(2)}) is unbiased, but confidence band is wide.`;
+        } else {
+          subResVar.textContent = `Absorbed ${Math.round(r2Val * 100)}% of variance`;
+          subSE.textContent = `Reduced by ${Math.round((1 - se / 0.80) * 100)}%`;
+          labInsightTitle.textContent = `Adjusted Model (R² = ${r2Val.toFixed(2)}):`;
+          labInsightBody.textContent = `Pre-treatment X absorbs ${Math.round(r2Val * 100)}% of outcome variance. Residual variance falls to ${resVar.toFixed(2)}, shrinking SE from 0.800 down to ${se.toFixed(3)} and narrowing CI width by ${Math.round((1 - ciWidth / (1.96 * 2 * 0.80)) * 100)}%.`;
+        }
+
+        renderVisualizer(betaEst, se, ciLow, ciHigh);
+      }
+
+      function renderVisualizer(betaEst, se, ciLow, ciHigh) {
+        const width = 680;
+        const height = 200;
+        const padL = 60;
+        const padR = 40;
+        const padT = 20;
+        const padB = 40;
+
+        const plotW = width - padL - padR;
+        const plotH = height - padT - padB;
+
+        // x-scale: beta from -0.5 to 4.5
+        const minX = -0.5, maxX = 4.5;
+        const scaleX = val => padL + ((val - minX) / (maxX - minX)) * plotW;
+
+        // y-scale: density max ~ 1.5
+        const maxY = 1.6;
+        const scaleY = d => padT + plotH - (d / maxY) * plotH;
+
+        let svgHtml = '';
+
+        // Axes & Grid
+        svgHtml += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+
+        // X Ticks
+        [0, 1, 2, 3, 4].forEach(tick => {
+          const xPos = scaleX(tick);
+          svgHtml += `<line x1="${xPos}" y1="${padT + plotH}" x2="${xPos}" y2="${padT + plotH + 4}" stroke="var(--border-subtle)"/>`;
+          svgHtml += `<text x="${xPos}" y="${padT + plotH + 18}" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">${tick}</text>`;
+        });
+
+        svgHtml += `<text x="${padL + plotW / 2}" y="${height - 6}" font-size="12" fill="var(--color-text-secondary)" font-weight="500" text-anchor="middle">Treatment Effect Estimate (β̂₁)</text>`;
+
+        // True beta reference line (+2.00)
+        const trueX = scaleX(2.00);
+        svgHtml += `<line x1="${trueX}" y1="${padT}" x2="${trueX}" y2="${padT + plotH}" stroke="#6d28d9" stroke-dasharray="3,3" stroke-width="1.5"/>`;
+        svgHtml += `<text x="${trueX}" y="${padT + 12}" font-size="11" fill="#6d28d9" font-weight="600" text-anchor="middle">True: +2.00</text>`;
+
+        // Bell curve density of N(betaEst, se^2)
+        let curvePoints = [];
+        for (let xVal = minX; xVal <= maxX; xVal += 0.05) {
+          const z = (xVal - betaEst) / se;
+          const density = (1 / (se * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * z * z);
+          curvePoints.push(`${scaleX(xVal)},${scaleY(density)}`);
+        }
+        svgHtml += `<polyline points="${curvePoints.join(' ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+
+        // 95% Confidence Interval span on bottom
+        const ciY = padT + plotH - 15;
+        const lowX = scaleX(ciLow);
+        const highX = scaleX(ciHigh);
+        const ptX = scaleX(betaEst);
+
+        svgHtml += `<line x1="${lowX}" y1="${ciY}" x2="${highX}" y2="${ciY}" stroke="#059669" stroke-width="3"/>`;
+        svgHtml += `<line x1="${lowX}" y1="${ciY - 6}" x2="${lowX}" y2="${ciY + 6}" stroke="#059669" stroke-width="2"/>`;
+        svgHtml += `<line x1="${highX}" y1="${ciY - 6}" x2="${highX}" y2="${ciY + 6}" stroke="#059669" stroke-width="2"/>`;
+        svgHtml += `<circle cx="${ptX}" cy="${ciY}" r="5" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>`;
+
+        svgHtml += `<text x="${ptX}" y="${ciY - 10}" font-size="11" fill="#059669" font-weight="700" text-anchor="middle">β̂₁ = ${betaEst.toFixed(2)} (95% CI)</text>`;
+
+        svg.innerHTML = svgHtml;
+      }
+
+      btnSpecUnadj.addEventListener('click', () => { isAdjusted = false; updateLab(); });
+      btnSpecAdj.addEventListener('click', () => { isAdjusted = true; updateLab(); });
+
+      btnR2Low.addEventListener('click', () => { r2Val = 0.10; updateLab(); });
+      btnR2Med.addEventListener('click', () => { r2Val = 0.35; updateLab(); });
+      btnR2High.addEventListener('click', () => { r2Val = 0.60; updateLab(); });
+
+      // Quick check toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

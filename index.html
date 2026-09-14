@@ -81,7 +81,7 @@
       <div class="container hero-grid">
         <div class="hero-text-content">
           <div class="hero-meta-badges">
-            <span class="badge badge-amber">12 Modules • Beginner → Advanced</span>
+            <span class="badge badge-amber">14 Modules • Beginner → Advanced</span>
             <span class="hero-pillars">Theory • Mathematics • Data • Causal Reasoning</span>
           </div>
 
@@ -425,14 +425,14 @@
     </section>
 
     <!-- =======================================================================
-         6. COURSE MODULES (EXACTLY 12 CARDS IN 4 PROGRESSION TIERS)
+         6. COURSE MODULES (EXACTLY 13 CARDS IN 4 PROGRESSION TIERS)
          ======================================================================= -->
     <section class="section-wrapper" id="modules" style="background-color: var(--surface-raised); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);" aria-labelledby="modulesTitle">
       <div class="container">
         <div class="section-title-wrap">
           <span class="section-kicker">Complete Curriculum</span>
           <h2 id="modulesTitle" class="section-title">Course Modules</h2>
-          <p class="section-subtitle">Twelve interconnected modules spanning core regression mechanics, diagnostics, causal identification, and discrete-choice models.</p>
+          <p class="section-subtitle">Thirteen interconnected modules spanning core regression mechanics, diagnostics, causal identification, and experimental design.</p>
         </div>
 
         <div class="curriculum-tier-section">
@@ -986,13 +986,13 @@
           </div>
 
           <!-- =================================================================
-               TIER 4: DISCRETE & LIMITED OUTCOMES (Modules 10 - 12)
+               TIER 4: ADVANCED METHODS & EXPERIMENTAL DESIGN (Modules 10 - 13)
                ================================================================= -->
           <div class="curriculum-tier">
             <div class="tier-header">
               <span class="tier-pill">Tier 4</span>
-              <span class="tier-title">Advanced Panel, IV &amp; Diagnostics</span>
-              <span class="tier-count">Modules 10 – 12</span>
+              <span class="tier-title">Advanced Panel, IV, Diagnostics &amp; Experiments</span>
+              <span class="tier-count">Modules 10 – 14</span>
             </div>
 
             <div class="modules-grid">
@@ -1155,6 +1155,132 @@
                     </div>
                   </div>
                   <a href="modules/module-12/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 12</a>
+                </div>
+              </article>
+
+              <!-- Module 13 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">13</span>
+                  <span class="module-group-tag">Experimental Design</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Randomization & Treatment Split -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Population circle -->
+                    <circle cx="20" cy="22" r="10" fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <text x="20" y="24" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">Pop</text>
+                    
+                    <!-- Arrow split -->
+                    <path d="M 33 18 L 52 12" stroke="var(--border-strong)" stroke-width="1.2" fill="none" />
+                    <path d="M 33 26 L 52 32" stroke="var(--border-strong)" stroke-width="1.2" fill="none" />
+                    
+                    <!-- Treated arm (Purple) -->
+                    <rect x="54" y="6" width="30" height="12" rx="2" fill="rgba(109, 40, 217, 0.15)" stroke="#6d28d9" stroke-width="1.2" />
+                    <text x="69" y="14" font-size="5.5" font-family="var(--font-mono)" fill="#6d28d9" text-anchor="middle" font-weight="600">Treated</text>
+
+                    <!-- Control arm (Blue) -->
+                    <rect x="54" y="26" width="30" height="12" rx="2" fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <text x="69" y="34" font-size="5.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle" font-weight="600">Control</text>
+
+                    <!-- Difference label -->
+                    <text x="96" y="24" font-size="6" font-family="var(--font-mono)" fill="#059669" font-weight="700">Ȳ₁-Ȳ₀</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">13 Field Experiments, Randomization &amp; Experimental Design</h3>
+                <p class="module-desc">Learn how randomized field experiments eliminate systematic treatment selection, determine how sample size affects precision, conduct randomization-based inference, improve experimental design through blocking, diagnose baseline balance, and use pre-treatment covariates to increase precision.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Field Experiments &amp; Selection Bias</li>
+                    <li class="module-topic-tag">Difference in Means (\(\hat{\beta}_1 = \bar{Y}_1 - \bar{Y}_0\))</li>
+                    <li class="module-topic-tag">Sample Size &amp; Quadrupling Rule</li>
+                    <li class="module-topic-tag">Randomization Inference &amp; Sharp Null</li>
+                    <li class="module-topic-tag">Stratified / Blocked Randomization</li>
+                    <li class="module-topic-tag">Fisher's Exact Test (\(2 \times 2\))</li>
+                    <li class="module-topic-tag">Baseline Balance Diagnostics</li>
+                    <li class="module-topic-tag">Covariates for Precision</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-13">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-13" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-13/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 13</a>
+                </div>
+              </article>
+
+              <!-- Module 14 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">14</span>
+                  <span class="module-group-tag">Field Experiments II</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Compliance & Wald Ratio -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Offer Z box -->
+                    <rect x="8" y="14" width="22" height="16" rx="2" fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <text x="19" y="24" font-size="6" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle" font-weight="600">Z</text>
+
+                    <!-- Arrow to T -->
+                    <path d="M 32 22 L 48 22" stroke="var(--border-strong)" stroke-width="1.2" fill="none" />
+                    
+                    <!-- Take-up T box -->
+                    <rect x="50" y="14" width="22" height="16" rx="2" fill="rgba(109, 40, 217, 0.15)" stroke="#6d28d9" stroke-width="1.2" />
+                    <text x="61" y="24" font-size="6" font-family="var(--font-mono)" fill="#6d28d9" text-anchor="middle" font-weight="600">T</text>
+
+                    <!-- Arrow to Y -->
+                    <path d="M 74 22 L 90 22" stroke="var(--border-strong)" stroke-width="1.2" fill="none" />
+
+                    <!-- Outcome Y box -->
+                    <rect x="92" y="14" width="22" height="16" rx="2" fill="rgba(5, 150, 105, 0.12)" stroke="#059669" stroke-width="1.2" />
+                    <text x="103" y="24" font-size="6" font-family="var(--font-mono)" fill="#059669" text-anchor="middle" font-weight="600">Y</text>
+
+                    <!-- Wald label -->
+                    <text x="60" y="39" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Wald: ΔY / ΔT = LATE</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">14 Field Experiments II: Estimation, Compliance &amp; LATE</h3>
+                <p class="module-desc">Extend randomized field experiments into estimation and inference: choose meaningful detectable effects, estimate intent-to-treat effects, plan analyses through preregistration, account for multiple hypotheses, understand imperfect compliance, and connect randomized offers to IV, LATE, the Wald estimator, and 2SLS.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Minimum Detectable Effect (MDE)</li>
+                    <li class="module-topic-tag">Intent-to-Treat (ITT) Regression</li>
+                    <li class="module-topic-tag">Multi-Period DID Interactions</li>
+                    <li class="module-topic-tag">Preregistration &amp; p-Hacking</li>
+                    <li class="module-topic-tag">Multiple Testing &amp; Bonferroni</li>
+                    <li class="module-topic-tag">4 Compliance Types (Compliers)</li>
+                    <li class="module-topic-tag">Monotonicity (No Defiers)</li>
+                    <li class="module-topic-tag">Wald Estimator &amp; 2SLS LATE</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-14">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-14" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-14/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 14</a>
                 </div>
               </article>
             </div>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.2: Estimating Experimental Effects: ITT, Controls &amp; Repeated Outcomes — EcoIntuition Academy</title>
+  <meta name="description" content="Estimate the intent-to-treat effect of randomized offers, incorporate predictive baseline covariates, specify multi-arm treatments relative to baseline, and model pre, during, and post treatment periods using interaction models.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 6 &middot; ITT, Controls &amp; Repeated Outcomes</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.2</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Estimation</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Estimating Experimental Effects: ITT, Controls &amp; Repeated Outcomes
+      </h1>
+      <p class="lesson-hero-lead">
+        Randomized treatment offers identify the Intent-to-Treat (ITT) effect directly via reduced-form regressions. Learn how to specify models with multiple treatment arms, incorporate pre-experiment covariates, model multi-period outcomes via Difference-in-Differences, and cluster standard errors over time.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Specify the reduced-form Intent-to-Treat (ITT) regression model \(Y_i = \alpha + \beta_1 Z_i + \beta_2 x_i + \varepsilon_i\).</li>
+        <li>Explain why ITT preserves randomization validity even when compliance is imperfect.</li>
+        <li>Formulate multi-arm experimental regressions relative to an omitted baseline category.</li>
+        <li>Estimate treatment-time interaction models across pre, during, and post treatment periods.</li>
+        <li>Apply the within-unit clustering warning when analyzing repeated observations over time.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Reduced-Form ITT Model & Covariates -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The Intent-to-Treat (ITT) Specification</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">CORE DEFINITION</div>
+          <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.05rem;">Intent-to-Treat (ITT) Effect</h3>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+            The <strong>Intent-to-Treat (ITT)</strong> effect measures the average difference in outcomes between those randomly assigned (or offered) treatment and those not offered treatment, regardless of whether participants actually comply with their assignment.
+          </p>
+        </div>
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          Because randomization directly determines treatment assignment \(Z_i\), the assignment dummy is strictly uncorrelated with the disturbance term \(\varepsilon_i\):
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">EXPERIMENTAL REDUCED FORM (ITT REGRESSION)</div>
+          <div class="equation-math">
+            $$Y_i = \alpha + \beta_1 Z_i + \beta_2 x_i + \varepsilon_i$$
+          </div>
+          <div class="equation-subtext">
+            where \(Z_i = 1\) indicates assignment to treatment, \(Z_i = 0\) indicates control, and \(x_i\) represents pre-treatment control variables. The coefficient \(\beta_1\) captures the ITT effect.
+          </div>
+        </div>
+
+        <div class="callout" style="border-left: 4px solid #059669; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #ecfdf5; color: #047857;">PRECISION BENEFIT</span>
+            <h3 class="callout-title">Role of Pre-Experiment Controls</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Including pre-treatment covariates \(x_i\) that explain variation in the outcome lowers the residual error variance \(\sigma^2_{\varepsilon}\), reduces coefficient standard errors, and increases statistical power without biasing \(\beta_1\).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Multiple Treatments -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Multiple Treatment Arms</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          When an experiment tests several distinct interventions (e.g., cash transfer vs. in-kind voucher), researchers add separate dummy variables for each arm:
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">MULTI-ARM EXPERIMENTAL SPECIFICATION</div>
+          <div class="equation-math">
+            $$Y_i = \alpha + \beta_1 Z_{1i} + \beta_2 Z_{2i} + \beta_3 x_i + \varepsilon_i$$
+          </div>
+          <div class="equation-subtext">
+            One group is omitted as the baseline reference category (control). Coefficient \(\beta_1\) evaluates Treatment 1 against control, and \(\beta_2\) evaluates Treatment 2 against control.
+          </div>
+        </div>
+
+        <!-- Visual Multi-Arm Layout -->
+        <div class="comparison-card" style="padding: var(--space-md); margin-bottom: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: var(--space-sm); text-align: center;">
+            <div style="padding: var(--space-sm); background: #eff6ff; border-radius: var(--radius-xs); min-width: 140px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: #1d4ed8;">BASELINE CONTROL</div>
+              <div style="font-size: 1.1rem; font-weight: 600; color: #1e40af; margin: 4px 0;">Omitted Group (\(\alpha\))</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Benchmark outcome level</div>
+            </div>
+            <div style="padding: var(--space-sm); background: #f5f3ff; border-radius: var(--radius-xs); min-width: 140px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: #6d28d9;">TREATMENT ARM 1</div>
+              <div style="font-size: 1.1rem; font-weight: 600; color: #5b21b6; margin: 4px 0;">Effect \(\beta_1\)</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Relative to control baseline</div>
+            </div>
+            <div style="padding: var(--space-sm); background: #ecfdf5; border-radius: var(--radius-xs); min-width: 140px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: #047857;">TREATMENT ARM 2</div>
+              <div style="font-size: 1.1rem; font-weight: 600; color: #065f46; margin: 4px 0;">Effect \(\beta_2\)</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Relative to control baseline</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Repeated Observations & DID Interactions -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Repeated Observations &amp; Treatment-Time Interactions</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          When participants are observed both before and during treatment, the experiment can be analyzed using a <strong>Difference-in-Differences</strong> interaction specification:
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">TWO-PERIOD DID INTERACTION MODEL</div>
+          <div class="equation-math">
+            $$Y_{it} = \alpha + \beta_1 Z_i + \beta_2 \text{intreat}_t + \beta_3(Z_i \cdot \text{intreat}_t) + \beta_4 x_i + \varepsilon_{it}$$
+          </div>
+          <div class="equation-subtext">
+            where \(\text{intreat}_t = 1\) during the treatment period and \(0\) before. The interaction coefficient \(\beta_3\) captures the differential treatment effect over time.
+          </div>
+        </div>
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          When data span three periods—pre-treatment, in-treatment, and post-treatment—the model incorporates two time indicators and two interaction terms:
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">THREE-PERIOD DID INTERACTION MODEL</div>
+          <div class="equation-math">
+            $$Y_{it} = \alpha + \beta_1 Z_i + \beta_2 \text{intreat}_t + \beta_3(Z_i \cdot \text{intreat}_t) + \beta_4 \text{post}_t + \beta_5(Z_i \cdot \text{post}_t) + \beta_6 x_i + \varepsilon_{it}$$
+          </div>
+          <div class="equation-subtext">
+            Omitted reference category: control group in the pre-treatment period.
+          </div>
+        </div>
+
+        <!-- Coefficient Map Grid -->
+        <h4 style="font-size: var(--text-base); margin-top: var(--space-md); margin-bottom: var(--space-xs);">Coefficient Interpretation Map</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-family: var(--font-mono); font-size: 0.9rem;">\(\alpha\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Control group mean in pre-treatment period.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-family: var(--font-mono); font-size: 0.9rem;">\(\beta_1\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Pre-treatment difference (expected 0 by randomization).</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-family: var(--font-mono); font-size: 0.9rem;">\(\beta_2\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Common control change from pre to in-treatment.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #059669; font-family: var(--font-mono); font-size: 0.9rem;">\(\beta_3\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Treatment effect during the active intervention.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #2563eb; font-family: var(--font-mono); font-size: 0.9rem;">\(\beta_4\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Common control change from pre to post-treatment.</span></div>
+          <div class="study-card" style="padding: 8px 10px; background: var(--color-surface);"><span style="font-weight: 700; color: #059669; font-family: var(--font-mono); font-size: 0.9rem;">\(\beta_5\):</span> <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Post-treatment effect for the treated group.</span></div>
+        </div>
+
+        <div class="study-card" style="padding: var(--space-md); background: #f8fafc; border: 1px solid var(--border-subtle); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem;">COMPARATIVE TRAJECTORY EXPRESSION</div>
+          <div style="font-family: var(--font-mono); font-size: 0.88rem; text-align: center; color: var(--color-text); margin-bottom: var(--space-xs);">
+            $$[(\alpha + \beta_1 + \beta_4 + \beta_5) - (\alpha + \beta_1)] - [(\alpha + \beta_2) - \alpha] = \beta_5 - \beta_2$$
+          </div>
+          <p style="margin: 0; font-size: 0.84rem; color: var(--color-text-secondary); line-height: 1.5;">
+            This expression isolates the treatment group's post-treatment change relative to the control group's in-treatment change. Even if baseline differences exist (\(\beta_1 \neq 0\)), difference-in-differences controls for them, isolating true treatment-time dynamics.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Clustering Warning -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Within-Unit Serial Correlation &amp; Clustering</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="callout" style="border-left: 4px solid #d97706; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #fef3c7; color: #b45309;">INFERENCE WARNING</span>
+            <h3 class="callout-title">Repeated Observations Are Not Independent by Default</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.92rem; line-height: 1.6;">
+              When the same units (individuals, firms, schools) are observed repeatedly over time, the disturbance term \(\varepsilon_{it}\) is almost certainly correlated across time within each unit.
+            </p>
+            <p style="margin: 0; font-size: 0.88rem; line-height: 1.5; color: var(--color-text-secondary);">
+              Failing to cluster standard errors by unit can drastically underestimate standard errors, leading to severely inflated false-positive rates and misleadingly narrow confidence intervals.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 14.2 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Interactive Lab: ITT &amp; Repeated-Outcome Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">INTERACTIVE LAB 14.2</span>
+            <h3 class="lab-title">ITT &amp; Repeated-Outcome Trajectory Explorer</h3>
+            <p class="lab-desc">
+              Compare single-period Intent-to-Treat estimation against two-period and three-period Difference-in-Differences interaction models across time.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Outcome Observation Structure:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeSingle">Single Post-Treatment Outcome</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeTwo">Two Periods: Pre vs. During</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnModeThree">Three Periods: Pre, During, Post</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Baseline Pre-Difference (\(\beta_1\))</div>
+              <div class="metric-value" id="readoutBeta1" style="color: #2563eb;">+0.20</div>
+              <div class="metric-sub">Expected ~0 by randomization</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">In-Treatment Effect (\(\beta_3\))</div>
+              <div class="metric-value" id="readoutBeta3" style="color: #059669;">+4.80</div>
+              <div class="metric-sub">Additional treated change</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Post-Treatment Effect (\(\beta_5\))</div>
+              <div class="metric-value" id="readoutBeta5" style="color: #6d28d9;">+3.20</div>
+              <div class="metric-sub">Persistent impact</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Model Specification</div>
+              <div class="metric-value" id="readoutModel" style="color: #2563eb; font-size: 1.1rem;">THREE-PERIOD DID</div>
+              <div class="metric-sub" id="subModel">Full trajectory interaction</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 3px;"></span> Treated Arm (\(Z=1\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 3px;"></span> Control Arm (\(Z=0\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 2px; border-style: dashed;"></span> Treatment Effect Gap (\(\beta_3, \beta_5\))</div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 240px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="didSvg" viewBox="0 0 680 200" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Three-Period DID Model:</strong> <span id="labInsightBody">In-treatment effect (\(\beta_3 = +4.80\)) captures the peak impact during active intervention, while post-treatment effect (\(\beta_5 = +3.20\)) measures persistence after the intervention concludes.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Trajectory plots comparing treated and control mean outcomes across pre-treatment, in-treatment, and post-treatment windows.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                In the pre-period, treatment and control tracks align closely (\(\beta_1 \approx 0\)), confirming baseline equivalence.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A multi-period model differentiates immediate program impacts from long-term decay or persistent behavioral change.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The interaction coefficients \(\beta_3\) and \(\beta_5\) isolate double-differenced changes, removing time trends and baseline quirks.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Toggle to "Single Post-Treatment Outcome" to see the simple static ITT comparison without baseline trajectory adjustments.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">6. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            What does the Intent-to-Treat (ITT) effect measure in a randomized experiment?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider whether ITT groups participants by their assigned treatment offer or by their actual take-up.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> It measures the average difference in outcomes by randomized treatment assignment or offer, not by whether treatment was actually taken.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Randomization directly dictates the assignment indicator \(Z_i\), ensuring that \(Z_i\) is orthogonal to unobserved potential outcome confounders. Comparing outcomes across \(Z\) provides an unbiased estimate of the policy effect of making the intervention available, even when some participants fail to comply.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The ITT regression \(Y_i = \alpha + \beta_1 Z_i + \beta_2 x_i + \varepsilon_i\) evaluates the causal effect of treatment assignment.</li>
+        <li>Pre-treatment covariates absorb outcome variance and shrink standard errors without biasing \(\beta_1\).</li>
+        <li>Multi-arm trials specify dummy indicators for each active treatment relative to an omitted baseline control.</li>
+        <li>Treatment-time interaction models (\(Z_i \cdot \text{intreat}_t\)) isolate differential changes across experimental phases.</li>
+        <li>Repeated observations over time require cluster-robust standard errors to prevent false-positive inflation.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">14.1 Minimum Detectable Effects</span>
+      </a>
+      <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">14.3 Preregistration &amp; Multiple Testing</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 14.2 Script -->
+  <script>
+    (function() {
+      let currentMode = 'three'; // 'single', 'two', 'three'
+
+      const btnModeSingle = document.getElementById('btnModeSingle');
+      const btnModeTwo = document.getElementById('btnModeTwo');
+      const btnModeThree = document.getElementById('btnModeThree');
+
+      const readoutBeta1 = document.getElementById('readoutBeta1');
+      const readoutBeta3 = document.getElementById('readoutBeta3');
+      const readoutBeta5 = document.getElementById('readoutBeta5');
+      const readoutModel = document.getElementById('readoutModel');
+      const subModel = document.getElementById('subModel');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('didSvg');
+
+      function updateLab() {
+        btnModeSingle.className = currentMode === 'single' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnModeTwo.className = currentMode === 'two' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnModeThree.className = currentMode === 'three' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        if (currentMode === 'single') {
+          readoutBeta1.textContent = '—';
+          readoutBeta3.textContent = '—';
+          readoutBeta5.textContent = '—';
+          readoutModel.textContent = 'STATIC ITT MODEL';
+          subModel.textContent = 'ITT = +4.80 (Post-period only)';
+
+          labInsightTitle.textContent = 'Single Post-Treatment ITT:';
+          labInsightBody.textContent = 'Evaluates post-intervention outcomes only (Y = 10 + 4.80*Z). Simple and direct, but does not benchmark against pre-treatment baselines.';
+        } else if (currentMode === 'two') {
+          readoutBeta1.textContent = '+0.20';
+          readoutBeta3.textContent = '+4.80';
+          readoutBeta5.textContent = '—';
+          readoutModel.textContent = 'TWO-PERIOD DID';
+          subModel.textContent = 'Pre vs. In-Treatment';
+
+          labInsightTitle.textContent = 'Two-Period DID Model:';
+          labInsightBody.textContent = 'Accounts for baseline differences (+0.20). The interaction term β3 (+4.80) isolates the treatment group\'s additional gain during the active program.';
+        } else {
+          readoutBeta1.textContent = '+0.20';
+          readoutBeta3.textContent = '+4.80';
+          readoutBeta5.textContent = '+3.20';
+          readoutModel.textContent = 'THREE-PERIOD DID';
+          subModel.textContent = 'Full trajectory interaction';
+
+          labInsightTitle.textContent = 'Three-Period DID Model:';
+          labInsightBody.textContent = 'Differentiates in-treatment gains (β3 = +4.80) from post-treatment persistence (β5 = +3.20), revealing long-run intervention decay.';
+        }
+
+        renderTrajectory(currentMode);
+      }
+
+      function renderTrajectory(mode) {
+        const width = 680;
+        const height = 200;
+        const padL = 60;
+        const padR = 60;
+        const padT = 30;
+        const padB = 40;
+
+        const plotW = width - padL - padR;
+        const plotH = height - padT - padB;
+
+        // Points
+        // Periods: 0 = Pre, 1 = During, 2 = Post
+        const controlMeans = [10.0, 11.5, 12.0];
+        const treatedMeans = [10.2, 16.5, 15.4]; // Pre: +0.2, During: +5.0 (diff 4.8), Post: +3.4 (diff 3.2)
+
+        const scaleY = val => padT + plotH - ((val - 8) / (18 - 8)) * plotH;
+
+        let svgHtml = '';
+
+        // Axes & Grid
+        svgHtml += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+        svgHtml += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+
+        // Y Ticks
+        [10, 12, 14, 16, 18].forEach(tick => {
+          const yPos = scaleY(tick);
+          svgHtml += `<line x1="${padL}" y1="${yPos}" x2="${padL + plotW}" y2="${yPos}" stroke="var(--border-subtle)" stroke-dasharray="2,2" stroke-width="1"/>`;
+          svgHtml += `<text x="${padL - 8}" y="${yPos + 4}" font-size="11" fill="var(--color-text-secondary)" text-anchor="end">${tick}</text>`;
+        });
+
+        if (mode === 'single') {
+          // Bar plot for single post-treatment
+          const cX = padL + plotW * 0.35;
+          const tX = padL + plotW * 0.65;
+          const barW = 80;
+
+          const cY = scaleY(11.5);
+          const tY = scaleY(16.3);
+
+          svgHtml += `<rect x="${cX - barW/2}" y="${cY}" width="${barW}" height="${padT + plotH - cY}" fill="#2563eb" fill-opacity="0.8" rx="4"/>`;
+          svgHtml += `<text x="${cX}" y="${cY - 8}" font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">Control: 11.5</text>`;
+
+          svgHtml += `<rect x="${tX - barW/2}" y="${tY}" width="${barW}" height="${padT + plotH - tY}" fill="#6d28d9" fill-opacity="0.8" rx="4"/>`;
+          svgHtml += `<text x="${tX}" y="${tY - 8}" font-size="12" font-weight="700" fill="#6d28d9" text-anchor="middle">Treated: 16.3</text>`;
+
+          // Bracket
+          svgHtml += `<line x1="${tX + barW/2 + 10}" y1="${cY}" x2="${tX + barW/2 + 10}" y2="${tY}" stroke="#059669" stroke-width="2"/>`;
+          svgHtml += `<text x="${tX + barW/2 + 16}" y="${(cY + tY)/2 + 4}" font-size="11" font-weight="700" fill="#059669">ITT = +4.80</text>`;
+
+        } else {
+          // Line plot
+          const numPeriods = mode === 'two' ? 2 : 3;
+          const periodLabels = mode === 'two' ? ['Pre-Treatment', 'During Treatment'] : ['Pre-Treatment', 'During Treatment', 'Post-Treatment'];
+          const xCoords = [];
+
+          for (let p = 0; p < numPeriods; p++) {
+            const x = padL + (p / (numPeriods - 1)) * plotW;
+            xCoords.push(x);
+            svgHtml += `<text x="${x}" y="${padT + plotH + 20}" font-size="12" font-weight="600" fill="var(--color-text)" text-anchor="middle">${periodLabels[p]}</text>`;
+            svgHtml += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-dasharray="3,3"/>`;
+          }
+
+          // Polyline control
+          let cPoints = [];
+          for (let p = 0; p < numPeriods; p++) cPoints.push(`${xCoords[p]},${scaleY(controlMeans[p])}`);
+          svgHtml += `<polyline points="${cPoints.join(' ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+
+          // Polyline treated
+          let tPoints = [];
+          for (let p = 0; p < numPeriods; p++) tPoints.push(`${xCoords[p]},${scaleY(treatedMeans[p])}`);
+          svgHtml += `<polyline points="${tPoints.join(' ')}" fill="none" stroke="#6d28d9" stroke-width="2.5"/>`;
+
+          // Dots and text
+          for (let p = 0; p < numPeriods; p++) {
+            const cx = xCoords[p];
+            const cyC = scaleY(controlMeans[p]);
+            const cyT = scaleY(treatedMeans[p]);
+
+            svgHtml += `<circle cx="${cx}" cy="${cyC}" r="5" fill="#2563eb"/>`;
+            svgHtml += `<text x="${cx}" y="${cyC + 16}" font-size="11" font-weight="600" fill="#2563eb" text-anchor="middle">${controlMeans[p].toFixed(1)}</text>`;
+
+            svgHtml += `<circle cx="${cx}" cy="${cyT}" r="5" fill="#6d28d9"/>`;
+            svgHtml += `<text x="${cx}" y="${cyT - 10}" font-size="11" font-weight="600" fill="#6d28d9" text-anchor="middle">${treatedMeans[p].toFixed(1)}</text>`;
+          }
+
+          // In-treatment effect bracket at Period 1
+          const x1 = xCoords[1];
+          svgHtml += `<line x1="${x1 + 15}" y1="${scaleY(controlMeans[1])}" x2="${x1 + 15}" y2="${scaleY(treatedMeans[1])}" stroke="#059669" stroke-width="2"/>`;
+          svgHtml += `<text x="${x1 + 20}" y="${(scaleY(controlMeans[1]) + scaleY(treatedMeans[1]))/2 + 4}" font-size="11" font-weight="700" fill="#059669">β₃ = +4.80</text>`;
+
+          if (mode === 'three') {
+            const x2 = xCoords[2];
+            svgHtml += `<line x1="${x2 + 15}" y1="${scaleY(controlMeans[2])}" x2="${x2 + 15}" y2="${scaleY(treatedMeans[2])}" stroke="#059669" stroke-width="2"/>`;
+            svgHtml += `<text x="${x2 + 20}" y="${(scaleY(controlMeans[2]) + scaleY(treatedMeans[2]))/2 + 4}" font-size="11" font-weight="700" fill="#059669">β₅ = +3.20</text>`;
+          }
+        }
+
+        svg.innerHTML = svgHtml;
+      }
+
+      btnModeSingle.addEventListener('click', () => { currentMode = 'single'; updateLab(); });
+      btnModeTwo.addEventListener('click', () => { currentMode = 'two'; updateLab(); });
+      btnModeThree.addEventListener('click', () => { currentMode = 'three'; updateLab(); });
+
+      // Quick check toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.6: 2SLS in Field Experiments, LATE vs ATE &amp; Exclusion Restrictions — Econometrics with AI</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; 2SLS, LATE vs ATE &amp; Exclusion</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.6</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Experimental IV</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        2SLS in Field Experiments, LATE vs ATE &amp; Exclusion Restrictions
+      </h1>
+      <p class="lesson-hero-lead">
+        Connect randomized encouragement designs to Two-Stage Least Squares, contrast complier-specific local effects with full population averages, and critically scrutinize the exclusion restriction in practical field applications.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Formulate Two-Stage Least Squares (2SLS) using randomized assignment as an instrument for treatment receipt.</li>
+        <li>Apply proper IV standard error calculations and avoid manual second-stage OLS inference pitfalls.</li>
+        <li>Contrast the Local Average Treatment Effect (LATE) with the Average Treatment Effect (ATE) under effect heterogeneity.</li>
+        <li>Evaluate potential violations of the Exclusion Restriction using field trial design cautions and measurement diagnostics.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: 2SLS in Field Experiments -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Two-Stage Least Squares with Randomized Assignment</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          When randomized assignment \(Z_i\) changes actual treatment receipt \(T_i\) imperfectly, ordinary regression of outcome \(Y_i\) on \(T_i\) suffers from self-selection bias. Because \(Z_i\) is truly randomized, it satisfies instrument exogeneity, allowing us to estimate the causal impact of \(T_i\) via Two-Stage Least Squares (2SLS).
+        </p>
+
+        <!-- 2SLS Equations Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">EXPERIMENTAL 2SLS SPECIFICATION</span>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">Two-Stage Model</span>
+          </div>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0;">
+            \[
+            \begin{aligned}
+            \text{First Stage:} \quad & T_i = \pi_0 + \pi_1 Z_i + \pi_2 x_i + \nu_i \\[0.5rem]
+            \text{Second Stage:} \quad & Y_i = \alpha + \beta \hat{T}_i + \varepsilon_i
+            \end{aligned}
+            \]
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            In the first stage, treatment receipt \(T_i\) is predicted using randomized assignment \(Z_i\) and baseline controls \(x_i\). The fitted values \(\hat{T}_i\) purge endogenous selection from treatment participation. In the second stage, outcome \(Y_i\) is regressed on \(\hat{T}_i\), identifying the causal treatment effect \(\beta\).
+          </p>
+        </div>
+
+        <!-- Standard Error Warning -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: #fef2f2; border-left: 4px solid #dc2626; margin: var(--space-sm) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">INFERENCE RULE &middot; DO NOT RUN MANUAL SECOND-STAGE OLS</div>
+          <p style="font-size: 0.85rem; color: #7f1d1d; margin: 4px 0 0 0; line-height: 1.5;">
+            Never manually estimate \(\hat{T}_i\) and then run standard OLS on \(Y_i = \alpha + \beta \hat{T}_i + \varepsilon_i\). Standard OLS computes residuals as \(Y_i - \hat{\alpha} - \hat{\beta} \hat{T}_i\), underestimating the true error variance and generating invalid standard errors and p-values. True 2SLS software computes residuals using actual treatment: \(Y_i - \hat{\alpha} - \hat{\beta} T_i\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: LATE vs ATE -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Local Average Treatment Effect (LATE) vs. Average Treatment Effect (ATE)</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          A common misconception is that 2SLS estimates the impact of treatment for everyone in the experimental population. When treatment impacts vary across individuals (heterogeneous treatment effects), IV identifies a local effect rather than a population average.
+        </p>
+
+        <!-- Side-by-Side Cards -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary);">POPULATION AVERAGE</div>
+            <div style="font-size: 1rem; font-weight: 700; margin: 4px 0;">Average Treatment Effect (ATE)</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 0;">
+              The expected causal effect if <em>every single individual</em> in the target population were assigned and received treatment:
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; margin-top: 6px; color: var(--color-text);">
+              \(\text{ATE} = E[Y_i(1) - Y_i(0)]\)
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #f0fdf4; border-left: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">COMPLIER-SPECIFIC</div>
+            <div style="font-size: 1rem; font-weight: 700; color: #064e3b; margin: 4px 0;">Local Average Treatment Effect (LATE)</div>
+            <p style="font-size: 0.82rem; color: #064e3b; margin: 0;">
+              The average causal treatment effect strictly for <strong>Compliers</strong> whose participation is shifted by the offer \(Z\):
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; margin-top: 6px; color: #047857;">
+              \(\text{LATE} = E[Y_i(1) - Y_i(0) \mid \text{Complier}]\)
+            </div>
+          </div>
+        </div>
+
+        <!-- Practice Note -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.05); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <strong style="color: var(--color-primary); font-size: 0.85rem; letter-spacing: 0.04em;">PRACTICAL INSIGHT &middot; COMPLIANCE &amp; ETHICS</strong>
+          <p style="font-size: 0.88rem; margin: 6px 0 0 0; line-height: 1.6;">
+            If compliance were 100%, assignment and receipt would coincide (\(Z_i = T_i\)), and LATE would equal ATE. However, in economic policy and health interventions, forcing compliance is frequently infeasible or ethically impermissible. Imperfect compliance is an inherent feature of human decision-making, which makes instrumental variables essential for policy evaluation.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Exclusion Restriction -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. The Exclusion Restriction in Field Experiments</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Randomization guarantees that assignment \(Z_i\) is unconfounded, but it does <strong>not</strong> automatically guarantee the exclusion restriction. The exclusion restriction requires that the offer \(Z_i\) impacts outcome \(Y_i\) solely through treatment receipt \(T_i\).
+        </p>
+
+        <!-- Vaccination Example -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border: 1px solid var(--border-subtle); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.84rem; font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">
+            Field Trial Example: Financial Incentive for Vaccination
+          </div>
+          <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin-bottom: var(--space-xs);">
+            Consider a trial where \(Z\) is a cash incentive offer, \(T\) is vaccination receipt, and \(Y\) is health:
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs); font-size: 0.82rem;">
+            <div><strong>Instrument \(Z\):</strong> Cash voucher offered to get vaccinated.</div>
+            <div><strong>Treatment \(T\):</strong> Actual clinical receipt of the vaccine.</div>
+            <div><strong>Outcome \(Y\):</strong> Infection rate / health metrics.</div>
+          </div>
+          <div style="background: #fef2f2; border-left: 3px solid #dc2626; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs); margin-top: var(--space-xs); font-size: 0.82rem; color: #7f1d1d;">
+            <strong>Potential Exclusion Failure:</strong> If the cash incentive alters perceptions of vaccine safety ("why else would they pay me?"), or if the cash alters nutrition or hygiene directly, then \(Z\) affects \(Y\) outside of vaccination \(T\), biasing 2SLS.
+          </div>
+        </div>
+
+        <!-- Causal Diagrams -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: #f0fdf4; border-left: 3px solid #059669; text-align: center;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">VALID IDENTIFICATION PATH</div>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #047857; margin: 8px 0;">
+              \(Z \longrightarrow T \longrightarrow Y\)
+            </div>
+            <p style="font-size: 0.8rem; color: #064e3b; margin: 0;">
+              Random offer operates entirely through shifting treatment take-up.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #fef2f2; border-left: 3px solid #dc2626; text-align: center;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">INVALID DIRECT CHANNEL</div>
+            <div style="font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: #b91c1c; margin: 8px 0;">
+              \(Z \xrightarrow{\quad \text{Direct} \quad} Y\)
+            </div>
+            <p style="font-size: 0.8rem; color: #7f1d1d; margin: 0;">
+              Offer alters beliefs, stigma, or resources, violating exclusion.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 14.6 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Exclusion Restriction Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <span class="lab-badge">CAUSAL PATH EXPLORER</span>
+            <h3 class="lab-title">Instrument Validity Diagnostic</h3>
+            <p class="lab-desc">
+              Toggle between a valid experimental encouragement design and a design compromised by a direct pathway from offer to outcome. Observe how the interpretation of 2SLS shifts.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Design Mode:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnModeValid">Mode A: Valid Instrument (\(Z \to T \to Y\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeInvalid">Mode B: Direct Effect Present (\(Z \to Y\))</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">First-Stage Relevance</div>
+              <div class="metric-value" id="readoutRelevance" style="color: #059669;">Strong (\(\pi_1 = 0.35\))</div>
+              <div class="metric-sub">Offer shifts participation</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Direct Effect Status</div>
+              <div class="metric-value" id="readoutDirect" style="color: #059669;">Zero (\(\gamma = 0\))</div>
+              <div class="metric-sub">No direct channel</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">IV Interpretation</div>
+              <div class="metric-value" id="readoutInterp" style="color: #2563eb;">Unbiased LATE</div>
+              <div class="metric-sub">Complier effect identified</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Target Status</div>
+              <div class="metric-value" id="readoutTarget" style="color: #059669;">Causal Effect</div>
+              <div class="metric-sub">Reliable policy insight</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 10px; width: 10px; border-radius: 2px;"></span> Valid Mediated Pathway: \(Z \to T \to Y\)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #dc2626; height: 10px; width: 10px; border-radius: 2px;"></span> Invalid Direct Channel: \(Z \to Y\)</div>
+          </div>
+
+          <!-- Visual Path Box -->
+          <div style="background: var(--surface); border-radius: var(--radius-md); padding: var(--space-md); border: 1px solid var(--border-subtle); text-align: center; margin: var(--space-xs) 0;">
+            <div style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700;">
+              <span style="color: #2563eb;">[Random Offer Z]</span>
+              <span style="color: #059669; margin: 0 0.75rem;">&mdash;&mdash;&gt;</span>
+              <span style="color: #6d28d9;">[Take-Up T]</span>
+              <span style="color: #059669; margin: 0 0.75rem;">&mdash;&mdash;&gt;</span>
+              <span style="color: var(--color-text);">[Outcome Y]</span>
+            </div>
+            <div id="pathDirectVisual" style="display: none; margin-top: 0.75rem; color: #dc2626; font-family: var(--font-mono); font-size: 0.92rem; font-weight: 700;">
+              &#x26A0; Direct Channel Active: [Random Offer Z] &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&gt; [Outcome Y]
+            </div>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Exclusion Diagnostic:</strong> <span id="labExclusionInsight">When the exclusion restriction holds, the randomized encouragement Z affects Y exclusively through its impact on treatment receipt T. The 2SLS estimator cleanly isolates the causal Local Average Treatment Effect for compliers.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">FIRST-STAGE LINK</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The offer must significantly predict actual participation (\(\pi_1 \neq 0\)).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">EXCLUSION CORE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Zero direct effect of the offer on outcomes once treatment receipt is held fixed.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">PERCEPTION RISKS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Incentives or messaging that shift participant psychology violate exclusion.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">MEASUREMENT CHECKS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Surveys measuring beliefs and timing help detect potential exclusion failures.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">CLEAN PROTOCOLS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Keeping encouragement offers isolated from other procedural changes protects validity.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Module 14 Synthesis & Glossary -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Module 14 Synthesis &amp; Conceptual Reference</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <!-- Comparison Table -->
+        <div style="overflow-x: auto; margin: var(--space-sm) 0;">
+          <table class="table-compact" style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 6px 10px;">Concept</th>
+                <th style="padding: 6px 10px;">Variable / Estimand</th>
+                <th style="padding: 6px 10px;">Econometric Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Assignment \(Z\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(Z_i \in \{0, 1\}\)</td>
+                <td style="padding: 6px 10px;">Randomized offer; strictly exogenous instrument.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Treatment \(T\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T_i \in \{0, 1\}\)</td>
+                <td style="padding: 6px 10px;">Actual participation; endogenous under noncompliance.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Intent-to-Treat</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(\text{ITT} = \Delta Y\)</td>
+                <td style="padding: 6px 10px;">Causal effect of randomized offer on outcomes.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">First Stage</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono); color: var(--color-primary);">\(\Delta T\)</td>
+                <td style="padding: 6px 10px;">Shift in take-up; equals complier share under monotonicity.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Wald Estimator</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono); color: #047857;">\(\Delta Y / \Delta T\)</td>
+                <td style="padding: 6px 10px;">Scales ITT by compliance rate to recover complier effect.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">LATE</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(E[Y(1) - Y(0) \mid \text{Complier}]\)</td>
+                <td style="padding: 6px 10px;">Local average treatment effect for compliers.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">ATE</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(E[Y(1) - Y(0)]\)</td>
+                <td style="padding: 6px 10px;">Population average effect across all compliance types.</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">2SLS</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(Y_i = \alpha + \beta \hat{T}_i + \varepsilon_i\)</td>
+                <td style="padding: 6px 10px;">Multivariate IV estimation with baseline covariate adjustment.</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; font-weight: 600;">Exclusion Restriction</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(Y(z, t) = Y(t)\)</td>
+                <td style="padding: 6px 10px;">Zero direct effect of assignment offer on outcomes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 21 Concept Review Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-xs); margin-top: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">MDE</strong>
+            Smallest effect a design can detect with targeted power.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Actionable Effect</strong>
+            Effect size large enough to justify policy action.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">ITT</strong>
+            Difference in outcomes by randomized offer arm.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Pre-Treatment Covariate</strong>
+            Baseline control reducing residual variance and raising power.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Treatment Assignment</strong>
+            Exogenous offer \(Z\) randomized by researcher.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Treatment Receipt</strong>
+            Endogenous take-up \(T\) chosen by participant.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Preregistration</strong>
+            Locking analysis plan before observing data realization.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Multiple Hypotheses</strong>
+            Testing many outcomes inflates false discovery rates.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Bonferroni</strong>
+            Stricter alpha threshold \(\alpha / m\) bounding FWER.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">FWER</strong>
+            Family-Wise Error Rate across all tested hypotheses.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Always-Taker</strong>
+            Takes treatment regardless of assignment state.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Complier</strong>
+            Takes treatment if and only if offered.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Never-Taker</strong>
+            Does not take treatment under any offer.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: #b91c1c; display: block;">Defier</strong>
+            Does the exact opposite of assignment (ruled out).
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Monotonicity</strong>
+            No defiers: offer only encourages take-up.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">First Stage</strong>
+            Instrument's empirical effect on treatment take-up.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Wald Estimator</strong>
+            Ratio of ITT to first-stage compliance shift.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">LATE</strong>
+            Causal treatment effect for the complier subgroup.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">ATE</strong>
+            Average treatment effect across entire population.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">Exclusion Restriction</strong>
+            Assignment affects outcome strictly through treatment.
+          </div>
+          <div class="study-card" style="padding: var(--space-xs) var(--space-sm); font-size: 0.8rem;">
+            <strong style="color: var(--color-primary); display: block;">2SLS</strong>
+            Two-stage least squares estimator with proper SEs.
+          </div>
+        </div>
+
+        <!-- Completion Box -->
+        <div class="study-card" style="margin-top: var(--space-md); padding: var(--space-md); background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(5,150,105,0.08)); border: 1px solid var(--color-primary); text-align: center; border-radius: var(--radius-md);">
+          <div style="font-size: 2rem; margin-bottom: 0.25rem;">&#x1F3C6;</div>
+          <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-text);">Module 14 Complete!</div>
+          <p style="font-size: 0.88rem; color: var(--color-text-secondary); max-width: 600px; margin: 0.5rem auto 1rem;">
+            You have mastered experimental estimation, preregistration protocols, compliance taxonomy, the Wald estimator, and the instrumental variables foundations of field trials.
+          </p>
+          <div style="display: flex; justify-content: center; gap: var(--space-xs);">
+            <a href="index.html" class="btn btn-sm btn-primary">Review Module 14 Overview</a>
+            <a href="../../index.html" class="btn btn-sm btn-secondary">Return to Curriculum</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">6. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Under what condition does the 2SLS / Wald estimator identify the Average Treatment Effect (ATE) rather than just the Local Average Treatment Effect (LATE)?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider whether treatment effects differ across compliance types, or what happens when compliance is 100%.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Homogeneity of treatment effects or full compliance.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> 2SLS identifies ATE if either: (1) treatment effects are identical across compliers, always-takers, and never-takers (homogeneous treatment effects), or (2) there is 100% compliance so that all individuals are compliers and \(Z_i = T_i\) for the entire sample.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Randomized assignment \(Z_i\) serves as an instrumental variable for endogenous treatment receipt \(T_i\) via Two-Stage Least Squares.</li>
+        <li>Inference must use proper 2SLS standard errors rather than manual second-stage OLS regression on \(\hat{T}_i\).</li>
+        <li>Under heterogeneous treatment effects, 2SLS estimates LATE (effect for compliers) rather than the population ATE.</li>
+        <li>The exclusion restriction requires that the randomized offer \(Z_i\) affects outcome \(Y_i\) solely through treatment receipt \(T_i\).</li>
+        <li>Field trial design practices—such as minimizing noncompliance and surveying perceptions—protect and probe exclusion validity.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">14.5 LATE &amp; the Wald Estimator</span>
+      </a>
+      <a href="index.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Module Complete &rarr;</span>
+        <span class="nav-btn-title">Back to Module 14 Overview</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Lab 14.6 Script -->
+  <script>
+    (function() {
+      const btnModeValid = document.getElementById('btnModeValid');
+      const btnModeInvalid = document.getElementById('btnModeInvalid');
+      const readoutDirect = document.getElementById('readoutDirect');
+      const readoutInterp = document.getElementById('readoutInterp');
+      const readoutTarget = document.getElementById('readoutTarget');
+      const pathDirectVisual = document.getElementById('pathDirectVisual');
+      const labExclusionInsight = document.getElementById('labExclusionInsight');
+
+      function setMode(isValid) {
+        if (isValid) {
+          btnModeValid.className = 'btn btn-sm btn-primary';
+          btnModeInvalid.className = 'btn btn-sm btn-outline';
+
+          readoutDirect.textContent = 'Zero (γ = 0)';
+          readoutDirect.style.color = '#059669';
+          readoutInterp.textContent = 'Unbiased LATE';
+          readoutInterp.style.color = '#2563eb';
+          readoutTarget.textContent = 'Causal Effect';
+          readoutTarget.style.color = '#059669';
+
+          pathDirectVisual.style.display = 'none';
+          labExclusionInsight.textContent = 'When the exclusion restriction holds, the randomized encouragement Z affects Y exclusively through its impact on treatment receipt T. The 2SLS estimator cleanly isolates the causal Local Average Treatment Effect for compliers.';
+        } else {
+          btnModeInvalid.className = 'btn btn-sm btn-primary';
+          btnModeValid.className = 'btn btn-sm btn-outline';
+
+          readoutDirect.textContent = 'Nonzero (γ ≠ 0)';
+          readoutDirect.style.color = '#dc2626';
+          readoutInterp.textContent = 'Biased & Inconsistent';
+          readoutInterp.style.color = '#dc2626';
+          readoutTarget.textContent = 'Spurious Target';
+          readoutTarget.style.color = '#dc2626';
+
+          pathDirectVisual.style.display = 'block';
+          labExclusionInsight.textContent = 'When a direct channel exists (γ ≠ 0), the offer Z impacts Y through psychological perceptions, incentives, or alternate behavioral shifts. The 2SLS estimator conflates the treatment effect with the direct offer effect, resulting in biased, uninterpretable estimates.';
+        }
+      }
+
+      if (btnModeValid) btnModeValid.addEventListener('click', () => setMode(true));
+      if (btnModeInvalid) btnModeInvalid.addEventListener('click', () => setMode(false));
+
+      // Quick Check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      setMode(true);
+    })();
+  </script>
+</body>
+</html>

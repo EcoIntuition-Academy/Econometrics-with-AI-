@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13.4: Blocked Randomization &amp; Fisher's Exact Test — EcoIntuition Academy</title>
+  <meta name="description" content="Design stratified mini-experiments within baseline subgroups to ensure covariate balance and improve estimation precision, incorporate block fixed effects in analysis regressions, and implement Fisher's exact test on contingency tables.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-13" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 13: Field Experiments &amp; Randomization</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 13</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 13</a>
+          <span class="module-nav-title">Field Experiments, Randomization &amp; Experimental Design</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Blocked Randomization &amp; Fisher Exact</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 13 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.1 Field Experiments &amp; Selection Bias</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.2 Power Calculations &amp; Sample Size</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.3 Randomization Inference</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">13.4 Blocked Randomization &amp; Fisher Exact</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.5 Balance Tests in Experiments</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.6 Covariate Adjustment &amp; Best Practices</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 13.4</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Experimental Design</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Blocked Randomization &amp; Fisher's Exact Test
+      </h1>
+      <p class="lesson-hero-lead">
+        Simple randomization can produce chance imbalances on key baseline covariates in small samples. Learn how stratified or blocked randomization ensures group balance and improves precision, and explore Fisher's exact test for contingency tables.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define stratified (blocked) randomization and conceptualize experiments as mini-experiments within strata.</li>
+        <li>Explain how blocking guarantees balance on critical covariates and enhances treatment-effect precision.</li>
+        <li>Specify the regression model with block indicator fixed effects \(Y_i = \alpha + \beta_1 T_i + \sum \gamma_b D_{ib} + \varepsilon_i\).</li>
+        <li>Distinguish blocked randomization from cluster-robust inference.</li>
+        <li>Implement Fisher's exact test on a \(2 \times 2\) contingency table under the sharp null.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Stratified / Blocked Randomization -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Stratified &amp; Blocked Randomization</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">DESIGN DEFINITION</div>
+          <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.05rem;">Blocked (Stratified) Randomization</h3>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+            In <strong>stratified or blocked randomization</strong>, the sample is divided into mutually exclusive subgroups (strata or blocks) based on observable baseline characteristics—such as age, income bracket, or gender—and treatment is randomized independently <em>within</em> each subgroup.
+          </p>
+        </div>
+
+        <!-- Architectural Comparison -->
+        <h4 style="font-size: var(--text-base); margin-top: var(--space-md); margin-bottom: var(--space-xs);">Architecture: One Experiment vs. Mini-Experiments</h4>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">COMPLETE RANDOMIZATION</div>
+            <div style="padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.82rem; text-align: center; margin-bottom: var(--space-xs);">
+              Full Sample (N)<br>
+              &darr; (Single Lottery)<br>
+              Treated (n₁) &nbsp;|&nbsp; Control (n₀)
+            </div>
+            <p style="margin: 0; font-size: 0.84rem; color: var(--color-text-secondary); line-height: 1.5;">
+              Subject to finite-sample chance imbalance. For instance, treatment might inadvertently receive a disproportionate number of older or higher-income participants.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); background: #f5f3ff; border: 1px solid #ddd6fe;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #6d28d9; margin-bottom: var(--space-xs);">BLOCKED RANDOMIZATION</div>
+            <div style="padding: var(--space-sm); background: #ffffff; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.82rem; text-align: center; margin-bottom: var(--space-xs); color: #5b21b6;">
+              Block 1 (Young):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treated &nbsp;|&nbsp; Control<br>
+              Block 2 (Middle-aged): Treated &nbsp;|&nbsp; Control<br>
+              Block 3 (Older):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treated &nbsp;|&nbsp; Control
+            </div>
+            <p style="margin: 0; font-size: 0.84rem; color: #5b21b6; line-height: 1.5;">
+              Guarantees equal allocation within every block by design. Eliminates chance covariate imbalance across the blocked variables.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Why Block Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-sm); background: #eff6ff; border-left: 3px solid #2563eb;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8;">1. GUARANTEED BALANCE</div>
+            <p style="font-size: 0.84rem; color: #1e3a8a; margin: 4px 0 0 0; line-height: 1.5;">
+              Pre-empts chance imbalance on critical baseline attributes by forcing treatment and control arms to have identical proportions in each stratum.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #ecfdf5; border-left: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">2. INCREASED PRECISION</div>
+            <p style="font-size: 0.84rem; color: #064e3b; margin: 4px 0 0 0; line-height: 1.5;">
+              Reduces the unexplained outcome variance by isolating between-block differences, thereby lowering the standard error of \(\hat{\beta}_1\).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Regression with Block Indicators & Analysis Caution -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Analysis: Accounting for Strata</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          If an experiment is randomized within blocks, standard econometric practice dictates that the empirical specification should reflect the experimental design:
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">BLOCK-INDICATOR REGRESSION SPECIFICATION</div>
+          <div class="equation-math">
+            $$Y_i = \alpha + \beta_1 T_i + \sum_{b=1}^{B-1} \gamma_b D_{ib} + \varepsilon_i$$
+          </div>
+          <div class="equation-subtext">
+            where \(D_{ib} = 1\) if individual \(i\) belongs to block \(b\), and \(0\) otherwise. The stratum fixed effects \(\gamma_b\) absorb between-block variation.
+          </div>
+        </div>
+
+        <div class="callout" style="border-left: 4px solid #d97706; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #fef3c7; color: #b45309;">ANALYSIS CAUTION</span>
+            <h3 class="callout-title">Blocking vs. Clustering: Do Not Confuse the Two</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Stratification (blocking) assigns treatment <em>within</em> groups of individuals to guarantee balance. In contrast, cluster randomization assigns entire clusters to treatment or control simultaneously. Randomizing within blocks does <strong>not</strong> mean you must cluster standard errors by block. Block indicators in OLS respect the design by absorbing stratum-level fixed effects.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Fisher's Exact Test -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Fisher's Exact Test for Contingency Tables</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          When outcomes are binary (success or failure), researchers frequently evaluate treatment efficacy using a \(2 \times 2\) contingency table:
+        </p>
+
+        <div class="comparison-card" style="padding: var(--space-md); margin-bottom: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">2 × 2 CONTINGENCY TABLE SETUP</div>
+          <table style="width: 100%; max-width: 450px; margin: 0 auto; border-collapse: collapse; font-size: 0.88rem; text-align: center;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle);">
+                <th style="padding: 6px; text-align: left;">Group</th>
+                <th style="padding: 6px;">Success</th>
+                <th style="padding: 6px;">Failure</th>
+                <th style="padding: 6px;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px; text-align: left; font-weight: 600; color: #6d28d9;">Treatment</td>
+                <td style="padding: 6px; font-family: var(--font-mono); font-weight: 600;">a</td>
+                <td style="padding: 6px; font-family: var(--font-mono);">b</td>
+                <td style="padding: 6px; font-weight: 600;">a + b = n₁</td>
+              </tr>
+              <tr style="border-bottom: 2px solid var(--border-subtle);">
+                <td style="padding: 6px; text-align: left; font-weight: 600; color: #2563eb;">Control</td>
+                <td style="padding: 6px; font-family: var(--font-mono);">c</td>
+                <td style="padding: 6px; font-family: var(--font-mono);">d</td>
+                <td style="padding: 6px; font-weight: 600;">c + d = n₀</td>
+              </tr>
+              <tr style="font-weight: 600;">
+                <td style="padding: 6px; text-align: left;">Total</td>
+                <td style="padding: 6px;">a + c</td>
+                <td style="padding: 6px;">b + d</td>
+                <td style="padding: 6px;">N</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">HYPERGEOMETRIC EXACT PROBABILITY</div>
+          <div class="equation-math">
+            $$P(X = a) = \frac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{N}{a+c}} = \frac{\binom{n_1}{a}\binom{n_0}{c}}{\binom{N}{m}}$$
+          </div>
+          <div class="equation-subtext">
+            Under the sharp null that treatment affects no one, the marginal totals (\(n_1, n_0, m, N-m\)) are strictly fixed. The probability of observing exactly \(a\) treated successes follows the hypergeometric distribution.
+          </div>
+        </div>
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary);">
+          <strong>Fisher's exact test</strong> sums the hypergeometric probabilities of all tables that are as extreme as or more extreme than the observed table.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 13.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Blocked Randomization &amp; Contingency Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">INTERACTIVE LAB 13.4</span>
+            <h3 class="lab-title">Blocked Randomization &amp; Fisher's Exact Test</h3>
+            <p class="lab-desc">
+              Examine how blocked assignment eliminates chance covariate imbalance across strata, then interact with a 2 × 2 table to compute exact hypergeometric probabilities.
+            </p>
+          </div>
+
+          <!-- Mode Switcher -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Investigation Mode:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnModeBlock">Blocked vs. Complete Randomization</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeFisher">Fisher's Exact 2 × 2 Table</button>
+              </div>
+            </div>
+
+            <!-- Block Controls -->
+            <div class="control-group" id="blockControls">
+              <span class="control-label">Assignment Mechanism:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnAllocComplete">Complete Randomization (Lottery)</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAllocBlocked">Blocked Randomization (Stratified)</button>
+              </div>
+            </div>
+
+            <!-- Fisher Controls -->
+            <div class="control-group" id="fisherControls" style="display: none;">
+              <span class="control-label">Contingency Table Scenario:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnFishMod">Standard Split (9/12 vs 4/12)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnFishExt">Extreme Split (11/12 vs 2/12)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnFishNull">Null Split (6/12 vs 6/12)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label" id="metric1Label">Total Sample Treated</div>
+              <div class="metric-value" id="metric1Val" style="color: #6d28d9;">12 / 24</div>
+              <div class="metric-sub" id="metric1Sub">50% allocation target</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label" id="metric2Label">Total Sample Control</div>
+              <div class="metric-value" id="metric2Val" style="color: #2563eb;">12 / 24</div>
+              <div class="metric-sub" id="metric2Sub">50% allocation target</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label" id="metric3Label">Baseline Strata Imbalance</div>
+              <div class="metric-value" id="metric3Val" style="color: #059669;">0.0% (Zero)</div>
+              <div class="metric-sub" id="metric3Sub">Within-block balance</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label" id="metric4Label">Analytical Advantage</div>
+              <div class="metric-value" id="metric4Val" style="color: #2563eb;">MAX PRECISION</div>
+              <div class="metric-sub" id="metric4Sub">Guaranteed balance on strata</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar" id="labLegend">
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 10px; width: 10px; border-radius: 2px;"></span> Treated Units</div>
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 10px; width: 10px; border-radius: 2px;"></span> Control Units</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 3px;"></span> Strata Boundary</div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 280px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="blockSvg" viewBox="0 0 680 240" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Blocked Randomization:</strong> <span id="labInsightBody">Participants are stratified into Young (8), Middle (8), and Older (8) cohorts. Randomizing 4 treated and 4 control strictly within each block eliminates chance age imbalance.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A sample of 24 participants partitioned into 3 demographic strata (Young, Middle, Older) across assignment regimes.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Under complete randomization, one age group can accidentally receive 6 treated units and only 2 controls. Blocking guarantees an exact 4/4 split.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Blocking removes finite-sample chance bias on key variables and enables inclusion of block indicators to improve precision.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Analyzing blocked experiments with stratum fixed effects absorbs between-group variance, yielding narrower confidence intervals.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch to Fisher's Exact 2 × 2 Table mode and test the "Extreme Split" scenario to see the exact hypergeometric calculation.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why can blocked randomization improve the precision of the estimated treatment effect?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Think about what happens to unexplained outcome variation when comparisons are restricted to homogeneous subgroups.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because randomization occurs within more homogeneous groups, reducing chance imbalance and allowing block indicators to absorb between-block outcome variation.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> When strata explain a portion of the outcome variance, stratifying ensures treatment and control groups are balanced across those strata. In the analysis regression, stratum fixed effects account for between-block differences, reducing the residual variance \(\sigma^2\) and lowering the standard error of the estimated treatment effect.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Blocked randomization conducts mini-experiments within pre-defined demographic or baseline strata.</li>
+        <li>Blocking guarantees balance on stratified baseline covariates, preventing finite-sample chance disparities.</li>
+        <li>Stratum fixed effects in regression (\(\sum \gamma_b D_{ib}\)) absorb between-block variance to boost precision.</li>
+        <li>Stratified assignment within blocks is fundamentally distinct from cluster-randomized treatments.</li>
+        <li>Fisher's exact test uses hypergeometric probabilities to test the sharp null on \(2 \times 2\) contingency tables.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">13.3 Randomization Inference</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">13.5 Balance Tests in Experiments</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 13.4 Script -->
+  <script>
+    (function() {
+      let currentTab = 'block'; // 'block' or 'fisher'
+      let blockAllocation = 'blocked'; // 'complete' or 'blocked'
+      let fisherScenario = 'mod'; // 'mod', 'ext', 'null'
+
+      const btnModeBlock = document.getElementById('btnModeBlock');
+      const btnModeFisher = document.getElementById('btnModeFisher');
+      const blockControls = document.getElementById('blockControls');
+      const fisherControls = document.getElementById('fisherControls');
+
+      const btnAllocComplete = document.getElementById('btnAllocComplete');
+      const btnAllocBlocked = document.getElementById('btnAllocBlocked');
+
+      const btnFishMod = document.getElementById('btnFishMod');
+      const btnFishExt = document.getElementById('btnFishExt');
+      const btnFishNull = document.getElementById('btnFishNull');
+
+      const metric1Label = document.getElementById('metric1Label');
+      const metric1Val = document.getElementById('metric1Val');
+      const metric1Sub = document.getElementById('metric1Sub');
+
+      const metric2Label = document.getElementById('metric2Label');
+      const metric2Val = document.getElementById('metric2Val');
+      const metric2Sub = document.getElementById('metric2Sub');
+
+      const metric3Label = document.getElementById('metric3Label');
+      const metric3Val = document.getElementById('metric3Val');
+      const metric3Sub = document.getElementById('metric3Sub');
+
+      const metric4Label = document.getElementById('metric4Label');
+      const metric4Val = document.getElementById('metric4Val');
+      const metric4Sub = document.getElementById('metric4Sub');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('blockSvg');
+
+      function updateLab() {
+        btnModeBlock.className = currentTab === 'block' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnModeFisher.className = currentTab === 'fisher' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        blockControls.style.display = currentTab === 'block' ? 'block' : 'none';
+        fisherControls.style.display = currentTab === 'fisher' ? 'block' : 'none';
+
+        if (currentTab === 'block') {
+          btnAllocComplete.className = blockAllocation === 'complete' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+          btnAllocBlocked.className = blockAllocation === 'blocked' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+          metric1Label.textContent = 'Total Sample Treated';
+          metric2Label.textContent = 'Total Sample Control';
+          metric3Label.textContent = 'Baseline Strata Imbalance';
+          metric4Label.textContent = 'Analytical Advantage';
+
+          metric1Val.textContent = '12 / 24';
+          metric1Sub.textContent = '50% allocation target';
+          metric2Val.textContent = '12 / 24';
+          metric2Sub.textContent = '50% allocation target';
+
+          if (blockAllocation === 'blocked') {
+            metric3Val.textContent = '0.0% (Zero)';
+            metric3Val.style.color = '#059669';
+            metric3Sub.textContent = 'Exact 4/4 split in all 3 strata';
+            metric4Val.textContent = 'MAX PRECISION';
+            metric4Val.style.color = '#2563eb';
+            metric4Sub.textContent = 'Guaranteed balance on strata';
+
+            labInsightTitle.textContent = 'Blocked Randomization:';
+            labInsightBody.textContent = 'Each age group (Young, Middle, Older) is treated as a mini-experiment with exactly 4 treated and 4 control units. Strata imbalance is mathematically zero by design.';
+          } else {
+            metric3Val.textContent = '25.0% (Imbalanced)';
+            metric3Val.style.color = '#dc2626';
+            metric3Sub.textContent = 'Young stratum has 6 Treated, 2 Control';
+            metric4Val.textContent = 'CHANCE BIAS RISK';
+            metric4Val.style.color = '#dc2626';
+            metric4Sub.textContent = 'Subgroup chance disparities';
+
+            labInsightTitle.textContent = 'Complete Randomization:';
+            labInsightBody.textContent = 'A single overall lottery produced chance imbalance in the subgroups: Young has 6 treated vs 2 controls, while Older has 2 treated vs 6 controls.';
+          }
+
+          renderBlockSvg(blockAllocation);
+
+        } else {
+          // Fisher Mode
+          btnFishMod.className = fisherScenario === 'mod' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+          btnFishExt.className = fisherScenario === 'ext' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+          btnFishNull.className = fisherScenario === 'null' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+          metric1Label.textContent = 'Treated Success Rate';
+          metric2Label.textContent = 'Control Success Rate';
+          metric3Label.textContent = 'Estimated Odds Ratio';
+          metric4Label.textContent = "Fisher's Exact p-value";
+
+          let a, b, c, d, pval, orVal;
+          if (fisherScenario === 'mod') {
+            a = 9; b = 3; c = 4; d = 8;
+            pval = 0.0890;
+            orVal = (9*8)/(3*4);
+            labInsightTitle.textContent = 'Standard Split (9/12 vs 4/12):';
+            labInsightBody.textContent = `Treated success rate is 75% vs 33% in control (Odds Ratio = 6.0). Two-sided Fisher exact p-value is ${pval.toFixed(4)} (marginally significant at 10% level).`;
+          } else if (fisherScenario === 'ext') {
+            a = 11; b = 1; c = 2; d = 10;
+            pval = 0.0007;
+            orVal = (11*10)/(1*2);
+            labInsightTitle.textContent = 'Extreme Split (11/12 vs 2/12):';
+            labInsightBody.textContent = `Treated success rate is 92% vs 17% in control (Odds Ratio = 55.0). Two-sided Fisher exact p-value is ${pval.toFixed(4)} (strongly significant, p < 0.001).`;
+          } else {
+            a = 6; b = 6; c = 6; d = 6;
+            pval = 1.0000;
+            orVal = 1.0;
+            labInsightTitle.textContent = 'Null Split (6/12 vs 6/12):';
+            labInsightBody.textContent = `Identical success rates of 50% across both groups (Odds Ratio = 1.0). Fisher exact p-value is ${pval.toFixed(4)} (perfect null consistency).`;
+          }
+
+          metric1Val.textContent = `${a} / 12 (${((a/12)*100).toFixed(0)}%)`;
+          metric1Val.style.color = '#6d28d9';
+          metric1Sub.textContent = 'Treated successes / total';
+
+          metric2Val.textContent = `${c} / 12 (${((c/12)*100).toFixed(0)}%)`;
+          metric2Val.style.color = '#2563eb';
+          metric2Sub.textContent = 'Control successes / total';
+
+          metric3Val.textContent = orVal.toFixed(2);
+          metric3Val.style.color = '#2563eb';
+          metric3Sub.textContent = 'Cross-product ratio (ad / bc)';
+
+          metric4Val.textContent = pval.toFixed(4);
+          metric4Val.style.color = pval < 0.05 ? '#059669' : '#d97706';
+          metric4Sub.textContent = pval < 0.05 ? 'Reject sharp null at 5%' : 'Fail to reject sharp null';
+
+          renderFisherSvg(a, b, c, d, pval);
+        }
+      }
+
+      function renderBlockSvg(mode) {
+        const width = 680;
+        const height = 240;
+        let svgHtml = '';
+
+        // Three strata blocks: Young, Mid, Older
+        const strata = [
+          { name: 'Block 1: Young Cohort (Age < 30)', treated: mode === 'blocked' ? 4 : 6, control: mode === 'blocked' ? 4 : 2 },
+          { name: 'Block 2: Middle-Aged (Age 30–50)', treated: mode === 'blocked' ? 4 : 4, control: mode === 'blocked' ? 4 : 4 },
+          { name: 'Block 3: Older Cohort (Age > 50)', treated: mode === 'blocked' ? 4 : 2, control: mode === 'blocked' ? 4 : 6 }
+        ];
+
+        const rowH = 65;
+        strata.forEach((st, idx) => {
+          const yTop = 20 + idx * (rowH + 10);
+
+          // Card background
+          svgHtml += `<rect x="30" y="${yTop}" width="620" height="${rowH}" fill="var(--color-surface)" stroke="var(--border-subtle)" rx="6"/>`;
+          svgHtml += `<text x="45" y="${yTop + 24}" font-size="12" font-weight="600" fill="var(--color-text)">${st.name}</text>`;
+
+          // Units visualization: 8 circles per stratum
+          const startX = 320;
+          for (let u = 0; u < 8; u++) {
+            const isTreated = u < st.treated;
+            const cx = startX + u * 35;
+            const cy = yTop + 33;
+            const fill = isTreated ? '#6d28d9' : '#2563eb';
+            const label = isTreated ? 'T' : 'C';
+
+            svgHtml += `<circle cx="${cx}" cy="${cy}" r="12" fill="${fill}" fill-opacity="0.85"/>`;
+            svgHtml += `<text x="${cx}" y="${cy + 4}" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">${label}</text>`;
+          }
+
+          // Balance tag
+          const isBalanced = st.treated === 4;
+          const tagFill = isBalanced ? '#ecfdf5' : '#fef2f2';
+          const tagStroke = isBalanced ? '#a7f3d0' : '#fecaca';
+          const tagColor = isBalanced ? '#047857' : '#b91c1c';
+          const tagText = isBalanced ? 'Balanced (4T : 4C)' : `Imbalanced (${st.treated}T : ${st.control}C)`;
+
+          svgHtml += `<rect x="500" y="${yTop + 20}" width="135" height="24" rx="4" fill="${tagFill}" stroke="${tagStroke}"/>`;
+          svgHtml += `<text x="567" y="${yTop + 36}" font-size="11" font-weight="600" fill="${tagColor}" text-anchor="middle">${tagText}</text>`;
+        });
+
+        svg.innerHTML = svgHtml;
+      }
+
+      function renderFisherSvg(a, b, c, d, pval) {
+        const width = 680;
+        const height = 240;
+        let svgHtml = '';
+
+        // Table container
+        svgHtml += `<rect x="60" y="20" width="560" height="200" fill="var(--color-surface)" stroke="var(--border-subtle)" rx="8"/>`;
+
+        // Table header
+        svgHtml += `<text x="210" y="55" font-size="12" font-weight="700" fill="var(--color-primary)" text-anchor="middle">Success (Y = 1)</text>`;
+        svgHtml += `<text x="360" y="55" font-size="12" font-weight="700" fill="var(--color-primary)" text-anchor="middle">Failure (Y = 0)</text>`;
+        svgHtml += `<text x="500" y="55" font-size="12" font-weight="700" fill="var(--color-text-secondary)" text-anchor="middle">Subtotal</text>`;
+
+        svgHtml += `<line x1="80" y1="65" x2="600" y2="65" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+
+        // Row 1: Treatment
+        svgHtml += `<text x="100" y="105" font-size="13" font-weight="700" fill="#6d28d9">Treated (T = 1)</text>`;
+        svgHtml += `<rect x="160" y="80" width="100" height="40" fill="#f5f3ff" stroke="#ddd6fe" rx="4"/>`;
+        svgHtml += `<text x="210" y="106" font-size="16" font-weight="700" fill="#5b21b6" text-anchor="middle">${a}</text>`;
+
+        svgHtml += `<rect x="310" y="80" width="100" height="40" fill="#f5f3ff" stroke="#ddd6fe" rx="4"/>`;
+        svgHtml += `<text x="360" y="106" font-size="16" font-weight="700" fill="#5b21b6" text-anchor="middle">${b}</text>`;
+
+        svgHtml += `<text x="500" y="105" font-size="14" font-weight="600" fill="var(--color-text)" text-anchor="middle">${a + b}</text>`;
+
+        // Row 2: Control
+        svgHtml += `<text x="100" y="160" font-size="13" font-weight="700" fill="#2563eb">Control (T = 0)</text>`;
+        svgHtml += `<rect x="160" y="135" width="100" height="40" fill="#eff6ff" stroke="#bfdbfe" rx="4"/>`;
+        svgHtml += `<text x="210" y="161" font-size="16" font-weight="700" fill="#1d4ed8" text-anchor="middle">${c}</text>`;
+
+        svgHtml += `<rect x="310" y="135" width="100" height="40" fill="#eff6ff" stroke="#bfdbfe" rx="4"/>`;
+        svgHtml += `<text x="360" y="161" font-size="16" font-weight="700" fill="#1d4ed8" text-anchor="middle">${d}</text>`;
+
+        svgHtml += `<text x="500" y="160" font-size="14" font-weight="600" fill="var(--color-text)" text-anchor="middle">${c + d}</text>`;
+
+        // Bottom Totals
+        svgHtml += `<line x1="80" y1="185" x2="600" y2="185" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+        svgHtml += `<text x="100" y="206" font-size="12" font-weight="700" fill="var(--color-text-secondary)">Column Total</text>`;
+        svgHtml += `<text x="210" y="206" font-size="13" font-weight="700" fill="var(--color-text)" text-anchor="middle">${a + c}</text>`;
+        svgHtml += `<text x="360" y="206" font-size="13" font-weight="700" fill="var(--color-text)" text-anchor="middle">${b + d}</text>`;
+        svgHtml += `<text x="500" y="206" font-size="14" font-weight="700" fill="var(--color-primary)" text-anchor="middle">N = ${a + b + c + d}</text>`;
+
+        svg.innerHTML = svgHtml;
+      }
+
+      btnModeBlock.addEventListener('click', () => { currentTab = 'block'; updateLab(); });
+      btnModeFisher.addEventListener('click', () => { currentTab = 'fisher'; updateLab(); });
+
+      btnAllocComplete.addEventListener('click', () => { blockAllocation = 'complete'; updateLab(); });
+      btnAllocBlocked.addEventListener('click', () => { blockAllocation = 'blocked'; updateLab(); });
+
+      btnFishMod.addEventListener('click', () => { fisherScenario = 'mod'; updateLab(); });
+      btnFishExt.addEventListener('click', () => { fisherScenario = 'ext'; updateLab(); });
+      btnFishNull.addEventListener('click', () => { fisherScenario = 'null'; updateLab(); });
+
+      // Quick check toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 12: IV Diagnostics, Weak Instruments &amp; Measurement Error — EcoIntuition Academy</title>
-  <meta name="description" content="Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.">
+  <title>Module 13: Field Experiments, Randomization &amp; Experimental Design — EcoIntuition Academy</title>
+  <meta name="description" content="Learn how randomized field experiments remove systematic treatment selection, determine how sample size affects precision, conduct randomization-based inference, improve experimental design through blocking, diagnose baseline balance, and use pre-treatment covariates to increase precision.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
   <!-- Google Fonts: Poppins & JetBrains Mono -->
@@ -32,7 +32,7 @@
     });
   </script>
 </head>
-<body data-module="module-12">
+<body data-module="module-13">
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
@@ -63,11 +63,12 @@
               <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
               <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
               <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
-              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
-              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
             </div>
           </li>
-          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 13</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
             <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
@@ -95,24 +96,24 @@
     <!-- Hero Header -->
     <div class="module-hero">
       <div class="module-hero-badges">
-        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 12</span>
-        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">IV Diagnostics &amp; Measurement Error</span>
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 13</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Field Experiments &amp; Randomization</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">6 Lessons</span>
-        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Advanced Econometric Methods</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Experimental Design &amp; Inference</span>
       </div>
 
       <h1 class="module-hero-title">
-        IV Diagnostics, Weak Instruments &amp; Measurement Error
+        Field Experiments, Randomization &amp; Experimental Design
       </h1>
       
       <p class="module-hero-desc">
-        Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.
+        Learn how randomized field experiments remove systematic treatment selection, determine how sample size affects precision, conduct randomization-based inference, improve experimental design through blocking, diagnose baseline balance, and use pre-treatment covariates to increase precision.
       </p>
 
       <!-- Action Buttons & Progress -->
       <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
-          Start Module 12 →
+          Start Module 13 →
         </a>
         <a href="../../index.html#modules" class="btn btn-outline btn-lg">
           Explore All Modules
@@ -122,11 +123,11 @@
       <!-- Module Progress Card -->
       <div class="module-progress-card">
         <div class="module-progress-labels">
-          <span>Module 12 Completion</span>
-          <span id="progress-text-module-12" class="module-progress-percent">0% Complete</span>
+          <span>Module 13 Completion</span>
+          <span id="progress-text-module-13" class="module-progress-percent">0% Complete</span>
         </div>
         <div class="module-progress-track">
-          <div class="module-progress-fill" id="progress-fill-module-12"></div>
+          <div class="module-progress-fill" id="progress-fill-module-13"></div>
         </div>
       </div>
     </div>
@@ -137,17 +138,17 @@
         MODULE LEARNING PATH
       </h3>
       <div class="module-learning-path-flow">
-        <span class="learning-path-step"><span class="learning-path-pill">Need IV?</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Hausman</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Wu Test</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Validity</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Sargan</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Relevance</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Weak IV</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Measurement Error</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Attenuation</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">IV Solution</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Propagation of Error</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Self-Selection</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Selection Bias</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Random Assignment</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Treatment Effect</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Sample Size</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Precision</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Randomization Inference</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Blocking</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Fisher Exact</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Balance</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Covariate Adjustment</span></span>
       </div>
     </div>
 
@@ -159,19 +160,19 @@
 
       <div class="module-lessons-list">
         
-        <!-- Lesson 12.1 Card -->
+        <!-- Lesson 13.1 Card -->
         <a href="lesson-01.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.1</span>
-                <span class="badge badge-cat">Exogeneity Tests</span>
+                <span class="badge badge-num">LESSON 13.1</span>
+                <span class="badge badge-cat">Field Experiments</span>
               </div>
               <h2 class="lesson-card-title">
-                Do We Need IV? Hausman &amp; Wu Tests for Endogeneity
+                Field Experiments, Selection Bias &amp; Random Assignment
               </h2>
               <p class="lesson-card-desc">
-                Evaluate whether regressors are truly endogenous by comparing consistent IV estimates with efficient OLS, master the Hausman contrast statistic, and implement the auxiliary first-stage residual regression of the Wu test.
+                Examine why self-selection contaminates causal inference through omitted factor correlation, understand how randomized assignment eliminates systematic selection by design, and contrast self-selection against random assignment.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -180,19 +181,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.2 Card -->
+        <!-- Lesson 13.2 Card -->
         <a href="lesson-02.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.2</span>
-                <span class="badge badge-cat">Overidentification</span>
+                <span class="badge badge-num">LESSON 13.2</span>
+                <span class="badge badge-cat">Experimental Precision</span>
               </div>
               <h2 class="lesson-card-title">
-                Testing Instrument Validity: Sargan &amp; Overidentification
+                Power Calculations, Sample Size &amp; Precision
               </h2>
               <p class="lesson-card-desc">
-                Test the orthogonality of instrument sets using Sargan overidentification tests when instruments exceed regressors, understand why rejection can reflect heterogeneous treatment effects rather than invalid instruments, and connect to LATE intuition.
+                Derive the variance of the difference-in-means estimator under equal allocation, uncover why standard errors scale with the inverse square root of sample size, and master the key rule that quadrupling sample size halves standard errors.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -201,19 +202,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.3 Card -->
+        <!-- Lesson 13.3 Card -->
         <a href="lesson-03.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.3</span>
-                <span class="badge badge-cat">Weak Instruments</span>
+                <span class="badge badge-num">LESSON 13.3</span>
+                <span class="badge badge-cat">Inference</span>
               </div>
               <h2 class="lesson-card-title">
-                Instrument Strength &amp; Weak-Instrument Diagnostics
+                Randomization Inference
               </h2>
               <p class="lesson-card-desc">
-                Discover why relevance is vital for IV precision, examine how weak instruments inflate variance and finite-sample bias, apply the first-stage rule of thumb thresholds, and survey Stock-Yogo, Cragg-Donald, and Kleibergen-Paap diagnostics.
+                Evaluate hypotheses using the experimental assignment mechanism itself under the sharp null, construct the randomization distribution by reassigning treatments, and compute exact and simulation-based p-values without distributional assumptions.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -222,19 +223,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.4 Card -->
+        <!-- Lesson 13.4 Card -->
         <a href="lesson-04.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.4</span>
-                <span class="badge badge-cat">Measurement Error</span>
+                <span class="badge badge-num">LESSON 13.4</span>
+                <span class="badge badge-cat">Experimental Design</span>
               </div>
               <h2 class="lesson-card-title">
-                Measurement Error in Dependent and Independent Variables
+                Blocked Randomization &amp; Fisher's Exact Test
               </h2>
               <p class="lesson-card-desc">
-                Analyze the classical errors-in-variables model, prove why measurement error in the dependent variable inflates disturbance variance without biasing OLS coefficients, and understand why measurement error in regressors induces endogeneity.
+                Design stratified mini-experiments within baseline subgroups to ensure covariate balance and improve estimation precision, incorporate block fixed effects in analysis regressions, and implement Fisher's exact test on contingency tables.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -243,19 +244,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.5 Card -->
+        <!-- Lesson 13.5 Card -->
         <a href="lesson-05.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.5</span>
-                <span class="badge badge-cat">Attenuation &amp; IV</span>
+                <span class="badge badge-num">LESSON 13.5</span>
+                <span class="badge badge-cat">Diagnostics</span>
               </div>
               <h2 class="lesson-card-title">
-                Attenuation Bias &amp; IV as a Measurement-Error Solution
+                Balance Tests in Randomized Experiments
               </h2>
               <p class="lesson-card-desc">
-                Derive the classical attenuation factor lambda that pulls estimated slopes toward zero, explore numerical examples of signal-to-noise ratios, and prove how valid instruments isolate true variation to restore estimator consistency.
+                Evaluate baseline covariate comparability across treatment and control groups using t-tests, balance regressions, and standardized differences, while recognizing the reality of finite-sample chance imbalance versus assignment failures.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -264,19 +265,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.6 Card -->
+        <!-- Lesson 13.6 Card -->
         <a href="lesson-06.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.6</span>
-                <span class="badge badge-cat">Synthesis &amp; Review</span>
+                <span class="badge badge-num">LESSON 13.6</span>
+                <span class="badge badge-cat">Precision &amp; Practice</span>
               </div>
               <h2 class="lesson-card-title">
-                Propagation of Error &amp; Module Review
+                Covariate Adjustment, Precision &amp; Best Practices
               </h2>
               <p class="lesson-card-desc">
-                Examine how non-linear transformations and ratios propagate underlying measurement noise, synthesize the diagnostic workflow connecting endogeneity, validity, relevance, and data mismeasurement, and review core concepts.
+                Harness pre-treatment covariates in regression models to absorb residual variance and boost statistical power, avoid conditioning on post-treatment colliders, and apply essential experimental design principles from pre-registration to reporting.
               </p>
             </div>
             <div class="lesson-card-action">

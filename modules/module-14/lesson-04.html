@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.4: Noncompliance, Treatment Assignment &amp; Compliance Types — Econometrics with AI</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Noncompliance &amp; Compliance Types</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.4</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Compliance</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Noncompliance, Treatment Assignment &amp; Compliance Types
+      </h1>
+      <p class="lesson-hero-lead">
+        In economic field trials, researchers randomize treatment offers, but participants choose whether to comply. Understanding noncompliance bridges experimental trials and instrumental variables.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Distinguish strictly between randomized treatment assignment \(Z\) and actual treatment receipt \(T\).</li>
+        <li>Explain why Intent-to-Treat (ITT) measures the effect of an offer rather than the effect of taking the treatment.</li>
+        <li>Define the four potential compliance types: Always-takers, Compliers, Never-takers, and Defiers.</li>
+        <li>Construct the potential treatment status table across assignment states \(Z \in \{0, 1\}\).</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Z vs T -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Treatment Assignment \(Z\) vs. Treatment Receipt \(T\)</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          In controlled laboratory settings, researchers can often force treatment delivery. In economic field settings, individuals have agency: they can decline free job training, skip doctor appointments, or purchase microloans from alternate lenders.
+        </p>
+
+        <!-- Two Large Distinct Cards -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid var(--color-primary);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">EXOGENOUS INSTRUMENT</div>
+            <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Assignment \(Z_i \in \{0, 1\}\)</div>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Whether participant \(i\) was randomly assigned or offered the treatment. This variable is <strong>strictly controlled by the researcher</strong> and guaranteed independent of potential outcomes by randomization.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid #6d28d9;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #6d28d9; letter-spacing: 0.05em;">ENDOGENOUS CHOICE</div>
+            <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Receipt \(T_i \in \{0, 1\}\)</div>
+            <p style="font-size: 0.88rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+              Whether participant \(i\) actually received or participated in the treatment. Because participants decide whether to comply with their assignment, \(T_i\) is <strong>endogenous and self-selected</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITT Model Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">REDUCED-FORM ITT REGRESSION</span>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">Assignment Effect</span>
+          </div>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0;">
+            \[
+            Y_i = \alpha + \beta_1 Z_i + \varepsilon_i
+            \]
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            \(\beta_1\) identifies the effect of being <strong>offered / assigned</strong> treatment: \(E[Y_i \mid Z_i = 1] - E[Y_i \mid Z_i = 0]\). When noncompliance is present, \(Z_i \neq T_i\) for some subjects, meaning \(\beta_1\) does not capture the biological or direct economic impact of actually receiving treatment.
+          </p>
+        </div>
+
+        <!-- Cookie Intuition Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.05); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <strong style="color: var(--color-primary); font-size: 0.85rem; letter-spacing: 0.04em;">INTUITION &middot; THE COOKIE ANALOGY</strong>
+          <p style="font-size: 0.88rem; margin: 6px 0 0 0; line-height: 1.6;">
+            Offering a child a cookie (\(Z = 1\)) does not guarantee they eat the cookie (\(T = 1\)). Some children love cookies and sneak one even when not offered; others refuse cookies no matter what; and some eat only when offered. Measuring happiness by offer (\(Z\)) tells you the value of the gesture; measuring happiness by eating (\(T\)) requires accounting for who complied.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Four Compliance Types -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Four Compliance Types</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Under the potential outcomes framework, every individual possesses two potential treatment receipt values: \(T_i(1)\) (treatment taken if assigned \(Z=1\)) and \(T_i(0)\) (treatment taken if assigned \(Z=0\)). This generates four distinct behavioral profiles:
+        </p>
+
+        <!-- 4 Equal Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary);">ALWAYS-TAKER</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: var(--color-text-secondary);">
+              Takes treatment regardless of assignment state:
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; margin-top: 6px; color: var(--color-text);">
+              \(T_i(0) = 1, \quad T_i(1) = 1\)
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #f0fdf4; border-left: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">COMPLIER</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: #064e3b;">
+              Complies strictly with assignment offer:
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; margin-top: 6px; color: #047857;">
+              \(T_i(0) = 0, \quad T_i(1) = 1\)
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary);">NEVER-TAKER</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: var(--color-text-secondary);">
+              Refuses treatment under any offer:
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; margin-top: 6px; color: var(--color-text);">
+              \(T_i(0) = 0, \quad T_i(1) = 0\)
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #fef2f2; border-left: 3px solid #dc2626;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">DEFIER</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: #7f1d1d;">
+              Does the opposite of assignment (ruled out):
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; margin-top: 6px; color: #b91c1c;">
+              \(T_i(0) = 1, \quad T_i(1) = 0\)
+            </div>
+          </div>
+        </div>
+
+        <!-- Scholarship Example Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border: 1px solid var(--border-subtle); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.84rem; font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">
+            Field Experiment Example: College Scholarship Offer
+          </div>
+          <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin-bottom: var(--space-xs);">
+            Randomized offer \(Z = 1\) represents a tuition scholarship; \(T = 1\) represents college enrollment:
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs); font-size: 0.82rem;">
+            <div><strong>Always-Taker:</strong> Attends college regardless of financial aid.</div>
+            <div><strong>Complier:</strong> Attends college if and only if offered the scholarship.</div>
+            <div><strong>Never-Taker:</strong> Enters family trade or military; never attends college.</div>
+            <div><strong>Defier:</strong> Attends only if denied aid (assumed nonexistent).</div>
+          </div>
+        </div>
+
+        <!-- Potential Status Table -->
+        <div style="overflow-x: auto; margin: var(--space-sm) 0;">
+          <table class="table-compact" style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 6px 10px;">Compliance Type</th>
+                <th style="padding: 6px 10px;">If Control (\(Z = 0\))</th>
+                <th style="padding: 6px 10px;">If Treated (\(Z = 1\))</th>
+                <th style="padding: 6px 10px;">Behavioral Response to Offer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Always-taker</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 1\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 1\)</td>
+                <td style="padding: 6px 10px; color: var(--color-text-secondary);">No change in status (\(\Delta = 0\))</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle); background: rgba(5, 150, 105, 0.05);">
+                <td style="padding: 6px 10px; font-weight: 600; color: #047857;">Complier</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 0\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 1\)</td>
+                <td style="padding: 6px 10px; font-weight: 600; color: #047857;">Switches into treatment (\(\Delta = +1\))</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 6px 10px; font-weight: 600;">Never-taker</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 0\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 0\)</td>
+                <td style="padding: 6px 10px; color: var(--color-text-secondary);">No change in status (\(\Delta = 0\))</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; font-weight: 600; color: #b91c1c;">Defier</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 1\)</td>
+                <td style="padding: 6px 10px; font-family: var(--font-mono);">\(T = 0\)</td>
+                <td style="padding: 6px 10px; color: #b91c1c;">Switches out of treatment (\(\Delta = -1\))</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 14.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: Compliance Type &amp; First-Stage Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <span class="lab-badge">COMPLIANCE EXPLORER</span>
+            <h3 class="lab-title">First-Stage Take-Up Simulator</h3>
+            <p class="lab-desc">
+              Examine how the distribution of compliance types determines treatment take-up rates in both assignment arms and generates the first-stage experimental instrument effect.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Preset Scenarios:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnSource">Source Baseline (30/25/45)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnHighComp">High Compliance (10/70/20)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnPerfect">Perfect Compliance (0/100/0)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Take-Up in Control (\(Z=0\))</div>
+              <div class="metric-value" id="readoutT0" style="color: #64748b;">30.0%</div>
+              <div class="metric-sub">Always-takers only</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Take-Up in Treated (\(Z=1\))</div>
+              <div class="metric-value" id="readoutT1" style="color: #2563eb;">55.0%</div>
+              <div class="metric-sub">Always-takers + Compliers</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">First-Stage Effect</div>
+              <div class="metric-value" id="readoutFS" style="color: #059669;">0.25</div>
+              <div class="metric-sub">\(E[T|Z=1] - E[T|Z=0]\)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Complier Population Share</div>
+              <div class="metric-value" id="readoutCO" style="color: #059669;">25.0%</div>
+              <div class="metric-sub">Induced into treatment</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #64748b; height: 10px; width: 10px; border-radius: 2px;"></span> Control Take-Up: \(E[T \mid Z=0]\)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 10px; width: 10px; border-radius: 2px;"></span> Treated Take-Up: \(E[T \mid Z=1]\)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 10px; width: 10px; border-radius: 2px;"></span> First Stage = Complier Proportion</div>
+          </div>
+
+          <!-- Visual Bar Display -->
+          <div style="background: var(--surface); border-radius: var(--radius-md); padding: var(--space-sm); border: 1px solid var(--border-subtle); margin: var(--space-xs) 0;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              OBSERVED TREATMENT TAKE-UP BY RANDOMIZED OFFER STATUS
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <span style="width: 110px; font-size: 0.8125rem; font-weight: 600;">Control (\(Z=0\)):</span>
+              <div style="flex: 1; background: rgba(0,0,0,0.05); height: 20px; border-radius: 4px; overflow: hidden;">
+                <div id="barT0" style="height: 100%; width: 30%; background: #64748b; transition: width 0.3s ease;"></div>
+              </div>
+              <span id="barT0Text" style="width: 60px; text-align: right; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700; color: #64748b; margin-left: 0.5rem;">30.0%</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <span style="width: 110px; font-size: 0.8125rem; font-weight: 600;">Treated (\(Z=1\)):</span>
+              <div style="flex: 1; background: rgba(0,0,0,0.05); height: 20px; border-radius: 4px; overflow: hidden;">
+                <div id="barT1" style="height: 100%; width: 55%; background: #2563eb; transition: width 0.3s ease;"></div>
+              </div>
+              <span id="barT1Text" style="width: 60px; text-align: right; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700; color: #2563eb; margin-left: 0.5rem;">55.0%</span>
+            </div>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>First-Stage Insight:</strong> <span id="labComplianceInsight">Under monotonicity (no defiers), the first-stage difference in treatment take-up E[T|Z=1] − E[T|Z=0] = 0.55 − 0.30 = 0.25 exactly equals the population proportion of compliers (25.0%). The randomized offer successfully induced 25.0% of the population into treatment.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">CONTROL TAKE-UP</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                In the unassigned arm, only Always-takers access treatment: \(E[T \mid Z=0] = \pi_{\text{AT}}\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TREATED TAKE-UP</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                In the offered arm, Always-takers and Compliers participate: \(E[T \mid Z=1] = \pi_{\text{AT}} + \pi_{\text{C}}\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">FIRST-STAGE SHIFT</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Subtracting the two arms cancels \(\pi_{\text{AT}}\), cleanly isolating the complier share \(\pi_{\text{C}}\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">NEVER-TAKERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Contribute zero take-up in both arms, mechanically diluting the aggregate ITT effect.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">GATEWAY TO LATE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                This first-stage take-up shift forms the exact denominator of the Wald instrumental variable estimator.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Who changes treatment status because of randomized assignment under monotonicity?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider which subgroup has \(T=0\) under control but switches to \(T=1\) when offered treatment.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Compliers.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Under monotonicity (no defiers), Always-takers take treatment under both conditions (\(T=1\)) and Never-takers reject treatment under both conditions (\(T=0\)). Only Compliers switch status in response to the randomized offer (\(T=0 \to T=1\)).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Randomized assignment \(Z_i\) is exogenous, but actual treatment receipt \(T_i\) is endogenous whenever noncompliance occurs.</li>
+        <li>ITT regression identifies the causal effect of being offered treatment, not necessarily the biological or direct effect of receiving it.</li>
+        <li>The population divides into four potential compliance types: Always-takers, Compliers, Never-takers, and Defiers.</li>
+        <li>Always-takers and Never-takers exhibit invariant treatment status across arms, meaning assignment offers create zero behavior change for them.</li>
+        <li>The first-stage difference in treatment take-up \(E[T|Z=1] - E[T|Z=0]\) isolates the fraction of compliers in the population under monotonicity.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">14.3 Preregistration &amp; Multiple Testing</span>
+      </a>
+      <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">14.5 LATE &amp; the Wald Estimator</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Lab 14.4 Script -->
+  <script>
+    (function() {
+      let at = 30;
+      let co = 25;
+      let nt = 45;
+
+      const btnSource = document.getElementById('btnSource');
+      const btnHighComp = document.getElementById('btnHighComp');
+      const btnPerfect = document.getElementById('btnPerfect');
+
+      const readoutT0 = document.getElementById('readoutT0');
+      const readoutT1 = document.getElementById('readoutT1');
+      const readoutFS = document.getElementById('readoutFS');
+      const readoutCO = document.getElementById('readoutCO');
+
+      const barT0 = document.getElementById('barT0');
+      const barT0Text = document.getElementById('barT0Text');
+      const barT1 = document.getElementById('barT1');
+      const barT1Text = document.getElementById('barT1Text');
+      const labComplianceInsight = document.getElementById('labComplianceInsight');
+
+      function updateLab() {
+        btnSource.className = (at === 30 && co === 25) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnHighComp.className = (at === 10 && co === 70) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnPerfect.className = (at === 0 && co === 100) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        const pT0 = at / 100;
+        const pT1 = (at + co) / 100;
+        const fs = co / 100;
+
+        readoutT0.textContent = `${at.toFixed(1)}%`;
+        readoutT1.textContent = `${(at + co).toFixed(1)}%`;
+        readoutFS.textContent = fs.toFixed(2);
+        readoutCO.textContent = `${co.toFixed(1)}%`;
+
+        barT0.style.width = `${Math.min(at, 100)}%`;
+        barT0Text.textContent = `${at.toFixed(1)}%`;
+
+        barT1.style.width = `${Math.min(at + co, 100)}%`;
+        barT1Text.textContent = `${(at + co).toFixed(1)}%`;
+
+        labComplianceInsight.textContent = `Under monotonicity (no defiers), the first-stage difference in treatment take-up E[T|Z=1] − E[T|Z=0] = ${pT1.toFixed(2)} − ${pT0.toFixed(2)} = ${fs.toFixed(2)} exactly equals the population proportion of compliers (${co.toFixed(1)}%). The randomized offer successfully induced ${co.toFixed(1)}% of the population into treatment.`;
+      }
+
+      if (btnSource) btnSource.addEventListener('click', () => { at = 30; co = 25; nt = 45; updateLab(); });
+      if (btnHighComp) btnHighComp.addEventListener('click', () => { at = 10; co = 70; nt = 20; updateLab(); });
+      if (btnPerfect) btnPerfect.addEventListener('click', () => { at = 0; co = 100; nt = 0; updateLab(); });
+
+      // Quick Check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

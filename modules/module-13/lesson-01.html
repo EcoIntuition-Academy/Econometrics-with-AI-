@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13.1: Field Experiments, Selection Bias &amp; Random Assignment — EcoIntuition Academy</title>
+  <meta name="description" content="Understand how randomized field experiments eliminate selection bias by design, contrast self-selection against random assignment, and explore the omitted-variable mechanism in observational data.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-13" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 13: Field Experiments &amp; Randomization</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 13</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 13</a>
+          <span class="module-nav-title">Field Experiments, Randomization &amp; Experimental Design</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; Field Experiments &amp; Selection Bias</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 13 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">13.1 Field Experiments &amp; Selection Bias</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.2 Power Calculations &amp; Sample Size</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.3 Randomization Inference</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.4 Blocked Randomization &amp; Fisher Exact</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.5 Balance Tests in Experiments</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">13.6 Covariate Adjustment &amp; Best Practices</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 13.1</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Field Experiments</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Field Experiments, Selection Bias &amp; Random Assignment
+      </h1>
+      <p class="lesson-hero-lead">
+        Observational evaluations are routinely confounded when individuals choose their own treatments. Learn how randomized field experiments eliminate systematic selection by design, breaking the statistical correlation between treatment status and omitted factors.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define a field experiment and distinguish the roles of treatment and control groups.</li>
+        <li>Explain the mechanism of self-selection and why it confounds causal attribution in observational data.</li>
+        <li>Formulate the selection bias regression model and show how omitted factors enter the composite error.</li>
+        <li>Contrast causal pathways under self-selection versus random assignment.</li>
+        <li>Recognize that random assignment prevents systematic selection by design, while finite samples can still exhibit chance imbalance.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Field Experiments & Experimental Groups -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. What is a Field Experiment?</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">CORE DEFINITION</div>
+          <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.05rem;">Field Experiment</h3>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+            A <strong>field experiment</strong> is an empirical study conducted in a natural, real-world setting where a specific intervention—the <strong>treatment</strong>—is randomly assigned to a subset of the sample, while the remaining observations form the unexposed <strong>control group</strong>.
+          </p>
+        </div>
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          In empirical economics and policy analysis, common randomized interventions include:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary);">Diet &amp; Health Programs</div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Subsidized nutrition or fitness interventions offered to randomly selected households.</p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary);">Advertisements &amp; Nudges</div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Marketing campaigns or informational mailings sent to randomly chosen customer segments.</p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary);">Neighborhood Mobility</div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Housing vouchers provided via lottery to help families move to lower-poverty neighborhoods.</p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary);">Discounts &amp; Subsidies</div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Price reductions or credit offers randomly distributed to test price elasticity of demand.</p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary);">Study-Abroad Opportunities</div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">Fellowships or travel grants assigned by lottery to measure labor market returns to international study.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Core Problem: Self-Selection -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Core Challenge: Self-Selection &amp; Omitted Factors</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="callout" style="border-left: 4px solid #d97706; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #fef3c7; color: #b45309;">INTUITION</span>
+            <h3 class="callout-title">Why Observational Comparisons Deceive</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              In the absence of an experimental protocol, individuals choose whether or not to adopt a treatment based on expected costs, personal preferences, and unobserved attributes. Consequently, treated individuals and untreated individuals systematically differ <em>before</em> any treatment occurs.
+            </p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.88rem; color: var(--color-text);">Education &amp; Earnings</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+              People who acquire more education may possess higher baseline ability, family wealth, or ambition. A simple earnings gap reflects both schooling and underlying ability.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.88rem; color: var(--color-text);">Exercise &amp; Longevity</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+              People who choose regular exercise may already be healthier, smoke less, and have superior diets. Their better health cannot be attributed solely to the gym.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.88rem; color: var(--color-text);">Weight-Loss Programs</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+              Voluntary enrollees possess exceptionally strong personal motivation at the time of signup. Non-participants differ in baseline readiness to alter habits.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--color-surface);">
+            <div style="font-weight: 600; font-size: 0.88rem; color: var(--color-text);">Tax Audits</div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 4px 0 0 0;">
+              Tax agencies select returns that display red flags for noncompliance. Finding high fraud rates among audited returns does not imply audits cause fraud.
+            </p>
+          </div>
+        </div>
+
+        <!-- Mathematical Formalization -->
+        <h3 style="font-size: var(--text-base); margin-top: var(--space-md); margin-bottom: var(--space-xs);">Selection Bias in the Regression Framework</h3>
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          Consider the data-generating process for outcome \(y\), where \(T\) indicates treatment and \(x_2\) represents an unobserved or omitted baseline characteristic (such as ability or motivation):
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">TRUE DATA-GENERATING PROCESS</div>
+          <div class="equation-math">
+            $$y = \alpha + \beta_1 T + \beta_2 x_2 + \varepsilon$$
+          </div>
+          <div class="equation-subtext">
+            where \(T \in \{0,1\}\) is the treatment indicator, \(x_2\) is the omitted characteristic, and \(\mathbb{E}[\varepsilon \mid T, x_2] = 0\).
+          </div>
+        </div>
+
+        <p style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-sm);">
+          When an analyst estimates a simple bivariate regression omitting \(x_2\), the omitted factor is subsumed into the composite error term \(\omega\):
+        </p>
+
+        <div class="equation-card" style="margin-bottom: var(--space-md);">
+          <div class="equation-label">ESTIMATED REGRESSION WITH COMPOSITE ERROR</div>
+          <div class="equation-math">
+            $$\omega = \beta_2 x_2 + \varepsilon \implies y = \alpha + \beta_1 T + \omega$$
+          </div>
+          <div class="equation-subtext">
+            If individuals self-select into treatment based on \(x_2\), then \(\text{Cov}(T, x_2) \neq 0\), which guarantees \(\text{Cov}(T, \omega) \neq 0\).
+          </div>
+        </div>
+
+        <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border-left: 4px solid #ef4444;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626; margin-bottom: 0.25rem;">KEY ECONOMETRIC RESULT</div>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+            Because \(T\) is correlated with the composite regression error \(\omega\), ordinary least squares (OLS) attribution to \(\beta_1\) is contaminated by selection bias:
+            $$\hat{\beta}_1^{\text{OLS}} \xrightarrow{p} \beta_1 + \beta_2 \frac{\text{Cov}(T, x_2)}{\text{Var}(T)}$$
+            The estimated coefficient conflates the true causal treatment effect \(\beta_1\) with baseline differences in \(x_2\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Visual Intuition: Self-Selection vs Random Assignment -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Visual Intuition: Breaking the Selection Link</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <!-- Card A: Self Selection -->
+          <div class="study-card" style="padding: var(--space-md); background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c; margin-bottom: var(--space-xs);">MODE 1 &middot; OBSERVATIONAL SELF-SELECTION</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #991b1b;">Confounded by Baseline Attributes</h4>
+            <div style="padding: var(--space-sm); background: #ffffff; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.82rem; text-align: center; color: #7f1d1d; margin-bottom: var(--space-xs); line-height: 1.5;">
+              Baseline Ability / Motivation (\(x_2\))<br>
+              ↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘<br>
+              Treatment Choice (\(T\)) &nbsp;&rarr;&nbsp; Realized Outcome (\(y\))
+            </div>
+            <p style="margin: 0; font-size: 0.84rem; line-height: 1.5; color: #7f1d1d;">
+              Because \(x_2\) drives both treatment adoption and outcomes, treated and untreated units differ prior to the intervention. Causal attribution fails.
+            </p>
+          </div>
+
+          <!-- Card B: Random Assignment -->
+          <div class="study-card" style="padding: var(--space-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8; margin-bottom: var(--space-xs);">MODE 2 &middot; RANDOM ASSIGNMENT</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #1e40af;">Systematic Selection Broken by Design</h4>
+            <div style="padding: var(--space-sm); background: #ffffff; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.82rem; text-align: center; color: #1e3a8a; margin-bottom: var(--space-xs); line-height: 1.5;">
+              Physical Randomizer (Coin / RNG)<br>
+              ↓<br>
+              Treatment Status (\(T\)) &nbsp;&rarr;&nbsp; Realized Outcome (\(y\))<br>
+              <span style="font-size: 0.74rem; color: var(--color-text-secondary);">(Baseline \(x_2\) no longer determines assignment)</span>
+            </div>
+            <p style="margin: 0; font-size: 0.84rem; line-height: 1.5; color: #1e3a8a;">
+              Random assignment forces \(\text{Cov}(T, x_2) = 0\) in expectation. Baseline characteristics are no longer systematically used to determine assignment.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">IMPORTANT DISTINCTION</span>
+            <h3 class="callout-title">Design Exogeneity vs. Finite-Sample Realization</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Randomization removes <strong>systematic selection</strong> into treatment by construction. However, in any realized finite sample, small differences in baseline characteristics can still arise purely through random chance. This reality motivates baseline balance testing (examined in Lesson 13.5) and precision-improving covariate adjustments (examined in Lesson 13.6).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 13.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Selection Bias Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">INTERACTIVE LAB 13.1</span>
+            <h3 class="lab-title">Selection Bias Explorer: Observational vs. Experimental Assignment</h3>
+            <p class="lab-desc">
+              Compare how treatment effects are estimated when individuals select into treatment based on baseline ability \(x_2\) versus when treatment is assigned via lottery.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Assignment Regime:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnModeSelf">Self-Selection (Observational)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeRandom">Random Assignment (Experimental)</button>
+              </div>
+            </div>
+
+            <div class="control-group" id="selectionStrengthGroup">
+              <span class="control-label">Selection Strength on Baseline Characteristic \(x_2\):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnStrengthWeak">Mild Selection</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnStrengthMod">Moderate Selection</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnStrengthStrong">Severe Selection</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Treatment Group Mean \(x_2\)</div>
+              <div class="metric-value" id="readoutTreatedX" style="color: #6d28d9;">68.4</div>
+              <div class="metric-sub" id="subTreatedX">Baseline ability / motivation</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Control Group Mean \(x_2\)</div>
+              <div class="metric-value" id="readoutControlX" style="color: #2563eb;">50.2</div>
+              <div class="metric-sub" id="subControlX">Baseline ability / motivation</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Estimated Difference (\(\hat{\beta}_1\))</div>
+              <div class="metric-value" id="readoutBetaEst" style="color: #dc2626;">+5.64</div>
+              <div class="metric-sub" id="subBetaEst">Conflates effect + selection bias</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">True Treatment Effect (\(\beta_1\))</div>
+              <div class="metric-value" id="readoutBetaTrue" style="color: #059669;">+2.00</div>
+              <div class="metric-sub">Causal benchmark</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 10px; width: 10px; border-radius: 50%;"></span> Treated Units</div>
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 10px; width: 10px; border-radius: 50%;"></span> Control Units</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 2px;"></span> True Effect (\(\beta_1 = 2.00\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #dc2626; height: 2px; border-style: dashed;"></span> Estimated Difference</div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 280px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="selectionSvg" viewBox="0 0 680 240" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Self-Selection Mode:</strong> <span id="labInsightBody">Higher baseline \(x_2\) individuals selectively enroll in treatment. The naive difference in means (+5.64) heavily overstates the true causal effect (+2.00) due to positive selection bias.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A sample of participants positioned along their baseline characteristic \(x_2\) and their realized outcomes \(y\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Under self-selection, treated points shift to the right along \(x_2\). Under random assignment, the \(x_2\) distribution is balanced across groups.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                When \(x_2\) affects both treatment status and outcome, naive mean comparisons attribute selection advantages to treatment efficacy.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Randomization forces \(\text{Cov}(T, \omega) = 0\) by design, yielding an unbiased and consistent estimator of the causal treatment effect \(\beta_1\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch to Random Assignment. Notice how the gap between treated and control mean \(x_2\) collapses, aligning \(\hat{\beta}_1\) with the true effect (+2.00).
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Canonical Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why can self-selection make the treatment coefficient in an observational regression biased?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider how individual choices link treatment status to unobserved characteristics that independently affect the outcome.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because individuals who select into treatment often differ in outcome-relevant characteristics, making treatment correlated with the composite regression error.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> When an unobserved factor \(x_2\) influences both the decision to adopt treatment \(T\) and the outcome \(y\), it enters the composite error \(\omega = \beta_2 x_2 + \varepsilon\). As a result, \(\text{Cov}(T, \omega) \ne 0\), violating OLS exogeneity and conflating the true treatment effect with pre-existing selection differences.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Field experiments test interventions in natural settings with randomized treatment and control groups.</li>
+        <li>Self-selection causes treatment status to correlate with unobserved attributes that also influence outcomes.</li>
+        <li>In observational regressions, omitted baseline factors enter the composite error, biasing OLS estimates.</li>
+        <li>Random assignment severs the systematic connection between baseline traits and treatment status.</li>
+        <li>Randomization guarantees exogeneity in expectation, though finite samples may still show chance imbalance.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="index.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Module Overview</span>
+        <span class="nav-btn-title">Module 13: Field Experiments &amp; Randomization</span>
+      </a>
+      <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">13.2 Power Calculations, Sample Size &amp; Precision</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 13.1 Script -->
+  <script>
+    (function() {
+      // Deterministic participant dataset (24 units)
+      // Base x2: Baseline motivation/ability (30 to 80)
+      const participants = [
+        { id: 1,  x2: 32, noise: -0.4 }, { id: 2,  x2: 36, noise: 0.3 },
+        { id: 3,  x2: 39, noise: -0.2 }, { id: 4,  x2: 42, noise: 0.5 },
+        { id: 5,  x2: 45, noise: -0.6 }, { id: 6,  x2: 47, noise: 0.1 },
+        { id: 7,  x2: 49, noise: -0.3 }, { id: 8,  x2: 51, noise: 0.4 },
+        { id: 9,  x2: 53, noise: -0.1 }, { id: 10, x2: 55, noise: 0.2 },
+        { id: 11, x2: 57, noise: -0.5 }, { id: 12, x2: 59, noise: 0.3 },
+        { id: 13, x2: 61, noise: -0.2 }, { id: 14, x2: 63, noise: 0.4 },
+        { id: 15, x2: 65, noise: -0.4 }, { id: 16, x2: 67, noise: 0.2 },
+        { id: 17, x2: 69, noise: -0.3 }, { id: 18, x2: 71, noise: 0.5 },
+        { id: 19, x2: 73, noise: -0.1 }, { id: 20, x2: 75, noise: 0.3 },
+        { id: 21, x2: 77, noise: -0.4 }, { id: 22, x2: 79, noise: 0.2 },
+        { id: 23, x2: 81, noise: -0.2 }, { id: 24, x2: 84, noise: 0.4 }
+      ];
+
+      // True parameters: y = 10 + 2.0*T + 0.2*x2 + noise
+      const trueBeta0 = 10.0;
+      const trueBeta1 = 2.0;
+      const beta2 = 0.2;
+
+      let currentMode = 'self'; // 'self' or 'random'
+      let selectionStrength = 'mod'; // 'weak', 'mod', 'strong'
+
+      const btnModeSelf = document.getElementById('btnModeSelf');
+      const btnModeRandom = document.getElementById('btnModeRandom');
+      const selectionStrengthGroup = document.getElementById('selectionStrengthGroup');
+
+      const btnStrengthWeak = document.getElementById('btnStrengthWeak');
+      const btnStrengthMod = document.getElementById('btnStrengthMod');
+      const btnStrengthStrong = document.getElementById('btnStrengthStrong');
+
+      const readoutTreatedX = document.getElementById('readoutTreatedX');
+      const readoutControlX = document.getElementById('readoutControlX');
+      const readoutBetaEst = document.getElementById('readoutBetaEst');
+      const subBetaEst = document.getElementById('subBetaEst');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('selectionSvg');
+
+      function updateLab() {
+        btnModeSelf.className = currentMode === 'self' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnModeRandom.className = currentMode === 'random' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        selectionStrengthGroup.style.display = currentMode === 'self' ? 'block' : 'none';
+
+        btnStrengthWeak.className = selectionStrength === 'weak' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnStrengthMod.className = selectionStrength === 'mod' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnStrengthStrong.className = selectionStrength === 'strong' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        // Assign treatment indicator T
+        let treated = [];
+        let control = [];
+
+        participants.forEach((p, idx) => {
+          let T = 0;
+          if (currentMode === 'random') {
+            // Fixed alternating deterministic lottery: equal allocation (12 vs 12)
+            T = (idx % 2 === 0) ? 1 : 0;
+          } else {
+            // Self-selection based on x2
+            if (selectionStrength === 'weak') {
+              // Units above median generally select, but with slight overlap
+              T = (p.x2 >= 55) ? 1 : (idx === 3 || idx === 7 ? 1 : 0);
+            } else if (selectionStrength === 'mod') {
+              // Top 12 units select into treatment
+              T = (p.x2 >= 58) ? 1 : 0;
+            } else {
+              // Strong selection: top units strictly select, very high concentration
+              T = (p.x2 >= 63 || (p.x2 >= 53 && idx % 2 === 1)) ? 1 : 0;
+            }
+          }
+
+          // Calculate outcome y
+          const y = trueBeta0 + trueBeta1 * T + beta2 * p.x2 + p.noise;
+          const unit = { ...p, T, y };
+
+          if (T === 1) treated.push(unit);
+          else control.push(unit);
+        });
+
+        // Compute means
+        const meanX_T = treated.reduce((acc, u) => acc + u.x2, 0) / treated.length;
+        const meanX_C = control.reduce((acc, u) => acc + u.x2, 0) / control.length;
+
+        const meanY_T = treated.reduce((acc, u) => acc + u.y, 0) / treated.length;
+        const meanY_C = control.reduce((acc, u) => acc + u.y, 0) / control.length;
+
+        const diffY = meanY_T - meanY_C;
+
+        readoutTreatedX.textContent = meanX_T.toFixed(1);
+        readoutControlX.textContent = meanX_C.toFixed(1);
+        readoutBetaEst.textContent = (diffY >= 0 ? '+' : '') + diffY.toFixed(2);
+
+        if (currentMode === 'self') {
+          const bias = diffY - trueBeta1;
+          readoutBetaEst.style.color = '#dc2626';
+          subBetaEst.textContent = `Includes selection bias of +${bias.toFixed(2)}`;
+          labInsightTitle.textContent = 'Self-Selection Mode:';
+          labInsightBody.textContent = `Because higher-motivation individuals selectively chose treatment, treated mean x₂ (${meanX_T.toFixed(1)}) is much higher than control (${meanX_C.toFixed(1)}). The difference in outcomes (+${diffY.toFixed(2)}) heavily overstates the true causal effect (+2.00).`;
+        } else {
+          readoutBetaEst.style.color = '#059669';
+          subBetaEst.textContent = 'Unbiased estimate of causal effect';
+          labInsightTitle.textContent = 'Random Assignment Mode:';
+          labInsightBody.textContent = `Random lottery broken the systematic link between baseline x₂ and treatment. Baseline means are balanced (Treated: ${meanX_T.toFixed(1)}, Control: ${meanX_C.toFixed(1)}), and the estimated effect (+${diffY.toFixed(2)}) is centered near the true effect (+2.00).`;
+        }
+
+        renderVisualizer(treated, control, diffY);
+      }
+
+      function renderVisualizer(treated, control, diffY) {
+        const width = 680;
+        const height = 240;
+        const padL = 50;
+        const padR = 30;
+        const padT = 30;
+        const padB = 40;
+
+        const plotW = width - padL - padR;
+        const plotH = height - padT - padB;
+
+        // x-scale: x2 from 25 to 90
+        const minX = 25, maxX = 90;
+        const scaleX = val => padL + ((val - minX) / (maxX - minX)) * plotW;
+
+        // y-scale: y from 15 to 35
+        const minY = 14, maxY = 34;
+        const scaleY = val => padT + plotH - ((val - minY) / (maxY - minY)) * plotH;
+
+        let svgHtml = '';
+
+        // Axes & Grid
+        svgHtml += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+        svgHtml += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+
+        // Y gridlines
+        [18, 22, 26, 30].forEach(yTick => {
+          const yPos = scaleY(yTick);
+          svgHtml += `<line x1="${padL}" y1="${yPos}" x2="${padL + plotW}" y2="${yPos}" stroke="var(--border-subtle)" stroke-dasharray="3,3" stroke-width="1"/>`;
+          svgHtml += `<text x="${padL - 8}" y="${yPos + 4}" font-size="11" fill="var(--color-text-secondary)" text-anchor="end">${yTick}</text>`;
+        });
+
+        // X ticks
+        [30, 45, 60, 75, 90].forEach(xTick => {
+          const xPos = scaleX(xTick);
+          svgHtml += `<line x1="${xPos}" y1="${padT + plotH}" x2="${xPos}" y2="${padT + plotH + 4}" stroke="var(--border-subtle)"/>`;
+          svgHtml += `<text x="${xPos}" y="${padT + plotH + 18}" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">${xTick}</text>`;
+        });
+
+        // Axis Labels
+        svgHtml += `<text x="${padL + plotW / 2}" y="${height - 6}" font-size="12" fill="var(--color-text-secondary)" font-weight="500" text-anchor="middle">Baseline Covariate x₂ (Motivation / Ability)</text>`;
+        svgHtml += `<text x="14" y="${padT + plotH / 2}" font-size="12" fill="var(--color-text-secondary)" font-weight="500" text-anchor="middle" transform="rotate(-90 14 ${padT + plotH / 2})">Realized Outcome y</text>`;
+
+        // Control Points (Blue)
+        control.forEach(p => {
+          const cx = scaleX(p.x2);
+          const cy = scaleY(p.y);
+          svgHtml += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="#2563eb" fill-opacity="0.8" stroke="#1d4ed8" stroke-width="1.5"/>`;
+        });
+
+        // Treated Points (Purple)
+        treated.forEach(p => {
+          const cx = scaleX(p.x2);
+          const cy = scaleY(p.y);
+          svgHtml += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="#6d28d9" fill-opacity="0.8" stroke="#5b21b6" stroke-width="1.5"/>`;
+        });
+
+        // Mean Lines
+        const meanY_C = control.reduce((acc, u) => acc + u.y, 0) / control.length;
+        const meanY_T = treated.reduce((acc, u) => acc + u.y, 0) / treated.length;
+
+        const yC_Pos = scaleY(meanY_C);
+        const yT_Pos = scaleY(meanY_T);
+
+        // Control Mean Line
+        svgHtml += `<line x1="${padL}" y1="${yC_Pos}" x2="${padL + plotW}" y2="${yC_Pos}" stroke="#2563eb" stroke-dasharray="4,4" stroke-width="1.5" opacity="0.7"/>`;
+        svgHtml += `<text x="${padL + plotW - 6}" y="${yC_Pos - 4}" font-size="11" fill="#2563eb" text-anchor="end" font-weight="600">Control Ȳ₀: ${meanY_C.toFixed(1)}</text>`;
+
+        // Treated Mean Line
+        svgHtml += `<line x1="${padL}" y1="${yT_Pos}" x2="${padL + plotW}" y2="${yT_Pos}" stroke="#6d28d9" stroke-dasharray="4,4" stroke-width="1.5" opacity="0.7"/>`;
+        svgHtml += `<text x="${padL + plotW - 6}" y="${yT_Pos - 4}" font-size="11" fill="#6d28d9" text-anchor="end" font-weight="600">Treated Ȳ₁: ${meanY_T.toFixed(1)}</text>`;
+
+        // Estimated Gap bracket
+        const gapX = padL + 35;
+        svgHtml += `<line x1="${gapX}" y1="${yC_Pos}" x2="${gapX}" y2="${yT_Pos}" stroke="#dc2626" stroke-width="2.5"/>`;
+        svgHtml += `<circle cx="${gapX}" cy="${yC_Pos}" r="3" fill="#dc2626"/>`;
+        svgHtml += `<circle cx="${gapX}" cy="${yT_Pos}" r="3" fill="#dc2626"/>`;
+        svgHtml += `<text x="${gapX + 8}" y="${(yC_Pos + yT_Pos) / 2 + 4}" font-size="11" fill="#dc2626" font-weight="700">Diff: +${diffY.toFixed(2)}</text>`;
+
+        svg.innerHTML = svgHtml;
+      }
+
+      btnModeSelf.addEventListener('click', () => {
+        currentMode = 'self';
+        updateLab();
+      });
+
+      btnModeRandom.addEventListener('click', () => {
+        currentMode = 'random';
+        updateLab();
+      });
+
+      btnStrengthWeak.addEventListener('click', () => {
+        selectionStrength = 'weak';
+        updateLab();
+      });
+
+      btnStrengthMod.addEventListener('click', () => {
+        selectionStrength = 'mod';
+        updateLab();
+      });
+
+      btnStrengthStrong.addEventListener('click', () => {
+        selectionStrength = 'strong';
+        updateLab();
+      });
+
+      // Quick Check interactive toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

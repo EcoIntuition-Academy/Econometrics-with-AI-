@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.3: Preregistration &amp; Multiple Hypothesis Testing — Econometrics with AI</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="3">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 6 &middot; Preregistration &amp; Multiple Testing</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">50%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 50%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.3</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Research Integrity</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Preregistration &amp; Multiple Hypothesis Testing
+      </h1>
+      <p class="lesson-hero-lead">
+        Credible experimental science requires locking statistical specifications before inspecting data realizations and adjusting inference when evaluating multiple outcomes or subgroups simultaneously.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define preregistration and explain how it separates planned confirmatory analyses from post-hoc exploratory searching.</li>
+        <li>Understand how p-hacking and researcher degrees of freedom degrade nominal statistical significance.</li>
+        <li>Trace the accumulation of false-positive (Type I) risk when testing multiple outcomes or subgroups.</li>
+        <li>Apply the Bonferroni adjustment and evaluate Family-Wise Error Rate (FWER) control principles.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Preregistration -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Why Preregister Experimental Analyses?</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          In an ideal trial, every analytical choice is made to address the underlying causal question rather than to locate an artificially low p-value. In practice, researchers encounter dozens of subtle discretionary choices: which outcomes to highlight, which control variables to insert, which subgroups to split, and how to define treatment windows.
+        </p>
+
+        <!-- Definition Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">FORMAL DEFINITION</div>
+          <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Preregistration</div>
+          <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+            <strong>Preregistration</strong> is the formal public documentation of a study's primary hypotheses, outcome variables, sample selection rules, and exact estimation strategy <em>prior</em> to observing the realization of experimental outcomes.
+          </p>
+        </div>
+
+        <!-- 3 Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: #fef2f2; border-left: 3px solid #dc2626;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">DATA-DRIVEN SEARCH</div>
+            <p style="font-size: 0.84rem; color: #7f1d1d; margin: 4px 0 0 0; line-height: 1.5;">
+              Running scores of regression variants until one yields a statistically significant coefficient creates biased, unreplicable empirical claims.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #fffbeb; border-left: 3px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b45309;">p-HACKING RISK</div>
+            <p style="font-size: 0.84rem; color: #78350f; margin: 4px 0 0 0; line-height: 1.5;">
+              When researchers selectively report only specifications crossing \(p &lt; 0.05\), nominal significance levels lose their probabilistic meaning.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #f0fdf4; border-left: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">CLEAR RESEARCH DESIGN</div>
+            <p style="font-size: 0.84rem; color: #064e3b; margin: 4px 0 0 0; line-height: 1.5;">
+              A pre-analysis plan holds researchers accountable by clearly distinguishing confirmatory tests planned in advance from exploratory post-hoc findings.
+            </p>
+          </div>
+        </div>
+
+        <!-- Puzzle Analogy -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.05); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <strong style="color: var(--color-primary); font-size: 0.85rem; letter-spacing: 0.04em;">INTUITION &middot; THE PUZZLE ANALOGY</strong>
+          <p style="font-size: 0.88rem; margin: 6px 0 0 0; line-height: 1.6;">
+            Solving a jigsaw puzzle requires placing pieces where they naturally belong according to the picture on the box. If you carve and rearrange the pieces after opening the box until they arbitrarily fit your favorite pattern, you have not solved the puzzle—you have manufactured an illusion. Preregistering the analysis plan is writing down the assembly rules before opening the box.
+          </p>
+        </div>
+
+        <!-- Registry Link Callout -->
+        <div class="study-card" style="padding: var(--space-sm); background: var(--surface); border: 1px solid var(--border-subtle); margin-top: var(--space-sm);">
+          <strong style="font-size: 0.84rem; color: var(--color-primary);">Public Trial Registry:</strong>
+          <span style="font-size: 0.84rem; color: var(--color-text-secondary);">
+            Economics experiments frequently archive pre-analysis plans in the 
+            <a href="https://www.socialscienceregistry.org/" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: underline;">Social Science Registry</a> 
+            (the AEA RCT Registry), providing an immutable, timestamped record of primary endpoints before data collection concludes.
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Multiple Hypotheses -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Multiple Hypothesis Testing Problem</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Field trials often gather extensive survey instruments capturing hundreds of individual indicators—educational test scores, attendance rates, household expenditures, health metrics, and behavioral choices across diverse demographic subsets.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary);">1 HYPOTHESIS TESTED</div>
+            <p style="font-size: 0.84rem; margin: 4px 0 0 0;">
+              Probability of false discovery under a true null at \(\alpha = 0.05\):
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: var(--color-text); margin-top: 6px;">
+              \(\Pr(\text{False Discovery}) = 0.05\)
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #fef2f2;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626;">20 INDEPENDENT HYPOTHESES</div>
+            <p style="font-size: 0.84rem; margin: 4px 0 0 0;">
+              Probability of finding at least one false discovery across 20 true nulls:
+            </p>
+            <div style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: #dc2626; margin-top: 6px;">
+              \(1 - (1 - 0.05)^{20} \approx 64.2\%\)
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top: var(--space-sm);">
+          Evaluating multiple outcomes or conducting extensive subgroup analyses without formal statistical adjustment dramatically increases the probability of reporting chance noise as a breakthrough treatment effect.
+        </p>
+
+        <!-- Bonferroni Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ERROR-RATE CONTROL</span>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">Bonferroni Adjustment</span>
+          </div>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0;">
+            \[
+            \alpha_{\text{adjusted}} = \frac{\alpha_{\text{target}}}{m}
+            \]
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            Where \(m\) represents the total number of tested hypotheses and \(\alpha_{\text{target}}\) is the desired overall Family-Wise Error Rate (typically 0.05). By requiring each individual hypothesis to meet this stricter threshold, the probability of committing any Type I error across all \(m\) tests remains strictly bounded by \(\alpha_{\text{target}}\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 14.3 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: Multiple Testing &amp; FWER Simulator</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <span class="lab-badge">ILLUSTRATIVE SIMULATION</span>
+            <h3 class="lab-title">Multiple Hypothesis Testing Explorer</h3>
+            <p class="lab-desc">
+              Explore how the number of evaluated hypotheses inflates false-positive discovery rates under a true null effect, and compare unadjusted significance testing against the Bonferroni threshold.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Number of Hypotheses (\(m\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnM1">1 Test</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnM5">5 Tests</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnM10">10 Tests</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnM20">20 Tests</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Nominal Significance Level (\(\alpha\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnAlpha05">\(\alpha = 0.05\)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnAlpha01">\(\alpha = 0.01\)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Tested Hypotheses (\(m\))</div>
+              <div class="metric-value" id="readoutM" style="color: #2563eb;">20</div>
+              <div class="metric-sub">Independent outcomes</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Unadjusted FWER Risk</div>
+              <div class="metric-value" id="readoutUnadj" style="color: #dc2626;">64.2%</div>
+              <div class="metric-sub">\(\ge 1\) false positive</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Bonferroni Threshold</div>
+              <div class="metric-value" id="readoutBonf" style="color: #6d28d9;">0.0025</div>
+              <div class="metric-sub">Required p-value (\(\alpha / m\))</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Adjusted FWER Bound</div>
+              <div class="metric-value" id="readoutBound" style="color: #059669;">&le; 5.0%</div>
+              <div class="metric-sub">Protected overall error</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #dc2626; height: 10px; width: 10px; border-radius: 2px;"></span> Cumulative False Discovery Risk (Unadjusted)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 10px; width: 10px; border-radius: 2px;"></span> Protected Family-Wise Error Rate (Bonferroni)</div>
+          </div>
+
+          <!-- Visual Bar Display -->
+          <div style="background: var(--surface); border-radius: var(--radius-md); padding: var(--space-sm); border: 1px solid var(--border-subtle); margin: var(--space-xs) 0;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+              CUMULATIVE CHANCE OF FALSE DISCOVERY ACROSS HYPOTHESES (ALL NULLS TRUE)
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <span style="width: 110px; font-size: 0.8125rem; font-weight: 600;">Unadjusted:</span>
+              <div style="flex: 1; background: rgba(0,0,0,0.05); height: 20px; border-radius: 4px; overflow: hidden;">
+                <div id="unadjBar" style="height: 100%; width: 64.2%; background: #dc2626; transition: width 0.3s ease;"></div>
+              </div>
+              <span id="unadjBarText" style="width: 60px; text-align: right; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700; color: #dc2626; margin-left: 0.5rem;">64.2%</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <span style="width: 110px; font-size: 0.8125rem; font-weight: 600;">Bonferroni:</span>
+              <div style="flex: 1; background: rgba(0,0,0,0.05); height: 20px; border-radius: 4px; overflow: hidden;">
+                <div id="bonfBar" style="height: 100%; width: 5.0%; background: #059669; transition: width 0.3s ease;"></div>
+              </div>
+              <span id="bonfBarText" style="width: 60px; text-align: right; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700; color: #059669; margin-left: 0.5rem;">5.0%</span>
+            </div>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Multiple Testing Insight:</strong> <span id="labInsightText">Testing 20 independent hypotheses without adjustment creates a 64.2% chance that at least one irrelevant outcome appears statistically significant by pure random variation. The Bonferroni correction sets a strict threshold of p &lt; 0.0025, guarding the family-wise error rate at &le; 5.0%.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">NOMINAL ALPHA</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Applies only to a single standalone statistical hypothesis test in isolation.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">FWER INFLATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The probability of at least one Type I error scales exponentially with test count: \(1 - (1-\alpha)^m\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">BONFERRONI BOUND</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Divides nominal alpha by the test count \(m\) to cap aggregate false rejections strictly.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">PREREGISTRATION RESTRICTION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Designating primary vs. exploratory outcomes in advance restricts \(m\), preserving power.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">REPLICABILITY</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Disciplined multi-testing corrections ensure published findings reflect real causal mechanisms.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why can testing many experimental outcome variables create misleadingly significant empirical findings?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Think about what happens when you roll a 20-sided die 20 times—even with a 5% chance per roll, rolling at least one 20 becomes very likely.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because repeated testing increases the chance that at least one outcome appears statistically significant due to random noise alone.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Each individual test has a 5% false rejection rate under the null. When 20 outcomes are tested, the chance of at least one accidental false positive rises to approximately 64%. Preregistering primary endpoints or applying Bonferroni corrections controls the aggregate Family-Wise Error Rate.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Preregistration defines hypotheses, variables, and estimation strategies before observing data realization, separating confirmatory tests from exploratory search.</li>
+        <li>p-Hacking and researcher degrees of freedom degrade nominal significance levels by opportunistically selecting favorable specifications.</li>
+        <li>The AEA Social Science Registry provides an immutable public repository for archiving pre-analysis plans before field implementation.</li>
+        <li>Evaluating multiple outcomes without correction inflates the Family-Wise Error Rate, creating high probabilities of accidental false discoveries.</li>
+        <li>The Bonferroni correction caps aggregate false discovery risk by requiring each test to surpass a stricter threshold \(\alpha / m\).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-02.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">14.2 Estimating Effects: ITT &amp; DID</span>
+      </a>
+      <a href="lesson-04.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">14.4 Noncompliance &amp; Compliance Types</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Lab 14.3 Script -->
+  <script>
+    (function() {
+      let m = 20;
+      let alpha = 0.05;
+
+      const btnM1 = document.getElementById('btnM1');
+      const btnM5 = document.getElementById('btnM5');
+      const btnM10 = document.getElementById('btnM10');
+      const btnM20 = document.getElementById('btnM20');
+
+      const btnAlpha05 = document.getElementById('btnAlpha05');
+      const btnAlpha01 = document.getElementById('btnAlpha01');
+
+      const readoutM = document.getElementById('readoutM');
+      const readoutUnadj = document.getElementById('readoutUnadj');
+      const readoutBonf = document.getElementById('readoutBonf');
+      const readoutBound = document.getElementById('readoutBound');
+
+      const unadjBar = document.getElementById('unadjBar');
+      const unadjBarText = document.getElementById('unadjBarText');
+      const bonfBar = document.getElementById('bonfBar');
+      const bonfBarText = document.getElementById('bonfBarText');
+      const labInsightText = document.getElementById('labInsightText');
+
+      function updateLab() {
+        btnM1.className = m === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnM5.className = m === 5 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnM10.className = m === 10 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnM20.className = m === 20 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        btnAlpha05.className = alpha === 0.05 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnAlpha01.className = alpha === 0.01 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        const unadjProb = 1 - Math.pow(1 - alpha, m);
+        const unadjPct = (unadjProb * 100).toFixed(1);
+        const bonfThreshold = (alpha / m).toFixed(4);
+        const bonfPct = (alpha * 100).toFixed(1);
+
+        readoutM.textContent = m;
+        readoutUnadj.textContent = `${unadjPct}%`;
+        readoutBonf.textContent = bonfThreshold;
+        readoutBound.textContent = `≤ ${bonfPct}%`;
+
+        unadjBar.style.width = `${Math.min(unadjProb * 100, 100)}%`;
+        unadjBarText.textContent = `${unadjPct}%`;
+
+        bonfBar.style.width = `${Math.min(alpha * 100, 100)}%`;
+        bonfBarText.textContent = `${bonfPct}%`;
+
+        if (m === 1) {
+          labInsightText.textContent = `Testing a single hypothesis at nominal α = ${alpha} retains a clean ${(alpha*100).toFixed(0)}% false discovery rate under the null. No multiple-testing inflation occurs.`;
+        } else {
+          labInsightText.textContent = `Testing ${m} independent hypotheses without adjustment creates a ${unadjPct}% chance that at least one irrelevant outcome appears statistically significant by pure random variation. The Bonferroni correction sets a strict threshold of p < ${bonfThreshold}, guarding the overall family-wise error rate at ≤ ${bonfPct}%.`;
+        }
+      }
+
+      if (btnM1) btnM1.addEventListener('click', () => { m = 1; updateLab(); });
+      if (btnM5) btnM5.addEventListener('click', () => { m = 5; updateLab(); });
+      if (btnM10) btnM10.addEventListener('click', () => { m = 10; updateLab(); });
+      if (btnM20) btnM20.addEventListener('click', () => { m = 20; updateLab(); });
+
+      if (btnAlpha05) btnAlpha05.addEventListener('click', () => { alpha = 0.05; updateLab(); });
+      if (btnAlpha01) btnAlpha01.addEventListener('click', () => { alpha = 0.01; updateLab(); });
+
+      // Quick Check solution toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

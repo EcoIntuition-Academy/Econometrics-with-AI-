@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 12: IV Diagnostics, Weak Instruments &amp; Measurement Error — EcoIntuition Academy</title>
-  <meta name="description" content="Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.">
+  <title>Module 14: Field Experiments II: Estimation, Compliance &amp; LATE — EcoIntuition Academy</title>
+  <meta name="description" content="Extend randomized field experiments into estimation and inference: choose meaningful detectable effects, estimate intent-to-treat effects, plan analyses through preregistration, account for multiple hypotheses, understand imperfect compliance, and connect randomized offers to IV, LATE, the Wald estimator, and 2SLS.">
   <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
 
   <!-- Google Fonts: Poppins & JetBrains Mono -->
@@ -32,7 +32,7 @@
     });
   </script>
 </head>
-<body data-module="module-12">
+<body data-module="module-14">
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container nav-inner">
@@ -63,11 +63,12 @@
               <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
               <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
               <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
-              <a href="index.html" class="nav-dropdown-item active">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
               <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
             </div>
           </li>
-          <li><a href="index.html" class="nav-item-link active">Module 12</a></li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
           <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
           <li>
             <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
@@ -95,24 +96,24 @@
     <!-- Hero Header -->
     <div class="module-hero">
       <div class="module-hero-badges">
-        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 12</span>
-        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">IV Diagnostics &amp; Measurement Error</span>
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">MODULE 14</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Estimation, Compliance &amp; LATE</span>
         <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">6 Lessons</span>
-        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Advanced Econometric Methods</span>
+        <span class="badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">Advanced Experimental Econometrics</span>
       </div>
 
       <h1 class="module-hero-title">
-        IV Diagnostics, Weak Instruments &amp; Measurement Error
+        Field Experiments II: Estimation, Compliance &amp; LATE
       </h1>
       
       <p class="module-hero-desc">
-        Extend the instrumental-variables toolkit by testing whether regressors are endogenous, evaluating instrument validity and strength, understanding the consequences of weak instruments, and studying how measurement error affects OLS and how valid instruments can restore consistency.
+        Extend randomized field experiments into estimation and inference: choose meaningful detectable effects, estimate intent-to-treat effects, plan analyses through preregistration, account for multiple hypotheses, understand imperfect compliance, and connect randomized offers to IV, LATE, the Wald estimator, and 2SLS.
       </p>
 
       <!-- Action Buttons & Progress -->
       <div class="module-actions">
         <a href="lesson-01.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(37,99,235,0.25);">
-          Start Module 12 →
+          Start Module 14 →
         </a>
         <a href="../../index.html#modules" class="btn btn-outline btn-lg">
           Explore All Modules
@@ -122,11 +123,11 @@
       <!-- Module Progress Card -->
       <div class="module-progress-card">
         <div class="module-progress-labels">
-          <span>Module 12 Completion</span>
-          <span id="progress-text-module-12" class="module-progress-percent">0% Complete</span>
+          <span>Module 14 Completion</span>
+          <span id="progress-text-module-14" class="module-progress-percent">0% Complete</span>
         </div>
         <div class="module-progress-track">
-          <div class="module-progress-fill" id="progress-fill-module-12"></div>
+          <div class="module-progress-fill" id="progress-fill-module-14"></div>
         </div>
       </div>
     </div>
@@ -137,17 +138,21 @@
         MODULE LEARNING PATH
       </h3>
       <div class="module-learning-path-flow">
-        <span class="learning-path-step"><span class="learning-path-pill">Need IV?</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Hausman</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Wu Test</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Validity</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Sargan</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Relevance</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Weak IV</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Measurement Error</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Attenuation</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">IV Solution</span><span class="learning-path-arrow">→</span></span>
-        <span class="learning-path-step"><span class="learning-path-pill">Propagation of Error</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">MDE</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Feasibility</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">ITT</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Covariate Adjustment</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Multiple Treatments</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Repeated Outcomes</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Preregistration</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Multiple Testing</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Noncompliance</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Compliance Types</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Monotonicity</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">LATE</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Wald Estimator</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">2SLS</span><span class="learning-path-arrow">→</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Exclusion Restriction</span></span>
       </div>
     </div>
 
@@ -159,19 +164,19 @@
 
       <div class="module-lessons-list">
         
-        <!-- Lesson 12.1 Card -->
+        <!-- Lesson 14.1 Card -->
         <a href="lesson-01.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.1</span>
-                <span class="badge badge-cat">Exogeneity Tests</span>
+                <span class="badge badge-num">LESSON 14.1</span>
+                <span class="badge badge-cat">Experimental Design</span>
               </div>
               <h2 class="lesson-card-title">
-                Do We Need IV? Hausman &amp; Wu Tests for Endogeneity
+                Minimum Detectable Effects &amp; Experimental Feasibility
               </h2>
               <p class="lesson-card-desc">
-                Evaluate whether regressors are truly endogenous by comparing consistent IV estimates with efficient OLS, master the Hausman contrast statistic, and implement the auxiliary first-stage residual regression of the Wu test.
+                Define the minimum detectable effect size, align statistical precision targets with actionable policy thresholds, weigh cost-precision trade-offs, and establish safe control variable guidelines.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -180,19 +185,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.2 Card -->
+        <!-- Lesson 14.2 Card -->
         <a href="lesson-02.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.2</span>
-                <span class="badge badge-cat">Overidentification</span>
+                <span class="badge badge-num">LESSON 14.2</span>
+                <span class="badge badge-cat">Estimation</span>
               </div>
               <h2 class="lesson-card-title">
-                Testing Instrument Validity: Sargan &amp; Overidentification
+                Estimating Experimental Effects: ITT, Controls &amp; Repeated Outcomes
               </h2>
               <p class="lesson-card-desc">
-                Test the orthogonality of instrument sets using Sargan overidentification tests when instruments exceed regressors, understand why rejection can reflect heterogeneous treatment effects rather than invalid instruments, and connect to LATE intuition.
+                Estimate the intent-to-treat effect of randomized offers, incorporate predictive baseline covariates, specify multi-arm treatments relative to baseline, and model pre, during, and post treatment periods using interaction models.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -201,19 +206,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.3 Card -->
+        <!-- Lesson 14.3 Card -->
         <a href="lesson-03.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.3</span>
-                <span class="badge badge-cat">Weak Instruments</span>
+                <span class="badge badge-num">LESSON 14.3</span>
+                <span class="badge badge-cat">Research Integrity</span>
               </div>
               <h2 class="lesson-card-title">
-                Instrument Strength &amp; Weak-Instrument Diagnostics
+                Preregistration &amp; Multiple Hypothesis Testing
               </h2>
               <p class="lesson-card-desc">
-                Discover why relevance is vital for IV precision, examine how weak instruments inflate variance and finite-sample bias, apply the first-stage rule of thumb thresholds, and survey Stock-Yogo, Cragg-Donald, and Kleibergen-Paap diagnostics.
+                Protect empirical credibility by preregistering analysis strategies to mitigate p-hacking, analyze how testing multiple outcomes elevates false-positive rates, and apply familywise error rate adjustments.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -222,19 +227,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.4 Card -->
+        <!-- Lesson 14.4 Card -->
         <a href="lesson-04.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.4</span>
-                <span class="badge badge-cat">Measurement Error</span>
+                <span class="badge badge-num">LESSON 14.4</span>
+                <span class="badge badge-cat">Compliance</span>
               </div>
               <h2 class="lesson-card-title">
-                Measurement Error in Dependent and Independent Variables
+                Noncompliance, Treatment Assignment &amp; Compliance Types
               </h2>
               <p class="lesson-card-desc">
-                Analyze the classical errors-in-variables model, prove why measurement error in the dependent variable inflates disturbance variance without biasing OLS coefficients, and understand why measurement error in regressors induces endogeneity.
+                Distinguish randomized assignment Z from actual treatment take-up T, understand why ITT measures offer effects rather than treatment on takers, and classify individuals into always-takers, compliers, never-takers, and defiers.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -243,19 +248,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.5 Card -->
+        <!-- Lesson 14.5 Card -->
         <a href="lesson-05.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.5</span>
-                <span class="badge badge-cat">Attenuation &amp; IV</span>
+                <span class="badge badge-num">LESSON 14.5</span>
+                <span class="badge badge-cat">Local Effects</span>
               </div>
               <h2 class="lesson-card-title">
-                Attenuation Bias &amp; IV as a Measurement-Error Solution
+                LATE, Monotonicity &amp; the Wald Estimator
               </h2>
               <p class="lesson-card-desc">
-                Derive the classical attenuation factor lambda that pulls estimated slopes toward zero, explore numerical examples of signal-to-noise ratios, and prove how valid instruments isolate true variation to restore estimator consistency.
+                Establish the monotonicity condition ruling out defiers, derive the local average treatment effect isolating compliers, calculate the Wald estimator scaling ITT by the first stage, and evaluate core IV assumptions.
               </p>
             </div>
             <div class="lesson-card-action">
@@ -264,19 +269,19 @@
           </div>
         </a>
 
-        <!-- Lesson 12.6 Card -->
+        <!-- Lesson 14.6 Card -->
         <a href="lesson-06.html" class="module-lesson-card">
           <div class="lesson-card-inner">
             <div class="lesson-card-main">
               <div class="lesson-card-badges">
-                <span class="badge badge-num">LESSON 12.6</span>
-                <span class="badge badge-cat">Synthesis &amp; Review</span>
+                <span class="badge badge-num">LESSON 14.6</span>
+                <span class="badge badge-cat">Experimental IV</span>
               </div>
               <h2 class="lesson-card-title">
-                Propagation of Error &amp; Module Review
+                2SLS in Field Experiments, LATE vs ATE &amp; Exclusion Restrictions
               </h2>
               <p class="lesson-card-desc">
-                Examine how non-linear transformations and ratios propagate underlying measurement noise, synthesize the diagnostic workflow connecting endogeneity, validity, relevance, and data mismeasurement, and review core concepts.
+                Generalize imperfect compliance using two-stage least squares with baseline covariates, contrast LATE for compliers against overall population ATE, examine threats to the exclusion restriction, and synthesize experimental design best practices.
               </p>
             </div>
             <div class="lesson-card-action">

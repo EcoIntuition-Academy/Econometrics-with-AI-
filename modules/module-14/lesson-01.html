@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.1: Minimum Detectable Effects &amp; Experimental Feasibility — EcoIntuition Academy</title>
+  <meta name="description" content="Define the minimum detectable effect size, align statistical precision targets with actionable policy thresholds, weigh cost-precision trade-offs, and establish safe control variable guidelines.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts: Poppins & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; Minimum Detectable Effects</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.1</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Experimental Design</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Minimum Detectable Effects &amp; Experimental Feasibility
+      </h1>
+      <p class="lesson-hero-lead">
+        Calculating sample size is not merely an abstract statistical exercise. Learn how to target minimum detectable effects that reflect actionable policy thresholds, navigate research budget trade-offs, and establish safe control variable guidelines.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define the Minimum Detectable Effect (MDE) in experimental planning.</li>
+        <li>Connect statistical detectability to practical, actionable policy relevance.</li>
+        <li>Analyze the cost-precision trade-off linking sample size, budget constraints, and MDE.</li>
+        <li>Interpret the animal-search intuition connecting detectable magnitude to research value.</li>
+        <li>Distinguish valid pre-treatment covariates from dangerous post-treatment variables.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Definition of MDE & The Core Question -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. The Minimum Detectable Effect (MDE)</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); margin-bottom: var(--space-md); border-left: 4px solid var(--color-primary);">
+          <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primary); margin-bottom: 0.25rem;">CORE DEFINITION</div>
+          <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.05rem;">Minimum Detectable Effect (MDE)</h3>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+            The <strong>Minimum Detectable Effect (MDE)</strong> is the smallest true treatment effect size that a given experimental design is capable of detecting with the intended statistical significance and power.
+          </p>
+        </div>
+
+        <!-- Boxed Core Question -->
+        <div class="callout" style="border-left: 4px solid #2563eb; margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: #eff6ff; color: #1d4ed8;">PLANNING QUESTION</span>
+            <h3 class="callout-title">What MDE Should We Aim For?</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              The MDE informs the researcher about what effect size could be detected with a given sample size and design. But the central economic question is: <strong>Is that MDE large enough to justify undertaking the study?</strong> Ideally, researchers design studies around the smallest effect that policymakers or decision-makers would still find actionable.
+            </p>
+          </div>
+        </div>
+
+        <!-- Actionable vs Detectable Comparison -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">STATISTICALLY DETECTABLE</div>
+            <p style="margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--color-text-secondary);">
+              An effect magnitude that the experimental sample size and variance can distinguish from zero with acceptable type I and type II error rates.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-md); background: #f0fdf4; border: 1px solid #bbf7d0;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #15803d; margin-bottom: var(--space-xs);">POLICY RELEVANT &amp; ACTIONABLE</div>
+            <p style="margin: 0; font-size: 0.86rem; line-height: 1.5; color: #14532d;">
+              An effect large enough to alter institutional decisions, justify program implementation costs, or scale up a social intervention.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Cost-Precision Trade-off & Animal-Search Intuition -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Cost–Precision Trade-offs &amp; Search Intuition</h2>
+      </div>
+      <div class="study-section-body">
+
+        <!-- Flow Diagram -->
+        <div class="comparison-card" style="padding: var(--space-md); margin-bottom: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-sm);">THE BUDGET–PRECISION DILEMMA</div>
+          <div style="display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: var(--space-xs); text-align: center; font-size: 0.86rem;">
+            <div style="padding: 6px 12px; background: #eff6ff; border-radius: 4px; color: #1d4ed8; font-weight: 600;">More Observations (N)</div>
+            <div style="color: var(--color-text-secondary);">&rarr;</div>
+            <div style="padding: 6px 12px; background: #eff6ff; border-radius: 4px; color: #1d4ed8; font-weight: 600;">Smaller Standard Errors</div>
+            <div style="color: var(--color-text-secondary);">&rarr;</div>
+            <div style="padding: 6px 12px; background: #ecfdf5; border-radius: 4px; color: #047857; font-weight: 600;">Smaller Detectable MDE</div>
+            <div style="color: var(--color-text-secondary);">&rarr;</div>
+            <div style="padding: 6px 12px; background: #fef2f2; border-radius: 4px; color: #b91c1c; font-weight: 600;">Higher Financial Cost</div>
+          </div>
+        </div>
+
+        <!-- Animal Search Intuition Card -->
+        <div class="study-card" style="padding: var(--space-md); background: #fffbeb; border-left: 4px solid #d97706; margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-bottom: var(--space-xs);">INTUITIVE ANALOGY &middot; DETECTING AN EFFECT</div>
+          <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #92400e;">Searching for Wildlife: Lion, Leopard, or Serval?</h4>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.88rem; line-height: 1.6; color: #78350f;">
+            Suppose villages report that a wild cat is threatening livestock. A quick, inexpensive search can readily find a <strong>lion</strong> (a massive, unmistakable effect). Finding a secretive <strong>leopard</strong> requires more tracking effort and resources, but may still be actionable.
+          </p>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #78350f;">
+            However, spending immense resources on an exhaustive expedition just to spot a <strong>serval</strong>—a cat so small and inconsequential that no public policy would change—is economically wasteful. <em>Do not design an expensive trial to detect an effect too small to matter.</em>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Compliance Foresight & Control Variables -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Implementation Considerations &amp; Control Variables</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">IMPLEMENTATION CAUTION</span>
+            <h3 class="callout-title">The Imperfect Compliance Risk</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Even a perfectly powered study can run into severe difficulties if assigned individuals do not actually take up the treatment (e.g., selling subsidized medicine rather than consuming it). When assignment diverges from receipt, experimental evaluation requires specialized instrumental-variables tools (developed in Lessons 14.4–14.6).
+            </p>
+          </div>
+        </div>
+
+        <h4 style="font-size: var(--text-base); margin-top: var(--space-md); margin-bottom: var(--space-xs);">Rules for Baseline Control Variables</h4>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-sm); background: #ecfdf5; border-left: 3px solid #059669;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #047857;">PREFERRED &middot; PRE-TREATMENT</div>
+            <p style="font-size: 0.84rem; color: #064e3b; margin: 4px 0 0 0; line-height: 1.5;">
+              Use covariates measured strictly before the experiment begins. Because they predate treatment, they cannot be influenced by it.
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: #eff6ff; border-left: 3px solid #2563eb;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8;">PERMISSIBLE &middot; UNAFFECTED IN-TREATMENT</div>
+            <p style="font-size: 0.84rem; color: #1e3a8a; margin: 4px 0 0 0; line-height: 1.5;">
+              In-treatment variables are safe only if external forces ensure they cannot be influenced by assignment (e.g., state cigarette tax in a smoking trial).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-sm); background: #fef2f2; border-left: 3px solid #dc2626;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">DANGEROUS &middot; TREATMENT-AFFECTED</div>
+            <p style="font-size: 0.84rem; color: #7f1d1d; margin: 4px 0 0 0; line-height: 1.5;">
+              Never control for variables altered by the intervention. Doing so creates bad controls, inducing bias in the treatment effect estimate.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 14.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Interactive Lab: Design Feasibility Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          
+          <div class="lab-header">
+            <span class="lab-badge">ILLUSTRATIVE DESIGN EXPLORER</span>
+            <h3 class="lab-title">Experimental Feasibility &amp; MDE Explorer</h3>
+            <p class="lab-desc">
+              Explore how sample size and outcome variance determine the smallest detectable effect, and evaluate whether the study design reaches the actionable policy threshold.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Sample Size per Arm (\(n\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnN50">Small (\(n = 50\))</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnN250">Medium (\(n = 250\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnN1000">Large (\(n = 1000\))</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Outcome Noise (\(\sigma\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-outline" id="btnSigLow">Low (\(\sigma = 5\))</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnSigMed">Medium (\(\sigma = 10\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnSigHigh">High (\(\sigma = 15\))</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Policymaker Action Threshold (\(\Delta^*\)):</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnThreshMod">Moderate Target (\(\Delta^* = 1.80\))</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnThreshSmall">Strict Target (\(\Delta^* = 0.90\))</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact 2x2 Metrics Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Sample Size (Total \(N\))</div>
+              <div class="metric-value" id="readoutN" style="color: #2563eb;">250 (500)</div>
+              <div class="metric-sub">Per group allocation</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Illustrative MDE (\(\approx 2.8 \times \text{SE}\))</div>
+              <div class="metric-value" id="readoutMDE" style="color: #6d28d9;">2.50</div>
+              <div class="metric-sub">Minimum detectable effect</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Policy Action Threshold (\(\Delta^*\))</div>
+              <div class="metric-value" id="readoutThresh" style="color: #059669;">1.80</div>
+              <div class="metric-sub">Smallest meaningful policy effect</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Design Feasibility Status</div>
+              <div class="metric-value" id="readoutStatus" style="color: #dc2626;">DETECTS ONLY LARGE</div>
+              <div class="metric-sub" id="subStatus">MDE exceeds policy threshold</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 3px;"></span> Minimum Detectable Effect (MDE)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 2px; border-style: dashed;"></span> Policy Action Threshold (\(\Delta^*\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 10px; width: 10px; border-radius: 2px;"></span> Detectable Effect Range</div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 240px; background: var(--color-bg); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="mdeSvg" viewBox="0 0 680 200" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong id="labInsightTitle">Scenario Assessment:</strong> <span id="labInsightBody">With \(n = 250\), the MDE is 2.50. This exceeds the policy threshold (1.80), meaning an effect of 2.00 would be policy-relevant but undetectable by this study.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A visual comparison between the smallest effect size the design can detect (MDE) and the smallest effect policymakers care about.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                When sample size increases to 1000, MDE shrinks below the policy threshold, making the trial capable of informing decisions.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A trial where \(\text{MDE} > \Delta^*\) risks failing to detect a genuinely valuable intervention, rendering research expenditure fruitless.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Statistical detectability must align with actionable welfare benefits; over-designing for tiny effects (servals) is wasteful.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Select Large sample size (\(n = 1000\)) and Low noise (\(\sigma = 5\)). Observe how MDE falls to 0.63, fully reaching the policy target.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why is the smallest statistically detectable effect not automatically the correct target for an experimental study?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider whether an effect too tiny to trigger policy action justifies an expensive, large-scale search.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because the target effect size must also be large enough to matter for the policy, decision, or investment the study is meant to inform.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Detecting an extraordinarily tiny effect requires massive sample sizes and research budgets. If decision-makers would not take action on an effect of that small magnitude, the additional expenditure to detect it produces no social or policy value. Studies should be powered for actionable effects.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>The Minimum Detectable Effect (MDE) defines the precision threshold of an experimental design.</li>
+        <li>Researchers should align MDE targets with the smallest effect size that would remain policy-actionable.</li>
+        <li>Increasing sample size reduces MDE but increases study implementation costs.</li>
+        <li>Like searching for lions vs. servals, chasing inconsequential effects wastes research capital.</li>
+        <li>Use pre-treatment covariates for precision; never control for variables affected by treatment.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="index.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Module Overview</span>
+        <span class="nav-btn-title">Module 14: Estimation, Compliance &amp; LATE</span>
+      </a>
+      <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">14.2 Estimating Effects: ITT &amp; DID</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Interactive Lab 14.1 Script -->
+  <script>
+    (function() {
+      let nPerArm = 250;
+      let sigma = 10;
+      let policyThreshold = 1.80;
+
+      const btnN50 = document.getElementById('btnN50');
+      const btnN250 = document.getElementById('btnN250');
+      const btnN1000 = document.getElementById('btnN1000');
+
+      const btnSigLow = document.getElementById('btnSigLow');
+      const btnSigMed = document.getElementById('btnSigMed');
+      const btnSigHigh = document.getElementById('btnSigHigh');
+
+      const btnThreshMod = document.getElementById('btnThreshMod');
+      const btnThreshSmall = document.getElementById('btnThreshSmall');
+
+      const readoutN = document.getElementById('readoutN');
+      const readoutMDE = document.getElementById('readoutMDE');
+      const readoutThresh = document.getElementById('readoutThresh');
+      const readoutStatus = document.getElementById('readoutStatus');
+      const subStatus = document.getElementById('subStatus');
+
+      const labInsightTitle = document.getElementById('labInsightTitle');
+      const labInsightBody = document.getElementById('labInsightBody');
+      const svg = document.getElementById('mdeSvg');
+
+      function updateLab() {
+        btnN50.className = nPerArm === 50 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnN250.className = nPerArm === 250 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnN1000.className = nPerArm === 1000 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        btnSigLow.className = sigma === 5 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnSigMed.className = sigma === 10 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnSigHigh.className = sigma === 15 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        btnThreshMod.className = policyThreshold === 1.80 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnThreshSmall.className = policyThreshold === 0.90 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        // Standard SE under equal allocation: sqrt(2 * sigma^2 / n)
+        const se = Math.sqrt((2 * sigma * sigma) / nPerArm);
+        // Illustrative MDE factor ~ 2.80 (for 80% power at 5% alpha: 1.96 + 0.84)
+        const mde = 2.80 * se;
+
+        readoutN.textContent = `${nPerArm} (${nPerArm * 2})`;
+        readoutMDE.textContent = mde.toFixed(2);
+        readoutThresh.textContent = policyThreshold.toFixed(2);
+
+        if (mde <= policyThreshold * 0.70) {
+          readoutStatus.textContent = 'HIGHLY POWERED';
+          readoutStatus.style.color = '#2563eb';
+          subStatus.textContent = 'Easily detects policy effect';
+          labInsightTitle.textContent = 'Well-Powered Design:';
+          labInsightBody.textContent = `The MDE (${mde.toFixed(2)}) is comfortably smaller than the policy threshold (${policyThreshold.toFixed(2)}). The experiment will reliably detect meaningful policy impacts.`;
+        } else if (mde <= policyThreshold) {
+          readoutStatus.textContent = 'ACTIONABLE RANGE';
+          readoutStatus.style.color = '#059669';
+          subStatus.textContent = 'Matches policy target threshold';
+          labInsightTitle.textContent = 'Balanced Design:';
+          labInsightBody.textContent = `The MDE (${mde.toFixed(2)}) reaches the required policy threshold (${policyThreshold.toFixed(2)}). The study is neither underpowered nor wastefully overpowered.`;
+        } else {
+          readoutStatus.textContent = 'DETECTS ONLY LARGE';
+          readoutStatus.style.color = '#dc2626';
+          subStatus.textContent = 'MDE exceeds policy threshold';
+          labInsightTitle.textContent = 'Underpowered for Policy:';
+          labInsightBody.textContent = `The MDE (${mde.toFixed(2)}) exceeds the policy threshold (${policyThreshold.toFixed(2)}). An effect that policymakers care about could occur but go undetected.`;
+        }
+
+        renderVisualizer(mde, policyThreshold);
+      }
+
+      function renderVisualizer(mde, thresh) {
+        const width = 680;
+        const height = 200;
+        const padL = 50;
+        const padR = 40;
+        const padT = 30;
+        const padB = 40;
+
+        const plotW = width - padL - padR;
+        const plotH = height - padT - padB;
+
+        // Scale: effect sizes from 0 to 6.0
+        const minVal = 0, maxVal = 6.0;
+        const scaleX = val => padL + ((val - minVal) / (maxVal - minVal)) * plotW;
+
+        let svgHtml = '';
+
+        // Horizontal Axis & Grid
+        svgHtml += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--border-subtle)" stroke-width="1.5"/>`;
+
+        // Ticks
+        [0, 1, 2, 3, 4, 5, 6].forEach(tick => {
+          const xPos = scaleX(tick);
+          svgHtml += `<line x1="${xPos}" y1="${padT + plotH}" x2="${xPos}" y2="${padT + plotH + 4}" stroke="var(--border-subtle)"/>`;
+          svgHtml += `<text x="${xPos}" y="${padT + plotH + 18}" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">${tick.toFixed(1)}</text>`;
+        });
+
+        svgHtml += `<text x="${padL + plotW / 2}" y="${height - 6}" font-size="12" fill="var(--color-text-secondary)" font-weight="500" text-anchor="middle">Effect Size (\(\Delta\))</text>`;
+
+        // Detectable Zone (Blue fill to the right of MDE)
+        const mdeX = Math.min(padL + plotW, scaleX(mde));
+        const zoneW = Math.max(0, padL + plotW - mdeX);
+        svgHtml += `<rect x="${mdeX}" y="${padT + 20}" width="${zoneW}" height="${plotH - 40}" fill="rgba(37, 99, 235, 0.12)" rx="4"/>`;
+        svgHtml += `<text x="${Math.min(padL + plotW - 10, mdeX + 15)}" y="${padT + 40}" font-size="11" font-weight="600" fill="#2563eb">Detectable Effect Zone</text>`;
+
+        // Policy Threshold Line (Green dashed)
+        const threshX = scaleX(thresh);
+        svgHtml += `<line x1="${threshX}" y1="${padT}" x2="${threshX}" y2="${padT + plotH}" stroke="#059669" stroke-width="2" stroke-dasharray="4,4"/>`;
+        svgHtml += `<text x="${threshX}" y="${padT - 8}" font-size="11" font-weight="700" fill="#047857" text-anchor="middle">Policy Threshold (\(\Delta^* = ${thresh.toFixed(2)}\))</text>`;
+
+        // MDE Indicator (Purple solid line & dot)
+        svgHtml += `<line x1="${mdeX}" y1="${padT}" x2="${mdeX}" y2="${padT + plotH}" stroke="#6d28d9" stroke-width="2.5"/>`;
+        svgHtml += `<circle cx="${mdeX}" cy="${padT + (plotH / 2)}" r="6" fill="#6d28d9" stroke="#ffffff" stroke-width="1.5"/>`;
+        svgHtml += `<text x="${mdeX}" y="${padT + plotH - 6}" font-size="11" font-weight="700" fill="#6d28d9" text-anchor="middle">MDE: ${mde.toFixed(2)}</text>`;
+
+        svg.innerHTML = svgHtml;
+      }
+
+      btnN50.addEventListener('click', () => { nPerArm = 50; updateLab(); });
+      btnN250.addEventListener('click', () => { nPerArm = 250; updateLab(); });
+      btnN1000.addEventListener('click', () => { nPerArm = 1000; updateLab(); });
+
+      btnSigLow.addEventListener('click', () => { sigma = 5; updateLab(); });
+      btnSigMed.addEventListener('click', () => { sigma = 10; updateLab(); });
+      btnSigHigh.addEventListener('click', () => { sigma = 15; updateLab(); });
+
+      btnThreshMod.addEventListener('click', () => { policyThreshold = 1.80; updateLab(); });
+      btnThreshSmall.addEventListener('click', () => { policyThreshold = 0.90; updateLab(); });
+
+      // Quick check toggles
+      document.querySelectorAll('.toggle-hint-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      document.querySelectorAll('.toggle-sol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.quick-check-card');
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

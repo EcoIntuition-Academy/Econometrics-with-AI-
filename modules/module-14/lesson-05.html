@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14.5: LATE, Monotonicity &amp; the Wald Estimator — Econometrics with AI</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-14" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 14: Estimation, Compliance &amp; LATE</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 14</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 14</a>
+          <span class="module-nav-title">Field Experiments II: Estimation, Compliance &amp; LATE</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 6 &middot; LATE, Monotonicity &amp; the Wald Estimator</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 14 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.1 Minimum Detectable Effects</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.2 Estimating Effects: ITT &amp; DID</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.3 Preregistration &amp; Multiple Testing</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.4 Noncompliance &amp; Compliance Types</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">14.5 LATE &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">83%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 83%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 14.5</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">Local Effects</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        LATE, Monotonicity &amp; the Wald Estimator
+      </h1>
+      <p class="lesson-hero-lead">
+        When randomized offers induce only a subset of participants to take treatment, instrumental variable methods scale the Intent-to-Treat effect by the first-stage compliance rate to uncover the Local Average Treatment Effect.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define the Monotonicity condition and explain why ruling out defiers allows causal attribution.</li>
+        <li>Define the Local Average Treatment Effect (LATE) as the treatment effect for compliers.</li>
+        <li>Calculate the Wald estimator step-by-step from observed group means and compliance rates.</li>
+        <li>State and evaluate the three core IV assumptions: Random Assignment, Exclusion Restriction, and Monotonicity.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Monotonicity & Compliers -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Monotonicity &amp; The Complier Subpopulation</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Random assignment \(Z_i\) determines who is offered treatment, but imperfect compliance means treatment receipt \(T_i\) is not guaranteed. To learn the effect of treatment itself, we require that the assignment offer acts weakly in one direction.
+        </p>
+
+        <!-- Definition Card: Monotonicity -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">CORE IDENTIFYING ASSUMPTION</div>
+          <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Monotonicity (No Defiers)</div>
+          <p style="font-size: 0.92rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+            <strong>Monotonicity</strong> assumes that being offered treatment can only weakly increase, never decrease, the likelihood of taking treatment:
+            \[
+            T_i(1) \ge T_i(0) \quad \text{for all } i
+            \]
+            This explicitly rules out the existence of <strong>Defiers</strong> (\(T_i(0)=1, T_i(1)=0\)).
+          </p>
+        </div>
+
+        <!-- Compliance Transition Visual -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-text); margin-bottom: 6px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">
+              Control Arm (\(Z = 0\))
+            </div>
+            <div style="font-size: 0.82rem; line-height: 1.7;">
+              <div>Always-takers: <strong style="font-family: var(--font-mono); color: var(--color-primary);">\(T = 1\)</strong></div>
+              <div>Compliers: <strong style="font-family: var(--font-mono); color: var(--color-text-secondary);">\(T = 0\)</strong></div>
+              <div>Never-takers: <strong style="font-family: var(--font-mono); color: var(--color-text-secondary);">\(T = 0\)</strong></div>
+            </div>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: #f0fdf4; border-left: 3px solid #059669;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #047857; margin-bottom: 6px; border-bottom: 1px solid rgba(5,150,105,0.2); padding-bottom: 4px;">
+              Treated Arm (\(Z = 1\))
+            </div>
+            <div style="font-size: 0.82rem; line-height: 1.7;">
+              <div>Always-takers: <strong style="font-family: var(--font-mono); color: var(--color-primary);">\(T = 1\)</strong></div>
+              <div>Compliers: <strong style="font-family: var(--font-mono); color: #047857;">\(T = 1\) (Switched!)</strong></div>
+              <div>Never-takers: <strong style="font-family: var(--font-mono); color: var(--color-text-secondary);">\(T = 0\)</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LATE Definition Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: rgba(5,150,105,0.05); border-left: 3px solid #059669; margin: var(--space-sm) 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: #047857; letter-spacing: 0.05em;">CAUSAL ESTIMAND</div>
+          <div style="font-size: 1.05rem; font-weight: 700; color: #064e3b; margin: 4px 0;">Local Average Treatment Effect (LATE)</div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: #064e3b;">
+            <strong>LATE</strong> is the average treatment effect for the subpopulation of <strong>Compliers</strong> whose treatment status is induced or shifted by the randomized assignment / instrument:
+            \[
+            \text{LATE} = E[Y_i(1) - Y_i(0) \mid \text{Complier}]
+            \]
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Step-by-Step Derivation Journey -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Derivation Journey: Numerical LATE Example</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Consider a concrete trial with 100 control subjects (\(Z=0\)) and 100 treatment-assigned subjects (\(Z=1\)), containing 30 Always-takers, 25 Compliers, 45 Never-takers, and 0 Defiers.
+        </p>
+
+        <!-- Derivation Box -->
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            DERIVATION JOURNEY &middot; THE WALD RATIO
+          </div>
+
+          <div style="margin-bottom: var(--space-sm); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--border-subtle);">
+            <strong style="display: block; font-size: 0.88rem; color: var(--color-primary);">Step 1: Calculate Intent-to-Treat (ITT)</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Difference in outcome means between assigned arms:
+            </p>
+            <div style="font-size: 1.05rem; text-align: center;">
+              \[
+              \text{ITT} = E[Y \mid Z = 1] - E[Y \mid Z = 0] = 65 - 60 = 5
+              \]
+            </div>
+          </div>
+
+          <div style="margin-bottom: var(--space-sm); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--border-subtle);">
+            <strong style="display: block; font-size: 0.88rem; color: var(--color-primary);">Step 2: Calculate First-Stage Compliance Shift</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Difference in treatment take-up rates between assigned arms:
+            </p>
+            <div style="font-size: 1.05rem; text-align: center;">
+              \[
+              \text{First Stage} = E[T \mid Z = 1] - E[T \mid Z = 0] = 0.55 - 0.30 = 0.25
+              \]
+            </div>
+          </div>
+
+          <div>
+            <strong style="display: block; font-size: 0.88rem; color: #047857;">Step 3: Compute the Wald Estimator</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Scale the ITT outcome shift by the proportion of participants who actually took treatment:
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; color: #047857; font-weight: 700;">
+              \[
+              \hat{\beta}_{\text{LATE}} = \frac{\text{ITT}}{\text{First Stage}} = \frac{5}{0.25} = 20
+              \]
+            </div>
+            <div style="background: rgba(5,150,105,0.08); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs); font-size: 0.84rem; color: #064e3b; margin-top: 6px;">
+              <strong>Key Result:</strong> For compliers, receiving treatment increases the outcome by <strong>20 units</strong>. The overall ITT was diluted to 5 because compliers represent only 25% of the total sample.
+            </div>
+          </div>
+        </div>
+
+        <!-- Wald Formula Equation Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WALD ESTIMATOR FORMULA</span>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">Binary Instrument &amp; Treatment</span>
+          </div>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0;">
+            \[
+            \hat{\beta}_{\text{LATE}} = \frac{E[Y \mid Z = 1] - E[Y \mid Z = 0]}{E[T \mid Z = 1] - E[T \mid Z = 0]}
+            \]
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.6; margin: 0; color: var(--color-text-secondary);">
+            The Wald estimator expresses the instrumental variables estimator with a single binary instrument \(Z\) and a single binary endogenous treatment \(T\). The numerator captures the reduced-form ITT effect, and the denominator captures the first-stage compliance rate.
+          </p>
+        </div>
+
+        <!-- Three IV Assumptions -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary);">1. RANDOM ASSIGNMENT</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: var(--color-text-secondary);">
+              \(Z_i\) is independent of potential outcomes and compliance types: \(Z_i \perp (Y_i(0), Y_i(1), T_i(0), T_i(1))\).
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary);">2. EXCLUSION RESTRICTION</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: var(--color-text-secondary);">
+              \(Z_i\) affects \(Y_i\) solely through treatment \(T_i\): no direct pathway exists from offer to outcome.
+            </p>
+          </div>
+          <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary);">3. MONOTONICITY</div>
+            <p style="font-size: 0.82rem; margin: 4px 0 0 0; color: var(--color-text-secondary);">
+              No defiers: assignment offer only encourages treatment participation (\(T_i(1) \ge T_i(0)\)).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 14.5 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Interactive Lab: Wald / LATE Calculator</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <span class="lab-badge">IV CALCULATOR</span>
+            <h3 class="lab-title">Wald Ratio &amp; Weak First-Stage Explorer</h3>
+            <p class="lab-desc">
+              Adjust outcome means and treatment take-up rates across assignment arms to calculate the ITT, first-stage compliance rate, and resulting LATE estimate.
+            </p>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="lab-controls-panel">
+            <div class="control-group">
+              <span class="control-label">Outcome Scenarios:</span>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnSourceData">Source Data (60 &rarr; 65, 30% &rarr; 55%)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnHighItt">Large Effect (50 &rarr; 70, 20% &rarr; 60%)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnWeakFS">Weak First Stage (60 &rarr; 61, 30% &rarr; 32%)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weak IV Warning Alert -->
+          <div id="weakIvAlert" style="display: none; background: #fef2f2; border: 1px solid #dc2626; border-radius: var(--radius-sm); padding: var(--space-xs) var(--space-sm); margin-bottom: var(--space-sm);">
+            <strong style="color: #b91c1c; font-size: 0.84rem;">&#x26A0; WEAK FIRST STAGE:</strong>
+            <span style="font-size: 0.82rem; color: #7f1d1d; margin-left: 0.5rem;">
+              First-stage take-up difference is near zero (&le; 0.05). LATE estimates become highly volatile and prone to explosive standard errors.
+            </span>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div class="metric-card">
+              <div class="metric-label">Intent-to-Treat (ITT)</div>
+              <div class="metric-value" id="readoutItt" style="color: #2563eb;">5.0</div>
+              <div class="metric-sub">\(E[Y|Z=1] - E[Y|Z=0]\)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">First Stage (\(\Delta T\))</div>
+              <div class="metric-value" id="readoutFs" style="color: #6d28d9;">0.25</div>
+              <div class="metric-sub">\(E[T|Z=1] - E[T|Z=0]\)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">LATE Estimate (\(\hat{\beta}_{\text{Wald}}\))</div>
+              <div class="metric-value" id="readoutLate" style="color: #059669;">20.0</div>
+              <div class="metric-sub">\(\text{ITT} / \text{First Stage}\)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Compliance Change</div>
+              <div class="metric-value" id="readoutComp" style="color: #059669;">25.0%</div>
+              <div class="metric-sub">Complier population fraction</div>
+            </div>
+          </div>
+
+          <!-- External Legend Bar -->
+          <div class="external-legend-bar">
+            <div class="legend-item"><span class="legend-line" style="background: #2563eb; height: 10px; width: 10px; border-radius: 2px;"></span> ITT = Outcome Shift (\(\Delta Y\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #6d28d9; height: 10px; width: 10px; border-radius: 2px;"></span> First Stage = Take-Up Shift (\(\Delta T\))</div>
+            <div class="legend-item"><span class="legend-line" style="background: #059669; height: 10px; width: 10px; border-radius: 2px;"></span> Wald LATE = \(\Delta Y / \Delta T\)</div>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labScenarioInsight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Wald Estimator Insight:</strong> <span id="labWaldInsight">Under these parameters, the randomized offer increases average outcomes by 5.0 points while shifting treatment receipt by 0.25 (25.0 percentage points). Dividing ITT by the first stage yields a LATE of 20.0 for the complier subpopulation.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ITT NUMERATOR</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Measures the raw outcome difference between randomized offer arms.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">FIRST-STAGE DENOM</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Measures the fraction of individuals whose treatment status was shifted by the offer.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">SCALING FACTOR</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Dividing by \(\Delta T\) scales the assignment effect up to reflect full treatment.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WEAK IV DANGER</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                If \(\Delta T \approx 0\), the ratio explodes and standard errors diverge.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">COMPLIER TARGET</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                LATE applies specifically to compliers, not necessarily always- or never-takers.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Check -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Quick Check</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <div class="quick-check-card">
+          <div class="quick-check-header">
+            <span class="quick-check-badge">QUICK CHECK</span>
+          </div>
+          <p class="quick-check-question" style="font-size: 0.95rem; font-weight: 600; margin: 0 0 var(--space-sm) 0;">
+            Why does the Wald estimator divide the Intent-to-Treat (ITT) effect by the first-stage effect?
+          </p>
+          <div class="quick-check-actions" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button type="button" class="btn btn-secondary btn-sm toggle-hint-btn">Hint</button>
+            <button type="button" class="btn btn-primary btn-sm toggle-sol-btn">Show Solution</button>
+          </div>
+          <div class="quick-check-hint" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6; margin-bottom: var(--space-xs);">
+            <strong>HINT:</strong> Consider who generated the ITT outcome difference, and what fraction of the sample they comprise.
+          </div>
+          <div class="quick-check-solution" style="display: none; padding: var(--space-sm) var(--space-md); background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.6;">
+            <p style="margin: 0 0 0.4rem 0;">
+              <strong>ANSWER:</strong> Because ITT reflects the outcome impact of randomized assignment, while the first stage measures how much assignment changes actual treatment receipt.
+            </p>
+            <p style="margin: 0; color: var(--text-secondary);">
+              <strong>WHY?</strong> Under random assignment, exclusion restriction, and monotonicity, non-compliers contribute zero to the ITT; dividing by the first stage scales the assignment effect back up to recover the genuine causal treatment effect for compliers.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Summary Box -->
+    <div class="summary-takeaways-card">
+      <div class="summary-takeaways-header" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="academic-badge badge-summary">TAKEAWAYS</span>
+        <h3 class="summary-takeaways-title" style="margin: 0;">What You Should Now Understand</h3>
+      </div>
+      <ul class="summary-takeaways-list">
+        <li>Monotonicity assumes no defiers exist, ensuring the randomized offer only moves individuals into treatment, never out of it.</li>
+        <li>Always-takers and Never-takers exhibit zero behavioral response to the offer, meaning any ITT difference is caused entirely by Compliers.</li>
+        <li>The Local Average Treatment Effect (LATE) identifies the average treatment impact strictly for the complier subpopulation.</li>
+        <li>The Wald estimator \(\hat{\beta}_{\text{LATE}} = \frac{E[Y|Z=1] - E[Y|Z=0]}{E[T|Z=1] - E[T|Z=0]}\) computes LATE from observed sample means.</li>
+        <li>Three core assumptions are required for valid LATE identification: Random Assignment, Exclusion Restriction, and Monotonicity.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Pagination Navigation Cards -->
+    <nav class="lesson-pagination lesson-pager" aria-label="Lesson Navigation">
+      <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+        <span class="nav-btn-sub">&larr; Previous Lesson</span>
+        <span class="nav-btn-title">14.4 Noncompliance &amp; Compliance Types</span>
+      </a>
+      <a href="lesson-06.html" class="lesson-nav-btn btn-next">
+        <span class="nav-btn-sub">Next Lesson &rarr;</span>
+        <span class="nav-btn-title">14.6 2SLS, LATE vs ATE &amp; Exclusion</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Lab 14.5 Script -->
+  <script>
+    (function() {
+      let y0 = 60;
+      let y1 = 65;
+      let t0 = 0.30;
+      let t1 = 0.55;
+
+      const btnSourceData = document.getElementById('btnSourceData');
+      const btnHighItt = document.getElementById('btnHighItt');
+      const btnWeakFS = document.getElementById('btnWeakFS');
+
+      const readoutItt = document.getElementById('readoutItt');
+      const readoutFs = document.getElementById('readoutFs');
+      const readoutLate = document.getElementById('readoutLate');
+      const readoutComp = document.getElementById('readoutComp');
+      const labWaldInsight = document.getElementById('labWaldInsight');
+      const weakIvAlert = document.getElementById('weakIvAlert');
+
+      function updateLab() {
+        btnSourceData.className = (y0 === 60 && y1 === 65 && t0 === 0.30) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnHighItt.className = (y0 === 50 && y1 === 70) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        btnWeakFS.className = (y0 === 60 && y1 === 61 && t1 === 0.32) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+        const itt = y1 - y0;
+        const fs = t1 - t0;
+
+        readoutItt.textContent = itt.toFixed(1);
+        readoutFs.textContent = fs.toFixed(2);
+        readoutComp.textContent = `${(fs * 100).toFixed(1)}%`;
+
+        if (fs <= 0.05) {
+          weakIvAlert.style.display = 'block';
+          if (fs <= 0) {
+            readoutLate.textContent = 'Undefined';
+            labWaldInsight.textContent = 'First-stage take-up is zero or negative (violating relevance or monotonicity). The Wald ratio cannot be computed.';
+            return;
+          }
+        } else {
+          weakIvAlert.style.display = 'none';
+        }
+
+        const late = itt / fs;
+        readoutLate.textContent = late.toFixed(1);
+
+        labWaldInsight.textContent = `Under these parameters, the randomized offer increases average outcomes by ${itt.toFixed(1)} points while shifting treatment receipt by ${fs.toFixed(2)} (${(fs*100).toFixed(1)} percentage points). Dividing ITT by the first stage yields a LATE of ${late.toFixed(1)} for the complier subpopulation.`;
+      }
+
+      if (btnSourceData) btnSourceData.addEventListener('click', () => { y0 = 60; y1 = 65; t0 = 0.30; t1 = 0.55; updateLab(); });
+      if (btnHighItt) btnHighItt.addEventListener('click', () => { y0 = 50; y1 = 70; t0 = 0.20; t1 = 0.60; updateLab(); });
+      if (btnWeakFS) btnWeakFS.addEventListener('click', () => { y0 = 60; y1 = 61; t0 = 0.30; t1 = 0.32; updateLab(); });
+
+      // Quick Check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>
