@@ -14,8 +14,11 @@ const modules = [
   { id: 'module-10', num: 10, title: 'Panel Data II: First Differences, Cluster-Robust Inference & the Hausman Test', lessons: 5 },
   { id: 'module-11', num: 11, title: 'Instrumental Variables & Two-Stage Least Squares', lessons: 7 },
   { id: 'module-12', num: 12, title: 'IV Diagnostics, Weak Instruments & Measurement Error', lessons: 6 },
-  { id: 'module-13', num: 13, title: 'Field Experiments, Randomization & Experimental Design', lessons: 6 },
-  { id: 'module-14', num: 14, title: 'Field Experiments II: Estimation, Compliance & LATE', lessons: 6 }
+  { id: 'module-14', num: 14, title: 'Field Experiments II: Estimation, Compliance & LATE', lessons: 6 },
+  { id: 'module-15', num: 15, title: 'Regression Discontinuity Designs', lessons: 6 },
+  { id: 'module-16', num: 16, title: 'Binary Choice Models & Maximum Likelihood', lessons: 6 },
+  { id: 'module-17', num: 17, title: 'Hypothesis, Specification Tests & Generalized Method of Moments', lessons: 6 },
+  { id: 'module-18', num: 18, title: 'Multinomial & Conditional Logit Models', lessons: 5 }
 ];
 
 let totalChecks = 0;

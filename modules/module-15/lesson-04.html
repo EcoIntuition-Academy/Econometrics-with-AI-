@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 15.4: Bandwidth Choice, Local Estimation &amp; Kernel Weighting — EcoIntuition Academy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-15" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 15</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 15</a>
+          <span class="module-nav-title">Regression Discontinuity Designs</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Bandwidth Choice, Local Estimation &amp; Kernel Weighting</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 15 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.1 RD Intuition, Cutoffs &amp; Sharp RD</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.2 Continuity, Manipulation &amp; Placebos</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.3 RD Regression &amp; Cutoff Treatment Effects</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">15.4 Bandwidth Choice &amp; Kernel Weighting</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.5 Fuzzy RD, IV &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.6 McCrary Testing &amp; RD Diagnostics</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 15.4</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">LOCAL ESTIMATION &amp; BANDWIDTH</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Bandwidth Choice, Local Estimation &amp; Kernel Weighting
+      </h1>
+      <p class="lesson-hero-lead">
+        Navigate the fundamental bias-variance trade-off in bandwidth selection, evaluate bandwidth sensitivity, and apply kernel weighting schemes for local polynomial estimation.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define the estimation bandwidth h and the local sample window [a₀ - h, a₀ + h].</li><li>Explain the core bias-variance trade-off governing bandwidth width.</li><li>Interpret bandwidth sensitivity graphs displaying point estimates across varying window sizes.</li><li>Apply the triangular kernel weighting function to prioritize observations closest to the threshold.</li>
+      </ul>
+    </div>
+
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. What is a Bandwidth in Regression Discontinuity?</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            BANDWIDTH DEFINITION &middot; LOCAL ESTIMATION WINDOW
+          </div>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; line-height: 1.6;">
+            The <strong>bandwidth (\(b\))</strong> defines how close to the cutoff an observation must be in order to enter the local RD comparison.
+          </p>
+          <div style="font-size: 1.15rem; font-family: var(--font-mono); text-align: center; margin: var(--space-xs) 0;">
+            \[
+            a_0 - b < a_i < a_0 + b
+            \]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+            Observations with running variable values outside this symmetric window are excluded from the estimation sample.
+          </p>
+        </div>
+
+        <!-- Academic Example Card -->
+        <div class="study-card" style="padding: var(--space-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8; margin-bottom: var(--space-xs);">CANONICAL APPLICATION &middot; ACADEMY SCORE THRESHOLD</div>
+          <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #1e3a8a;">Cutoff \(a_0 = 500\) with Bandwidth \(b = 25\)</h4>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #1e40af;">
+            If the academy admission cutoff is \(a_0 = 500\) and the researcher selects a bandwidth of \(b = 25\), the regression sample is restricted strictly to students scoring between <strong>475 and 525</strong>:
+            \[
+            500 - 25 < a_i < 500 + 25 \iff 475 < a_i < 525
+            \]
+            Students scoring 420 or 650 are discarded from local regression fitting.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: The Core Bias-Variance Trade-Off -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. The Core Bias?"Variance / Comparability Trade-off</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          Choosing the bandwidth \(b\) is the defining practical decision in local RD estimation. It represents a direct tension between statistical precision and causal comparability:
+        </p>
+
+        <!-- 2 Side-by-Side Trade-off Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <!-- Too Narrow -->
+          <div class="study-card" style="padding: var(--space-md); background: #fef2f2; border-left: 4px solid #dc2626;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c; margin-bottom: var(--space-xs);">BANDWIDTH TOO NARROW</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #7f1d1d;">High Variance &amp; Low Precision</h4>
+            <div style="font-size: 0.86rem; color: #991b1b; line-height: 1.6;">
+              <div style="margin-bottom: 4px;">&bull; <strong>Few Observations:</strong> Sample size \(N_{\text{local}}\) collapses.</div>
+              <div style="margin-bottom: 4px;">&bull; <strong>Large Standard Errors:</strong> Inflated sampling uncertainty.</div>
+              <div>&bull; <strong>Wide CIs:</strong> Low statistical power to detect meaningful impacts.</div>
+            </div>
+          </div>
+
+          <!-- Too Wide -->
+          <div class="study-card" style="padding: var(--space-md); background: #fffbeb; border-left: 4px solid #d97706;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-bottom: var(--space-xs);">BANDWIDTH TOO WIDE</div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #92400e;">Comparability Threat &amp; Potential Bias</h4>
+            <div style="font-size: 0.86rem; color: #78350f; line-height: 1.6;">
+              <div style="margin-bottom: 4px;">&bull; <strong>More Observations:</strong> Standard errors shrink substantially.</div>
+              <div style="margin-bottom: 4px;">&bull; <strong>Distant Units Differ:</strong> Units far from \(a_0\) diverge in unobservables.</div>
+              <div>&bull; <strong>Specification Error:</strong> Mis-specifying curvature introduces bias into \(\hat{\beta}\).</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">PRACTICE STANDARD</span>
+            <h3 class="callout-title">There is No Single "Universal" Bandwidth</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Econometric theory and applied consensus emphasize that no single bandwidth is universally correct. Best practice relies on a combination of:
+            </p>
+            <ol style="margin: 6px 0 0 1.2rem; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+              <li><strong>Substantive Theory:</strong> Domain knowledge regarding the range over which units remain plausible counterfactuals.</li>
+              <li><strong>Bandwidth Sensitivity Diagnostics:</strong> Estimating \(\hat{\beta}\) across multiple bandwidths (e.g., \(0.5\hat{b}\), \(\hat{b}\), \(1.5\hat{b}\), \(2\hat{b}\)) to verify qualitative stability.</li>
+              <li><strong>Data-Driven Optimal Procedures:</strong> Algorithmic mean-squared-error (MSE) or coverage-error-rate optimal selectors (e.g., Imbens &amp; Kalyanaraman, 2012; Cattaneo &amp; V&aacute;zquez-Bare, 2016).</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Bandwidth Sensitivity Visual -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Bandwidth Sensitivity &amp; Confidence Interval Trajectory</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          A credible Regression Discontinuity design should not hinge precariously on a single arbitrarily chosen window width. Researchers plot point estimates and 95% confidence intervals across a continuous grid of candidate bandwidths.
+        </p>
+
+        <!-- Bandwidth Sensitivity Chart (Reconstructed from Source Page 7) -->
+        <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">DIAGNOSTIC VISUALIZATION</span>
+              <h4 style="margin: 2px 0 0 0; font-size: 0.95rem;">Point Estimates &amp; 95% Confidence Intervals vs. Bandwidth \(b\)</h4>
+            </div>
+            <!-- External Legend -->
+            <div style="display: flex; gap: var(--space-sm); font-size: 0.78rem; font-weight: 600; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #2563eb; display: inline-block;"></span> Point Estimate \(\hat{\beta}(b)\)</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 2px; border-top: 2px dashed #9333ea; display: inline-block;"></span> Upper 95% CI</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 2px; border-top: 2px dashed #9333ea; display: inline-block;"></span> Lower 95% CI</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 10px; background: rgba(147, 51, 234, 0.12); display: inline-block;"></span> 95% Confidence Band</span>
+            </div>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="width: 100%; height: 360px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="bandwidthCiSvg" viewBox="0 0 740 360" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Grid lines -->
+              <line x1="60" y1="60" x2="700" y2="60" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="140" x2="700" y2="140" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="220" x2="700" y2="220" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="300" x2="700" y2="300" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+
+              <!-- Axes -->
+              <line x1="60" y1="320" x2="700" y2="320" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+              <line x1="60" y1="30" x2="60" y2="320" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+
+              <!-- Zero reference line -->
+              <line x1="60" y1="270" x2="700" y2="270" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2" />
+              <text x="52" y="274" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="end">0.0</text>
+
+              <!-- Axis labels -->
+              <text x="380" y="352" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle">Bandwidth Window b &rarr;</text>
+              <text x="20" y="175" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 20 175)">Estimated RD Effect &beta;</text>
+
+              <!-- Shaded 95% Confidence Band Area -->
+              <!-- b goes from 8 to 50. Width = 640. Left x = 90, Right x = 680 -->
+              <path d="
+                M 90 45
+                C 180 80, 300 110, 420 125
+                C 520 135, 600 142, 680 148
+                L 680 205
+                C 600 200, 520 196, 420 190
+                C 300 180, 180 215, 90 265
+                Z
+              " fill="rgba(147, 51, 234, 0.12)" />
+
+              <!-- Upper CI Dashed Curve -->
+              <path d="
+                M 90 45
+                C 180 80, 300 110, 420 125
+                C 520 135, 600 142, 680 148
+              " fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="5,3" />
+
+              <!-- Lower CI Dashed Curve -->
+              <path d="
+                M 90 265
+                C 180 215, 300 180, 420 190
+                C 520 196, 600 200, 680 205
+              " fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="5,3" />
+
+              <!-- Point Estimate Solid Curve -->
+              <path d="
+                M 90 155
+                C 180 152, 300 150, 420 155
+                C 520 162, 600 168, 680 176
+              " fill="none" stroke="#2563eb" stroke-width="3" />
+
+              <!-- Points along the curve -->
+              <circle cx="90" cy="155" r="4" fill="#2563eb" />
+              <circle cx="210" cy="152" r="4" fill="#2563eb" />
+              <circle cx="330" cy="151" r="4" fill="#2563eb" />
+              <circle cx="450" cy="157" r="4" fill="#2563eb" />
+              <circle cx="570" cy="166" r="4" fill="#2563eb" />
+              <circle cx="680" cy="176" r="4" fill="#2563eb" />
+
+              <!-- Callout annotations -->
+              <text x="100" y="35" fill="#dc2626" font-size="10" font-weight="700">Very Narrow b (High Variance)</text>
+              <text x="660" y="135" fill="#d97706" font-size="10" font-weight="700" text-anchor="end">Wide b (Bias Threat)</text>
+              <text x="380" y="140" fill="#059669" font-size="10" font-weight="700" text-anchor="middle">&uarr; Stable Point Estimates</text>
+            </svg>
+          </div>
+
+          <div style="font-size: 0.84rem; color: var(--color-text-secondary); margin-top: var(--space-xs); line-height: 1.5;">
+            <strong>Interpretation:</strong> Notice how the confidence band narrows as bandwidth \(b\) expands. Across intermediate bandwidths (\(b \approx 20\text{--}35\)), the point estimate remains remarkably stable around \(\hat{\beta} \approx 20\), demonstrating that the empirical conclusion is robust to local neighborhood choice.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Kernel Weighting & The Triangular Kernel -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Kernel Weighting &amp; The Triangular Kernel</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          Within a selected bandwidth window \(a_0 \pm b\), should every observation be treated equally? Standard local linear regression applies <strong>kernel weighting</strong>:
+        </p>
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid #059669; margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #047857; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            KERNEL WEIGHTING DEFINITION
+          </div>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; line-height: 1.6;">
+            In <strong>kernel weighting</strong>, observations closer to the cutoff \(a_0\) receive the highest weight in estimation, while weights decline for observations situated near the outer boundaries of the bandwidth.
+          </p>
+          <div style="font-size: 1.05rem; font-family: var(--font-mono); text-align: center; margin: var(--space-xs) 0;">
+            \[
+            K(u) = (1 - |u|) \cdot \mathbf{1}(|u| \le 1), \quad \text{where } u = \frac{a_i - a_0}{b}
+            \]
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+            <strong>The Triangular Kernel:</strong> The triangular kernel assigns maximum weight \(K(0) = 1\) directly at the threshold \(a_0\), tapering down linearly to \(0\) at the bandwidth edges \(a_0 - b\) and \(a_0 + b\). It emphasizes units with the strongest local comparability without relying on distant units.
+          </p>
+        </div>
+
+        <!-- Triangular Kernel Diagram (Reconstructed from Source Page 8) -->
+        <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <span style="font-size: 0.75rem; font-weight: 700; color: #047857;">TRIANGULAR KERNEL WEIGHT FUNCTION</span>
+            <span class="badge" style="background: #dcfce7; color: #166534; font-size: 0.7rem;">Optimal Boundary Properties</span>
+          </div>
+
+          <div style="width: 100%; height: 260px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg viewBox="0 0 680 260" style="width: 100%; height: 100%;">
+              <!-- Axes -->
+              <line x1="60" y1="210" x2="620" y2="210" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+              <line x1="340" y1="40" x2="340" y2="210" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3" />
+
+              <!-- Bandwidth boundaries -->
+              <line x1="160" y1="40" x2="160" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="520" y1="40" x2="520" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3" />
+
+              <!-- Boundary labels -->
+              <text x="160" y="228" fill="var(--color-text-secondary)" font-size="11" font-weight="600" text-anchor="middle">a₀ &minus; b</text>
+              <text x="340" y="228" fill="#dc2626" font-size="11" font-weight="700" text-anchor="middle">Cutoff a₀ (Peak)</text>
+              <text x="520" y="228" fill="var(--color-text-secondary)" font-size="11" font-weight="600" text-anchor="middle">a₀ + b</text>
+
+              <!-- Triangular shaded area -->
+              <polygon points="160,210 340,60 520,210" fill="rgba(5, 150, 105, 0.15)" stroke="#059669" stroke-width="3" />
+
+              <!-- Max Weight Peak point -->
+              <circle cx="340" cy="60" r="5" fill="#059669" />
+              <text x="340" y="50" fill="#047857" font-size="11" font-weight="700" text-anchor="middle">Max Weight: K(0) = 1.0</text>
+
+              <!-- Zero weight labels at edges -->
+              <text x="155" y="200" fill="#047857" font-size="10" font-weight="600" text-anchor="end">Weight = 0</text>
+              <text x="525" y="200" fill="#047857" font-size="10" font-weight="600" text-anchor="start">Weight = 0</text>
+
+              <!-- Outer zero weight lines -->
+              <line x1="80" y1="210" x2="160" y2="210" stroke="#94a3b8" stroke-width="2.5" />
+              <line x1="520" y1="210" x2="600" y2="210" stroke="#94a3b8" stroke-width="2.5" />
+              <text x="110" y="198" fill="#94a3b8" font-size="10" font-weight="600">Weight = 0</text>
+              <text x="540" y="198" fill="#94a3b8" font-size="10" font-weight="600">Weight = 0</text>
+
+              <!-- Y-axis arrow -->
+              <line x1="60" y1="210" x2="60" y2="50" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+              <text x="25" y="130" fill="var(--color-text)" font-size="11" font-weight="600" text-anchor="middle" transform="rotate(-90 25 130)">Kernel Weight K(u)</text>
+              <text x="340" y="250" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle">Running Variable a</text>
+            </svg>
+          </div>
+
+          <div style="font-size: 0.84rem; color: var(--color-text-secondary); margin-top: var(--space-xs); line-height: 1.5;">
+            <strong>Academic Precision Note:</strong> A triangular kernel does not magically "eliminate bias." Rather, it has mathematically optimal properties for boundary estimation in local linear regression (minimizing asymptotic mean-squared error at boundary points).
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 15.4 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Interactive Lab 15.4: Bandwidth &amp; Kernel Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          
+          <!-- Lab Header -->
+          <div class="lab-header" style="margin-bottom: var(--space-md);">
+            <div>
+              <span class="lab-badge">INTERACTIVE LAB 15.4</span>
+              <h3 class="lab-title" style="margin: var(--space-2xs) 0;">Bandwidth &amp; Kernel Explorer</h3>
+              <p class="lab-desc">Vary the bandwidth window \(b\) and toggle between Uniform and Triangular kernel weighting. Observe how the effective sample size, local regression fits, and standard errors respond.</p>
+            </div>
+          </div>
+
+          <!-- Controls Toolbar -->
+          <div class="lab-controls-toolbar" style="display: flex; flex-wrap: wrap; gap: var(--space-md); padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: var(--space-md);">
+            <!-- Kernel Toggle -->
+            <div>
+              <label style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">KERNEL WEIGHTING</label>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="btnKernelUniform" class="btn btn-sm btn-outline">Uniform (Flat)</button>
+                <button type="button" id="btnKernelTriangular" class="btn btn-sm btn-primary">Triangular (Peak)</button>
+              </div>
+            </div>
+
+            <!-- Bandwidth Slider -->
+            <div style="flex: 2; min-width: 220px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>BANDWIDTH WINDOW (b)</span>
+                <span id="labelBandwidth">b = 20.0 (Window: [30, 70])</span>
+              </div>
+              <input type="range" id="sliderBandwidth" min="6" max="38" step="2" value="20" style="width: 100%;">
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">EFFECTIVE LOCAL N</div>
+              <div id="metricLocalN" style="font-size: 1.3rem; font-weight: 700; color: var(--color-primary);">42 units</div>
+              <div id="subLocalN" style="font-size: 0.75rem; color: var(--color-text-secondary);">Inside [a₀ &plusmn; b]</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">BANDWIDTH INTERVAL</div>
+              <div id="metricInterval" style="font-size: 1.15rem; font-weight: 700; color: #d97706;">[30.0, 70.0]</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Cutoff a₀ = 50</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">ESTIMATED DISCONTINUITY</div>
+              <div id="metricJumpEst" style="font-size: 1.3rem; font-weight: 700; color: #7c3aed;">+20.4</div>
+              <div style="font-size: 0.75rem; font-weight: 600; color: #059669;">&beta; Estimate</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">STANDARD ERROR (SE)</div>
+              <div id="metricSE" style="font-size: 1.3rem; font-weight: 700; color: #2563eb;">&plusmn; 2.15</div>
+              <div id="subSE" style="font-size: 0.75rem; color: var(--color-text-secondary);">95% CI: [16.2, 24.6]</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div class="external-legend-bar" style="margin-bottom: var(--space-xs); font-size: 0.78rem;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: #2563eb; border-radius: 50%; display: inline-block;"></span> Included Unit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%; display: inline-block;"></span> Excluded Unit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #2563eb; display: inline-block;"></span> Local Control Fit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #059669; display: inline-block;"></span> Local Treated Fit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 2px; border-top: 2px dashed #dc2626; display: inline-block;"></span> Cutoff a₀ = 50</span>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 370px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="lab154Svg" viewBox="0 0 740 370" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Callout -->
+          <div id="lab154Insight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.5;">
+            <strong>Trade-off Insight:</strong> <span id="lab154InsightText">With bandwidth b = 20.0, the estimation focuses on 42 local units within [30, 70]. Triangular weighting emphasizes points nearest to the cutoff, yielding a balanced standard error of &plusmn;2.15.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Observations highlighted in blue fall inside the active window \([a_0 - b, a_0 + b]\); gray points outside are trimmed.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                As you shrink \(b\) toward 6, the standard error widens substantially as \(N_{\text{local}}\) falls, illustrating the precision loss.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Expanding \(b\) excessively pulls in distant units where unobservable confounders may bias the estimated discontinuity.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Triangular weighting minimizes asymptotic MSE at the boundary, ensuring maximum weight on the most comparable units.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Switch between <em>Uniform</em> and <em>Triangular</em>. Notice how triangular weighting downweights distant points at the window edges.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> What is the main statistical trade-off when an empirical researcher chooses a very narrow bandwidth?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint154">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol154">Show Solution</button>
+        </div>
+        <div id="hint154" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Consider how sample size and comparability change as you look closer and closer to the threshold.
+          </p>
+        </div>
+        <div id="sol154" class="practice-accordion-panel">
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            The observations are more local to the cutoff, but fewer observations remain, increasing sampling uncertainty.
+          </p>
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            A narrower bandwidth ensures that the units being compared are as close as possible to the cutoff, minimizing potential bias from curvature or unobserved confounders. However, it severely reduces the effective sample size \(N_{\text{local}}\), inflating the variance of \(\hat{\beta}\) and producing wider confidence intervals.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 15.4 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Bandwidth selection governs the fundamental bias-variance trade-off in nonparametric and local linear RD estimation. Narrow windows minimize specification bias by comparing units closest to the threshold, but inflate sampling variance due to reduced sample sizes. Data-driven algorithms optimize this trade-off, while triangular kernels assign maximum weight to observations at the cutoff. Robust empirical practice requires presenting bandwidth sensitivity curves to prove findings are stable across windows. Next, we extend RD to imperfect compliance settings using Fuzzy RD and the Wald estimator.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 15</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-15" data-lesson="4" style="align-self: center;">
+          &check; Mark Lesson Complete
+        </button>
+        <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">Fuzzy RD &amp; the Wald Estimator</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <script>
+    (function() {
+      let b = 20.0;
+      let kernelType = 'triangular'; // 'uniform' or 'triangular'
+      const cutoff = 50.0;
+      const trueJump = 20.0;
+
+      const sliderBandwidth = document.getElementById('sliderBandwidth');
+      const labelBandwidth = document.getElementById('labelBandwidth');
+
+      const btnKernelUniform = document.getElementById('btnKernelUniform');
+      const btnKernelTriangular = document.getElementById('btnKernelTriangular');
+
+      const metricLocalN = document.getElementById('metricLocalN');
+      const subLocalN = document.getElementById('subLocalN');
+      const metricInterval = document.getElementById('metricInterval');
+      const metricJumpEst = document.getElementById('metricJumpEst');
+      const metricSE = document.getElementById('metricSE');
+      const subSE = document.getElementById('subSE');
+
+      const labInsightText = document.getElementById('lab154InsightText');
+      const svg = document.getElementById('lab154Svg');
+
+      // Fixed sample of 80 points
+      const sample = [];
+      const N_total = 80;
+      for (let i = 0; i < N_total; i++) {
+        const a = 12 + (i / (N_total - 1)) * 76;
+        const noise = Math.sin(i * 3.4) * 4.2 + Math.cos(i * 1.8) * 3.0;
+        let y = 18 + 0.60 * a + noise;
+        if (a >= cutoff) {
+          y += trueJump;
+        }
+        sample.push({ a, y });
+      }
+
+      function updateLab() {
+        const lowerBound = Math.max(10, cutoff - b);
+        const upperBound = Math.min(90, cutoff + b);
+
+        labelBandwidth.textContent = `b = ${b.toFixed(1)} (Window: [${lowerBound.toFixed(1)}, ${upperBound.toFixed(1)}])`;
+        metricInterval.textContent = `[${lowerBound.toFixed(1)}, ${upperBound.toFixed(1)}]`;
+
+        // Filter local units
+        const localUnits = sample.filter(pt => pt.a > lowerBound && pt.a < upperBound);
+        const nLocal = localUnits.length;
+        metricLocalN.textContent = `${nLocal} units`;
+        subLocalN.textContent = `Out of ${N_total} total`;
+
+        // Standard Error proxy: proportional to 1 / sqrt(nLocal)
+        // With triangular kernel, effective variance is slightly higher than uniform for same b, but bias is lower
+        const kernelFactor = kernelType === 'triangular' ? 1.15 : 1.0;
+        const se = (14.0 / Math.sqrt(Math.max(4, nLocal))) * kernelFactor;
+        
+        // Point estimate slightly stabilizes as b grows
+        const estJump = trueJump + (kernelType === 'triangular' ? 0.3 : 0.7) * (b / 20.0);
+        metricJumpEst.textContent = `+${estJump.toFixed(1)}`;
+        metricSE.textContent = `± ${se.toFixed(2)}`;
+        subSE.textContent = `95% CI: [${(estJump - 1.96 * se).toFixed(1)}, ${(estJump + 1.96 * se).toFixed(1)}]`;
+
+        if (b < 12) {
+          labInsightText.textContent = `Narrow Bandwidth (b = ${b.toFixed(1)}): Only ${nLocal} units are included. While units are closely comparable, sampling variance is elevated (SE = ±${se.toFixed(2)}).`;
+        } else if (b > 30) {
+          labInsightText.textContent = `Wide Bandwidth (b = ${b.toFixed(1)}): Effective sample is large (${nLocal} units, SE = ±${se.toFixed(2)}), but units near ${lowerBound.toFixed(0)} and ${upperBound.toFixed(0)} may threaten local counterfactual comparability.`;
+        } else {
+          labInsightText.textContent = `Balanced Window (b = ${b.toFixed(1)}): Focuses on ${nLocal} units within [${lowerBound.toFixed(1)}, ${upperBound.toFixed(1)}]. ${kernelType === 'triangular' ? 'Triangular weighting prioritizes points nearest to cutoff.' : 'Uniform weighting treats all window points equally.'} Precision is strong (SE = ±${se.toFixed(2)}).`;
+        }
+
+        renderVisualizer(lowerBound, upperBound, estJump);
+      }
+
+      function renderVisualizer(lowerBound, upperBound, estJump) {
+        const width = 740;
+        const height = 370;
+        const padL = 60;
+        const padR = 40;
+        const padT = 30;
+        const padB = 45;
+
+        const minA = 10, maxA = 90;
+        const minY = 10, maxY = 115;
+
+        function scaleX(a) {
+          return padL + ((a - minA) / (maxA - minA)) * (width - padL - padR);
+        }
+        function scaleY(y) {
+          return height - padB - ((y - minY) / (maxY - minY)) * (height - padT - padB);
+        }
+
+        const cutoffX = scaleX(cutoff);
+        const lowX = scaleX(lowerBound);
+        const highX = scaleX(upperBound);
+
+        let html = `
+          <!-- Active Bandwidth Window Shaded Area -->
+          <rect x="${lowX.toFixed(1)}" y="${padT}" width="${(highX - lowX).toFixed(1)}" height="${height - padT - padB}" fill="rgba(37, 99, 235, 0.06)" />
+
+          <!-- Bandwidth Boundary Dashed Lines -->
+          <line x1="${lowX.toFixed(1)}" y1="${padT}" x2="${lowX.toFixed(1)}" y2="${height - padB}" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,3" />
+          <line x1="${highX.toFixed(1)}" y1="${padT}" x2="${highX.toFixed(1)}" y2="${height - padB}" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,3" />
+          <text x="${lowX.toFixed(1)}" y="${padT - 8}" fill="#2563eb" font-size="10" font-weight="600" text-anchor="middle">a₀ - b</text>
+          <text x="${highX.toFixed(1)}" y="${padT - 8}" fill="#2563eb" font-size="10" font-weight="600" text-anchor="middle">a₀ + b</text>
+
+          <!-- Axes -->
+          <line x1="${padL}" y1="${height - padB}" x2="${width - padR}" y2="${height - padB}" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${height - padB}" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+
+          <!-- Cutoff Line -->
+          <line x1="${cutoffX}" y1="${padT}" x2="${cutoffX}" y2="${height - padB}" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,4" />
+          <text x="${cutoffX}" y="${padT - 8}" fill="#dc2626" font-size="11" font-weight="700" text-anchor="middle">Cutoff a₀ = 50</text>
+
+          <!-- Axis Labels -->
+          <text x="${(width + padL - padR) / 2}" y="${height - 10}" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle">Running Variable a</text>
+          <text x="18" y="${(height + padT - padB) / 2}" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 18 ${(height + padT - padB) / 2})">Outcome Y</text>
+        `;
+
+        // If triangular kernel: draw a faint triangular envelope in the background of the window
+        if (kernelType === 'triangular') {
+          const triPeakY = scaleY(110);
+          const triBaseY = height - padB;
+          html += `<polygon points="${lowX.toFixed(1)},${triBaseY} ${cutoffX},${triPeakY} ${highX.toFixed(1)},${triBaseY}" fill="rgba(5, 150, 105, 0.08)" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" />`;
+          html += `<text x="${cutoffX}" y="${triPeakY - 4}" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">Triangular Weight Peak</text>`;
+        }
+
+        // Draw scatter data
+        sample.forEach(pt => {
+          const isInside = pt.a > lowerBound && pt.a < upperBound;
+          const cx = scaleX(pt.a);
+          const cy = scaleY(pt.y);
+
+          if (isInside) {
+            // Weight calculation for sizing/opacity
+            let w = 1.0;
+            if (kernelType === 'triangular') {
+              w = 1.0 - Math.abs(pt.a - cutoff) / b;
+            }
+            const r = 3 + w * 2.5;
+            const op = 0.4 + w * 0.55;
+            html += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="#2563eb" opacity="${op.toFixed(2)}" />`;
+          } else {
+            // Excluded point
+            html += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="2.8" fill="#cbd5e1" opacity="0.4" />`;
+          }
+        });
+
+        // Fitted line inside window (Control left)
+        const leftX1 = lowX;
+        const leftY1 = scaleY(18 + 0.60 * lowerBound);
+        const leftX2 = cutoffX;
+        const leftY2 = scaleY(18 + 0.60 * cutoff);
+        html += `<line x1="${leftX1}" y1="${leftY1}" x2="${leftX2}" y2="${leftY2}" stroke="#2563eb" stroke-width="3" />`;
+        html += `<circle cx="${leftX2}" cy="${leftY2}" r="4.5" fill="#2563eb" />`;
+
+        // Fitted line inside window (Treated right)
+        const rightX1 = cutoffX;
+        const rightY1 = scaleY(18 + 0.60 * cutoff + estJump);
+        const rightX2 = highX;
+        const rightY2 = scaleY(18 + 0.60 * upperBound + estJump);
+        html += `<line x1="${rightX1}" y1="${rightY1}" x2="${rightX2}" y2="${rightY2}" stroke="#059669" stroke-width="3" />`;
+        html += `<circle cx="${rightX1}" cy="${rightY1}" r="4.5" fill="#059669" />`;
+
+        // Discontinuity gap indicator
+        html += `<line x1="${cutoffX}" y1="${leftY2}" x2="${cutoffX}" y2="${rightY1}" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="3,3" />`;
+        html += `<rect x="${cutoffX + 8}" y="${(leftY2 + rightY1)/2 - 11}" width="80" height="22" rx="3" fill="#7c3aed" opacity="0.12" />`;
+        html += `<text x="${cutoffX + 48}" y="${(leftY2 + rightY1)/2 + 4}" fill="#6d28d9" font-size="10" font-weight="700" text-anchor="middle">&beta; = +${estJump.toFixed(1)}</text>`;
+
+        svg.innerHTML = html;
+      }
+
+      sliderBandwidth.addEventListener('input', (e) => {
+        b = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      btnKernelUniform.addEventListener('click', () => {
+        kernelType = 'uniform';
+        btnKernelUniform.className = 'btn btn-sm btn-primary';
+        btnKernelTriangular.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+
+      btnKernelTriangular.addEventListener('click', () => {
+        kernelType = 'triangular';
+        btnKernelUniform.className = 'btn btn-sm btn-outline';
+        btnKernelTriangular.className = 'btn btn-sm btn-primary';
+        updateLab();
+      });
+
+      // Quick check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

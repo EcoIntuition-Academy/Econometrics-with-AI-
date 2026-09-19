@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17.1: Likelihood Ratio Tests — EcoIntuition Academy</title>
+  <meta name="description" content="Master the Likelihood Ratio (LR) test: formulate restricted and unrestricted likelihood functions, understand parameter restrictions, compute the test statistic, and apply the likelihood ratio asymptotic theorem.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-17" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 17: Hypothesis Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 17</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 17</a>
+          <span class="module-nav-title">Hypothesis Tests &amp; GMM</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; Likelihood Ratio Tests</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 17 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">17.1 Likelihood Ratio Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.2 The Wald Test &amp; Delta-Method Variance</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.3 LM / Score Tests &amp; Comparing LR, Wald, LM</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.4 GMM Foundations: Moments, Plims &amp; OLS</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.5 GMM with Instruments: IV &amp; Weighting</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.6 Efficient GMM, Hansen J &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 17.1</span>
+        <span class="badge">Likelihood Inference</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Likelihood Ratio Tests
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Learn how econometric hypothesis testing imposes restrictions directly on the likelihood function, compare unrestricted and restricted maxima, define the likelihood ratio statistic, and establish its asymptotic chi-squared distribution.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand how a hypothesis test acts as a parametric restriction on the parameter space of the likelihood function.</li>
+        <li>Distinguish between unrestricted estimates \(\hat{\boldsymbol{\theta}}_U\) and restricted estimates \(\hat{\boldsymbol{\theta}}_R\).</li>
+        <li>Formulate the likelihood ratio \(\lambda_{LR} = L_R / L_U\) and its log-transformation \(-2 \ln \lambda_{LR}\).</li>
+        <li>Establish the asymptotic \(\chi^2_q\) distribution under the null hypothesis.</li>
+        <li>Master the foundational intuition: if a restriction is valid, imposing it should not reduce the likelihood substantially.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Definition and Intuition -->
+    <section class="lesson-section">
+      <h2 class="section-title">1. Restrictions on the Likelihood Function</h2>
+      <p>
+        In maximum likelihood estimation, a hypothesis test imposes a restriction on the likelihood function. When no restrictions are imposed, we choose all parameters freely to achieve the highest possible probability density of the observed sample.
+      </p>
+      <p>
+        Consider the source example where our null hypothesis is that the first parameter equals a specific constant:
+      </p>
+
+      <!-- Equation Card: Restricted Hypothesis -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">HYPOTHESIS SPECIFICATION</span>
+          <h3 class="equation-title">Null Hypothesis as a Parameter Restriction</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          H_0 : \theta_1 = 1
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\theta_1\)</span>
+              <span class="symbol-desc">The parameter of interest restricted under the null hypothesis.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(1\)</span>
+              <span class="symbol-desc">The hypothesized constant value imposed on \(\theta_1\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(q = 1\)</span>
+              <span class="symbol-desc">Number of parameter restrictions being tested.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        When estimating under the restriction, we no longer choose \(\hat{\theta}_1\) to maximize the likelihood freely. Instead, we hold \(\theta_1 = 1\) fixed and maximize the likelihood over the remaining parameters.
+      </p>
+
+      <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0;">
+        <div class="study-card" style="border-top: 3px solid var(--color-primary);">
+          <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 700; color: var(--color-text);">Unrestricted Model</h4>
+          <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-xs);">
+            Estimate all parameters freely by maximizing the likelihood without constraints:
+          </p>
+          <p style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-primary); font-weight: 600; margin: 0;">
+            \(\hat{\boldsymbol{\theta}}_U = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\)
+          </p>
+          <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-xs);">
+            Attains the global maximum likelihood value: \(L_U = L(\hat{\boldsymbol{\theta}}_U)\).
+          </p>
+        </div>
+
+        <div class="study-card" style="border-top: 3px solid var(--color-warning);">
+          <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 700; color: var(--color-text);">Restricted Model</h4>
+          <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-xs);">
+            Hold \(\theta_1 = 1\) fixed and maximize over the remaining parameters:
+          </p>
+          <p style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-warning); font-weight: 600; margin: 0;">
+            \(\hat{\boldsymbol{\theta}}_R = \arg\max_{\boldsymbol{\theta} \in \Theta_0} L(\boldsymbol{\theta})\)
+          </p>
+          <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-xs);">
+            Attains the constrained maximum likelihood value: \(L_R = L(\hat{\boldsymbol{\theta}}_R)\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Intuition Callout -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border-left: 4px solid var(--color-primary); margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: var(--color-primary); font-weight: 700;">
+          💡 Core Pedagogical Intuition
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          <strong>"If the restriction is valid, imposing it should not reduce the likelihood very much."</strong><br>
+          Because the unrestricted estimator searches over the entire parameter space, \(L_U \ge L_R\) always holds. If the hypothesized restriction is true in the population, the unconstrained maximum should naturally occur close to the restricted subspace, causing only a minor loss in likelihood. Conversely, a large drop in likelihood suggests that the restriction is inconsistent with the data.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Likelihood Ratio Test Statistic -->
+    <section class="lesson-section">
+      <h2 class="section-title">2. The Likelihood Ratio Test Statistic</h2>
+      <p>
+        To formalize this intuition, we construct the likelihood ratio \(\lambda_{LR}\) by comparing the constrained and unconstrained likelihood values:
+      </p>
+
+      <!-- Equation Card: LR Statistic -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">TEST STATISTIC &middot; LIKELIHOOD RATIO</span>
+          <h3 class="equation-title">Likelihood Ratio and Asymptotic Chi-Squared Statistic</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \lambda_{LR} = \frac{L_R}{L_U}, \quad \text{or equivalently:} \quad -2 \ln \lambda_{LR} = 2 \left[ \ln L_U - \ln L_R \right]
+          \]
+          \[
+          -2 \ln \lambda_{LR} \xrightarrow{d} \chi^2_q \quad \text{under } H_0
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\lambda_{LR}\)</span>
+              <span class="symbol-desc">The likelihood ratio, strictly bounded in the interval \([0, 1]\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(L_R\)</span>
+              <span class="symbol-desc">Likelihood function evaluated at the restricted parameter estimates \(\hat{\boldsymbol{\theta}}_R\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(L_U\)</span>
+              <span class="symbol-desc">Likelihood function evaluated at the unrestricted parameter estimates \(\hat{\boldsymbol{\theta}}_U\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(q\)</span>
+              <span class="symbol-desc">Number of independent restrictions imposed by the null hypothesis \(H_0\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\chi^2_q\)</span>
+              <span class="symbol-desc">Chi-squared distribution with \(q\) degrees of freedom.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Student Mistake -->
+      <div class="common-mistake-card">
+        <div class="mistake-header">
+          <span class="mistake-icon">⚠️</span>
+          <h4 class="mistake-title">Common Student Mistake: Ratio Direction</h4>
+        </div>
+        <div class="mistake-body">
+          <p>
+            <strong>MISCONCEPTION:</strong> "A small likelihood ratio \(\lambda_{LR}\) value supports the restriction because small values mean the restriction changed very little."
+          </p>
+          <p>
+            <strong>CORRECTION:</strong> As the authoritative source emphasizes, <em>"If the ratio is too small, the restricted likelihood is too low compared to the unrestricted one, so we reject \(H_0\)."</em> Because \(\lambda_{LR} = L_R / L_U \le 1\), when \(L_R \ll L_U\), the ratio \(\lambda_{LR} \to 0\), causing \(\ln \lambda_{LR} \to -\infty\) and \(-2 \ln \lambda_{LR} \to +\infty\). A small ratio is decisive evidence <strong>against</strong> the restriction!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 17.1 -->
+    <section class="lesson-section">
+      <h2 class="section-title">3. Interactive Lab 17.1: The Likelihood Ratio Curve</h2>
+      <p>
+        Explore how the Likelihood Ratio test measures the drop in likelihood when moving away from the unconstrained maximum likelihood estimate \(\hat{\theta}_U\).
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">INTERACTIVE LAB 17.1</div>
+          <h3 class="lab-title">Visualizing the Likelihood Drop and Test Statistic</h3>
+          <p class="lab-desc">
+            Adjust the restricted parameter value \(\theta_0\) relative to the unrestricted maximum \(\hat{\theta}_U = 1.00\). Watch the restricted likelihood \(L_R\) fall, the likelihood ratio \(\lambda_{LR}\) shrink, and the test statistic \(-2 \ln \lambda_{LR}\) cross the critical threshold.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div class="lab-control-group">
+            <label for="theta0Slider">Restricted Value \(\theta_0\): <span id="theta0Val" style="font-weight: 700; color: var(--color-primary);">1.00</span></label>
+            <input type="range" id="theta0Slider" min="0.00" max="2.40" step="0.05" value="1.00" class="lab-slider">
+          </div>
+          <div class="lab-control-group">
+            <label for="curvatureSlider">Log-Likelihood Curvature (Information \(I\)): <span id="curvVal" style="font-weight: 700; color: var(--color-secondary);">10.0</span></label>
+            <input type="range" id="curvatureSlider" min="4.0" max="20.0" step="1.0" value="10.0" class="lab-slider">
+          </div>
+        </div>
+
+        <!-- 2x2 Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Unrestricted Max \(\ln L_U\)</div>
+            <div class="metric-value" id="metricLogLU">-50.00</div>
+            <div class="metric-subtext">Peak log-likelihood at \(\hat{\theta}_U = 1.00\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Restricted Value \(\ln L_R\)</div>
+            <div class="metric-value" id="metricLogLR">-50.00</div>
+            <div class="metric-subtext">Constrained log-likelihood at \(\theta_0\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Likelihood Ratio \(\lambda_{LR}\)</div>
+            <div class="metric-value" id="metricRatio" style="color: #2563eb;">1.000</div>
+            <div class="metric-subtext">Ratio \(L_R / L_U \in [0, 1]\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Test Statistic \(-2 \ln \lambda_{LR}\)</div>
+            <div class="metric-value" id="metricStat" style="color: #10b981;">0.00</div>
+            <div class="metric-subtext">Critical \(\chi^2_1(0.05) = 3.84\)</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #2563eb;"></span>
+            <span>Log-Likelihood Curve \(\ln L(\theta)\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span>
+            <span>Unrestricted Maximum \(\hat{\theta}_U\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span>
+            <span>Restricted Point \(\theta_0\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #f59e0b;"></span>
+            <span>Vertical Likelihood Drop</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="min-height: 380px;">
+          <svg id="lrSvg" viewBox="0 0 760 360" width="100%" height="360" style="overflow: visible; font-family: var(--font-sans);"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            At \(\theta_0 = 1.00\), the restriction perfectly coincides with the unconstrained maximum. There is zero loss in likelihood (\(\lambda_{LR} = 1.000\)), yielding a test statistic of 0.00 and failing to reject \(H_0\).
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The blue parabolic curve depicts the log-likelihood function \(\ln L(\theta)\). The green dot marks the unrestricted maximum \(\hat{\theta}_U = 1.00\) with height \(\ln L_U\), while the red marker indicates the restricted candidate \(\theta_0\) with height \(\ln L_R\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                Because \(\hat{\theta}_U\) maximizes the likelihood globally, \(\ln L_R \le \ln L_U\) in every case. As you drag \(\theta_0\) farther away, the vertical drop \(\ln L_U - \ln L_R\) expands quadratically, causing the test statistic to surge.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The Likelihood Ratio test directly gauges empirical fit penalty. Imposing a false restriction forces the model into low-probability regions of the sample space, producing a massive drop in likelihood that cannot be explained by sampling noise alone.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                Under standard regularity conditions, \(-2 \ln \lambda_{LR} \xrightarrow{d} \chi^2_1\). Once the statistic crosses 3.84, the p-value falls below 0.05, leading to rejection of the null hypothesis at the 5% significance level.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Increase the curvature slider from 10 to 20 to represent greater sample information. Notice how the same parameter deviation \(|\theta_0 - \hat{\theta}_U|\) now creates a much steeper drop, quadrupling the test statistic!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2 class="section-title">4. Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-meta">
+          <span class="badge badge-outline">CONCEPT CHECK</span>
+          <span class="badge badge-secondary">Likelihood Comparison</span>
+        </div>
+        <h3 class="practice-question">
+          Why does a very small likelihood ratio \(\lambda_{LR}\) indicate strong evidence <em>against</em> the null hypothesis \(H_0\)?
+        </h3>
+        <div class="practice-actions">
+          <button class="btn btn-secondary btn-sm hint-toggle" data-toggle-target="hint171">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol171">
+            Show Solution
+          </button>
+        </div>
+        <div id="hint171" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Hint:</strong> Recall the definition \(\lambda_{LR} = L_R / L_U\). What does it mean for this ratio to approach zero? How does the restricted model's ability to explain the data compare to the unrestricted model?
+          </p>
+        </div>
+        <div id="sol171" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> Because \(\lambda_{LR} = L_R / L_U\), a small ratio implies that \(L_R\) is minuscule relative to \(L_U\). Imposing the restriction dramatically reduces the probability of observing the actual sample data. Under \(H_0\), the reduction should be small sampling variation; a massive drop causes \(-2 \ln \lambda_{LR}\) to become very large, rejecting \(H_0\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 17.1 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        The Likelihood Ratio test constitutes the first of the classical testing trinity:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Restriction Formulation:</strong> Hypotheses constrain the parameter space (e.g., \(\theta_1 = 1\)), yielding restricted estimates \(\hat{\boldsymbol{\theta}}_R\) and unrestricted estimates \(\hat{\boldsymbol{\theta}}_U\).</li>
+        <li><strong>Ratio Definition:</strong> \(\lambda_{LR} = L_R / L_U\), taking values between 0 and 1 because \(L_R \le L_U\) always holds.</li>
+        <li><strong>Asymptotic Distribution:</strong> Under regularity conditions, \(-2 \ln \lambda_{LR} = 2[\ln L_U - \ln L_R] \xrightarrow{d} \chi^2_q\), where \(q\) is the number of restrictions.</li>
+        <li><strong>Core Intuition:</strong> Valid restrictions do not substantially depress the likelihood; significant likelihood drops lead to rejection.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module Overview</span>
+          <span class="nav-btn-title">Module 17 Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-17" data-lesson="1" style="align-self: center;">
+          ✓ Mark Lesson 1 Complete
+        </button>
+        <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">The Wald Test &amp; Delta Method</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Interactive Lab 17.1 Script -->
+  <script>
+    const theta0Slider = document.getElementById('theta0Slider');
+    const curvatureSlider = document.getElementById('curvatureSlider');
+    const theta0Val = document.getElementById('theta0Val');
+    const curvVal = document.getElementById('curvVal');
+    const metricLogLU = document.getElementById('metricLogLU');
+    const metricLogLR = document.getElementById('metricLogLR');
+    const metricRatio = document.getElementById('metricRatio');
+    const metricStat = document.getElementById('metricStat');
+    const labInsightText = document.getElementById('labInsightText');
+    const labInsightContainer = document.getElementById('labInsightContainer');
+    const lrSvg = document.getElementById('lrSvg');
+
+    function updateLRPlot() {
+      const theta0 = parseFloat(theta0Slider.value);
+      const curv = parseFloat(curvatureSlider.value);
+      theta0Val.textContent = theta0.toFixed(2);
+      curvVal.textContent = curv.toFixed(1);
+
+      const thetaU = 1.0;
+      const logLU = -50.0;
+      const drop = 0.5 * curv * Math.pow(theta0 - thetaU, 2);
+      const logLR = logLU - drop;
+      const stat = 2 * drop;
+      const ratio = Math.exp(-drop);
+
+      metricLogLU.textContent = logLU.toFixed(2);
+      metricLogLR.textContent = logLR.toFixed(2);
+      metricRatio.textContent = ratio.toFixed(4);
+      metricStat.textContent = stat.toFixed(2);
+
+      if (stat > 3.841) {
+        metricStat.style.color = '#ef4444';
+        labInsightContainer.style.borderLeftColor = '#ef4444';
+        labInsightContainer.style.background = 'rgba(239, 68, 68, 0.05)';
+        labInsightText.innerHTML = 'At \\(\\theta_0 = ' + theta0.toFixed(2) + '\\), the test statistic <strong>' + stat.toFixed(2) + '</strong> exceeds the \\(\\chi^2_1\\) critical value (3.84). The likelihood ratio \\(\\lambda_{LR} = ' + ratio.toFixed(4) + '\\) is so small that we <strong>decisively reject \\(H_0\\)</strong>.';
+      } else {
+        metricStat.style.color = '#10b981';
+        labInsightContainer.style.borderLeftColor = '#10b981';
+        labInsightContainer.style.background = 'rgba(16, 185, 129, 0.05)';
+        labInsightText.innerHTML = 'At \\(\\theta_0 = ' + theta0.toFixed(2) + '\\), the test statistic <strong>' + stat.toFixed(2) + '</strong> is below the \\(\\chi^2_1\\) critical threshold (3.84). The likelihood drop is modest (\\(\\lambda_{LR} = ' + ratio.toFixed(4) + '\\)), so we <strong>fail to reject \\(H_0\\)</strong>.';
+      }
+
+      // Redraw SVG
+      const width = 760;
+      const height = 360;
+      const margin = { top: 35, right: 45, bottom: 50, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      function xToPix(th) {
+        return margin.left + ((th - 0.0) / 2.4) * plotW;
+      }
+      function yToPix(l) {
+        return margin.top + ((-48.0 - l) / 17.0) * plotH;
+      }
+
+      let curvePts = [];
+      for (let th = 0.0; th <= 2.4; th += 0.02) {
+        let lVal = logLU - 0.5 * curv * Math.pow(th - thetaU, 2);
+        if (lVal < -65.0) lVal = -65.0;
+        curvePts.push(xToPix(th).toFixed(1) + ',' + yToPix(lVal).toFixed(1));
+      }
+
+      const xU_pix = xToPix(thetaU);
+      const yU_pix = yToPix(logLU);
+      const x0_pix = xToPix(theta0);
+      const y0_pix = yToPix(Math.max(-65.0, logLR));
+
+      let svgHtml = `
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+          </marker>
+        </defs>
+
+        <!-- Grid Lines -->
+        <line x1="${margin.left}" y1="${yToPix(-50)}" x2="${width - margin.right}" y2="${yToPix(-50)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+        <line x1="${margin.left}" y1="${yToPix(-55)}" x2="${width - margin.right}" y2="${yToPix(-55)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+        <line x1="${margin.left}" y1="${yToPix(-60)}" x2="${width - margin.right}" y2="${yToPix(-60)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+
+        <!-- Axes -->
+        <line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+
+        <!-- X Ticks -->
+        <text x="${xToPix(0.0)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">0.0</text>
+        <text x="${xToPix(0.5)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">0.5</text>
+        <text x="${xToPix(1.0)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)" font-weight="700">1.0 (\u03B8̂_U)</text>
+        <text x="${xToPix(1.5)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">1.5</text>
+        <text x="${xToPix(2.0)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">2.0</text>
+
+        <!-- Y Ticks -->
+        <text x="${margin.left - 10}" y="${yToPix(-50) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">-50</text>
+        <text x="${margin.left - 10}" y="${yToPix(-55) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">-55</text>
+        <text x="${margin.left - 10}" y="${yToPix(-60) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">-60</text>
+
+        <!-- Axis Labels -->
+        <text x="${width / 2}" y="${height - 12}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)">Parameter \u03B8</text>
+        <text x="18" y="${height / 2}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)" transform="rotate(-90 18 ${height/2})">Log-Likelihood ln L(\u03B8)</text>
+
+        <!-- Log-Likelihood Curve -->
+        <polyline points="${curvePts.join(' ')}" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Vertical Drop Line & Arrow -->
+        <line x1="${x0_pix}" y1="${yU_pix}" x2="${x0_pix}" y2="${y0_pix}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+
+        <!-- Unrestricted Peak Marker -->
+        <line x1="${xU_pix}" y1="${yU_pix}" x2="${xU_pix}" y2="${height - margin.bottom}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="${xU_pix}" cy="${yU_pix}" r="6" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+        <text x="${xU_pix}" y="${yU_pix - 12}" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981">ln L_U = -50.0</text>
+
+        <!-- Restricted Point Marker -->
+        <line x1="${x0_pix}" y1="${y0_pix}" x2="${x0_pix}" y2="${height - margin.bottom}" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="${x0_pix}" cy="${y0_pix}" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+        <text x="${x0_pix}" y="${y0_pix + 20}" text-anchor="middle" font-size="12" font-weight="700" fill="#ef4444">\u03B8_0 = ${theta0.toFixed(2)}</text>
+
+        <!-- Drop Annotation -->
+        <rect x="${Math.max(xU_pix, x0_pix) + 12}" y="${(yU_pix + y0_pix)/2 - 12}" width="130" height="24" rx="4" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b"/>
+        <text x="${Math.max(xU_pix, x0_pix) + 77}" y="${(yU_pix + y0_pix)/2 + 4}" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">Drop = ${drop.toFixed(2)}</text>
+      `;
+
+      lrSvg.innerHTML = svgHtml;
+    }
+
+    theta0Slider.addEventListener('input', updateLRPlot);
+    curvatureSlider.addEventListener('input', updateLRPlot);
+    updateLRPlot();
+  </script>
+</body>
+</html>

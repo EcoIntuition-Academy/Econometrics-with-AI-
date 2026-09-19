@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 18.5: Conditional Logit &amp; Alternative Attributes — EcoIntuition Academy</title>
+  <meta name="description" content="Extend discrete choice beyond individual-specific variables to alternative-specific attributes, derive the conditional logit choice probability with common parameters, contrast with MNL, and synthesize the discrete choice framework.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-18" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 18</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 18</a>
+          <span class="module-nav-title">Multinomial &amp; Conditional Logit Models</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 5 &middot; Conditional Logit &amp; Alternative Attributes</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 18 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.1 Unordered Choice &amp; Multinomial Logit</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.2 Likelihood, Base Categories &amp; Relative Odds</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.3 Marginal Effects &amp; Choice Probabilities</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.4 Prediction, Model Fit &amp; Wald Testing</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">18.5 Conditional Logit &amp; Alternative Attributes</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Eyebrows -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge badge-primary">LESSON 18.5</span>
+        <span class="badge badge-outline">Choice Attribute Modeling</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Conditional Logit &amp; Alternative-Specific Characteristics
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Extend discrete choice beyond individual-specific variables to alternative-specific attributes, derive the conditional logit choice probability with common parameters, contrast with MNL, and synthesize the discrete choice framework.
+      </p>
+    </div>
+
+    <!-- Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        &#127919; Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Motivate the necessity of Conditional Logit when regressors vary across alternatives (e.g., travel cost, travel time, ticket prices) rather than individuals.</li>
+        <li>Specify the Conditional Logit utility model \(U_{ij} = \mathbf{z}_{ij}'\boldsymbol{\alpha} + \varepsilon_{ij}\) with alternative-varying regressors and a common preference vector \(\boldsymbol{\alpha}\).</li>
+        <li>Derive the choice probability \(P(y_i = j) = \frac{\exp(\mathbf{z}_{ij}'\boldsymbol{\alpha})}{\sum_{k=1}^J \exp(\mathbf{z}_{ik}'\boldsymbol{\alpha})}\) and understand why it is termed "conditional".</li>
+        <li>Contrast Multinomial Logit and Conditional Logit in a structured comparison table, synthesize the discrete choice curriculum, and conclude the course.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Motivation -->
+    <section class="lesson-section">
+      <h2>1. Motivation: Alternative-Specific Regressors</h2>
+      <p>
+        In Lessons 18.1 through 18.4, we explored the standard <strong>Multinomial Logit (MNL)</strong> model. In MNL, the explanatory variables \(\mathbf{x}_i\) represent <strong>individual-specific characteristics</strong> (e.g., age, income, education, gender). These covariates are constant across all alternatives for a given person; to explain why people choose different options, MNL estimates <em>different coefficient vectors</em> \(\boldsymbol{\beta}_j\) for each alternative.
+      </p>
+      <p>
+        In many economic environments, however, the decisive variation lies in the <strong>characteristics of the alternatives themselves</strong>. Consider:
+      </p>
+      <ul>
+        <li><strong>Commuter Mode Choice:</strong> An individual chooses among Car, Bus, and Bike. The key determinants are not just the commuter's wage, but the <em>travel time</em> and <em>travel cost</em> of each specific mode.</li>
+        <li><strong>Consumer Product Selection:</strong> A shopper chooses among three brands of milk. The choices depend on the <em>shelf price</em>, <em>fat content</em>, and <em>expiry date</em> of each brand.</li>
+        <li><strong>Recreation Site Choice:</strong> An angler chooses a lake based on <em>distance to lake</em>, <em>fish stocking density</em>, and <em>boat ramp fees</em>.</li>
+      </ul>
+      <p>
+        When covariates vary across both individuals \(i\) and alternatives \(j\), the standard MNL model is structurally ill-suited. We need McFadden's <strong>Conditional Logit (CL)</strong> model.
+      </p>
+    </section>
+
+    <!-- Section 2: Conditional Logit Specification & Probability -->
+    <section class="lesson-section">
+      <h2>2. Conditional Logit Specification &amp; Choice Probability</h2>
+      <p>
+        The Conditional Logit model re-specifies latent utility such that regressors carry both an individual index \(i\) and an alternative index \(j\):
+      </p>
+
+      <!-- Equation Box: Conditional Logit -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIFICATION</span>
+          <span class="equation-title">Conditional Logit Utility &amp; Choice Probability</span>
+        </div>
+        <div class="equation-main">
+          \[
+          U_{ij} = \mathbf{z}_{ij}'\boldsymbol{\alpha} + \varepsilon_{ij}
+          \]
+          \[
+          P(y_i = j) = \frac{\exp(\mathbf{z}_{ij}'\boldsymbol{\alpha})}{\sum_{k=1}^J \exp(\mathbf{z}_{ik}'\boldsymbol{\alpha})}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-label">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{z}_{ij}\)</span>
+              <span class="symbol-desc">Vector of alternative-specific regressors varying across both individuals \(i\) and alternatives \(j\) (e.g., travel time \(z_{ij1}\) and travel cost \(z_{ij2}\)).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\boldsymbol{\alpha}\)</span>
+              <span class="symbol-desc"><strong>Common parameter vector</strong> shared across all alternatives (e.g., the marginal utility of income or the disutility of commute time).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon_{ij}\)</span>
+              <span class="symbol-desc">i.i.d. Gumbel (Type I Extreme Value) error terms, leading directly to closed-form logit probabilities.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why Conditional Callout -->
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 700;">
+          WHY IS IT CALLED &ldquo;CONDITIONAL&rdquo;?
+        </h4>
+        <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin: 0;">
+          As highlighted on Page 9 of the lecture source: <strong>it is called "conditional" because the choice probability is explicitly conditional on the characteristics of the available alternatives</strong> in the choice set. If a city opens a new express transit lane that cuts bus travel time by 15 minutes, bus choice probabilities rise automatically across all commuters because \(z_{i, \text{bus}, \text{time}}\) has decreased.
+        </p>
+      </div>
+
+      <h3>Lecture Travel Mode Choice Application</h3>
+      <p>
+        In the travel mode choice setting with three alternatives (Car, Bus, Bike), the utility specification is:
+      </p>
+      <div style="text-align: center; margin: 1rem 0; font-size: var(--text-sm);">
+        \[
+        U_{ij} = \alpha_1 (\text{Time}_{ij}) + \alpha_2 (\text{Cost}_{ij}) + \varepsilon_{ij}
+        \]
+      </div>
+      <p>
+        Because consumers dislike both transit delay and out-of-pocket expense, economic theory predicts \(\alpha_1 < 0\) and \(\alpha_2 < 0\). The ratio of coefficients yields the classic <strong>Value of Travel Time Savings (VTTS)</strong>:
+      </p>
+      <div style="text-align: center; margin: 1rem 0; font-size: var(--text-sm);">
+        \[
+        \text{VTTS} = \frac{\partial U / \partial \text{Time}}{\partial U / \partial \text{Cost}} = \frac{\alpha_1}{\alpha_2} \quad (\$/\text{minute or } \$/\text{hour})
+        \]
+      </div>
+      <p>
+        This single parameter ratio informs billions of dollars in public transit infrastructure and highway investment.
+      </p>
+    </section>
+
+    <!-- Section 3: Empirical Applications -->
+    <section class="lesson-section">
+      <h2>3. Empirical Applications: Marketing, Transportation &amp; Valuation</h2>
+      <p>
+        As noted on Page 10 of the lecture text, Conditional Logit is widely deployed across three major fields of applied quantitative economics:
+      </p>
+      <ul>
+        <li><strong>Transportation Economics:</strong> Modeling choice of commute mode (car, rail, bus, rideshare), airline itinerary selection, and congestion pricing response.</li>
+        <li><strong>Quantitative Marketing:</strong> Analyzing supermarket scanner data where consumers select among competing cereal, yogurt, or soft drink brands whose prices and promotional discounts vary weekly.</li>
+        <li><strong>Environmental &amp; Resource Economics:</strong> Non-market valuation via discrete choice experiments (DCEs) and recreational demand models, measuring willingness-to-pay for lake water quality, forest conservation, or renewable energy tariffs.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4: Structural Comparison Table -->
+    <section class="lesson-section">
+      <h2>4. Multinomial Logit vs. Conditional Logit Comparison</h2>
+      <p>
+        Understanding when to employ MNL versus Conditional Logit is a fundamental econometric competency:
+      </p>
+
+      <div class="study-card" style="margin: var(--space-md) 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: var(--text-sm); text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--color-border); background: rgba(37, 99, 235, 0.05);">
+              <th style="padding: 0.75rem;">Feature</th>
+              <th style="padding: 0.75rem;">Multinomial Logit (MNL)</th>
+              <th style="padding: 0.75rem;">Conditional Logit (CL)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.75rem;"><strong>Primary Variation</strong></td>
+              <td style="padding: 0.75rem;">Individual characteristics (people differ)</td>
+              <td style="padding: 0.75rem;">Alternative attributes (options differ)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.75rem;"><strong>Regressor Notation</strong></td>
+              <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: var(--text-xs);">\(\mathbf{x}_i\) (constant across \(j\))</td>
+              <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: var(--text-xs);">\(\mathbf{z}_{ij}\) (varies across \(i\) and \(j\))</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.75rem;"><strong>Parameter Vector</strong></td>
+              <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: var(--text-xs);">\(\boldsymbol{\beta}_j\) (different per alternative, \(\boldsymbol{\beta}_0 = \mathbf{0}\))</td>
+              <td style="padding: 0.75rem; font-family: var(--font-mono); font-size: var(--text-xs);">\(\boldsymbol{\alpha}\) (common across all alternatives)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.75rem;"><strong>Number of Slopes</strong></td>
+              <td style="padding: 0.75rem;">\(J \times K\) parameters</td>
+              <td style="padding: 0.75rem;">\(M\) parameters (dimension of \(\mathbf{z}_{ij}\))</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.75rem;"><strong>Typical Use Case</strong></td>
+              <td style="padding: 0.75rem;">Occupational choice, college major selection</td>
+              <td style="padding: 0.75rem;">Travel mode, supermarket brand choice, housing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 5: Note Regarding Source Outline Topics -->
+    <section class="lesson-section">
+      <h2>5. Note on Outline Topics: IIA &amp; Ordered Models</h2>
+      <div class="study-card" style="border-left: 4px solid #64748b; background: rgba(100, 116, 139, 0.05); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text); font-weight: 700;">
+          ACADEMIC SCOPE NOTE &middot; LECTURE OUTLINE TOPICS
+        </h4>
+        <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+          <em>Listed in the lecture outline; detailed treatment is not included in the supplied Module 18 source.</em>
+        </p>
+        <p style="font-size: var(--text-xs); line-height: 1.6; color: var(--color-text-secondary); margin: 0;">
+          The outline on Page 1 of the supplied source references two additional topics:
+          <strong>Independence from Irrelevant Alternatives (IIA)</strong> (the property that the relative odds ratio \(\frac{P_j}{P_k}\) depends only on alternatives \(j\) and \(k\) and is unaffected by the presence or attributes of other options, famously critiqued via the "red bus / blue bus" paradox) and <strong>Models for Ordered Discrete Choice</strong> (such as ordered logit and probit for ordinal ratings like education degrees or survey Likert scales). As instructed, because detailed mathematical development was not supplied in the lecture text, we do not invent external formulations.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive Lab -->
+    <section class="lesson-section">
+      <h2>6. Interactive Lab: Conditional Logit Mode Choice Simulator</h2>
+      <p>
+        Simulate commuter mode choice among Car, Bus, and Bike using the Conditional Logit framework with disutilities \(\alpha_{\text{cost}} = -0.20\) and \(\alpha_{\text{time}} = -0.05\).
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <span class="lab-badge">SIMULATOR &middot; CONDITIONAL LOGIT</span>
+          <h3 class="lab-title">Mode Choice Attribute Explorer</h3>
+          <p class="lab-desc">
+            Adjust the travel time and cost of the Bus relative to the Car. Observe how transit subsidies (lower bus fare) or bus lane investments (lower travel time) shift commuter market shares.
+          </p>
+        </div>
+
+        <div class="lab-controls-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div class="lab-slider-group">
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); font-weight: 600; margin-bottom: 0.25rem;">
+              <label for="sliderBusCost">Bus Fare / Cost ($)</label>
+              <span id="sliderBusCostVal" style="font-family: var(--font-mono); color: var(--color-primary);">$2.50</span>
+            </div>
+            <input type="range" id="sliderBusCost" min="0.5" max="8.0" step="0.5" value="2.5" style="width: 100%;">
+          </div>
+
+          <div class="lab-slider-group">
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); font-weight: 600; margin-bottom: 0.25rem;">
+              <label for="sliderBusTime">Bus Commute Time (min)</label>
+              <span id="sliderBusTimeVal" style="font-family: var(--font-mono); color: var(--color-primary);">35 min</span>
+            </div>
+            <input type="range" id="sliderBusTime" min="15" max="60" step="5" value="35" style="width: 100%;">
+          </div>
+        </div>
+
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Bus Share \(P_{\text{bus}}\)</div>
+            <div class="metric-value" id="metricPBus" style="color: var(--color-primary);">38.2%</div>
+            <div class="metric-subtext">Transit share</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Car Share \(P_{\text{car}}\)</div>
+            <div class="metric-value" id="metricPCar" style="color: #ef4444;">48.1%</div>
+            <div class="metric-subtext">Car: $6.00 fare, 25 min</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Bike Share \(P_{\text{bike}}\)</div>
+            <div class="metric-value" id="metricPBike" style="color: #10b981;">13.7%</div>
+            <div class="metric-subtext">Bike: $0 fare, 45 min</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Implied Value of Time</div>
+            <div class="metric-value" style="color: var(--color-text);">$15.00/hr</div>
+            <div class="metric-subtext">\(\alpha_{\text{time}} / \alpha_{\text{cost}} = 0.25/\text{min}\)</div>
+          </div>
+        </div>
+
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid var(--color-primary); background: rgba(37, 99, 235, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            At a fare of $2.50 and commute time of 35 min, Bus captures 38.2% of commuters. Lowering the bus fare or reducing travel time directly increases the systematic utility of the bus, drawing riders away from both car and bike.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>7. Quick Knowledge Check</h2>
+      <div class="practice-item" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 600;">
+          Question: Common Parameter vs. Alternative-Specific Parameters
+        </h4>
+        <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+          In a Conditional Logit model of supermarket brand choice, why is the price coefficient \(\alpha_{\text{price}}\) restricted to be common across all brands, whereas in a Multinomial Logit model of occupation choice, the education coefficients \(\beta_{j, \text{educ}}\) are permitted to vary across occupations?
+        </p>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <button class="btn btn-secondary btn-sm" type="button" data-toggle-target="hint5">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm" type="button" data-toggle-target="sol5">
+            Show Solution
+          </button>
+        </div>
+
+        <div id="hint5" class="practice-accordion-panel" style="display: none; margin-bottom: var(--space-sm); padding: var(--space-sm); background: var(--color-background); border-radius: var(--radius-sm); border-left: 3px solid var(--color-secondary);">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6;">
+            <strong>Hint:</strong> What varies in each model: the person's characteristics or the option's attributes? Does a dollar have a different marginal utility depending on which brand of milk you buy?
+          </p>
+        </div>
+
+        <div id="sol5" class="practice-accordion-panel" style="display: none; padding: var(--space-sm); background: var(--color-background); border-radius: var(--radius-sm); border-left: 3px solid #10b981;">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6;">
+            <strong>Solution:</strong><br>
+            In Conditional Logit, price \(z_{ij}\) is an attribute of the option. The parameter \(\alpha_{\text{price}}\) represents the consumer's marginal disutility of spending an extra dollar; economic theory implies that a dollar out-of-pocket exerts the same disutility regardless of which brand is purchased. In MNL, however, education \(x_i\) is an attribute of the person, and different careers reward education at completely different rates (e.g., medical doctor vs waiter), requiring alternative-specific parameters \(\boldsymbol{\beta}_j\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Final Review & Pagination -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Module 18 &amp; Course Review</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        Congratulations on completing the final lesson of Module 18 and the Econometrics with AI curriculum!
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Multinomial Logit (Lessons 18.1–18.4):</strong> Derived from random utility with Gumbel errors; identified via base-category normalization \(\boldsymbol{\beta}_0 = \mathbf{0}\); coefficients represent relative log-odds; probability effects require non-linear continuous derivatives or discrete finite differences; evaluated via McFadden's pseudo-\(R^2\) and joint Wald tests.</li>
+        <li><strong>Conditional Logit (Lesson 18.5):</strong> Extends discrete choice to alternative-varying attributes \(\mathbf{z}_{ij}\) with common preference vector \(\boldsymbol{\alpha}\); foundational in transportation, marketing, and non-market environmental valuation.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">Prediction, Model Fit &amp; Wald Testing</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-18" data-lesson="5" style="align-self: center;">
+          &#10003; Mark Lesson 5 Complete
+        </button>
+        <a href="index.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Return to Module 18 &rarr;</span>
+          <span class="nav-btn-title">Module 18 Overview</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+
+  <!-- Interactive Lab Script -->
+  <script>
+    (function() {
+      const sliderCost = document.getElementById('sliderBusCost');
+      const sliderTime = document.getElementById('sliderBusTime');
+      const sliderCostVal = document.getElementById('sliderBusCostVal');
+      const sliderTimeVal = document.getElementById('sliderBusTimeVal');
+
+      const metricPBus = document.getElementById('metricPBus');
+      const metricPCar = document.getElementById('metricPCar');
+      const metricPBike = document.getElementById('metricPBike');
+      const labInsightText = document.getElementById('labInsightText');
+
+      function updateLab() {
+        const costBus = parseFloat(sliderCost.value);
+        const timeBus = parseFloat(sliderTime.value);
+
+        sliderCostVal.textContent = '$' + costBus.toFixed(2);
+        sliderTimeVal.textContent = timeBus.toFixed(0) + ' min';
+
+        // Attributes:
+        // Car: Cost = $6.00, Time = 25 min
+        // Bus: Cost = costBus, Time = timeBus
+        // Bike: Cost = $0.00, Time = 45 min
+        const aCost = -0.20;
+        const aTime = -0.05;
+
+        const uCar = (aCost * 6.00) + (aTime * 25.0); // -1.2 - 1.25 = -2.45
+        const uBus = (aCost * costBus) + (aTime * timeBus);
+        const uBike = (aCost * 0.00) + (aTime * 45.0); // 0 - 2.25 = -2.25
+
+        const maxU = Math.max(uCar, uBus, uBike);
+        const expCar = Math.exp(uCar - maxU);
+        const expBus = Math.exp(uBus - maxU);
+        const expBike = Math.exp(uBike - maxU);
+        const denom = expCar + expBus + expBike;
+
+        const pCar = expCar / denom;
+        const pBus = expBus / denom;
+        const pBike = expBike / denom;
+
+        metricPCar.textContent = (pCar * 100).toFixed(1) + '%';
+        metricPBus.textContent = (pBus * 100).toFixed(1) + '%';
+        metricPBike.textContent = (pBike * 100).toFixed(1) + '%';
+
+        labInsightText.textContent = `At a fare of $${costBus.toFixed(2)} and commute time of ${timeBus.toFixed(0)} min, Bus captures ${(pBus * 100).toFixed(1)}% of commuters. Lowering the bus fare or reducing travel time directly increases the systematic utility of the bus, drawing riders away from both car and bike.`;
+      }
+
+      sliderCost.addEventListener('input', updateLab);
+      sliderTime.addEventListener('input', updateLab);
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

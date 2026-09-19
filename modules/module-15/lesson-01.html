@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 15.1: RD Intuition, Cutoffs &amp; Sharp Regression Discontinuity — EcoIntuition Academy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-15" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 15</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 15</a>
+          <span class="module-nav-title">Regression Discontinuity Designs</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 6 &middot; RD Intuition, Cutoffs &amp; Sharp Regression Discontinuity</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 15 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">15.1 RD Intuition, Cutoffs &amp; Sharp RD</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.2 Continuity, Manipulation &amp; Placebos</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.3 RD Regression &amp; Cutoff Treatment Effects</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.4 Bandwidth Choice &amp; Kernel Weighting</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.5 Fuzzy RD, IV &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.6 McCrary Testing &amp; RD Diagnostics</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">17%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 15.1</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">RD FOUNDATIONS</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        RD Intuition, Cutoffs &amp; Sharp Regression Discontinuity
+      </h1>
+      <p class="lesson-hero-lead">
+        Discover how administrative cutoffs create quasi-experimental variation, understand the local 'as-if random' identifying comparison, and analyze the mechanics of Sharp Regression Discontinuity.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Define the running/forcing variable, treatment cutoff, and treatment indicator.</li><li>Articulate the core intuition of local comparability near the threshold.</li><li>Contrast global comparisons with local threshold comparisons using the 50% unionization vote example.</li><li>Specify Sharp Regression Discontinuity deterministically using indicator notation and examine the score-500 academy application.</li>
+      </ul>
+    </div>
+
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Regression Discontinuity: Definition &amp; Core Notation</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            FORMAL DEFINITION &middot; REGRESSION DISCONTINUITY (RD)
+          </div>
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            In a <strong>Regression Discontinuity</strong> research design, individuals wind up in the treatment group if they cross a predetermined threshold or cutoff. Treatment assignment is determined by whether an observed continuous variable—termed the <strong>running</strong>, <strong>assignment</strong>, or <strong>forcing</strong> variable—exceeds a known threshold value.
+          </p>
+        </div>
+
+        <!-- 3 Notation Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-xs);">RUNNING VARIABLE</div>
+            <div style="font-size: 1.3rem; font-family: var(--font-mono); font-weight: 600; color: var(--color-primary); margin-bottom: 4px;">\(a_i\)</div>
+            <p style="margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--color-text-secondary);">
+              The continuous assignment or forcing variable (e.g., test score, vote share, age, wealth).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #d97706; margin-bottom: var(--space-xs);">KNOWN CUTOFF</div>
+            <div style="font-size: 1.3rem; font-family: var(--font-mono); font-weight: 600; color: #d97706; margin-bottom: 4px;">\(a_0\)</div>
+            <p style="margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--color-text-secondary);">
+              The explicit threshold or policy boundary governing eligibility (e.g., 50% vote, 500 points).
+            </p>
+          </div>
+
+          <div class="study-card" style="padding: var(--space-md); background: var(--color-surface); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-bottom: var(--space-xs);">TREATMENT INDICATOR</div>
+            <div style="font-size: 1.3rem; font-family: var(--font-mono); font-weight: 600; color: #059669; margin-bottom: 4px;">\(T_i\)</div>
+            <p style="margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--color-text-secondary);">
+              Binary treatment status (\(T_i = 1\) if treated, \(0\) if control) triggered at or near \(a_0\).
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Core Intuition & The Local As-If Random Argument -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Core Intuition: Local "As-If Random" Variation</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          Why is Regression Discontinuity so widely respected in modern applied econometrics? In non-experimental observational data, treated and untreated units often differ fundamentally across countless unmeasured dimensions (e.g., motivation, innate ability, or managerial skill), causing severe omitted variable bias.
+        </p>
+
+        <!-- Callout Box: Local Nature of RD -->
+        <div class="callout" style="border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">IDENTIFICATION LOGIC</span>
+            <h3 class="callout-title">The Power of Local Threshold Comparisons</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Regression Discontinuity allows researchers to estimate causal effects in non-experimental settings where treatment assignment is <strong>as-if random in a narrow window near a cutoff</strong>. Units situated immediately above and immediately below the threshold are virtually indistinguishable in both observable background characteristics and unobserved factors.
+            </p>
+            <p style="margin: 8px 0 0 0; font-size: 0.88rem; line-height: 1.5; color: var(--color-text-secondary);">
+              <em>Crucial Precision:</em> RD does <strong>not</strong> claim that units with very high and very low values of \(a_i\) are comparable. The identifying comparison is strictly <strong>local</strong>: under maintained continuity assumptions, any sudden jump in the outcome occurring exactly at the cutoff can be attributed to the causal effect of treatment.
+            </p>
+          </div>
+        </div>
+
+        <!-- Unionization Example Card -->
+        <div class="study-card" style="padding: var(--space-md); background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #15803d; margin-bottom: var(--space-xs);">CANONICAL APPLICATION &middot; UNIONIZATION VOTE SHARE</div>
+          <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #14532d;">Does Unionization Increase Wages?</h4>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.88rem; line-height: 1.6; color: #166534;">
+            When a workplace unionizes, comparing unionized firms to non-unionized firms generally conflates the union causal effect with confounding firm characteristics (e.g., industry conditions, worker discontent, plant size).
+          </p>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #166534;">
+            <strong>The RD Solution:</strong> Compare elections where workers narrowly voted to unionize (e.g., <strong>51%</strong> in favor) with elections where unionization narrowly failed (e.g., <strong>49%</strong> in favor). Within this narrow band around the 50% cutoff, economic conditions, firm profitability, and worker attitudes are nearly identical. Any discontinuous difference in subsequent wages or plant survival on either side of 50% isolates the causal effect of unionization.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Primary RD Graphical Interpretation -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Graphical Representation of Regression Discontinuity</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          Graphically, Regression Discontinuity is illustrated by plotting the running variable \(a_i\) on the horizontal axis and the outcome variable \(Y_i\) on the vertical axis. The threshold \(a_0\) is marked with a vertical dashed line.
+        </p>
+
+        <!-- Primary RD Graph Container -->
+        <div style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">THE FUNDAMENTAL RD GRAPH</span>
+              <h4 style="margin: 2px 0 0 0; font-size: 0.95rem;">Outcome vs. Running Variable at Cutoff \(a_0\)</h4>
+            </div>
+            <!-- External Legend -->
+            <div style="display: flex; gap: var(--space-sm); font-size: 0.78rem; font-weight: 600; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #94a3b8; border-radius: 50%; display: inline-block;"></span> Observed Data</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #2563eb; display: inline-block;"></span> Control Fit (\(a < a_0\))</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #059669; display: inline-block;"></span> Treated Fit (\(a \ge a_0\))</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 2px; border-top: 2px dashed #dc2626; display: inline-block;"></span> Cutoff \(a_0\)</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #7c3aed; display: inline-block;"></span> Treatment Effect \(eta\)</span>
+            </div>
+          </div>
+
+          <!-- SVG Chart -->
+          <div style="width: 100%; height: 380px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden; position: relative;">
+            <svg id="primaryRdSvg" viewBox="0 0 740 380" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+              <!-- Grid lines -->
+              <line x1="60" y1="40" x2="700" y2="40" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="120" x2="700" y2="120" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="200" x2="700" y2="200" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="60" y1="280" x2="700" y2="280" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+
+              <!-- Axes -->
+              <line x1="60" y1="330" x2="700" y2="330" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+              <line x1="60" y1="30" x2="60" y2="330" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+
+              <!-- Axis Labels -->
+              <text x="380" y="365" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle">Running Variable a (e.g., Vote Share %)</text>
+              <text x="20" y="180" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 20 180)">Outcome Y (e.g., Wage)</text>
+
+              <!-- Cutoff vertical line at x = 380 -->
+              <line x1="380" y1="30" x2="380" y2="330" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4" />
+              <text x="380" y="25" fill="#dc2626" font-size="11" font-weight="700" text-anchor="middle">Cutoff a₀ (50%)</text>
+
+              <!-- Control points (left) -->
+              <circle cx="100" cy="275" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="140" cy="260" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="170" cy="268" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="210" cy="245" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="250" cy="250" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="280" cy="232" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="310" cy="238" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="340" cy="222" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="360" cy="228" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="372" cy="218" r="3.5" fill="#94a3b8" opacity="0.7"/>
+
+              <!-- Treatment points (right) -->
+              <circle cx="388" cy="142" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="400" cy="130" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="430" cy="138" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="460" cy="122" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="500" cy="115" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="540" cy="124" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="580" cy="105" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="620" cy="98" r="3.5" fill="#94a3b8" opacity="0.7"/>
+              <circle cx="660" cy="88" r="3.5" fill="#94a3b8" opacity="0.7"/>
+
+              <!-- Left fitted line (control) -->
+              <line x1="80" y1="285" x2="380" y2="220" stroke="#2563eb" stroke-width="3.5" />
+              <!-- Limit point below cutoff -->
+              <circle cx="380" cy="220" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+              <text x="360" y="240" fill="#2563eb" font-size="11" font-weight="600" text-anchor="end">Control Limit: Y⁻(a₀)</text>
+
+              <!-- Right fitted line (treatment) -->
+              <line x1="380" y1="140" x2="680" y2="80" stroke="#059669" stroke-width="3.5" />
+              <!-- Limit point above cutoff -->
+              <circle cx="380" cy="140" r="5" fill="#059669" stroke="#ffffff" stroke-width="2" />
+              <text x="400" y="160" fill="#059669" font-size="11" font-weight="600" text-anchor="start">Treated Limit: Y⁺(a₀)</text>
+
+              <!-- Vertical Jump Bracket / Arrow -->
+              <line x1="380" y1="220" x2="380" y2="140" stroke="#7c3aed" stroke-width="3" stroke-dasharray="4,3" />
+              <line x1="372" y1="220" x2="388" y2="220" stroke="#7c3aed" stroke-width="2" />
+              <line x1="372" y1="140" x2="388" y2="140" stroke="#7c3aed" stroke-width="2" />
+              
+              <!-- Jump Label Badge -->
+              <rect x="230" y="165" width="135" height="30" rx="4" fill="#7c3aed" opacity="0.12" />
+              <text x="297" y="184" fill="#6d28d9" font-size="11" font-weight="700" text-anchor="middle">Discontinuity Jump &beta;</text>
+            </svg>
+          </div>
+
+          <div style="font-size: 0.84rem; color: var(--color-text-secondary); margin-top: var(--space-xs); line-height: 1.5;">
+            <strong>Interpretation:</strong> The lines fitted on either side are extrapolated to the boundary \(a_0\). The vertical gap between the right-side limit \(Y^+(a_0)\) and the left-side limit \(Y^-(a_0)\) estimates the causal effect \(eta\) at the threshold.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Sharp Regression Discontinuity & The Academy Example -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Sharp Regression Discontinuity &amp; The Academy Exam</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid #059669; margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #047857; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            SHARP REGRESSION DISCONTINUITY DEFINITION
+          </div>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; line-height: 1.6;">
+            In a <strong>Sharp Regression Discontinuity Design</strong>, crossing the threshold deterministically assigns an individual to treatment. There is zero noncompliance: every unit above the threshold receives treatment, and no unit below receives treatment.
+          </p>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0; font-family: var(--font-mono);">
+            \[
+            T_i = \mathbf{1}(a_i \ge a_0) = egin{cases} 1 & 	ext{if } a_i \ge a_0 \ 0 & 	ext{if } a_i < a_0 \end{cases}
+            \]
+          </div>
+        </div>
+
+        <!-- Academy Example Card -->
+        <div class="study-card" style="padding: var(--space-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8; margin-bottom: var(--space-xs);">CANONICAL APPLICATION &middot; ACADEMIC TEST SCORE CUTOFF</div>
+          <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #1e3a8a;">Special Academy Admission at Score 500</h4>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.88rem; line-height: 1.6; color: #1e40af;">
+            Consider students taking a standardized exam with eligibility rules:
+          </p>
+          <ul style="margin: 0 0 var(--space-xs) 1.2rem; font-size: 0.88rem; line-height: 1.6; color: #1e40af;">
+            <li>Students scoring \(a_i \ge 500\) attend an elite special academy (\(T_i = 1\)).</li>
+            <li>Students scoring \(a_i < 500\) attend their local regular school (\(T_i = 0\)).</li>
+          </ul>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: #1e40af;">
+            <strong>Comparing Score 499 vs. 500:</strong> Does a student with a score of 500 possess inherently superior intellectual capacity compared to a student who scored 499? Almost certainly not—a single multiple-choice question or slight testing noise accounts for the 1-point difference. Under the RD assumptions, units sufficiently close to the cutoff are treated as locally comparable. The discrete jump in their subsequent educational outcomes isolates the causal impact of attending the special academy.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 15.1 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Interactive Lab 15.1: RD Cutoff Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          
+          <!-- Lab Header -->
+          <div class="lab-header" style="margin-bottom: var(--space-md);">
+            <div>
+              <span class="lab-badge">INTERACTIVE LAB 15.1</span>
+              <h3 class="lab-title" style="margin: var(--space-2xs) 0;">RD Cutoff Explorer</h3>
+              <p class="lab-desc">Experiment with cutoff placement, treatment jump magnitude, and underlying baseline relationship slope. Observe how the estimated local discontinuity \(\hat{eta}\) changes at the threshold.</p>
+            </div>
+          </div>
+
+          <!-- Controls Toolbar -->
+          <div class="lab-controls-toolbar" style="display: flex; flex-wrap: wrap; gap: var(--space-md); padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: var(--space-md);">
+            <!-- Preset Modes -->
+            <div>
+              <label style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">SCENARIO PRESET</label>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="btnModeZero" class="btn btn-sm btn-outline">No Jump</button>
+                <button type="button" id="btnModePos" class="btn btn-sm btn-primary">Positive Jump</button>
+                <button type="button" id="btnModeNeg" class="btn btn-sm btn-outline">Negative Jump</button>
+              </div>
+            </div>
+
+            <!-- Jump Slider -->
+            <div style="flex: 1; min-width: 180px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>TREATMENT JUMP (&beta;)</span>
+                <span id="labelJumpVal">+20.0</span>
+              </div>
+              <input type="range" id="sliderJump" min="-30" max="40" step="2" value="20" style="width: 100%;">
+            </div>
+
+            <!-- Cutoff Slider -->
+            <div style="flex: 1; min-width: 160px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>CUTOFF a₀</span>
+                <span id="labelCutoffVal">50</span>
+              </div>
+              <input type="range" id="sliderCutoff" min="30" max="70" step="5" value="50" style="width: 100%;">
+            </div>
+
+            <!-- Underlying Slope Slider -->
+            <div style="flex: 1; min-width: 160px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>BASE SLOPE (&gamma;)</span>
+                <span id="labelSlopeVal">0.60</span>
+              </div>
+              <input type="range" id="sliderSlope" min="0.10" max="1.20" step="0.10" value="0.60" style="width: 100%;">
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">THRESHOLD (a₀)</div>
+              <div id="metricCutoff" style="font-size: 1.3rem; font-weight: 700; color: #dc2626;">50</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Forcing cutoff</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">CONTROL LIMIT Y⁻(a₀)</div>
+              <div id="metricControlLimit" style="font-size: 1.3rem; font-weight: 700; color: #2563eb;">50.0</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Left boundary limit</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">TREATED LIMIT Y⁺(a₀)</div>
+              <div id="metricTreatedLimit" style="font-size: 1.3rem; font-weight: 700; color: #059669;">70.0</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Right boundary limit</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">ESTIMATED DISCONTINUITY</div>
+              <div id="metricJump" style="font-size: 1.3rem; font-weight: 700; color: #7c3aed;">+20.0</div>
+              <div id="metricStatus" style="font-size: 0.75rem; font-weight: 600; color: #059669;">Positive Effect</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div class="external-legend-bar" style="margin-bottom: var(--space-xs); font-size: 0.78rem;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; display: inline-block;"></span> Observed Data</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #2563eb; display: inline-block;"></span> Control Fit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #059669; display: inline-block;"></span> Treated Fit</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 2px; border-top: 2px dashed #dc2626; display: inline-block;"></span> Cutoff a₀</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 14px; height: 3px; background: #7c3aed; display: inline-block;"></span> Jump &beta;</span>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div style="position: relative; width: 100%; height: 360px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="lab151Svg" viewBox="0 0 740 360" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Callout -->
+          <div id="lab151Insight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(37,99,235,0.08); border-left: 4px solid var(--color-primary); border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.5;">
+            <strong>RD Insight:</strong> <span id="lab151InsightText">A sharp vertical jump of +20.0 units is observed at the cutoff a₀ = 50. Units just to the right of the cutoff experience a discrete outcome boost relative to the continuous counterfactual baseline.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                A scatter of simulated units where treatment is assigned deterministically whenever the running variable exceeds \(a_0\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The underlying relationship has a smooth positive slope \(\gamma\), but at \(a_0\), the outcome exhibits a sharp discontinuous jump.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Without RD, comparing overall high scorers to low scorers would confuse the baseline ability slope with the program effect.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                The vertical gap \(eta = Y^+(a_0) - Y^-(a_0)\) captures the local average treatment effect directly at the cutoff boundary.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Click <em>No Jump</em>. Notice that the fitted line connects smoothly across \(a_0\) with \(\hat{eta} pprox 0\), revealing no treatment effect.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> Why does Regression Discontinuity focus on observations close to the cutoff rather than using all observations equally across the sample?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint151">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol151">Show Solution</button>
+        </div>
+        <div id="hint151" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Consider whether units with extreme values of the running variable (e.g., test score of 200 vs 800) differ in ways other than just program attendance.
+          </p>
+        </div>
+        <div id="sol151" class="practice-accordion-panel">
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            Because the identifying comparison is local: units immediately above and below the threshold are expected to be most comparable under the RD assumptions.
+          </p>
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            Units far from the cutoff typically differ substantially in unobserved factors (such as baseline productivity, socioeconomic status, or student aptitude). Comparing all treated units to all control units would reintroduce massive selection bias. In contrast, units narrowly separated by the cutoff threshold are as-if randomly assigned around the eligibility rule.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 15.1 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Regression Discontinuity designs exploit deterministic or probabilistic policy cutoffs along a continuous running variable. The identifying intuition is local: units immediately above and below the cutoff are treated as locally comparable, creating an "as-if" randomized quasi-experiment. In Sharp RD, crossing the threshold deterministically assigns treatment, and the treatment effect is graphically identified as the vertical jump at the threshold boundary. Next, we examine the core identifying assumptions: continuity of potential outcomes and the absence of strategic sorting.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 15</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-15" data-lesson="1" style="align-self: center;">
+          &check; Mark Lesson Complete
+        </button>
+        <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">Continuity &amp; No Manipulation</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <script>
+    (function() {
+      let cutoff = 50;
+      let jump = 20.0;
+      let baseSlope = 0.60;
+
+      const sliderCutoff = document.getElementById('sliderCutoff');
+      const sliderJump = document.getElementById('sliderJump');
+      const sliderSlope = document.getElementById('sliderSlope');
+
+      const labelCutoffVal = document.getElementById('labelCutoffVal');
+      const labelJumpVal = document.getElementById('labelJumpVal');
+      const labelSlopeVal = document.getElementById('labelSlopeVal');
+
+      const metricCutoff = document.getElementById('metricCutoff');
+      const metricControlLimit = document.getElementById('metricControlLimit');
+      const metricTreatedLimit = document.getElementById('metricTreatedLimit');
+      const metricJump = document.getElementById('metricJump');
+      const metricStatus = document.getElementById('metricStatus');
+
+      const btnModeZero = document.getElementById('btnModeZero');
+      const btnModePos = document.getElementById('btnModePos');
+      const btnModeNeg = document.getElementById('btnModeNeg');
+
+      const labInsightText = document.getElementById('lab151InsightText');
+      const svg = document.getElementById('lab151Svg');
+
+      // Fixed seed dataset points
+      const basePoints = [];
+      const N = 70;
+      for (let i = 0; i < N; i++) {
+        const a = 15 + (i / (N - 1)) * 70;
+        // Pseudo-random noise
+        const noise = Math.sin(i * 3.7) * 4.5 + Math.cos(i * 1.9) * 3.2;
+        basePoints.push({ a, noise });
+      }
+
+      function updateLab() {
+        labelCutoffVal.textContent = cutoff;
+        labelJumpVal.textContent = (jump >= 0 ? '+' : '') + jump.toFixed(1);
+        labelSlopeVal.textContent = baseSlope.toFixed(2);
+
+        metricCutoff.textContent = cutoff;
+        const intercept = 20.0;
+        const controlLimit = intercept + baseSlope * cutoff;
+        const treatedLimit = controlLimit + jump;
+
+        metricControlLimit.textContent = controlLimit.toFixed(1);
+        metricTreatedLimit.textContent = treatedLimit.toFixed(1);
+        metricJump.textContent = (jump >= 0 ? '+' : '') + jump.toFixed(1);
+
+        if (Math.abs(jump) < 1.0) {
+          metricStatus.textContent = 'No Discontinuity';
+          metricStatus.style.color = 'var(--color-text-secondary)';
+          labInsightText.textContent = `At cutoff a₀ = ${cutoff}, both regression lines meet smoothly. The estimated jump is ${jump.toFixed(1)}, indicating zero local treatment effect.`;
+        } else if (jump > 0) {
+          metricStatus.textContent = 'Positive Jump';
+          metricStatus.style.color = '#059669';
+          labInsightText.textContent = `A sharp upward discontinuity of +${jump.toFixed(1)} units is observed at a₀ = ${cutoff}. Units crossing the cutoff experience an immediate positive treatment boost.`;
+        } else {
+          metricStatus.textContent = 'Negative Jump';
+          metricStatus.style.color = '#dc2626';
+          labInsightText.textContent = `A sharp downward discontinuity of ${jump.toFixed(1)} units is observed at a₀ = ${cutoff}. Crossing the cutoff leads to a discrete drop in the outcome.`;
+        }
+
+        renderChart(controlLimit, treatedLimit);
+      }
+
+      function renderChart(controlLimit, treatedLimit) {
+        const width = 740;
+        const height = 360;
+        const padL = 60;
+        const padR = 40;
+        const padT = 30;
+        const padB = 45;
+
+        const minA = 10, maxA = 90;
+        const minY = 10, maxY = 120;
+
+        function scaleX(a) {
+          return padL + ((a - minA) / (maxA - minA)) * (width - padL - padR);
+        }
+        function scaleY(y) {
+          return height - padB - ((y - minY) / (maxY - minY)) * (height - padT - padB);
+        }
+
+        const cutoffX = scaleX(cutoff);
+        const intercept = 20.0;
+
+        let html = `
+          <!-- Grid -->
+          <line x1="${padL}" y1="${scaleY(30)}" x2="${width - padR}" y2="${scaleY(30)}" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+          <line x1="${padL}" y1="${scaleY(60)}" x2="${width - padR}" y2="${scaleY(60)}" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+          <line x1="${padL}" y1="${scaleY(90)}" x2="${width - padR}" y2="${scaleY(90)}" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
+
+          <!-- Axes -->
+          <line x1="${padL}" y1="${height - padB}" x2="${width - padR}" y2="${height - padB}" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${height - padB}" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+
+          <!-- Axis Labels -->
+          <text x="${(width + padL - padR) / 2}" y="${height - 10}" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle">Running Variable a</text>
+          <text x="18" y="${(height + padT - padB) / 2}" fill="var(--color-text)" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 18 ${(height + padT - padB) / 2})">Outcome Y</text>
+
+          <!-- Cutoff Vertical Line -->
+          <line x1="${cutoffX}" y1="${padT}" x2="${cutoffX}" y2="${height - padB}" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4" />
+          <text x="${cutoffX}" y="${padT - 8}" fill="#dc2626" font-size="11" font-weight="700" text-anchor="middle">Cutoff a₀ = ${cutoff}</text>
+        `;
+
+        // Data points
+        basePoints.forEach(pt => {
+          let y = intercept + baseSlope * pt.a + pt.noise;
+          const isTreated = pt.a >= cutoff;
+          if (isTreated) y += jump;
+          const cx = scaleX(pt.a);
+          const cy = scaleY(y);
+          html += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2" fill="#94a3b8" opacity="0.65" />`;
+        });
+
+        // Left fitted line (control)
+        const leftStartX = scaleX(15);
+        const leftStartY = scaleY(intercept + baseSlope * 15);
+        const leftEndX = cutoffX;
+        const leftEndY = scaleY(controlLimit);
+
+        html += `<line x1="${leftStartX}" y1="${leftStartY}" x2="${leftEndX}" y2="${leftEndY}" stroke="#2563eb" stroke-width="3" />`;
+        html += `<circle cx="${leftEndX}" cy="${leftEndY}" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="1.5" />`;
+
+        // Right fitted line (treatment)
+        const rightStartX = cutoffX;
+        const rightStartY = scaleY(treatedLimit);
+        const rightEndX = scaleX(85);
+        const rightEndY = scaleY(intercept + baseSlope * 85 + jump);
+
+        html += `<line x1="${rightStartX}" y1="${rightStartY}" x2="${rightEndX}" y2="${rightEndY}" stroke="#059669" stroke-width="3" />`;
+        html += `<circle cx="${rightStartX}" cy="${rightStartY}" r="4.5" fill="#059669" stroke="#ffffff" stroke-width="1.5" />`;
+
+        // Jump arrow / indicator
+        if (Math.abs(leftEndY - rightStartY) > 2) {
+          html += `<line x1="${cutoffX}" y1="${leftEndY}" x2="${cutoffX}" y2="${rightStartY}" stroke="#7c3aed" stroke-width="3" stroke-dasharray="3,3" />`;
+          html += `<line x1="${cutoffX - 6}" y1="${leftEndY}" x2="${cutoffX + 6}" y2="${leftEndY}" stroke="#7c3aed" stroke-width="2" />`;
+          html += `<line x1="${cutoffX - 6}" y1="${rightStartY}" x2="${cutoffX + 6}" y2="${rightStartY}" stroke="#7c3aed" stroke-width="2" />`;
+        }
+
+        svg.innerHTML = html;
+      }
+
+      // Event Listeners
+      sliderCutoff.addEventListener('input', (e) => {
+        cutoff = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      sliderJump.addEventListener('input', (e) => {
+        jump = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      sliderSlope.addEventListener('input', (e) => {
+        baseSlope = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      btnModeZero.addEventListener('click', () => {
+        jump = 0;
+        sliderJump.value = 0;
+        btnModeZero.className = 'btn btn-sm btn-primary';
+        btnModePos.className = 'btn btn-sm btn-outline';
+        btnModeNeg.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+
+      btnModePos.addEventListener('click', () => {
+        jump = 20;
+        sliderJump.value = 20;
+        btnModeZero.className = 'btn btn-sm btn-outline';
+        btnModePos.className = 'btn btn-sm btn-primary';
+        btnModeNeg.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+
+      btnModeNeg.addEventListener('click', () => {
+        jump = -18;
+        sliderJump.value = -18;
+        btnModeZero.className = 'btn btn-sm btn-outline';
+        btnModePos.className = 'btn btn-sm btn-outline';
+        btnModeNeg.className = 'btn btn-sm btn-primary';
+        updateLab();
+      });
+
+      // Quick Check Toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      // Initial Render
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 16.4: Latent Variables &amp; Threshold Models — EcoIntuition Academy</title>
+  <meta name="description" content="Interpret binary outcomes as observed realizations of an underlying continuous latent variable crossing a critical threshold, bridging economic utility theory with empirical estimation.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-16" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 16</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 16</a>
+          <span class="module-nav-title">Binary Choice Models &amp; Maximum Likelihood</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; Latent Variables &amp; Threshold Models</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 16 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.1 Binary Outcomes &amp; LPM</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.2 Probit, Logit &amp; Curves</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.3 Marginal Effects in Binary Choice</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.4 Latent Variables &amp; Threshold Models</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.5 Maximum Likelihood Estimation</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.6 MLE Properties, Variance &amp; Inference</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Layout Container -->
+  <main class="lesson-content-area" id="mainContent">
+    <!-- Header Block (Module 1 Canonical Header) -->
+        <!-- Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 16.4</span>
+        <span class="badge">Microeconomic Choice Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Latent Variables &amp; Threshold Models
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Interpret binary outcomes as observed realizations of an underlying continuous latent variable crossing a critical threshold, bridging economic utility theory with empirical estimation.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate the latent variable model \(y^* = \mathbf{x}'\boldsymbol{\beta} + \varepsilon\) with observation rule \(y = \mathbf{1}(y^* > 0)\).</li>
+        <li>Interpret latent variables as unobserved utility, net benefits, or underlying propensities.</li>
+        <li>Formally derive the choice probability \(\Pr(y=1 \mid \mathbf{x}) = \Pr(\varepsilon > -\mathbf{x}'\boldsymbol{\beta})\) under symmetric distributions.</li>
+        <li>Connect error distributions (standard normal vs. standard logistic) directly to Probit and Logit specifications.</li>
+        <li>Visualize the shifting threshold \(-\mathbf{x}'\boldsymbol{\beta}\) and the resulting changes in tail probability mass.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Microeconomic Foundations of Binary Decisions -->
+    <section class="lesson-section">
+      <h2>1. The Microeconomic Foundations of Binary Decisions</h2>
+      <p>
+        Why do economic agents make discrete choices? Microeconomic theory models decision-making using <strong>continuous latent propensities</strong>. An individual weighs benefits and costs along a continuous spectrum, but the econometrician observes only the final discrete action:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <span class="badge badge-outline" style="margin-bottom: 0.5rem;">CONSUMER DEMAND</span>
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Net Utility of Purchase</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            A consumer contemplating whether to buy insurance compares the utility of coverage versus remaining uninsured. The continuous difference in utility is unobserved, but the purchase decision is binary (\(y = 1\) if purchase, \(0\) otherwise).
+          </p>
+        </div>
+
+        <div class="study-card">
+          <span class="badge badge-outline" style="margin-bottom: 0.5rem;">LABOR SUPPLY</span>
+          <h4 style="color: var(--accent-success); margin-bottom: 0.5rem; font-size: 0.95rem;">Wage Offer vs. Reservation Wage</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            A worker compares an offered market wage to their internal reservation wage. The individual enters the labor force (\(y = 1\)) if and only if the continuous net benefit (offered wage minus reservation wage) is positive.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        We formalize this continuous, unobservable propensity as the <strong>latent variable</strong> \(y^*\):
+      </p>
+
+      <!-- Equation Box: Latent Variable Model -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Structural Model</span>
+          <span class="equation-title">Latent Variable Linear Specification</span>
+        </div>
+        <div class="equation-main">
+          \[ y_i^* = \mathbf{x}_i'\boldsymbol{\beta} + \varepsilon_i \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y_i^*\)</span>
+              <span class="symbol-desc">Unobserved continuous latent propensity (e.g., net utility, reservation difference)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{x}_i'\boldsymbol{\beta}\)</span>
+              <span class="symbol-desc">Deterministic portion of propensity explained by observed individual characteristics</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon_i\)</span>
+              <span class="symbol-desc">Unobserved idiosyncratic taste, ability, or random shock independent of \(\mathbf{x}_i\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Observational Threshold Rule -->
+    <section class="lesson-section">
+      <h2>2. The Observational Threshold Rule</h2>
+      <p>
+        The econometrician cannot directly observe the continuous score \(y_i^*\). Instead, we observe only whether \(y_i^*\) crosses an administrative or behavioral <strong>threshold</strong> (traditionally normalized to zero without loss of generality):
+      </p>
+
+      <!-- Equation Box: Observation Rule -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Observation Rule</span>
+          <span class="equation-title">Threshold Mapping Mechanism</span>
+        </div>
+        <div class="equation-main">
+          \[ y_i = \begin{cases} 1 & \text{if } y_i^* > 0 \\ 0 & \text{if } y_i^* \le 0 \end{cases} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(y_i \in \{0, 1\}\)</span>
+              <span class="symbol-desc">Observed binary outcome in your empirical dataset</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(y_i^* > 0\)</span>
+              <span class="symbol-desc">Latent propensity exceeds threshold, triggering the observable action (\(y_i = 1\))</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Student Mistake Card -->
+      <div class="common-mistake-card">
+        <div class="common-mistake-header">⚠️ Common Student Mistake</div>
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "In latent variable models, we observe both the continuous index \(y^*\) and the discrete outcome \(y\) in our dataset."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> The latent variable \(y^*\) is completely unobservable. Your empirical dataset contains only the discrete zeroes and ones of \(y\). Binary choice models use the probability distribution of the error \(\varepsilon\) to bridge the gap between continuous theoretical utility and discrete observational data.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Deriving Choice Probabilities from Error Distributions -->
+    <section class="lesson-section">
+      <h2>3. Deriving Choice Probabilities from Error Distributions</h2>
+      <p>
+        Using the threshold rule, we can express the probability of observing \(y = 1\) directly in terms of the random disturbance \(\varepsilon\):
+      </p>
+
+      <!-- Equation Box: Probability Derivation -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Probability Derivation</span>
+          <span class="equation-title">Threshold Probability Integral</span>
+        </div>
+        <div class="equation-main">
+          \[ \Pr(y_i = 1 \mid \mathbf{x}_i) = \Pr(y_i^* > 0 \mid \mathbf{x}_i) = \Pr(\mathbf{x}_i'\boldsymbol{\beta} + \varepsilon_i > 0 \mid \mathbf{x}_i) = \Pr(\varepsilon_i > -\mathbf{x}_i'\boldsymbol{\beta}) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(-\mathbf{x}_i'\boldsymbol{\beta}\)</span>
+              <span class="symbol-desc">The critical cutoff threshold that the random shock \(\varepsilon_i\) must exceed</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\Pr(\varepsilon_i > -\mathbf{x}_i'\boldsymbol{\beta})\)</span>
+              <span class="symbol-desc">Area under the error density function to the right of the cutoff point</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Because standard probability distributions are symmetric around zero (\(\Pr(\varepsilon > -z) = \Pr(\varepsilon < z) = F(z)\)), this immediately yields the standard binary choice specifications:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <span class="badge badge-outline" style="margin-bottom: 0.5rem;">PROBIT SPECIFICATION</span>
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Standard Normal Error</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0 0 0.5rem 0;">
+            If the unobserved disturbance follows a standard normal distribution \(\varepsilon_i \sim \mathcal{N}(0, 1)\):
+          </p>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \Pr(y_i = 1 \mid \mathbf{x}_i) = \Phi(\mathbf{x}_i'\boldsymbol{\beta}) \]
+          </div>
+        </div>
+
+        <div class="study-card">
+          <span class="badge badge-outline" style="margin-bottom: 0.5rem;">LOGIT SPECIFICATION</span>
+          <h4 style="color: var(--accent-success); margin-bottom: 0.5rem; font-size: 0.95rem;">Standard Logistic Error</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0 0 0.5rem 0;">
+            If the unobserved disturbance follows a standard logistic distribution \(\varepsilon_i \sim \text{Logistic}(0, 1)\):
+          </p>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \Pr(y_i = 1 \mid \mathbf{x}_i) = \Lambda(\mathbf{x}_i'\boldsymbol{\beta}) \]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Geometric Representation: Threshold at -x'b -->
+    <section class="lesson-section">
+      <h2>4. Geometric Representation: Threshold at \(-\mathbf{x}'\boldsymbol{\beta}\)</h2>
+      <p>
+        The latent variable formulation provides an intuitive geometric picture:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--text-secondary); margin: var(--space-sm) 0;">
+        <li>The density curve \(f(\varepsilon)\) remains stationary, centered at zero.</li>
+        <li>As an individual's deterministic score \(\mathbf{x}_i'\boldsymbol{\beta}\) increases, the threshold \(-\mathbf{x}_i'\boldsymbol{\beta}\) <strong>shifts to the left</strong>.</li>
+        <li>Shifting the threshold to the left captures <strong>more area under the curve to the right</strong>, expanding the probability that \(\varepsilon > -\mathbf{x}'\boldsymbol{\beta}\) and thus increasing \(\Pr(y = 1)\).</li>
+      </ul>
+    </section>
+
+    <!-- Section 5: Interactive Lab 16.4 -->
+    <section class="lesson-section">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <span class="lab-badge">INTERACTIVE LAB 16.4</span>
+          <h3 class="lab-title">Latent Threshold Explorer</h3>
+          <p class="lab-desc">
+            Interact with the latent threshold mechanism. Vary the deterministic index \(\mathbf{x}'\boldsymbol{\beta}\) and unobserved error \(\varepsilon\) to see whether the latent propensity \(y^*\) crosses the zero threshold.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+          <div class="segmented-control" role="group" aria-label="Select Error Distribution">
+            <button id="btnDistNormal" class="btn btn-sm btn-primary active" type="button">Normal Error (Probit)</button>
+            <button id="btnDistLogistic" class="btn btn-sm btn-outline" type="button">Logistic Error (Logit)</button>
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div class="lab-slider-group" style="display: flex; align-items: center; gap: 0.5rem;">
+              <label for="xBetaSlider" style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;">Index (\(\mathbf{x}'\boldsymbol{\beta}\)):</label>
+              <input type="range" id="xBetaSlider" min="-3.0" max="3.0" step="0.1" value="0.5" style="width: 110px;">
+              <span id="xBetaVal" class="slider-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; min-width: 36px;">0.5</span>
+            </div>
+
+            <div class="lab-slider-group" style="display: flex; align-items: center; gap: 0.5rem;">
+              <label for="epsSlider" style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;">Shock (\(\varepsilon\)):</label>
+              <input type="range" id="epsSlider" min="-3.0" max="3.0" step="0.1" value="0.2" style="width: 110px;">
+              <span id="epsVal" class="slider-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; min-width: 36px;">0.2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2x2 Metric Cards Grid -->
+        <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div class="metric-card">
+            <div class="metric-label">THRESHOLD (\(-\mathbf{x}'\boldsymbol{\beta}\))</div>
+            <div class="metric-value" id="m4Threshold">-0.50</div>
+            <div class="metric-subtext">Boundary error must exceed</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">PROBABILITY (\(\Pr(y=1)\))</div>
+            <div class="metric-value" id="m4Prob" style="color: var(--accent-primary);">69.1%</div>
+            <div class="metric-subtext">Area to right of threshold</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">LATENT SCORE (\(y^*\))</div>
+            <div class="metric-value" id="m4Ystar">0.70</div>
+            <div class="metric-subtext">\(\mathbf{x}'\boldsymbol{\beta} + \varepsilon\)</div>
+          </div>
+          <div class="metric-card" id="cardRealized">
+            <div class="metric-label">OBSERVED CHOICE (\(y\))</div>
+            <div class="metric-value" id="m4Realized" style="color: var(--accent-success);">y = 1</div>
+            <div class="metric-subtext" id="m4RealizedSub">Threshold crossed (\(y^* > 0\))</div>
+          </div>
+        </div>
+
+        <!-- Legend Bar Above Plot -->
+        <div class="external-legend-bar" style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--surface-raised); border-radius: var(--radius-sm); font-size: var(--text-xs); font-weight: 600;">
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #2563eb; border-radius: 2px;"></span>
+            Error Density \(f(\varepsilon)\)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #dc2626; border-radius: 2px;"></span>
+            Cutoff Threshold \(-\mathbf{x}'\boldsymbol{\beta}\)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: rgba(37, 99, 235, 0.25); border-radius: 2px;"></span>
+            Choice Probability Mass
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span>
+            Realized Shock \(\varepsilon\)
+          </span>
+        </div>
+
+        <!-- Visualization Plot Container -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="latentSvg" viewBox="0 0 760 380" style="width: 100%; height: 380px; display: block; overflow: visible;"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+                <!-- Scenario Insight -->
+        <div id="lab4InsightContainer" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: var(--text-sm); line-height: 1.6;">
+          <strong style="color: var(--color-primary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; display: inline-block; margin-right: 6px;">SCENARIO INSIGHT:</strong>
+          <span id="lab4InsightText"></span>
+        </div>
+          <p id="lab4InsightText" style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            With \(\mathbf{x}'\boldsymbol{\beta} = 0.5\) and shock \(\varepsilon = 0.2\), latent propensity \(y^* = 0.7 > 0\), triggering \(y = 1\)!
+          </p>
+        </div>
+
+        <!-- Canonical 2x2 Explanation Grid -->
+                <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The bell curve shows the distribution of unobserved shocks \(\varepsilon\). The vertical dashed red line marks the threshold \(-\mathbf{x}'\boldsymbol{\beta}\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Increasing \(\mathbf{x}'\boldsymbol{\beta}\) pushes the threshold to the left, capturing more of the shaded area under the curve to the right, which raises \(\Pr(y = 1)\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Individuals don't randomly flip coins. They have unobserved preferences (\(\varepsilon\)). An individual with high observable propensity (\(\mathbf{x}'\boldsymbol{\beta} > 0\)) can still choose \(y = 0\) if hit by a severe negative shock.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Setting the cutoff threshold at \(0\) is standard because any non-zero threshold \(c\) is absorbed into the intercept: \(\mathbf{x}'\boldsymbol{\beta} - c = \beta_0^* + \beta_1 x_1 + \dots\).</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> 
+          </div>
+        </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            Set \(\mathbf{x}'\boldsymbol{\beta} = 1.5\) (high propensity, \(\Pr(y=1) \approx 93\%\)). Now slide \(\varepsilon\) to \(-2.0\). Notice that even with a strong positive systematic index, a large negative idiosyncratic shock drives \(y^* = -0.5 \le 0\), producing \(y = 0\)!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+        <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> What do we observe in an empirical dataset if the underlying behavioral process is driven by a continuous latent variable \(y^*\)?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint164">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol164">Show Solution</button>
+        </div>
+        <div id="hint164" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Remember that latent variables represent unobserved utility or propensities.
+          </p>
+        </div>
+        <div id="sol164" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> We observe only the binary choice indicator \(y \in \{0, 1\}\), indicating whether the latent score exceeded the critical threshold (\(y^* > 0\)). The continuous index \(y^*\) itself is never directly observed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+        <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 16.4 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        Latent variable models ground empirical binary regressions in microeconomic choice theory:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Latent Index:</strong> Continuous propensity \(y_i^* = \mathbf{x}_i'\boldsymbol{\beta} + \varepsilon_i\) captures net benefits, utility, or reservation wage differences.</li>
+          <li><strong>Observation Threshold:</strong> We observe \(y_i = 1\) if \(y_i^* > 0\) and \(0\) otherwise.</li>
+          <li><strong>Probability Derivation:</strong> Choice probability equals \(\Pr(\varepsilon_i > -\mathbf{x}_i'\boldsymbol{\beta})\), which evaluates to \(F(\mathbf{x}_i'\boldsymbol{\beta})\) under symmetric error distributions.</li>
+          <li><strong>Error Distribution Link:</strong> Normal error generates Probit; logistic error generates Logit.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Marginal Effects in Binary Choice</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-16" data-lesson="4" style="align-self: center;">
+          ✓ Mark Lesson 4 Complete
+        </button>
+        <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Maximum Likelihood Estimation</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Lab 16.4 Interactive Script -->
+  <script>
+
+    let currentDist = 'normal';
+
+    const btnDistNormal = document.getElementById('btnDistNormal');
+    const btnDistLogistic = document.getElementById('btnDistLogistic');
+
+    const xBetaSlider = document.getElementById('xBetaSlider');
+    const epsSlider = document.getElementById('epsSlider');
+    const xBetaVal = document.getElementById('xBetaVal');
+    const epsVal = document.getElementById('epsVal');
+
+    const m4Threshold = document.getElementById('m4Threshold');
+    const m4Prob = document.getElementById('m4Prob');
+    const m4Ystar = document.getElementById('m4Ystar');
+    const m4Realized = document.getElementById('m4Realized');
+    const m4RealizedSub = document.getElementById('m4RealizedSub');
+    const cardRealized = document.getElementById('cardRealized');
+
+    const lab4InsightContainer = document.getElementById('lab4InsightContainer');
+    const lab4InsightText = document.getElementById('lab4InsightText');
+
+    function normalCdf(z) {
+      const a1 =  0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+      const sign = z < 0 ? -1 : 1;
+      const x = Math.abs(z) / Math.sqrt(2.0);
+      const t = 1.0 / (1.0 + p * x);
+      const erf = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+      return 0.5 * (1.0 + sign * erf);
+    }
+
+    function normalPdf(z) {
+      return (1.0 / Math.sqrt(2.0 * Math.PI)) * Math.exp(-0.5 * z * z);
+    }
+
+    function logitCdf(z) {
+      return 1.0 / (1.0 + Math.exp(-z));
+    }
+
+    function logitPdf(z) {
+      const p = logitCdf(z);
+      return p * (1.0 - p);
+    }
+
+    btnDistNormal.addEventListener('click', () => {
+      currentDist = 'normal';
+      btnDistNormal.className = 'btn btn-sm btn-primary active';
+      btnDistLogistic.className = 'btn btn-sm btn-outline';
+      updateLab4();
+    });
+
+    btnDistLogistic.addEventListener('click', () => {
+      currentDist = 'logistic';
+      btnDistLogistic.className = 'btn btn-sm btn-primary active';
+      btnDistNormal.className = 'btn btn-sm btn-outline';
+      updateLab4();
+    });
+
+    xBetaSlider.addEventListener('input', updateLab4);
+    epsSlider.addEventListener('input', updateLab4);
+
+    function updateLab4() {
+      const xBeta = parseFloat(xBetaSlider.value);
+      const eps = parseFloat(epsSlider.value);
+
+      xBetaVal.textContent = (xBeta >= 0 ? '+' : '') + xBeta.toFixed(2);
+      epsVal.textContent = (eps >= 0 ? '+' : '') + eps.toFixed(2);
+
+      const threshold = -xBeta;
+      const yStar = xBeta + eps;
+      const isCrossed = yStar > 0;
+
+      const cdfFunc = currentDist === 'normal' ? normalCdf : logitCdf;
+      const pdfFunc = currentDist === 'normal' ? normalPdf : logitPdf;
+
+      const prob = cdfFunc(xBeta);
+
+      m4Threshold.textContent = (threshold >= 0 ? '+' : '') + threshold.toFixed(3);
+      m4Prob.textContent = (prob * 100).toFixed(1) + '%';
+      m4Ystar.textContent = (yStar >= 0 ? '+' : '') + yStar.toFixed(3);
+
+      if (isCrossed) {
+        m4Realized.textContent = 'y = 1';
+        m4Realized.style.color = '#10b981';
+        m4RealizedSub.textContent = 'Threshold crossed (y* > 0)';
+        if (cardRealized) {
+          cardRealized.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          cardRealized.style.background = 'rgba(16, 185, 129, 0.04)';
+        }
+        lab4InsightContainer.style.borderLeftColor = '#10b981';
+        lab4InsightText.textContent = `The latent propensity y* = ${(yStar >= 0 ? '+' : '') + yStar.toFixed(2)} is strictly positive. The idiosyncratic shock ε_i = ${eps.toFixed(2)} exceeds the threshold ${threshold.toFixed(2)}, producing the observed outcome y = 1.`;
+      } else {
+        m4Realized.textContent = 'y = 0';
+        m4Realized.style.color = '#64748b';
+        m4RealizedSub.textContent = 'Below threshold (y* ≤ 0)';
+        if (cardRealized) {
+          cardRealized.style.borderColor = 'var(--color-border)';
+          cardRealized.style.background = 'var(--surface-bg, #ffffff)';
+        }
+        lab4InsightContainer.style.borderLeftColor = '#64748b';
+        lab4InsightText.textContent = `The latent propensity y* = ${yStar.toFixed(2)} is non-positive. The shock ε_i = ${eps.toFixed(2)} fails to exceed the threshold ${threshold.toFixed(2)}, resulting in the observed outcome y = 0.`;
+      }
+
+      renderLab4Chart(threshold, eps, cdfFunc, pdfFunc);
+    }
+
+    function renderLab4Chart(threshold, currentEps, cdfFunc, pdfFunc) {
+      const svg = document.getElementById('latentSvg');
+      if (!svg) return;
+
+      const width = 800;
+      const height = 380;
+      const margin = { top: 35, right: 45, bottom: 55, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const epsMin = -3.8;
+      const epsMax = 3.8;
+      const maxDensity = currentDist === 'normal' ? 0.42 : 0.28;
+
+      function scaleX(val) {
+        return margin.left + ((val - epsMin) / (epsMax - epsMin)) * plotW;
+      }
+
+      function scaleY(val) {
+        return margin.top + plotH - (val / maxDensity) * plotH;
+      }
+
+      const fontStack = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+
+      let html = `
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+
+        <line x1="${scaleX(0)}" y1="${margin.top}" x2="${scaleX(0)}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" stroke-dasharray="2,2" />
+        <text x="${scaleX(0)}" y="${margin.top + plotH + 18}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="middle">0</text>
+
+        <text x="${margin.left + plotW / 2}" y="${margin.top + plotH + 42}" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" text-anchor="middle">Unobserved Error Shock (ε)</text>
+        <text x="-${margin.top + plotH / 2}" y="18" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" transform="rotate(-90)" text-anchor="middle">Error Density f(ε)</text>
+      `;
+
+      [-3, -2, -1, 1, 2, 3].forEach(val => {
+        const xPos = scaleX(val);
+        html += `<line x1="${xPos}" y1="${margin.top + plotH}" x2="${xPos}" y2="${margin.top + plotH + 4}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" />`;
+        html += `<text x="${xPos}" y="${margin.top + plotH + 18}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="middle">${val}</text>`;
+      });
+
+      const numPts = 80;
+      let densityPath = '';
+      let shadedPath = '';
+      let startedShade = false;
+
+      for (let i = 0; i <= numPts; i++) {
+        const e = epsMin + (i / numPts) * (epsMax - epsMin);
+        const d = pdfFunc(e);
+        const xCoord = scaleX(e);
+        const yCoord = scaleY(d);
+
+        densityPath += (i === 0 ? 'M ' : ' L ') + `${xCoord} ${yCoord}`;
+
+        if (e >= threshold) {
+          if (!startedShade) {
+            const threshX = scaleX(threshold);
+            const threshY = scaleY(pdfFunc(threshold));
+            shadedPath = `M ${threshX} ${scaleY(0)} L ${threshX} ${threshY}`;
+            startedShade = true;
+          }
+          shadedPath += ` L ${xCoord} ${yCoord}`;
+        }
+      }
+
+      if (startedShade) {
+        shadedPath += ` L ${scaleX(epsMax)} ${scaleY(0)} Z`;
+        html += `<path d="${shadedPath}" fill="rgba(16, 185, 129, 0.22)" />`;
+      }
+
+      html += `<path d="${densityPath}" fill="none" stroke="#2563eb" stroke-width="3" />`;
+
+      const tX = scaleX(threshold);
+      if (tX >= margin.left && tX <= margin.left + plotW) {
+        html += `
+          <line x1="${tX}" y1="${margin.top}" x2="${tX}" y2="${margin.top + plotH}" stroke="#ef4444" stroke-width="2.5" />
+          <text x="${tX}" y="${margin.top - 10}" fill="#ef4444" font-weight="700" font-size="11" font-family="${fontStack}" text-anchor="middle">−x'β = ${threshold.toFixed(2)}</text>
+        `;
+      }
+
+      const epsX = scaleX(currentEps);
+      const epsD = pdfFunc(currentEps);
+      const epsY = scaleY(epsD);
+      const shockColor = currentEps > threshold ? '#10b981' : '#64748b';
+
+      html += `
+        <line x1="${epsX}" y1="${margin.top + plotH}" x2="${epsX}" y2="${epsY}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3" />
+        <circle cx="${epsX}" cy="${epsY}" r="7" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5" />
+        <text x="${epsX}" y="${epsY - 12}" fill="${shockColor}" font-weight="700" font-size="11" font-family="${fontStack}" text-anchor="middle">
+          ε_i = ${currentEps.toFixed(2)} (${currentEps > threshold ? 'y = 1' : 'y = 0'})
+        </text>
+      `;
+
+      svg.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLab4();
+    });
+  
+  </script>
+</body>
+</html>

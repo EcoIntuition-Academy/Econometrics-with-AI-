@@ -27,6 +27,39 @@
   applyTheme(getPreferredTheme());
 
   document.addEventListener('DOMContentLoaded', () => {
+    // Global Quick Check Hint & Solution Toggles
+    document.addEventListener('click', (e) => {
+      const hintBtn = e.target.closest('.toggle-hint-btn');
+      if (hintBtn) {
+        e.preventDefault();
+        const card = hintBtn.closest('.quick-check-card');
+        if (card) {
+          const hint = card.querySelector('.quick-check-hint');
+          if (hint) {
+            const isHidden = window.getComputedStyle(hint).display === 'none' || hint.style.display === 'none';
+            hint.style.display = isHidden ? 'block' : 'none';
+            hintBtn.textContent = isHidden ? 'Hide Hint' : 'Hint';
+          }
+        }
+        return;
+      }
+
+      const solBtn = e.target.closest('.toggle-sol-btn');
+      if (solBtn) {
+        e.preventDefault();
+        const card = solBtn.closest('.quick-check-card');
+        if (card) {
+          const sol = card.querySelector('.quick-check-solution');
+          if (sol) {
+            const isHidden = window.getComputedStyle(sol).display === 'none' || sol.style.display === 'none';
+            sol.style.display = isHidden ? 'block' : 'none';
+            solBtn.textContent = isHidden ? 'Hide Solution' : 'Show Solution';
+          }
+        }
+        return;
+      }
+    });
+
     // Theme toggle button handler
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) {

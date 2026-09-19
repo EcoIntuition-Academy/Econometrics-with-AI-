@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17.6: Efficient GMM, Hansen's J-Test &amp; Module Review — EcoIntuition Academy</title>
+  <meta name="description" content="Master Efficient GMM, optimal weighting matrix derivation, Hansen's J-test of overidentifying restrictions, and synthesize hypothesis testing with GMM.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-17" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 17: Hypothesis Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 17</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 17</a>
+          <span class="module-nav-title">Hypothesis Tests &amp; GMM</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; Efficient GMM, Hansen J &amp; Module Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 17 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.1 Likelihood Ratio Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.2 The Wald Test &amp; Delta-Method Variance</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.3 LM / Score Tests &amp; Comparing LR, Wald, LM</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.4 GMM Foundations: Moments, Plims &amp; OLS</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.5 GMM with Instruments: IV &amp; Weighting</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">17.6 Efficient GMM, Hansen J &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 17.6</span>
+        <span class="badge">Efficient GMM &amp; Synthesis</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Efficient GMM, Hansen J &amp; Module Review
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Derive the optimal weighting matrix that minimizes estimator asymptotic variance, execute Hansen's J-test of overidentifying restrictions, and synthesize the complete hypothesis testing and GMM framework.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Derive the optimal weighting matrix \(\mathbf{W}^* = \mathbf{S}^{-1}\) as the inverse asymptotic variance of the sample moments.</li>
+        <li>Explain how Efficient GMM accounts for arbitrary heteroskedasticity and cross-instrument correlation.</li>
+        <li>Formulate Hansen's J-test statistic \(J = n \hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})' \hat{\mathbf{W}} \hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})\).</li>
+        <li>Establish that \(J \sim \chi^2_{L-K}\) under \(H_0\) and explain why \(L > K\) is mandatory.</li>
+        <li>Understand proper interpretation: a large \(J\) rejects joint validity, but does not identify which specific instrument is invalid.</li>
+        <li>Synthesize the unified econometric framework across Likelihood Ratio, Wald, LM, GMM, and Hansen J.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Efficient GMM and Optimal Weighting Matrix -->
+    <section class="lesson-section">
+      <h2 class="section-title">1. Efficient GMM and the Optimal Weighting Matrix</h2>
+      <p>
+        While any positive semi-definite matrix \(\mathbf{W}\) produces a consistent GMM estimator when the moment conditions hold, different choices of \(\mathbf{W}\) yield different asymptotic variances.
+      </p>
+      <p>
+        According to the source, <strong>the optimal weighting matrix in GMM is the inverse of the asymptotic variance of the moment conditions:</strong>
+      </p>
+
+      <!-- Equation Card: Optimal Weighting Matrix -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">OPTIMAL INFERENCE &middot; EFFICIENT GMM</span>
+          <h3 class="equation-title">The Optimal GMM Weighting Matrix and Estimator</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \mathbf{W}^* = \left[ \text{Var}\left( \sqrt{n} \hat{\mathbf{g}}(\boldsymbol{\beta}) \right) \right]^{-1} = \mathbf{S}^{-1}
+          \]
+          \[
+          \mathbf{S} = \text{plim} \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{g}_i(\boldsymbol{\beta}) \mathbf{g}_i(\boldsymbol{\beta})' \right]
+          \]
+          \[
+          \hat{\boldsymbol{\beta}}_{GMM} = \arg\min_{\boldsymbol{\beta}} \left[ \hat{\mathbf{g}}(\boldsymbol{\beta})' \mathbf{S}^{-1} \hat{\mathbf{g}}(\boldsymbol{\beta}) \right]
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{S}\)</span>
+              <span class="symbol-desc">Asymptotic covariance matrix of the empirical moment conditions.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{S}^{-1}\)</span>
+              <span class="symbol-desc">Optimal weighting matrix, precision-weighting the moment vector.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\boldsymbol{\beta}}_{GMM}\)</span>
+              <span class="symbol-desc">The efficient GMM estimator achieving the minimum possible asymptotic covariance.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Intuition Callout -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border-left: 4px solid var(--color-primary); margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: var(--color-primary); font-weight: 700;">
+          💡 Core Pedagogical Intuition
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          <strong>"Efficient GMM chooses the weighting matrix that minimizes the asymptotic variance of the estimator. It accounts for heteroskedasticity and correlation across instruments."</strong><br>
+          Just as GLS weights observations by their variance, Efficient GMM weights moment conditions by their precision. Highly noisy moments receive little weight, while precise, low-variance moments receive heavy weight.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Hansen's J-Test -->
+    <section class="lesson-section">
+      <h2 class="section-title">2. Testing Overidentifying Restrictions: Hansen's J-Test</h2>
+      <p>
+        Recall that when \(L > K\), we have more instruments than regressors. The model cannot generally set every sample moment exactly to zero.
+      </p>
+      <p>
+        Under the null hypothesis, all \(L\) instruments are valid and uncorrelated with the structural error term:
+      </p>
+
+      <!-- Equation Card: Hansen J-Test -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIFICATION TEST &middot; HANSEN J-TEST</span>
+          <h3 class="equation-title">Hansen's J-Statistic for Overidentifying Restrictions</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          H_0 : \mathbb{E}\left[ \mathbf{z}_i (y_i - \mathbf{x}_i'\boldsymbol{\beta}) \right] = \mathbf{0} \quad \text{(all instruments are valid)}
+          \]
+          \[
+          J = n \cdot \hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})' \cdot \hat{\mathbf{W}} \cdot \hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})
+          \]
+          \[
+          J \xrightarrow{d} \chi^2_{L - K} \quad \text{under } H_0
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(J\)</span>
+              <span class="symbol-desc">Hansen's J-test statistic of overidentifying restrictions.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})\)</span>
+              <span class="symbol-desc">Sample moment residual vector evaluated at the efficient GMM estimates.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\mathbf{W}} = \hat{\mathbf{S}}^{-1}\)</span>
+              <span class="symbol-desc">Consistent estimate of the optimal weighting matrix.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(L - K\)</span>
+              <span class="symbol-desc">Degrees of freedom, equal to the number of overidentifying restrictions.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critical Interpretation & Caution Cards -->
+      <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0;">
+        <div class="study-card" style="border-top: 3px solid #ef4444;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #ef4444;">Source-Supported Interpretation</h4>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            <strong>If \(J\) is too large:</strong> the moment conditions cannot all be simultaneously satisfied, leading to rejection of the null hypothesis. The source states that this indicates that <em>some instruments may be invalid</em>.
+          </p>
+        </div>
+
+        <div class="study-card" style="border-top: 3px solid #f59e0b;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #f59e0b;">Mandatory Applicability Condition</h4>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            <strong>Hansen's J-test is valid only when the model is overidentified (\(L > K\)).</strong> When \(L = K\), \(\hat{\mathbf{g}}(\hat{\boldsymbol{\beta}}) = \mathbf{0}\) by algebraic construction, making \(J = 0\) identically with \(0\) degrees of freedom.
+          </p>
+        </div>
+      </div>
+
+      <!-- Common Student Mistake -->
+      <div class="common-mistake-card">
+        <div class="mistake-header">
+          <span class="mistake-icon">⚠️</span>
+          <h4 class="mistake-title">Common Student Mistake: Pinpointing Instrument Failure</h4>
+        </div>
+        <div class="mistake-body">
+          <p>
+            <strong>MISCONCEPTION:</strong> "A statistically significant Hansen J-statistic proves exactly which specific instrument is invalid."
+          </p>
+          <p>
+            <strong>CORRECTION:</strong> As econometrics demands, <strong>do not claim that \(J\) identifies which instrument is invalid.</strong> The J-test is an omnibus test of the <em>joint</em> validity of the entire system of restrictions. Rejection indicates that the instruments are mutually incompatible; it cannot diagnose whether Instrument 1, Instrument 2, or structural misspecification is the culprit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 17.6 -->
+    <section class="lesson-section">
+      <h2 class="section-title">3. Interactive Lab 17.6: Hansen's J-Test in Moment Space</h2>
+      <p>
+        Visualize how the Hansen J-statistic measures the standardized distance of the sample moment vector from zero in overidentified moment space.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">INTERACTIVE LAB 17.6</div>
+          <h3 class="lab-title">Moment Vector Distance from Origin</h3>
+          <p class="lab-desc">
+            Consider a model with \(L = 2\) instruments and \(K = 1\) parameter (overidentification degree \(L - K = 1\)). Toggle between valid, mutually compatible instruments and conflicting instruments. Watch the sample moment vector move away from the origin and cross the \(\chi^2_1\) critical boundary.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div class="lab-control-group">
+            <label>Instrument Regime:</label>
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-primary active" id="btnValid" type="button">Valid Instruments</button>
+              <button class="btn btn-sm btn-outline" id="btnInvalid" type="button">Conflicting Instruments</button>
+            </div>
+          </div>
+          <div class="lab-control-group">
+            <label for="sampleSizeSlider">Sample Size \(n\): <span id="nVal6" style="font-weight: 700; color: var(--color-primary);">100</span></label>
+            <input type="range" id="sampleSizeSlider" min="50" max="500" step="25" value="100" class="lab-slider">
+          </div>
+        </div>
+
+        <!-- 2x2 Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Overidentification df (\(L - K\))</div>
+            <div class="metric-value">1</div>
+            <div class="metric-subtext">\(L = 2\) instruments, \(K = 1\) regressor</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Residual Moment \(\|\hat{\mathbf{g}}\|\)</div>
+            <div class="metric-value" id="metricGNorm">0.120</div>
+            <div class="metric-subtext">Euclidean distance from origin</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Hansen J-Statistic</div>
+            <div class="metric-value" id="metricJVal" style="color: #10b981;">1.44</div>
+            <div class="metric-subtext">\(J = n \hat{\mathbf{g}}' \hat{\mathbf{W}} \hat{\mathbf{g}} \sim \chi^2_1\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Specification Decision (5%)</div>
+            <div class="metric-value" id="metricJDecision" style="color: #10b981;">PASS (H0 VALID)</div>
+            <div class="metric-subtext">Critical \(\chi^2_1 = 3.84\)</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span>
+            <span>Origin \((0, 0)\): Theoretical Zero Moment Vector</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: rgba(16, 185, 129, 0.2);"></span>
+            <span>5% Acceptance Ellipse (\(J \le 3.84\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span>
+            <span>Sample Moment Vector \(\hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})\)</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="min-height: 380px;">
+          <svg id="jSvg" viewBox="0 0 760 360" width="100%" height="360" style="overflow: visible; font-family: var(--font-sans);"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            Under valid instruments, the sample moment vector falls well inside the 95% acceptance ellipse. The J-statistic (1.44) does not exceed 3.84, confirming overidentifying validity.
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                A two-dimensional moment space. The green origin marks theoretical perfection \(\mathbb{E}[\mathbf{g}] = \mathbf{0}\). The shaded ellipse is the 95% acceptance boundary. The red dot represents the empirical sample moment vector \(\hat{\mathbf{g}}\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                When you switch to "Conflicting Instruments", the moment vector leaps far outside the acceptance ellipse. Even though GMM chooses \(\hat{\boldsymbol{\beta}}\) to minimize distance, the moments cannot be simultaneously brought near zero!
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                Hansen's J-test is the primary omnibus specification test for overidentified models. If \(J\) rejects, the structural model or instrument exogeneity assumptions are fundamentally flawed.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                Under \(H_0\), \(J = n \hat{\mathbf{g}}'\hat{\mathbf{W}}\hat{\mathbf{g}} \xrightarrow{d} \chi^2_{L - K}\). Notice that \(J\) scales directly with \(n\): in large samples, even modest correlation with disturbances drives \(J\) to significant rejection.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Switch to Conflicting Instruments and increase sample size \(n\) from 100 to 400. Watch the J-statistic explode from 7.84 to 31.36, highlighting how large samples sharpen power against invalid instruments!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Comprehensive Synthesis -->
+    <section class="lesson-section">
+      <h2 class="section-title">4. Complete Synthesis: Hypothesis Testing &amp; GMM</h2>
+      <p>
+        Review the unified framework across all five foundational test strategies covered in Module 17:
+      </p>
+
+      <div class="study-card" style="padding: 0; overflow-x: auto; margin: var(--space-lg) 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: var(--text-sm); text-align: left;">
+          <thead>
+            <tr style="background: var(--surface-secondary, #f8fafc); border-bottom: 2px solid var(--border-subtle);">
+              <th style="padding: 0.75rem 1rem; font-weight: 700;">Method / Test</th>
+              <th style="padding: 0.75rem 1rem; font-weight: 700;">Estimates Required</th>
+              <th style="padding: 0.75rem 1rem; font-weight: 700;">Core Geometric Metric</th>
+              <th style="padding: 0.75rem 1rem; font-weight: 700;">Null Distribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.75rem 1rem; font-weight: 600; color: #2563eb;">Likelihood Ratio (LR)</td>
+              <td style="padding: 0.75rem 1rem;">Restricted + Unrestricted</td>
+              <td style="padding: 0.75rem 1rem;">Vertical drop in likelihood height: \(2[\ln L_U - \ln L_R]\)</td>
+              <td style="padding: 0.75rem 1rem;">\(\chi^2_q\)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.75rem 1rem; font-weight: 600; color: #f59e0b;">Wald Test (W)</td>
+              <td style="padding: 0.75rem 1rem;">Unrestricted Only</td>
+              <td style="padding: 0.75rem 1rem;">Horizontal distance: \([\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}]'\text{Avar}^{-1}[\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}]\)</td>
+              <td style="padding: 0.75rem 1rem;">\(\chi^2_q\)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.75rem 1rem; font-weight: 600; color: #10b981;">Lagrange Multiplier (LM)</td>
+              <td style="padding: 0.75rem 1rem;">Restricted Only</td>
+              <td style="padding: 0.75rem 1rem;">Score gradient slope at restricted point: \(\hat{\mathbf{s}}_R'\mathbf{I}_R^{-1}\hat{\mathbf{s}}_R\)</td>
+              <td style="padding: 0.75rem 1rem;">\(\chi^2_q\)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.75rem 1rem; font-weight: 600; color: #6366f1;">GMM Estimator</td>
+              <td style="padding: 0.75rem 1rem;">Moment Conditions</td>
+              <td style="padding: 0.75rem 1rem;">Weighted quadratic moment distance: \(\hat{\mathbf{g}}'\mathbf{W}\hat{\mathbf{g}}\)</td>
+              <td style="padding: 0.75rem 1rem;">\(\hat{\boldsymbol{\beta}}_{GMM} \approx \mathcal{N}\)</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem 1rem; font-weight: 600; color: #ec4899;">Hansen's J-Test</td>
+              <td style="padding: 0.75rem 1rem;">Efficient GMM (\(L > K\))</td>
+              <td style="padding: 0.75rem 1rem;">Distance of moment vector from zero: \(n\hat{\mathbf{g}}'\mathbf{S}^{-1}\hat{\mathbf{g}}\)</td>
+              <td style="padding: 0.75rem 1rem;">\(\chi^2_{L - K}\)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2 class="section-title">5. Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-meta">
+          <span class="badge badge-outline">CONCEPT CHECK</span>
+          <span class="badge badge-secondary">Hansen J Preconditions</span>
+        </div>
+        <h3 class="practice-question">
+          Why can Hansen's J-test of overidentifying restrictions NOT be computed in a just-identified model where \(L = K\)?
+        </h3>
+        <div class="practice-actions">
+          <button class="btn btn-secondary btn-sm hint-toggle" data-toggle-target="hint176">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol176">
+            Show Solution
+          </button>
+        </div>
+        <div id="hint176" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Hint:</strong> What are the degrees of freedom \(L - K\) when \(L = K\)? What value does the sample moment vector \(\hat{\mathbf{g}}(\hat{\boldsymbol{\beta}})\) take?
+          </p>
+        </div>
+        <div id="sol176" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> When \(L = K\), the number of moment equations exactly equals the number of parameters. The sample moment vector can be solved exactly to zero: \(\hat{\mathbf{g}}(\hat{\boldsymbol{\beta}}) = \mathbf{0}\). Consequently, \(J = n \hat{\mathbf{g}}'\mathbf{W}\hat{\mathbf{g}} = 0\) by algebraic necessity, and the degrees of freedom \(L - K = 0\). The test has no overidentifying information with which to test validity; it is applicable strictly when \(L > K\).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 17.6 Summary &amp; Module Review</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        Efficient GMM and Hansen's J-test complete the modern econometric specification toolkit:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Efficient Weighting:</strong> Choosing \(\mathbf{W}^* = \mathbf{S}^{-1}\) minimizes estimator variance and accounts for heteroskedasticity and cross-instrument correlation.</li>
+        <li><strong>Hansen's J-Test:</strong> Tests \(H_0: \mathbb{E}[\mathbf{z}_i(y_i - \mathbf{x}_i'\boldsymbol{\beta})] = \mathbf{0}\) via \(J = n \hat{\mathbf{g}}' \hat{\mathbf{W}} \hat{\mathbf{g}} \sim \chi^2_{L-K}\).</li>
+        <li><strong>Proper Interpretation:</strong> Rejection indicates joint incompatibility of moments, not specific individual instrument culpability. Requires \(L > K\).</li>
+        <li><strong>Mastery Achieved:</strong> From likelihood-based testing (LR, Wald, LM) to moment-based estimation and overidentification testing (GMM, Hansen J), you have mastered the foundational econometric principles of specification testing!</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-05.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">GMM with Instruments &amp; Overidentification</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-17" data-lesson="6" style="align-self: center;">
+          ✓ Mark Lesson 6 Complete
+        </button>
+        <a href="index.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Return to Module &rarr;</span>
+          <span class="nav-btn-title">Module 17 Overview</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Interactive Lab 17.6 Script -->
+  <script>
+    const btnValid = document.getElementById('btnValid');
+    const btnInvalid = document.getElementById('btnInvalid');
+    const sampleSizeSlider = document.getElementById('sampleSizeSlider');
+    const nVal6 = document.getElementById('nVal6');
+    const metricGNorm = document.getElementById('metricGNorm');
+    const metricJVal = document.getElementById('metricJVal');
+    const metricJDecision = document.getElementById('metricJDecision');
+    const labInsightText = document.getElementById('labInsightText');
+    const labInsightContainer = document.getElementById('labInsightContainer');
+    const jSvg = document.getElementById('jSvg');
+
+    let isInvalid = false;
+
+    btnValid.addEventListener('click', () => {
+      isInvalid = false;
+      btnValid.className = 'btn btn-sm btn-primary active';
+      btnInvalid.className = 'btn btn-sm btn-outline';
+      updateJPlot();
+    });
+
+    btnInvalid.addEventListener('click', () => {
+      isInvalid = true;
+      btnInvalid.className = 'btn btn-sm btn-primary active';
+      btnValid.className = 'btn btn-sm btn-outline';
+      updateJPlot();
+    });
+
+    sampleSizeSlider.addEventListener('input', updateJPlot);
+
+    function updateJPlot() {
+      const N = parseInt(sampleSizeSlider.value);
+      nVal6.textContent = N;
+
+      // Residual moment coordinates
+      let g1 = isInvalid ? 0.28 : 0.08;
+      let g2 = isInvalid ? 0.22 : 0.06;
+
+      const gNorm = Math.sqrt(g1 * g1 + g2 * g2);
+      // Precision matrix S^-1 approx identity for visual
+      const J = N * (g1 * g1 + g2 * g2);
+
+      metricGNorm.textContent = gNorm.toFixed(3);
+      metricJVal.textContent = J.toFixed(2);
+
+      if (J > 3.841) {
+        metricJDecision.textContent = 'REJECT H0 (INVALID)';
+        metricJDecision.style.color = '#ef4444';
+        metricJVal.style.color = '#ef4444';
+        labInsightContainer.style.borderLeftColor = '#ef4444';
+        labInsightContainer.style.background = 'rgba(239, 68, 68, 0.05)';
+        labInsightText.innerHTML = 'At sample size \(n = ' + N + '\), the Hansen J-statistic <strong>J = ' + J.toFixed(2) + ' > 3.84</strong> (p < 0.05). The moment vector lies far outside the acceptance ellipse: <strong>reject joint validity of instruments</strong>!';
+      } else {
+        metricJDecision.textContent = 'PASS (H0 VALID)';
+        metricJDecision.style.color = '#10b981';
+        metricJVal.style.color = '#10b981';
+        labInsightContainer.style.borderLeftColor = '#10b981';
+        labInsightContainer.style.background = 'rgba(16, 185, 129, 0.05)';
+        labInsightText.innerHTML = 'Under valid instruments with \(n = ' + N + '\), the moment vector sits well inside the acceptance ellipse. <strong>J = ' + J.toFixed(2) + ' \le 3.84</strong>: <strong>fail to reject overidentifying restrictions</strong>.';
+      }
+
+      // Draw SVG Moment Space
+      const width = 760;
+      const height = 360;
+      const cx = width / 2;
+      const cy = height / 2;
+      const scale = 360; // pixels per unit
+
+      const rx = Math.sqrt(3.841 / N) * scale;
+      const ry = rx * 0.85;
+
+      const ptX = cx + g1 * scale;
+      const ptY = cy - g2 * scale;
+
+      let svgHtml = `
+        <!-- Axes through origin (0, 0) -->
+        <line x1="60" y1="${cy}" x2="${width - 60}" y2="${cy}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5"/>
+        <line x1="${cx}" y1="30" x2="${cx}" y2="${height - 30}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5"/>
+
+        <text x="${width - 55}" y="${cy - 8}" font-size="12" font-weight="600" fill="var(--color-text-secondary, #64748b)">Moment g1</text>
+        <text x="${cx + 8}" y="42" font-size="12" font-weight="600" fill="var(--color-text-secondary, #64748b)">Moment g2</text>
+
+        <!-- Acceptance Ellipse (J <= 3.84) -->
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4"/>
+        <text x="${cx + rx + 8}" y="${cy - 8}" font-size="11" font-weight="600" fill="#10b981">95% Acceptance Boundary</text>
+
+        <!-- Origin Point (0, 0) -->
+        <circle cx="${cx}" cy="${cy}" r="6" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+        <text x="${cx - 8}" y="${cy + 18}" text-anchor="end" font-size="11" font-weight="700" fill="#10b981">Origin (0, 0)</text>
+
+        <!-- Vector from Origin to Sample Moment -->
+        <line x1="${cx}" y1="${cy}" x2="${ptX}" y2="${ptY}" stroke="${J > 3.841 ? '#ef4444' : '#2563eb'}" stroke-width="2.5"/>
+
+        <!-- Sample Moment Point -->
+        <circle cx="${ptX}" cy="${ptY}" r="7" fill="${J > 3.841 ? '#ef4444' : '#2563eb'}" stroke="#ffffff" stroke-width="2"/>
+        <text x="${ptX + 10}" y="${ptY - 8}" font-size="12" font-weight="700" fill="${J > 3.841 ? '#ef4444' : '#2563eb'}">
+          ĝ = (${g1.toFixed(2)}, ${g2.toFixed(2)})
+        </text>
+      `;
+
+      jSvg.innerHTML = svgHtml;
+    }
+
+    updateJPlot();
+  </script>
+</body>
+</html>

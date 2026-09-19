@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17.5: GMM with Instruments: IV, Overidentification &amp; Weighting — EcoIntuition Academy</title>
+  <meta name="description" content="Master GMM with instrumental variables: analyze underidentified, just-identified, and overidentified systems, formulate the quadratic GMM objective function, and derive the 2SLS weighting matrix.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-17" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 17: Hypothesis Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 17</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 17</a>
+          <span class="module-nav-title">Hypothesis Tests &amp; GMM</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 6 &middot; GMM with Instruments: IV &amp; Weighting</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 17 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.1 Likelihood Ratio Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.2 The Wald Test &amp; Delta-Method Variance</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.3 LM / Score Tests &amp; Comparing LR, Wald, LM</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.4 GMM Foundations: Moments, Plims &amp; OLS</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">17.5 GMM with Instruments: IV &amp; Weighting</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.6 Efficient GMM, Hansen J &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">83%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 83%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 17.5</span>
+        <span class="badge">Overidentification &amp; Weighting</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        GMM with Instruments: IV &amp; Weighting
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Extend the method of moments when regressors are endogenous: define instrument matrices with \(L > K\), contrast just-identified IV with overidentified GMM, formulate the quadratic objective function, and analyze weighting matrix choices.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Formulate instrument-residual moment conditions \(\mathbb{E}[\mathbf{z}_i (y_i - \mathbf{x}_i'\boldsymbol{\beta})] = \mathbf{0}\) when \(\mathbf{Z} \ne \mathbf{X}\).</li>
+        <li>Distinguish the three identification regimes: underidentified (\(L < K\)), just-identified (\(L = K\)), and overidentified (\(L > K\)).</li>
+        <li>Prove that when \(L = K\), GMM reduces to the classical Instrumental Variables (IV) estimator.</li>
+        <li>Construct the quadratic GMM objective function \(Q_n(\boldsymbol{\beta}) = \hat{\mathbf{g}}(\boldsymbol{\beta})' \mathbf{W} \hat{\mathbf{g}}(\boldsymbol{\beta})\).</li>
+        <li>Show that choosing the weighting matrix \(\mathbf{W} = (\mathbf{Z}'\mathbf{Z})^{-1}\) derives the Two-Stage Least Squares (2SLS) estimator.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Definition & Dimensions -->
+    <section class="lesson-section">
+      <h2 class="section-title">1. Instrumental Variables and Moment Conditions</h2>
+      <p>
+        When regressors are endogenous (i.e., \(\mathbb{E}[\mathbf{x}_i \varepsilon_i] \ne \mathbf{0}\)), Ordinary Least Squares fails to be consistent. We introduce an instrument matrix \(\mathbf{Z}\) containing variables that are correlated with \(\mathbf{X}\) but orthogonal to \(\boldsymbol{\varepsilon}\).
+      </p>
+      <p>
+        Let \(\mathbf{Z}\) be an \(n \times L\) matrix of instruments and \(\mathbf{X}\) be an \(n \times K\) matrix of regressors:
+      </p>
+
+      <!-- Equation Card: Instrument Moment Conditions -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">MOMENT SPECIFICATION &middot; ORTHOGONALITY</span>
+          <h3 class="equation-title">Population and Sample Moment Conditions with Instruments</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \mathbb{E}[\mathbf{z}_i \varepsilon_i] = \mathbb{E}\left[ \mathbf{z}_i (y_i - \mathbf{x}_i'\boldsymbol{\beta}) \right] = \mathbf{0}
+          \]
+          \[
+          \hat{\mathbf{g}}(\boldsymbol{\beta}) = \frac{1}{n} \sum_{i=1}^n \mathbf{z}_i (y_i - \mathbf{x}_i'\boldsymbol{\beta}) = \frac{1}{n} \mathbf{Z}' (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{Z}\)</span>
+              <span class="symbol-desc">Instrument matrix of dimension \(n \times L\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{X}\)</span>
+              <span class="symbol-desc">Regressor matrix of dimension \(n \times K\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(L\)</span>
+              <span class="symbol-desc">Total number of available instruments (and moment conditions).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(K\)</span>
+              <span class="symbol-desc">Total number of unknown structural parameters in \(\boldsymbol{\beta}\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\mathbf{g}}(\boldsymbol{\beta})\)</span>
+              <span class="symbol-desc">The \(L \times 1\) sample moment vector.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Identification Regimes -->
+    <section class="lesson-section">
+      <h2 class="section-title">2. Identification Regimes: Just vs. Overidentified Systems</h2>
+      <p>
+        The relationship between the number of moment conditions \(L\) and the number of parameters \(K\) governs the mathematical solvability of the system:
+      </p>
+
+      <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0;">
+        <div class="study-card" style="border-top: 3px solid #64748b;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #64748b;">Underidentified (\(L < K\))</h4>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            Fewer moment equations than parameters. Infinite parameter vectors solve the system; \(\boldsymbol{\beta}\) cannot be uniquely identified without further economic assumptions.
+          </p>
+        </div>
+
+        <div class="study-card" style="border-top: 3px solid #2563eb;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #2563eb;">Just-Identified (\(L = K\))</h4>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            Exactly as many moment equations as parameters. We can set every sample moment strictly to zero: \(\mathbf{Z}'(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}\).
+          </p>
+        </div>
+
+        <div class="study-card" style="border-top: 3px solid #10b981;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #10b981;">Overidentified (\(L > K\))</h4>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+            More moment equations than parameters. In finite samples, no single \(\boldsymbol{\beta}\) can set all \(L\) moments simultaneously to zero. GMM is required to optimally compromise.
+          </p>
+        </div>
+      </div>
+
+      <!-- Equation Card: Just-Identified Case -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIAL CASE &middot; L = K</span>
+          <h3 class="equation-title">Just-Identified GMM Collapses to Standard IV</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \mathbf{Z}' (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0} \implies \mathbf{Z}'\mathbf{y} = \mathbf{Z}'\mathbf{X}\hat{\boldsymbol{\beta}} \implies \hat{\boldsymbol{\beta}}_{IV} = (\mathbf{Z}'\mathbf{X})^{-1} \mathbf{Z}'\mathbf{y}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\boldsymbol{\beta}}_{IV}\)</span>
+              <span class="symbol-desc">The standard Instrumental Variables estimator.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{Z}'\mathbf{X}\)</span>
+              <span class="symbol-desc">A square \(K \times K\) matrix, invertible under the instrument relevance rank condition.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        <strong>Key Result:</strong> When the number of instruments equals the number of regressors (\(L = K\)), GMM simplifies to the classical IV estimator without requiring any weighting matrix!
+      </p>
+    </section>
+
+    <!-- Section 3: The Overidentified Case and Weighting Matrices -->
+    <section class="lesson-section">
+      <h2 class="section-title">3. The Overidentified Case (\(L > K\)) &amp; the Weighting Matrix</h2>
+      <p>
+        When \(L > K\), we have an overdetermined system: \(L\) equations trying to solve for \(K\) parameters. Because random sampling error makes it impossible to satisfy all \(L\) equations exactly, we construct an objective function that minimizes the weighted quadratic distance of the moment vector from zero:
+      </p>
+
+      <!-- Equation Card: GMM Objective & Estimator -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">GMM CRITERION &middot; QUADRATIC FORM</span>
+          <h3 class="equation-title">The Quadratic GMM Objective and Estimator</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          Q_n(\boldsymbol{\beta}) = \hat{\mathbf{g}}(\boldsymbol{\beta})' \mathbf{W} \hat{\mathbf{g}}(\boldsymbol{\beta})
+          \]
+          \[
+          \hat{\boldsymbol{\beta}}_{GMM} = \arg\min_{\boldsymbol{\beta}} \left[ \frac{1}{n} \mathbf{Z}' (\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) \right]' \mathbf{W} \left[ \frac{1}{n} \mathbf{Z}' (\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) \right]
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(Q_n(\boldsymbol{\beta})\)</span>
+              <span class="symbol-desc">The scalar quadratic GMM loss function to be minimized.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{W}\)</span>
+              <span class="symbol-desc">A symmetric, positive semi-definite \(L \times L\) weighting matrix.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        To solve this minimization, we differentiate \(Q_n(\boldsymbol{\beta})\) with respect to \(\boldsymbol{\beta}\) and set the gradient to zero. The source notes:
+      </p>
+
+      <!-- Equation Card: 2SLS Weighting Choice -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIAL CHOICE &middot; 2SLS AS GMM</span>
+          <h3 class="equation-title">Weighting Matrix \(\mathbf{W} = (\mathbf{Z}'\mathbf{Z})^{-1}\) Derives 2SLS</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \mathbf{W} = (\mathbf{Z}'\mathbf{Z})^{-1}
+          \]
+          \[
+          \hat{\boldsymbol{\beta}}_{GMM} = \left[ \mathbf{X}'\mathbf{Z} (\mathbf{Z}'\mathbf{Z})^{-1} \mathbf{Z}'\mathbf{X} \right]^{-1} \mathbf{X}'\mathbf{Z} (\mathbf{Z}'\mathbf{Z})^{-1} \mathbf{Z}'\mathbf{y} = \hat{\boldsymbol{\beta}}_{2SLS}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\((\mathbf{Z}'\mathbf{Z})^{-1}\)</span>
+              <span class="symbol-desc">Instrument sample cross-product inverse, scaling moments by instrument variances.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\boldsymbol{\beta}}_{2SLS}\)</span>
+              <span class="symbol-desc">The classical Two-Stage Least Squares estimator.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Intuition Callout -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border-left: 4px solid var(--color-primary); margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: var(--color-primary); font-weight: 700;">
+          💡 Core Pedagogical Intuition
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          GMM generalizes Instrumental Variables to allow for multiple (possibly correlated) instruments. The weighting matrix \(\mathbf{W}\) adjusts for correlation between instruments to improve estimation efficiency. When \(\mathbf{W} = (\mathbf{Z}'\mathbf{Z})^{-1}\), GMM exactly reproduces Two-Stage Least Squares!
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Lab 17.5 -->
+    <section class="lesson-section">
+      <h2 class="section-title">4. Interactive Lab 17.5: Overidentified Moment Weighting Geometry</h2>
+      <p>
+        Visualize how GMM reaches a compromise when multiple instruments provide conflicting estimates for a single parameter.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">INTERACTIVE LAB 17.5</div>
+          <h3 class="lab-title">Weighting 3 Instruments for 1 Parameter</h3>
+          <p class="lab-desc">
+            We have 3 instruments (\(L = 3\)) estimating 1 parameter \(\beta\) (\(K = 1\)). The three instruments imply separate zero-moment values: \(\beta^{(1)} = 1.0\), \(\beta^{(2)} = 2.0\), and \(\beta^{(3)} = 3.0\). Adjust the weights assigned to each instrument to see how \(\hat{\beta}_{GMM}\) shifts toward the more heavily weighted moment.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div class="lab-control-group">
+            <label for="w1Slider">Weight \(w_1\) (Inst 1, target 1.0): <span id="w1Val" style="font-weight: 700; color: #2563eb;">1.0</span></label>
+            <input type="range" id="w1Slider" min="0.1" max="5.0" step="0.1" value="1.0" class="lab-slider">
+          </div>
+          <div class="lab-control-group">
+            <label for="w2Slider">Weight \(w_2\) (Inst 2, target 2.0): <span id="w2Val" style="font-weight: 700; color: #10b981;">1.0</span></label>
+            <input type="range" id="w2Slider" min="0.1" max="5.0" step="0.1" value="1.0" class="lab-slider">
+          </div>
+          <div class="lab-control-group">
+            <label for="w3Slider">Weight \(w_3\) (Inst 3, target 3.0): <span id="w3Val" style="font-weight: 700; color: #f59e0b;">1.0</span></label>
+            <input type="range" id="w3Slider" min="0.1" max="5.0" step="0.1" value="1.0" class="lab-slider">
+          </div>
+        </div>
+
+        <!-- 2x2 Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">GMM Compromise \(\hat{\beta}_{GMM}\)</div>
+            <div class="metric-value" id="metricBetaGMM" style="color: #2563eb;">2.00</div>
+            <div class="metric-subtext">Weighted mean of implied targets</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Quadratic Loss \(Q_n(\hat{\beta})\)</div>
+            <div class="metric-value" id="metricQn">2.00</div>
+            <div class="metric-subtext">\(Q_n = \sum w_j (\beta - \beta^{(j)})^2\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Moment 1 Residual \(\hat{g}_1\)</div>
+            <div class="metric-value" id="metricG1">1.00</div>
+            <div class="metric-subtext">Distance from \(\beta^{(1)} = 1.0\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Moments 2 &amp; 3 Residuals</div>
+            <div class="metric-value" id="metricG23">0.00 / -1.00</div>
+            <div class="metric-subtext">Distances from targets 2.0 and 3.0</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #2563eb;"></span>
+            <span>Instrument 1 Target (\(\beta = 1.0\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span>
+            <span>Instrument 2 Target (\(\beta = 2.0\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #f59e0b;"></span>
+            <span>Instrument 3 Target (\(\beta = 3.0\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #6366f1;"></span>
+            <span>GMM Loss Curve \(Q_n(\beta)\)</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="min-height: 380px;">
+          <svg id="gmmSvg" viewBox="0 0 760 360" width="100%" height="360" style="overflow: visible; font-family: var(--font-sans);"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid #2563eb; background: rgba(37, 99, 235, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            Under equal weights (\(w_1 = w_2 = w_3 = 1.0\)), the GMM estimate sits exactly at \(\hat{\beta} = 2.00\). Residual moments are balanced at \(\hat{g} = [1.0, 0.0, -1.0]'\).
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The purple bowl depicts the GMM quadratic objective function \(Q_n(\beta)\). The dashed vertical lines mark the individual targets implied by the three instruments (1.0, 2.0, 3.0). The minimum of the bowl is \(\hat{\beta}_{GMM}\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                When you increase the weight \(w_1\) on Instrument 1, the bowl shifts leftward toward 1.0. A higher weight forces GMM to prioritize satisfying that specific instrument's moment condition.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                In overidentified models, no parameter value sets all moments to zero simultaneously. The choice of \(\mathbf{W}\) dictates how much weight each moment gets in the compromise, directly impacting efficiency.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The GMM estimator minimizes weighted squared moment discrepancies: \(\hat{\beta} = (\sum w_j \beta^{(j)}) / (\sum w_j)\). Optimal GMM assigns larger weights to moments with smaller variance.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Increase \(w_1\) to 5.0 while keeping \(w_2 = w_3 = 0.5\). Watch \(\hat{\beta}_{GMM}\) slide to 1.25, demonstrating how an informative or low-variance instrument dominates the estimation!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2 class="section-title">5. Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-meta">
+          <span class="badge badge-outline">CONCEPT CHECK</span>
+          <span class="badge badge-secondary">Overidentification</span>
+        </div>
+        <h3 class="practice-question">
+          Why is a weighting matrix \(\mathbf{W}\) necessary when \(L > K\), but unnecessary when \(L = K\)?
+        </h3>
+        <div class="practice-actions">
+          <button class="btn btn-secondary btn-sm hint-toggle" data-toggle-target="hint175">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol175">
+            Show Solution
+          </button>
+        </div>
+        <div id="hint175" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Hint:</strong> Think about the number of equations versus the number of unknowns. When can a system be solved exactly?
+          </p>
+        </div>
+        <div id="sol175" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> When \(L = K\), we have exactly as many equations as parameters; we can set every sample moment strictly to zero (\(\hat{\mathbf{g}}(\boldsymbol{\beta}) = \mathbf{0}\)), which uniquely solves for \(\hat{\boldsymbol{\beta}}_{IV}\) regardless of \(\mathbf{W}\). When \(L > K\), the system is overdetermined: no single \(\boldsymbol{\beta}\) can set all \(L\) moments to zero simultaneously. A weighting matrix \(\mathbf{W}\) is mandatory to define a scalar criterion \(Q_n(\boldsymbol{\beta}) = \hat{\mathbf{g}}'\mathbf{W}\hat{\mathbf{g}}\) and trade off competing moment discrepancies.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 17.5 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        GMM seamlessly accommodates multiple instruments through quadratic moment weighting:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Instrument Moments:</strong> When \(\mathbf{Z} \ne \mathbf{X}\), sample moments take the form \(\hat{\mathbf{g}}(\boldsymbol{\beta}) = \frac{1}{n}\mathbf{Z}'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\).</li>
+        <li><strong>Identification Taxonomy:</strong> Underidentified (\(L < K\)), Just-identified (\(L = K \implies \hat{\boldsymbol{\beta}}_{IV}\)), and Overidentified (\(L > K\)).</li>
+        <li><strong>GMM Criterion:</strong> Overidentified systems minimize \(Q_n(\boldsymbol{\beta}) = \hat{\mathbf{g}}'\mathbf{W}\hat{\mathbf{g}}\) where \(\mathbf{W}\) is positive semi-definite.</li>
+        <li><strong>2SLS Equivalence:</strong> Setting \(\mathbf{W} = (\mathbf{Z}'\mathbf{Z})^{-1}\) derives the standard Two-Stage Least Squares estimator.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-04.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">GMM Foundations: Moments &amp; OLS</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-17" data-lesson="5" style="align-self: center;">
+          ✓ Mark Lesson 5 Complete
+        </button>
+        <a href="lesson-06.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">Efficient GMM &amp; Hansen's J-Test</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Interactive Lab 17.5 Script -->
+  <script>
+    const w1Slider = document.getElementById('w1Slider');
+    const w2Slider = document.getElementById('w2Slider');
+    const w3Slider = document.getElementById('w3Slider');
+    const w1Val = document.getElementById('w1Val');
+    const w2Val = document.getElementById('w2Val');
+    const w3Val = document.getElementById('w3Val');
+    const metricBetaGMM = document.getElementById('metricBetaGMM');
+    const metricQn = document.getElementById('metricQn');
+    const metricG1 = document.getElementById('metricG1');
+    const metricG23 = document.getElementById('metricG23');
+    const labInsightText = document.getElementById('labInsightText');
+    const gmmSvg = document.getElementById('gmmSvg');
+
+    function updateGMMPlot() {
+      const w1 = parseFloat(w1Slider.value);
+      const w2 = parseFloat(w2Slider.value);
+      const w3 = parseFloat(w3Slider.value);
+      w1Val.textContent = w1.toFixed(1);
+      w2Val.textContent = w2.toFixed(1);
+      w3Val.textContent = w3.toFixed(1);
+
+      const b1 = 1.0, b2 = 2.0, b3 = 3.0;
+      const bGMM = (w1 * b1 + w2 * b2 + w3 * b3) / (w1 + w2 + w3);
+      const qn = w1 * Math.pow(bGMM - b1, 2) + w2 * Math.pow(bGMM - b2, 2) + w3 * Math.pow(bGMM - b3, 2);
+
+      const g1 = bGMM - b1;
+      const g2 = bGMM - b2;
+      const g3 = bGMM - b3;
+
+      metricBetaGMM.textContent = bGMM.toFixed(2);
+      metricQn.textContent = qn.toFixed(2);
+      metricG1.textContent = g1.toFixed(2);
+      metricG23.textContent = g2.toFixed(2) + ' / ' + g3.toFixed(2);
+
+      labInsightText.innerHTML = 'With weights [w1 = ' + w1.toFixed(1) + ', w2 = ' + w2.toFixed(1) + ', w3 = ' + w3.toFixed(1) + '], GMM resolves the conflict at <strong>\(\hat{\beta}_{GMM} = ' + bGMM.toFixed(2) + '\)</strong> with minimum weighted loss <strong>Q_n = ' + qn.toFixed(2) + '</strong>.';
+
+      // Draw SVG
+      const width = 760;
+      const height = 360;
+      const margin = { top: 35, right: 45, bottom: 50, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      function xToPix(val) {
+        return margin.left + ((val - 0.0) / 4.0) * plotW; // 0 to 4
+      }
+      function yToPix(loss) {
+        return margin.top + ((12.0 - loss) / 12.0) * plotH; // 0 to 12
+      }
+
+      let bowlPts = [];
+      for (let b = 0.2; b <= 3.8; b += 0.05) {
+        let l = w1 * Math.pow(b - b1, 2) + w2 * Math.pow(b - b2, 2) + w3 * Math.pow(b - b3, 2);
+        if (l < 12.0) {
+          bowlPts.push(xToPix(b).toFixed(1) + ',' + yToPix(l).toFixed(1));
+        }
+      }
+
+      let svgHtml = `
+        <!-- Axes -->
+        <line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+
+        <!-- X Ticks -->
+        ${[0, 1, 2, 3, 4].map(t => `
+          <text x="${xToPix(t)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">${t}.0</text>
+        `).join('')}
+
+        <!-- Y Ticks -->
+        ${[0, 4, 8, 12].map(l => `
+          <text x="${margin.left - 10}" y="${yToPix(l) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">${l}</text>
+          <line x1="${margin.left}" y1="${yToPix(l)}" x2="${width - margin.right}" y2="${yToPix(l)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+        `).join('')}
+
+        <!-- Axis Labels -->
+        <text x="${width / 2}" y="${height - 12}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)">Parameter \u03B2</text>
+        <text x="18" y="${height / 2}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)" transform="rotate(-90 18 ${height/2})">GMM Criterion Q_n(\u03B2)</text>
+
+        <!-- Instrument Target Guidelines -->
+        <line x1="${xToPix(b1)}" y1="${margin.top}" x2="${xToPix(b1)}" y2="${height - margin.bottom}" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="${xToPix(b1)}" y="${margin.top - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#2563eb">z1 Target (1.0)</text>
+
+        <line x1="${xToPix(b2)}" y1="${margin.top}" x2="${xToPix(b2)}" y2="${height - margin.bottom}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="${xToPix(b2)}" y="${margin.top - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#10b981">z2 Target (2.0)</text>
+
+        <line x1="${xToPix(b3)}" y1="${margin.top}" x2="${xToPix(b3)}" y2="${height - margin.bottom}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="${xToPix(b3)}" y="${margin.top - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">z3 Target (3.0)</text>
+
+        <!-- Q_n Bowl -->
+        <polyline points="${bowlPts.join(' ')}" fill="none" stroke="#6366f1" stroke-width="3.5" stroke-linecap="round"/>
+
+        <!-- Minimum GMM Marker -->
+        <line x1="${xToPix(bGMM)}" y1="${yToPix(qn)}" x2="${xToPix(bGMM)}" y2="${height - margin.bottom}" stroke="#6366f1" stroke-width="2" stroke-dasharray="3 3"/>
+        <circle cx="${xToPix(bGMM)}" cy="${yToPix(qn)}" r="7" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+        <text x="${xToPix(bGMM)}" y="${yToPix(qn) - 14}" text-anchor="middle" font-size="12" font-weight="700" fill="#6366f1">\u03B2̂_GMM = ${bGMM.toFixed(2)}</text>
+      `;
+
+      gmmSvg.innerHTML = svgHtml;
+    }
+
+    w1Slider.addEventListener('input', updateGMMPlot);
+    w2Slider.addEventListener('input', updateGMMPlot);
+    w3Slider.addEventListener('input', updateGMMPlot);
+    updateGMMPlot();
+  </script>
+</body>
+</html>

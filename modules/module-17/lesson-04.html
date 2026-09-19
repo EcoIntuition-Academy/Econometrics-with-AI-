@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17.4: GMM Foundations: Moments, Probability Limits &amp; OLS — EcoIntuition Academy</title>
+  <meta name="description" content="Discover the foundational principles of the Generalized Method of Moments (GMM): define moments, apply probability limit theorems, estimate mean and variance, and derive OLS as a special case of GMM.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-17" data-lesson="4">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 17: Hypothesis Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 17</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 17</a>
+          <span class="module-nav-title">Hypothesis Tests &amp; GMM</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 4 of 6 &middot; GMM Foundations: Moments, Plims &amp; OLS</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 17 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.1 Likelihood Ratio Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.2 The Wald Test &amp; Delta-Method Variance</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.3 LM / Score Tests &amp; Comparing LR, Wald, LM</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">17.4 GMM Foundations: Moments, Plims &amp; OLS</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.5 GMM with Instruments: IV &amp; Weighting</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.6 Efficient GMM, Hansen J &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">67%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 17.4</span>
+        <span class="badge">GMM Foundations &amp; Moments</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        GMM Foundations: Moments, Plims &amp; OLS
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Establish the foundations of Generalized Method of Moments (GMM): define sample and population moments, apply probability limits from probability limit theorems, and derive the Ordinary Least Squares estimator as a special case of GMM.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Define moments as sample functions with known probability limits (plim).</li>
+        <li>State and interpret probability limit theorems regarding convergence of sample averages to population expectations.</li>
+        <li>Derive consistent estimators of population mean and variance from first and second sample moments.</li>
+        <li>Formulate the orthogonality assumption \(\mathbb{E}[\mathbf{x}_i \varepsilon_i] = \mathbf{0}\) as a population moment condition.</li>
+        <li>Prove mathematically that OLS is a special case of GMM where regressors serve as their own instruments.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Definition of Moments -->
+    <section class="lesson-section">
+      <h2 class="section-title">1. Moments and Probability Limits</h2>
+      <p>
+        How can unknown parameters be estimated when economic theory tells us that certain population averages must equal known values? This is the core question answered by the Generalized Method of Moments (GMM).
+      </p>
+      <p>
+        According to the source, <strong>a moment is a function of the data with a known probability limit (plim).</strong> The central idea of GMM is to solve for parameters by setting the sample moment equal to its theoretical probability limit:
+      </p>
+
+      <!-- Equation Card: Sample Moment & Theorems D.4/D.5 -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SAMPLE MOMENT CONVERGENCE</span>
+          <h3 class="equation-title">Sample Moments and Probability Limits</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          m_k = \frac{1}{n} \sum_{i=1}^n x_{it}^k, \qquad \text{plim} \left[ \frac{1}{n} \sum_{i=1}^n g(x_i) \right] = \mathbb{E}[g(x)] = \mu_{g(x)}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(m_k\)</span>
+              <span class="symbol-desc">The \(k\)-th sample moment of the data series.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\text{plim}\)</span>
+              <span class="symbol-desc">Probability limit as sample size \(n \to \infty\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbb{E}[g(x)]\)</span>
+              <span class="symbol-desc">Population expectation (theoretical moment) of the function \(g(x)\).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Intuition Card -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border-left: 4px solid var(--color-primary); margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: var(--color-primary); font-weight: 700;">
+          💡 Core Pedagogical Intuition
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          These theorems imply that if the sample moment converges to the population moment, then the solution to the sample moment condition provides a consistent estimator for the parameter. GMM replaces unobservable population expectations with observable sample averages.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: Examples: Mean, Variance & Classical OLS -->
+    <section class="lesson-section">
+      <h2 class="section-title">2. GMM Examples: Mean, Variance, and Classical Regression</h2>
+      
+      <h3 style="font-size: var(--text-base); font-weight: 700; color: var(--color-text); margin-top: var(--space-md);">
+        Example 1: Estimating Mean and Variance of an IID Random Variable
+      </h3>
+      <p>
+        Consider an independent and identically distributed (IID) sample \(y_1, \dots, y_n\). We formulate two sample moment conditions based on powers of \(y_i\):
+      </p>
+
+      <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card" style="border-top: 3px solid #2563eb;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #2563eb;">First Moment: Population Mean</h4>
+          <p style="font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; margin: 0.25rem 0;">
+            \[ \frac{1}{n} \sum_{i=1}^n y_i \xrightarrow{p} \mu_y \]
+          </p>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); margin: 0;">
+            Sample average converges to the population mean \(\mu_y\).
+          </p>
+        </div>
+
+        <div class="study-card" style="border-top: 3px solid #10b981;">
+          <h4 style="margin-top: 0; font-size: var(--text-sm); font-weight: 700; color: #10b981;">Second Moment: Variance + Squared Mean</h4>
+          <p style="font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; margin: 0.25rem 0;">
+            \[ \frac{1}{n} \sum_{i=1}^n y_i^2 \xrightarrow{p} \text{Var}(y_i) + \mu_y^2 = \sigma_y^2 + \mu_y^2 \]
+          </p>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); margin: 0;">
+            Sample second moment allows recovery of population variance: \(\hat{\sigma}_y^2 = \frac{1}{n}\sum y_i^2 - \bar{y}^2\).
+          </p>
+        </div>
+      </div>
+
+      <h3 style="font-size: var(--text-base); font-weight: 700; color: var(--color-text); margin-top: var(--space-xl);">
+        Example 2: The Classical Linear Regression Model as GMM
+      </h3>
+      <p>
+        Consider the classical regression model: \(y_i = \mathbf{x}_i'\boldsymbol{\beta} + \varepsilon_i\). Under Classical Assumption 3, the regressors are orthogonal to the error term:
+      </p>
+
+      <!-- Equation Card: OLS as GMM -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">DERIVATION &middot; OLS AS GMM</span>
+          <h3 class="equation-title">Deriving OLS from the GMM Orthogonality Moment Condition</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          \mathbb{E}[\mathbf{x}_i \varepsilon_i] = \mathbf{0} \implies \mathbb{E}\left[ \mathbf{x}_i (y_i - \mathbf{x}_i'\boldsymbol{\beta}) \right] = \mathbf{0}
+          \]
+          \[
+          \frac{1}{n} \sum_{i=1}^n \mathbf{x}_i (y_i - \mathbf{x}_i'\hat{\boldsymbol{\beta}}) = \hat{\mathbf{m}}(\hat{\boldsymbol{\beta}}) = \mathbf{0}
+          \]
+          \[
+          \frac{1}{n} \mathbf{X}' (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0} \implies \hat{\boldsymbol{\beta}}_{GMM} = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\mathbf{y} = \hat{\boldsymbol{\beta}}_{OLS}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbb{E}[\mathbf{x}_i \varepsilon_i] = \mathbf{0}\)</span>
+              <span class="symbol-desc">Population moment condition asserting exogeneity between regressors and disturbances.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\mathbf{m}}(\hat{\boldsymbol{\beta}}) = \mathbf{0}\)</span>
+              <span class="symbol-desc">Sample analog moment conditions set exactly to zero.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\hat{\boldsymbol{\beta}}_{GMM} = \hat{\boldsymbol{\beta}}_{OLS}\)</span>
+              <span class="symbol-desc">The resulting GMM estimator, which is identical to the classical Ordinary Least Squares formula.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Insight Callout -->
+      <div class="study-card" style="background: rgba(16, 185, 129, 0.05); border-left: 4px solid #10b981; margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: #10b981; font-weight: 700;">
+          💡 Key Unifying Insight: OLS is a Special Case of GMM
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          <strong>Even though derived via moment conditions, the GMM estimator under classical assumptions collapses to the OLS estimator.</strong><br>
+          This demonstrates how GMM provides a universal foundation that generalizes classical methods. The moment condition essentially imposes orthogonality between instruments and residuals, and in classical regression, the instruments are simply the regressors \(\mathbf{x}_i\) themselves!
+        </p>
+      </div>
+
+      <!-- GMM Flowchart -->
+      <div class="study-card" style="margin: var(--space-xl) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 700; color: var(--color-text); text-align: center;">
+          The Universal GMM Workflow
+        </h4>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); margin-top: var(--space-md);">
+          <div style="background: var(--surface-secondary, #f8fafc); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0.5rem 1.25rem; font-weight: 600; font-size: var(--text-sm);">
+            1. Economic / Statistical Assumption (e.g., Exogeneity, Rational Expectations)
+          </div>
+          <div style="color: var(--color-primary); font-weight: 700;">↓</div>
+          <div style="background: rgba(37, 99, 235, 0.08); border: 1px solid #2563eb; border-radius: var(--radius-md); padding: 0.5rem 1.25rem; font-weight: 600; font-size: var(--text-sm); color: #2563eb;">
+            2. Population Moment Condition: \(\mathbb{E}[\mathbf{g}_i(\boldsymbol{\beta})] = \mathbf{0}\)
+          </div>
+          <div style="color: var(--color-primary); font-weight: 700;">↓</div>
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid #f59e0b; border-radius: var(--radius-md); padding: 0.5rem 1.25rem; font-weight: 600; font-size: var(--text-sm); color: #d97706;">
+            3. Sample Analog Function: \(\hat{\mathbf{g}}(\boldsymbol{\beta}) = \frac{1}{n}\sum \mathbf{g}_i(\boldsymbol{\beta})\)
+          </div>
+          <div style="color: var(--color-primary); font-weight: 700;">↓</div>
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 0.5rem 1.25rem; font-weight: 600; font-size: var(--text-sm); color: #10b981;">
+            4. Choose \(\hat{\boldsymbol{\beta}}\) to set sample moments as close to zero as possible &rarr; Estimator!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 17.4 -->
+    <section class="lesson-section">
+      <h2 class="section-title">3. Interactive Lab 17.4: Sample Moments Approaching Population Limits</h2>
+      <p>
+        Simulate how sample averages converge to theoretical population expectations as sample size increases, confirming Theorems D.4 and D.5 in action.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">INTERACTIVE LAB 17.4</div>
+          <h3 class="lab-title">Convergence of Sample Moments to Population Limits</h3>
+          <p class="lab-desc">
+            Vary sample size \(n\) from 10 to 500. Watch the sample mean \(\bar{y}\) settle onto \(\mu = 2.0\), the sample second moment \(\frac{1}{n}\sum y^2\) converge to \(\sigma^2 + \mu^2 = 5.0\), and the sample OLS moment error collapse to 0.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div class="lab-control-group">
+            <label for="nSlider">Sample Size \(n\): <span id="nVal" style="font-weight: 700; color: var(--color-primary);">50</span></label>
+            <input type="range" id="nSlider" min="10" max="500" step="10" value="50" class="lab-slider">
+          </div>
+          <div class="lab-control-group">
+            <button class="btn btn-secondary btn-sm" id="resimBtn" type="button" style="align-self: flex-end;">
+              🔄 Re-Sample Data
+            </button>
+          </div>
+        </div>
+
+        <!-- 2x2 Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">1st Sample Moment \(\frac{1}{n}\sum y_i\)</div>
+            <div class="metric-value" id="metricM1">2.08</div>
+            <div class="metric-subtext">True \(\mu = 2.00\) (Mean)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">2nd Sample Moment \(\frac{1}{n}\sum y_i^2\)</div>
+            <div class="metric-value" id="metricM2">5.14</div>
+            <div class="metric-subtext">True \(\sigma^2 + \mu^2 = 5.00\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Recovered Variance \(\hat{\sigma}^2\)</div>
+            <div class="metric-value" id="metricVar" style="color: #2563eb;">0.81</div>
+            <div class="metric-subtext">True \(\sigma^2 = 1.00\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Orthogonality Moment Error</div>
+            <div class="metric-value" id="metricOrth" style="color: #10b981;">0.000</div>
+            <div class="metric-subtext">\(\frac{1}{n}\mathbf{X}'\mathbf{e} = 0\) for OLS</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #2563eb;"></span>
+            <span>Cumulative Sample Mean \(\bar{y}_k\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span>
+            <span>Population Mean Limit (\(\mu = 2.0\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span>
+            <span>Asymptotic Sampling Error Band</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="min-height: 380px;">
+          <svg id="momentSvg" viewBox="0 0 760 360" width="100%" height="360" style="overflow: visible; font-family: var(--font-sans);"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            At sample size \(n = 50\), the cumulative sample mean fluctuates closely around the population expectation \(\mu = 2.0\). As \(n\) increases, random deviations cancel out, illustrating the convergence of sample moments to population expectations.
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The blue trajectory traces the cumulative sample mean \(\bar{y}_k = \frac{1}{k}\sum_{i=1}^k y_i\) as sample size grows from 1 to \(n\). The horizontal green line marks the true theoretical expectation \(\mu = 2.0\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                For small \(k < 25\), the trajectory wanders with high volatility. As \(k\) exceeds 100, the law of large numbers dominates, compressing deviations into a tight band around the true population mean.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                This convergence is the cornerstone of GMM. Because sample averages consistently estimate population expectations, setting sample moments to zero guarantees that parameter estimates converge to their true population values.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                By probability limit theorems, \(\text{plim} \frac{1}{n}\sum g(x_i) = \mathbb{E}[g(x)]\). In classical regression, setting \(\frac{1}{n}\mathbf{X}'(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}\) reproduces OLS precisely.
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Drag the sample size slider from 20 up to 500. Watch the standard error of the sample moment shrink from 0.22 down to 0.04, demonstrating \(\sqrt{n}\)-consistency!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2 class="section-title">4. Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-meta">
+          <span class="badge badge-outline">CONCEPT CHECK</span>
+          <span class="badge badge-secondary">GMM Foundations</span>
+        </div>
+        <h3 class="practice-question">
+          Why can the classical Ordinary Least Squares (OLS) estimator be interpreted as a special case of GMM?
+        </h3>
+        <div class="practice-actions">
+          <button class="btn btn-secondary btn-sm hint-toggle" data-toggle-target="hint174">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol174">
+            Show Solution
+          </button>
+        </div>
+        <div id="hint174" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Hint:</strong> What is the core exogeneity assumption \(\mathbb{E}[\mathbf{x}_i \varepsilon_i] = \mathbf{0}\)? What sample equation does OLS solve?
+          </p>
+        </div>
+        <div id="sol174" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> The classical exogeneity assumption \(\mathbb{E}[\mathbf{x}_i \varepsilon_i] = \mathbf{0}\) specifies that regressors are uncorrelated with errors. Replacing this population expectation with its sample analog yields \(\frac{1}{n}\mathbf{X}'(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}\). Solving this sample moment condition yields \(\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}\), which is identical to the OLS estimator.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 17.4 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        The Generalized Method of Moments provides a unified foundation for econometric estimation:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Moment Definition:</strong> Functions of data with known probability limits. The Law of Large Numbers guarantees \(\text{plim} \frac{1}{n}\sum g(x_i) = \mathbb{E}[g(x)]\).</li>
+        <li><strong>Moment Matching:</strong> Setting sample analogs to theoretical expectations allows consistent recovery of population parameters.</li>
+        <li><strong>OLS Synthesis:</strong> Setting the sample regressor-error orthogonality condition \(\frac{1}{n}\mathbf{X}'(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}\) directly produces OLS.</li>
+        <li><strong>Looking Ahead:</strong> In the next lesson, we extend moment conditions beyond regressors to external instrumental variables, exploring just-identified and overidentified systems.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-03.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">LM / Score Tests &amp; Trinity Comparison</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-17" data-lesson="4" style="align-self: center;">
+          ✓ Mark Lesson 4 Complete
+        </button>
+        <a href="lesson-05.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">GMM with Instruments &amp; Overidentification</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Interactive Lab 17.4 Script -->
+  <script>
+    const nSlider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const resimBtn = document.getElementById('resimBtn');
+    const metricM1 = document.getElementById('metricM1');
+    const metricM2 = document.getElementById('metricM2');
+    const metricVar = document.getElementById('metricVar');
+    const metricOrth = document.getElementById('metricOrth');
+    const labInsightText = document.getElementById('labInsightText');
+    const momentSvg = document.getElementById('momentSvg');
+
+    // Pre-generate 500 standard normals
+    let randNormals = [];
+    function seedNormals() {
+      randNormals = [];
+      for (let i = 0; i < 500; i++) {
+        // Box-Muller
+        let u1 = Math.random();
+        let u2 = Math.random();
+        let z = Math.sqrt(-2.0 * Math.log(u1 || 0.001)) * Math.cos(2.0 * Math.PI * u2);
+        randNormals.push(z);
+      }
+    }
+    seedNormals();
+
+    function updateMomentsPlot() {
+      const N = parseInt(nSlider.value);
+      nVal.textContent = N;
+
+      const mu = 2.0;
+      const sigma = 1.0;
+
+      let sumY = 0;
+      let sumY2 = 0;
+      let cumMeans = [];
+
+      for (let i = 0; i < N; i++) {
+        let y = mu + sigma * randNormals[i];
+        sumY += y;
+        sumY2 += y * y;
+        cumMeans.push(sumY / (i + 1));
+      }
+
+      const m1 = sumY / N;
+      const m2 = sumY2 / N;
+      const s2 = m2 - m1 * m1;
+
+      metricM1.textContent = m1.toFixed(3);
+      metricM2.textContent = m2.toFixed(3);
+      metricVar.textContent = s2.toFixed(3);
+      metricOrth.textContent = '0.000';
+
+      labInsightText.innerHTML = 'At sample size \(n = ' + N + '\), sample mean is <strong>' + m1.toFixed(3) + '</strong> (true \(\mu = 2.0\)) and sample variance is <strong>' + s2.toFixed(3) + '</strong> (true \(\sigma^2 = 1.0\)). Deviations from truth shrink at rate \(1/\sqrt{n}\).';
+
+      // Render SVG
+      const width = 760;
+      const height = 360;
+      const margin = { top: 35, right: 45, bottom: 50, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      function xToPix(idx) {
+        return margin.left + ((idx - 1) / (N - 1 || 1)) * plotW;
+      }
+      function yToPix(val) {
+        return margin.top + ((3.2 - val) / 2.4) * plotH; // range: 0.8 to 3.2
+      }
+
+      let pts = [];
+      for (let i = 0; i < N; i++) {
+        pts.push(xToPix(i + 1).toFixed(1) + ',' + yToPix(cumMeans[i]).toFixed(1));
+      }
+
+      const yMu_pix = yToPix(mu);
+
+      let svgHtml = `
+        <!-- Shaded Confidence Tube: mu +/- 1.96 / sqrt(k) -->
+        <path d="
+          M ${xToPix(1)} ${yToPix(mu + 1.96)}
+          ${cumMeans.map((_, i) => `L ${xToPix(i+1)} ${yToPix(mu + 1.96 / Math.sqrt(i+1))}`).join(' ')}
+          ${cumMeans.map((_, i) => `L ${xToPix(N - i)} ${yToPix(mu - 1.96 / Math.sqrt(N - i))}`).join(' ')}
+          Z" fill="rgba(239, 68, 68, 0.08)"/>
+
+        <!-- Grid Lines -->
+        <line x1="${margin.left}" y1="${yToPix(1.5)}" x2="${width - margin.right}" y2="${yToPix(1.5)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+        <line x1="${margin.left}" y1="${yToPix(2.0)}" x2="${width - margin.right}" y2="${yToPix(2.0)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+        <line x1="${margin.left}" y1="${yToPix(2.5)}" x2="${width - margin.right}" y2="${yToPix(2.5)}" stroke="var(--border-subtle, #e2e8f0)" stroke-dasharray="3 3"/>
+
+        <!-- Axes -->
+        <line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}" stroke="var(--color-text-secondary, #64748b)" stroke-width="1.5"/>
+
+        <!-- X Ticks -->
+        <text x="${xToPix(1)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">1</text>
+        <text x="${xToPix(Math.round(N/2))}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">${Math.round(N/2)}</text>
+        <text x="${xToPix(N)}" y="${height - margin.bottom + 20}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">n = ${N}</text>
+
+        <!-- Y Ticks -->
+        <text x="${margin.left - 10}" y="${yToPix(1.5) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">1.5</text>
+        <text x="${margin.left - 10}" y="${yToPix(2.0) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">2.0 (\u03BC)</text>
+        <text x="${margin.left - 10}" y="${yToPix(2.5) + 4}" text-anchor="end" font-size="11" fill="var(--color-text-secondary, #64748b)">2.5</text>
+
+        <!-- Axis Labels -->
+        <text x="${width / 2}" y="${height - 12}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)">Sample Size Index k</text>
+        <text x="18" y="${height / 2}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)" transform="rotate(-90 18 ${height/2})">Cumulative Sample Mean</text>
+
+        <!-- Theoretical Mean Line (Green) -->
+        <line x1="${margin.left}" y1="${yMu_pix}" x2="${width - margin.right}" y2="${yMu_pix}" stroke="#10b981" stroke-width="2.5" stroke-dasharray="5 5"/>
+
+        <!-- Sample Mean Path (Blue) -->
+        <polyline points="${pts.join(' ')}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Final Point Marker -->
+        <circle cx="${xToPix(N)}" cy="${yToPix(m1)}" r="6" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+      `;
+
+      momentSvg.innerHTML = svgHtml;
+    }
+
+    nSlider.addEventListener('input', updateMomentsPlot);
+    resimBtn.addEventListener('click', () => {
+      seedNormals();
+      updateMomentsPlot();
+    });
+    updateMomentsPlot();
+  </script>
+</body>
+</html>

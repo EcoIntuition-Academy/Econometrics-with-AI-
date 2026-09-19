@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 15.2: RD Identification: Continuity, Manipulation &amp; Placebo Tests — EcoIntuition Academy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-15" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 15</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 15</a>
+          <span class="module-nav-title">Regression Discontinuity Designs</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 6 &middot; RD Identification: Continuity, Manipulation &amp; Placebo Tests</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 15 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.1 RD Intuition, Cutoffs &amp; Sharp RD</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">15.2 Continuity, Manipulation &amp; Placebos</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.3 RD Regression &amp; Cutoff Treatment Effects</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.4 Bandwidth Choice &amp; Kernel Weighting</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.5 Fuzzy RD, IV &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.6 McCrary Testing &amp; RD Diagnostics</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 15.2</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">IDENTIFICATION &amp; VALIDITY</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        RD Identification: Continuity, Manipulation &amp; Placebo Tests
+      </h1>
+      <p class="lesson-hero-lead">
+        Establish the two core identifying assumptions of Regression Discontinuity—continuity of potential outcomes and absence of precise manipulation—and inspect falsification strategies.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>State and explain the primary identifying assumption: Continuity of potential outcomes at the threshold.</li><li>Analyze confounded discontinuities using simultaneous interventions (the $100,000 scholarship example).</li><li>Define the No Precise Sorting assumption and contrast political incumbency with estate-tax bracket bunching.</li><li>Design empirical placebo tests with predetermined covariates to evaluate identifying credibility.</li>
+      </ul>
+    </div>
+
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Assumption 1: The Continuity Assumption</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            CORE IDENTIFYING ASSUMPTION &middot; CONTINUITY
+          </div>
+          <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.1rem;">Smoothness of Potential Outcomes Across the Cutoff</h3>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; line-height: 1.6;">
+            The <strong>continuity assumption</strong> requires that all other determinants of the outcome (both observable characteristics and unobserved potential outcomes) evolve <em>smoothly</em> through the cutoff threshold \(a_0\).
+          </p>
+          <p style="margin: 0; font-size: 0.88rem; line-height: 1.6; color: var(--color-text-secondary);">
+            Formally, the conditional expectations of the potential outcomes \(E[Y_i(0) \mid a_i = a]\) and \(E[Y_i(1) \mid a_i = a]\) must be continuous functions of the running variable \(a\) at \(a = a_0\). In the absence of treatment, there would be zero discontinuous jump in the outcome at the cutoff.
+          </p>
+        </div>
+
+        <!-- Confounded Discontinuity Example -->
+        <div class="study-card" style="padding: var(--space-md); background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-sm); margin-bottom: var(--space-md);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-bottom: var(--space-xs);">CRITICAL THREAT &middot; CONFOUNDED DISCONTINUITY</div>
+          <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.98rem; color: #92400e;">The Scholarship Bundling Trap</h4>
+          <p style="margin: 0 0 var(--space-sm) 0; font-size: 0.88rem; line-height: 1.6; color: #78350f;">
+            Suppose high school seniors take an entrance exam with cutoff \(a_0 = 500\). Students who score \(a_i \ge 500\) receive <strong>special academy admission</strong>. However, the state government simultaneously awards every student scoring \(a_i \ge 500\) a <strong>$100,000 cash college scholarship</strong>.
+          </p>
+
+          <!-- Confounded Discontinuity Flow Diagram -->
+          <div style="background: var(--color-surface); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-xs); border: 1px dashed #d97706; margin-bottom: var(--space-xs);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); flex-wrap: wrap; text-align: center; font-size: 0.86rem;">
+              <div style="padding: 6px 14px; background: #fee2e2; color: #b91c1c; font-weight: 700; border-radius: 4px;">CUTOFF a₀ = 500</div>
+              <div style="color: var(--color-text-secondary);">&rarr;</div>
+              <div style="text-align: left; background: var(--color-bg); padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                <div>&#9500;&#9472; <strong>Special Academy Admission</strong> (Intervention A)</div>
+                <div>&#9492;&#9472; <strong>$100,000 Scholarship</strong> (Intervention B)</div>
+              </div>
+              <div style="color: var(--color-text-secondary);">&rarr;</div>
+              <div style="padding: 6px 14px; background: #fef2f2; color: #991b1b; font-weight: 700; border-radius: 4px;">CONFOUNDED DISCONTINUITY</div>
+            </div>
+          </div>
+
+          <p style="margin: 8px 0 0 0; font-size: 0.86rem; line-height: 1.5; color: #78350f;">
+            <strong>Econometric Implication:</strong> If subsequent wages or graduation rates jump at 500, the researcher cannot determine whether the jump reflects the academic training of the academy or the financial liquidity of the scholarship. <em>No other compound intervention may change discontinuously at the same threshold.</em>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Assumption 2 - No Precise Manipulation -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Assumption 2: No Precise Manipulation of the Running Variable</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          For units on opposite sides of the threshold to be locally comparable, agents must not be able to <strong>precisely sort themselves</strong> across the cutoff line.
+        </p>
+
+        <div class="callout" style="border-left: 4px solid var(--color-primary); margin-bottom: var(--space-md);">
+          <div class="callout-header">
+            <span class="academic-badge" style="background: var(--color-primary-light); color: var(--color-primary);">NO PRECISE MANIPULATION RULE</span>
+            <h3 class="callout-title">Imprecise vs. Precise Control</h3>
+          </div>
+          <div class="callout-body">
+            <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+              Economic agents can exert effort to achieve higher values of \(a_i\) (e.g., studying hard to raise exam scores or campaigning actively to win votes). The RD assumption requires only that agents cannot <strong>precisely engineer</strong> their exact location around \(a_0\). As long as there is an idiosyncratic, unpredictable stochastic component in \(a_i\) near the threshold, local variation remains as-if random.
+            </p>
+          </div>
+        </div>
+
+        <!-- 2 Institutional Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <!-- Example 1: Incumbency -->
+          <div class="study-card" style="padding: var(--space-md); background: #ecfdf5; border-left: 4px solid #059669;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span style="font-size: 0.72rem; font-weight: 700; color: #047857; letter-spacing: 0.04em;">CASE 1 &middot; INCUMBENCY &amp; VOTE SHARE</span>
+              <span class="badge" style="background: #d1fae5; color: #065f46; font-size: 0.7rem; font-weight: 700;">ASSUMPTION MET</span>
+            </div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #064e3b;">Congressional Elections at 50%</h4>
+            <p style="font-size: 0.86rem; line-height: 1.5; color: #065f46; margin: 0 0 var(--space-xs) 0;">
+              Politicians campaign aggressively to maximize their overall vote share. No candidate can precisely manipulate election-day turnouts, weather, or counting errors to finish at exactly 50.01% rather than 49.99%.
+            </p>
+            <div style="font-size: 0.82rem; font-weight: 600; color: #047857;">
+              &check; Source Conclusion: Precise manipulation is implausible. The local comparison around 50% is credible.
+            </div>
+          </div>
+
+          <!-- Example 2: Federal Estate Tax -->
+          <div class="study-card" style="padding: var(--space-md); background: #fef2f2; border-left: 4px solid #dc2626;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span style="font-size: 0.72rem; font-weight: 700; color: #b91c1c; letter-spacing: 0.04em;">CASE 2 &middot; FEDERAL ESTATE TAX</span>
+              <span class="badge" style="background: #fee2e2; color: #991b1b; font-size: 0.7rem; font-weight: 700;">MANIPULATION CONCERN</span>
+            </div>
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: #7f1d1d;">Tax Exemption Threshold at $X Million</h4>
+            <p style="font-size: 0.86rem; line-height: 1.5; color: #991b1b; margin: 0 0 var(--space-xs) 0;">
+              Estate taxes apply only if reported taxable wealth exceeds a statutory cutoff \(X\). Wealthy families and estate planners face immense financial incentives to time gifts, claim asset valuation discounts, or shift deductions to report an estate just below \(X\).
+            </p>
+            <div style="font-size: 0.82rem; font-weight: 600; color: #b91c1c;">
+              &cross; Source Conclusion: Selective sorting is highly likely. Units just under the threshold systematically differ from those just above.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Placebo Tests & Covariate Balance -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. Placebo Tests &amp; Covariate Balance Checks</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          While the continuity of unobserved potential outcomes is fundamentally untestable, researchers can formally test whether <strong>predetermined characteristics</strong> or <strong>placebo outcomes</strong> jump at the cutoff.
+        </p>
+
+        <div class="study-card" style="padding: var(--space-md); border-left: 4px solid #7c3aed; margin-bottom: var(--space-md); background: var(--color-surface);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #6d28d9; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">
+            DIAGNOSTIC TOOL &middot; PLACEBO TESTS
+          </div>
+          <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>Placebo Test:</strong> Estimate an RD specification using a predetermined variable as the dependent variable instead of the true outcome \(Y_i\). Variables that were determined prior to treatment (e.g., baseline household income, marital status, gender, or parental education) should <em>not</em> exhibit a discontinuity at the cutoff.
+          </p>
+          <div style="background: rgba(124, 58, 237, 0.08); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs); font-size: 0.85rem; color: #5b21b6;">
+            <strong>Empirical Warning:</strong> If baseline household income jumps at the cutoff, or the fraction of married individuals jumps discontinuously from 40% to 60%, the design's credibility is severely compromised. It indicates that the units on either side were not comparable prior to treatment.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Heaping & Density Discontinuity Visuals -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Heaping and Density Bunching Near the Threshold</h2>
+      </div>
+      <div class="study-section-body">
+
+        <p>
+          When individuals can manipulate the running variable, they tend to <strong>bunch</strong> or <strong>heap</strong> near the threshold to secure favorable treatment status. Examining the empirical density of \(a_i\) provides a direct diagnostic check for sorting behavior.
+        </p>
+
+        <!-- Heaping vs No Heaping Comparison Visual (Reconstructed from Source Page 4) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          
+          <!-- Heaping Present -->
+          <div style="background: var(--color-surface); border: 1px solid #fca5a5; border-radius: var(--radius-sm); padding: var(--space-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;">DENSITY WITH HEAPING (BUNCHING)</span>
+              <span class="badge" style="background: #fee2e2; color: #991b1b; font-size: 0.7rem;">Suspicious Sorting</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 0 0 var(--space-xs) 0;">
+              An abnormal spike in the density of observations right at or just past the cutoff.
+            </p>
+            <div style="width: 100%; height: 180px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--border-subtle); overflow: hidden;">
+              <svg viewBox="0 0 320 180" style="width: 100%; height: 100%;">
+                <!-- Grid & Axes -->
+                <line x1="40" y1="150" x2="300" y2="150" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+                <line x1="40" y1="20" x2="40" y2="150" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+                <!-- Cutoff Line -->
+                <line x1="170" y1="20" x2="170" y2="150" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3" />
+                <text x="170" y="15" fill="#dc2626" font-size="9" font-weight="700" text-anchor="middle">Cutoff a₀</text>
+                <!-- Density histogram with spike at cutoff -->
+                <rect x="50" y="110" width="16" height="40" fill="#94a3b8" opacity="0.6"/>
+                <rect x="70" y="102" width="16" height="48" fill="#94a3b8" opacity="0.6"/>
+                <rect x="90" y="94" width="16" height="56" fill="#94a3b8" opacity="0.6"/>
+                <rect x="110" y="85" width="16" height="65" fill="#94a3b8" opacity="0.6"/>
+                <rect x="130" y="80" width="16" height="70" fill="#94a3b8" opacity="0.6"/>
+                <rect x="150" y="75" width="16" height="75" fill="#94a3b8" opacity="0.6"/>
+                <!-- Huge abnormal bunching bar right after cutoff -->
+                <rect x="172" y="25" width="18" height="125" fill="#ef4444" opacity="0.85"/>
+                <rect x="194" y="65" width="16" height="85" fill="#94a3b8" opacity="0.6"/>
+                <rect x="214" y="80" width="16" height="70" fill="#94a3b8" opacity="0.6"/>
+                <rect x="234" y="95" width="16" height="55" fill="#94a3b8" opacity="0.6"/>
+                <rect x="254" y="105" width="16" height="45" fill="#94a3b8" opacity="0.6"/>
+                <rect x="274" y="120" width="16" height="30" fill="#94a3b8" opacity="0.6"/>
+                <text x="181" y="20" fill="#b91c1c" font-size="9" font-weight="700" text-anchor="middle">&uarr; Bunching</text>
+                <!-- Axis Labels -->
+                <text x="170" y="170" fill="var(--color-text)" font-size="10" font-weight="600" text-anchor="middle">Running Variable a</text>
+                <text x="12" y="85" fill="var(--color-text)" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 12 85)">Density</text>
+              </svg>
+            </div>
+            <div style="font-size: 0.78rem; color: #991b1b; margin-top: 6px;">
+              <strong>Concern:</strong> A discontinuous jump in density indicates units selectively concentrated to receive treatment.
+            </div>
+          </div>
+
+          <!-- No Heaping -->
+          <div style="background: var(--color-surface); border: 1px solid #86efac; border-radius: var(--radius-sm); padding: var(--space-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #059669;">SMOOTH DENSITY (NO HEAPING)</span>
+              <span class="badge" style="background: #dcfce7; color: #166534; font-size: 0.7rem;">Continuous</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-secondary); margin: 0 0 var(--space-xs) 0;">
+              A smooth, continuous distribution of observations across the cutoff line.
+            </p>
+            <div style="width: 100%; height: 180px; background: var(--color-bg); border-radius: var(--radius-xs); border: 1px solid var(--border-subtle); overflow: hidden;">
+              <svg viewBox="0 0 320 180" style="width: 100%; height: 100%;">
+                <!-- Grid & Axes -->
+                <line x1="40" y1="150" x2="300" y2="150" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+                <line x1="40" y1="20" x2="40" y2="150" stroke="var(--color-text-secondary)" stroke-width="1.5" />
+                <!-- Cutoff Line -->
+                <line x1="170" y1="20" x2="170" y2="150" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3" />
+                <text x="170" y="15" fill="#dc2626" font-size="9" font-weight="700" text-anchor="middle">Cutoff a₀</text>
+                <!-- Smooth density histogram -->
+                <rect x="50" y="115" width="16" height="35" fill="#94a3b8" opacity="0.6"/>
+                <rect x="70" y="100" width="16" height="50" fill="#94a3b8" opacity="0.6"/>
+                <rect x="90" y="85" width="16" height="65" fill="#94a3b8" opacity="0.6"/>
+                <rect x="110" y="70" width="16" height="80" fill="#94a3b8" opacity="0.6"/>
+                <rect x="130" y="60" width="16" height="90" fill="#94a3b8" opacity="0.6"/>
+                <rect x="150" y="52" width="16" height="98" fill="#10b981" opacity="0.75"/>
+                <rect x="172" y="50" width="16" height="100" fill="#10b981" opacity="0.75"/>
+                <rect x="192" y="58" width="16" height="92" fill="#94a3b8" opacity="0.6"/>
+                <rect x="212" y="70" width="16" height="80" fill="#94a3b8" opacity="0.6"/>
+                <rect x="232" y="85" width="16" height="65" fill="#94a3b8" opacity="0.6"/>
+                <rect x="252" y="100" width="16" height="50" fill="#94a3b8" opacity="0.6"/>
+                <rect x="272" y="118" width="16" height="32" fill="#94a3b8" opacity="0.6"/>
+                <!-- Axis Labels -->
+                <text x="170" y="170" fill="var(--color-text)" font-size="10" font-weight="600" text-anchor="middle">Running Variable a</text>
+                <text x="12" y="85" fill="var(--color-text)" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 12 85)">Density</text>
+              </svg>
+            </div>
+            <div style="font-size: 0.78rem; color: #166534; margin-top: 6px;">
+              <strong>Credible:</strong> The density passes smoothly through \(a_0\) with no clustering or artificial grouping.
+            </div>
+          </div>
+
+        </div>
+
+        <div style="background: rgba(37,99,235,0.06); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary); font-size: 0.86rem; line-height: 1.5; margin-bottom: var(--space-md);">
+          <strong>Important Methodological Distinction:</strong> Heaping or bunching constitutes strong evidence <em>consistent with manipulation concerns</em>. However, researchers do not automatically declare every observed heap invalid without investigation; round-number reporting preferences (e.g., ages reported in multiples of 5) can create heaping without deliberate strategic sorting. Methodological care is essential.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 15.2 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Interactive Lab 15.2: RD Assumption Diagnostic</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card" style="background: var(--color-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md);">
+          
+          <!-- Lab Header -->
+          <div class="lab-header" style="margin-bottom: var(--space-md);">
+            <div>
+              <span class="lab-badge">INTERACTIVE LAB 15.2</span>
+              <h3 class="lab-title" style="margin: var(--space-2xs) 0;">RD Assumption Diagnostic</h3>
+              <p class="lab-desc">Toggle between identification scenarios. Adjust manipulation intensity and placebo covariate shifts to observe their impact on density smoothness and overall design credibility.</p>
+            </div>
+          </div>
+
+          <!-- Scenario Tabs Toolbar -->
+          <div class="lab-controls-toolbar" style="display: flex; flex-wrap: wrap; gap: var(--space-md); padding: var(--space-sm); background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: var(--space-md);">
+            <div>
+              <label style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">SCENARIO MODE</label>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="tabSmooth" class="btn btn-sm btn-primary">Smooth Assignment</button>
+                <button type="button" id="tabManipulation" class="btn btn-sm btn-outline">Manipulation</button>
+                <button type="button" id="tabConfound" class="btn btn-sm btn-outline">Confounding Jump</button>
+              </div>
+            </div>
+
+            <!-- Bunching Slider -->
+            <div style="flex: 1; min-width: 170px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>BUNCHING INTENSITY</span>
+                <span id="labelBunching">0% (Smooth)</span>
+              </div>
+              <input type="range" id="sliderBunching" min="0" max="100" step="5" value="0" style="width: 100%;">
+            </div>
+
+            <!-- Covariate Jump Slider -->
+            <div style="flex: 1; min-width: 170px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 4px;">
+                <span>PLACEBO JUMP</span>
+                <span id="labelPlaceboJump">0.0</span>
+              </div>
+              <input type="range" id="sliderPlacebo" min="-20" max="25" step="2" value="0" style="width: 100%;">
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">RUNNING VARIABLE DENSITY</div>
+              <div id="readoutDensityStatus" style="font-size: 1.15rem; font-weight: 700; color: #059669;">Continuous</div>
+              <div id="subDensityStatus" style="font-size: 0.75rem; color: var(--color-text-secondary);">No clustering detected</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">PREDETERMINED COVARIATE</div>
+              <div id="readoutPlaceboJump" style="font-size: 1.15rem; font-weight: 700; color: #2563eb;">&Delta; = 0.0</div>
+              <div id="subPlaceboStatus" style="font-size: 0.75rem; color: var(--color-text-secondary);">Smooth across cutoff</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">COMPOUND POLICY JUMP</div>
+              <div id="readoutCompoundStatus" style="font-size: 1.15rem; font-weight: 700; color: #059669;">Isolated</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Single treatment rule</div>
+            </div>
+
+            <div class="study-card" style="padding: var(--space-sm); text-align: center;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-text-secondary);">CREDIBILITY ASSESSMENT</div>
+              <div id="readoutCredibility" style="font-size: 1.05rem; font-weight: 700; color: #059669;">No Obvious Warning</div>
+              <div id="subCredibility" style="font-size: 0.75rem; color: var(--color-text-secondary);">Assumptions supported</div>
+            </div>
+          </div>
+
+          <!-- External Legend -->
+          <div class="external-legend-bar" style="margin-bottom: var(--space-xs); font-size: 0.78rem;">
+            <div class="legend-item"><span class="legend-swatch" style="background: #2563eb;"></span> Outcome Data (Y)</div>
+            <div class="legend-item"><span class="legend-swatch" style="background: #059669;"></span> Baseline Covariate (Z)</div>
+            <div class="legend-item"><span class="legend-line" style="border-top: 2px dashed #dc2626; height: 0;"></span> Cutoff a₀ = 50</div>
+          </div>
+
+          <!-- SVG Visualizer (Side-by-side or stacked panels) -->
+          <div style="position: relative; width: 100%; height: 380px; background: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); overflow: hidden;">
+            <svg id="lab152Svg" viewBox="0 0 740 380" style="width: 100%; height: 100%;" preserveAspectRatio="none"></svg>
+          </div>
+
+          <!-- Insight Callout -->
+          <div id="lab152Insight" style="margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(5,150,105,0.08); border-left: 4px solid #059669; border-radius: var(--radius-xs); font-size: 0.88rem; line-height: 1.5;">
+            <strong>Diagnostic Assessment:</strong> <span id="lab152InsightText">Both the density of the running variable and the placebo covariate show smooth continuity through the threshold. The design shows no initial signs of sorting or confounding discontinuities.</span>
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div class="visual-explanation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT YOU ARE SEEING</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Two diagnostic panels: (Top) The density histogram of the running variable; (Bottom) A placebo predetermined baseline covariate.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHAT TO NOTICE</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Under clean assignment, the density flows smoothly across \(a_0\), and the placebo covariate shows zero discontinuous jump at the threshold.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">WHY IT MATTERS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                If units can self-select or if predetermined traits jump, the fundamental assumption that units are locally comparable is violated.
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">ECONOMETRIC INTERPRETATION</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Placebo jumps suggest omitted variable bias; density heaping indicates strategic sorting. Both invalidate the causal interpretation of \(\beta\).
+              </p>
+            </div>
+            <div class="study-card" style="padding: var(--space-sm); background: var(--surface);">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em;">TRY THIS</div>
+              <p style="font-size: 0.82rem; margin-top: 4px; margin-bottom: 0; color: var(--color-text-secondary);">
+                Select <em>Manipulation</em> mode. Observe the abnormal density pile-up immediately past the cutoff and the resulting warning flag.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> If a predetermined covariate (such as parental income or age) jumps sharply at the treatment cutoff, why is that concerning for an RD study?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint152">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol152">Show Solution</button>
+        </div>
+        <div id="hint152" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Consider whether treatment received at the cutoff could have retroactively altered variables measured before the study began.
+          </p>
+        </div>
+        <div id="sol152" class="practice-accordion-panel">
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            Because it suggests that units immediately above and below the cutoff differ for reasons other than the treatment itself.
+          </p>
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            A predetermined variable was fixed prior to treatment assignment; treatment cannot retroactively alter parental income or age. If a predetermined covariate jumps discontinuously at the threshold, it reveals that the groups on either side were not comparable to begin with, indicating manipulation, sorting, or an unobserved confounding policy at the boundary.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 15.2 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        The validity of an RD design hinges on the continuity assumption: expected potential outcomes and background characteristics must evolve smoothly through the cutoff in the absence of treatment. While counterfactual continuity cannot be proven directly from data, researchers conduct essential falsification checks: verifying that predetermined covariates and placebo outcomes do not jump, and confirming running-variable density smoothness via the McCrary test. Next, we introduce formal regression estimation using centered polynomials and cutoff interactions.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 15</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-15" data-lesson="2" style="align-self: center;">
+          &check; Mark Lesson Complete
+        </button>
+        <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">RD Estimation &amp; Polynomials</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <script>
+    (function() {
+      let bunchingIntensity = 0; // 0 to 100
+      let placeboJump = 0.0;     // -20 to 25
+      let isConfounded = false;  // Compound policy jump
+
+      const tabSmooth = document.getElementById('tabSmooth');
+      const tabManipulation = document.getElementById('tabManipulation');
+      const tabConfound = document.getElementById('tabConfound');
+
+      const sliderBunching = document.getElementById('sliderBunching');
+      const sliderPlacebo = document.getElementById('sliderPlacebo');
+
+      const labelBunching = document.getElementById('labelBunching');
+      const labelPlaceboJump = document.getElementById('labelPlaceboJump');
+
+      const readoutDensityStatus = document.getElementById('readoutDensityStatus');
+      const subDensityStatus = document.getElementById('subDensityStatus');
+      const readoutPlaceboJump = document.getElementById('readoutPlaceboJump');
+      const subPlaceboStatus = document.getElementById('subPlaceboStatus');
+      const readoutCompoundStatus = document.getElementById('readoutCompoundStatus');
+      const readoutCredibility = document.getElementById('readoutCredibility');
+      const subCredibility = document.getElementById('subCredibility');
+
+      const labInsight = document.getElementById('lab152Insight');
+      const labInsightText = document.getElementById('lab152InsightText');
+      const svg = document.getElementById('lab152Svg');
+
+      function updateLab() {
+        labelBunching.textContent = bunchingIntensity === 0 ? '0% (Smooth)' : `${bunchingIntensity}%`;
+        labelPlaceboJump.textContent = (placeboJump >= 0 ? '+' : '') + placeboJump.toFixed(1);
+
+        readoutPlaceboJump.textContent = `Δ = ${(placeboJump >= 0 ? '+' : '') + placeboJump.toFixed(1)}`;
+        
+        // Density status
+        if (bunchingIntensity === 0) {
+          readoutDensityStatus.textContent = 'Continuous';
+          readoutDensityStatus.style.color = '#059669';
+          subDensityStatus.textContent = 'No clustering detected';
+        } else if (bunchingIntensity < 40) {
+          readoutDensityStatus.textContent = 'Mild Heaping';
+          readoutDensityStatus.style.color = '#d97706';
+          subDensityStatus.textContent = 'Slight bunching near cutoff';
+        } else {
+          readoutDensityStatus.textContent = 'Severe Discontinuity';
+          readoutDensityStatus.style.color = '#dc2626';
+          subDensityStatus.textContent = 'Unnatural pile-up at threshold';
+        }
+
+        // Placebo status
+        if (Math.abs(placeboJump) < 1.0) {
+          readoutPlaceboJump.style.color = '#2563eb';
+          subPlaceboStatus.textContent = 'Smooth across cutoff';
+        } else if (Math.abs(placeboJump) < 8.0) {
+          readoutPlaceboJump.style.color = '#d97706';
+          subPlaceboStatus.textContent = 'Modest imbalance detected';
+        } else {
+          readoutPlaceboJump.style.color = '#dc2626';
+          subPlaceboStatus.textContent = 'Significant covariate jump!';
+        }
+
+        // Compound policy status
+        if (isConfounded) {
+          readoutCompoundStatus.textContent = 'Confounded!';
+          readoutCompoundStatus.style.color = '#dc2626';
+        } else {
+          readoutCompoundStatus.textContent = 'Isolated';
+          readoutCompoundStatus.style.color = '#059669';
+        }
+
+        // Qualitative Credibility Assessment
+        if (bunchingIntensity >= 40 || Math.abs(placeboJump) >= 8.0) {
+          readoutCredibility.textContent = 'Investigate Manipulation';
+          readoutCredibility.style.color = '#dc2626';
+          subCredibility.textContent = 'Design credibility severely challenged';
+          labInsight.style.borderLeftColor = '#dc2626';
+          labInsight.style.background = 'rgba(220,38,38,0.08)';
+          labInsightText.textContent = 'Critical Warning: A significant discontinuity is present in predetermined traits or running-variable density. This suggests strategic sorting across the boundary, violating the local as-if random assumption.';
+        } else if (isConfounded) {
+          readoutCredibility.textContent = 'Possible Confounding Discontinuity';
+          readoutCredibility.style.color = '#d97706';
+          subCredibility.textContent = 'Multiple interventions share cutoff';
+          labInsight.style.borderLeftColor = '#d97706';
+          labInsight.style.background = 'rgba(217,119,6,0.08)';
+          labInsightText.textContent = 'Confounding Caution: While density and baseline covariates may appear smooth, multiple distinct interventions (e.g. academy + cash grant) are bundled at the exact same threshold, confounding causal attribution.';
+        } else if (bunchingIntensity > 0 || Math.abs(placeboJump) > 1.0) {
+          readoutCredibility.textContent = 'Examine Sensitivity';
+          readoutCredibility.style.color = '#d97706';
+          subCredibility.textContent = 'Minor anomalies present';
+          labInsight.style.borderLeftColor = '#d97706';
+          labInsight.style.background = 'rgba(217,119,6,0.08)';
+          labInsightText.textContent = 'Notice: Mild heaping or slight covariate shifts are visible. Conduct sensitivity tests across narrower bandwidths to verify whether results are robust.';
+        } else {
+          readoutCredibility.textContent = 'No Obvious Warning';
+          readoutCredibility.style.color = '#059669';
+          subCredibility.textContent = 'Assumptions supported';
+          labInsight.style.borderLeftColor = '#059669';
+          labInsight.style.background = 'rgba(5,150,105,0.08)';
+          labInsightText.textContent = 'Clean Identification: Both the density of the running variable and the predetermined placebo covariate show smooth continuity through the threshold. The design shows no initial signs of sorting or confounding discontinuities.';
+        }
+
+        renderVisualizer();
+      }
+
+      function renderVisualizer() {
+        const width = 740;
+        const height = 380;
+        const padL = 60;
+        const padR = 40;
+        const cutoff = 50;
+
+        // Panel 1: Top (Density Histogram) height = 150px (y: 25 to 175)
+        // Panel 2: Bottom (Placebo Covariate) height = 150px (y: 205 to 355)
+
+        const minA = 15, maxA = 85;
+        function scaleX(a) {
+          return padL + ((a - minA) / (maxA - minA)) * (width - padL - padR);
+        }
+
+        const cutoffX = scaleX(cutoff);
+
+        let html = `
+          <!-- Panel 1: Density Title -->
+          <text x="${padL}" y="20" fill="var(--color-primary)" font-size="11" font-weight="700">PANEL A &middot; RUNNING VARIABLE DENSITY HISTOGRAM</text>
+          <line x1="${padL}" y1="175" x2="${width - padR}" y2="175" stroke="var(--color-text-secondary)" stroke-width="1.2" />
+          <line x1="${padL}" y1="30" x2="${padL}" y2="175" stroke="var(--color-text-secondary)" stroke-width="1.2" />
+          <text x="${cutoffX}" y="28" fill="#dc2626" font-size="10" font-weight="700" text-anchor="middle">Cutoff a₀ = 50</text>
+          <line x1="${cutoffX}" y1="30" x2="${cutoffX}" y2="175" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="4,3" />
+
+          <!-- Panel 2: Placebo Covariate Title -->
+          <text x="${padL}" y="200" fill="#7c3aed" font-size="11" font-weight="700">PANEL B &middot; PREDETERMINED PLACEBO COVARIATE (e.g., Parental Income)</text>
+          <line x1="${padL}" y1="355" x2="${width - padR}" y2="355" stroke="var(--color-text-secondary)" stroke-width="1.2" />
+          <line x1="${padL}" y1="210" x2="${padL}" y2="355" stroke="var(--color-text-secondary)" stroke-width="1.2" />
+          <line x1="${cutoffX}" y1="210" x2="${cutoffX}" y2="355" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="4,3" />
+
+          <!-- X axis label at bottom -->
+          <text x="${(width + padL - padR) / 2}" y="375" fill="var(--color-text)" font-size="11" font-weight="600" text-anchor="middle">Running Variable a</text>
+        `;
+
+        // 1. Render Histogram Bars
+        const numBins = 18;
+        const binWidthVal = (maxA - minA) / numBins;
+        const binPixelW = (scaleX(minA + binWidthVal) - scaleX(minA)) - 2;
+
+        for (let b = 0; b < numBins; b++) {
+          const binCenter = minA + (b + 0.5) * binWidthVal;
+          const bx = scaleX(minA + b * binWidthVal) + 1;
+          
+          // Base bell shape around 50
+          const dist = (binCenter - 50) / 18;
+          let count = Math.exp(-0.5 * dist * dist) * 75 + 15;
+
+          // If bunching is active: remove mass below cutoff and pile it onto bar immediately above 50
+          if (binCenter >= 44 && binCenter < 50 && bunchingIntensity > 0) {
+            count -= (bunchingIntensity / 100) * 22;
+          }
+          if (binCenter >= 50 && binCenter < 56 && bunchingIntensity > 0) {
+            count += (bunchingIntensity / 100) * 65; // Massive spike
+          }
+
+          const barH = Math.min(135, Math.max(8, count));
+          const by = 175 - barH;
+          const isSpike = binCenter >= 50 && binCenter < 56 && bunchingIntensity > 30;
+          const barFill = isSpike ? '#ef4444' : '#94a3b8';
+          const barOpacity = isSpike ? '0.9' : '0.65';
+
+          html += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${binPixelW.toFixed(1)}" height="${barH.toFixed(1)}" fill="${barFill}" opacity="${barOpacity}" rx="1" />`;
+        }
+
+        // 2. Render Placebo Covariate Scatter & Lines
+        // Baseline relationship: parental income = 45 + 0.3 * a + noise
+        const N_placebo = 45;
+        for (let i = 0; i < N_placebo; i++) {
+          const a = minA + (i / (N_placebo - 1)) * (maxA - minA);
+          const noise = Math.sin(i * 4.1) * 4.2;
+          let y = 35 + 0.45 * a + noise;
+          if (a >= 50) {
+            y += placeboJump;
+          }
+
+          // Scale Y to Panel B range (y: 210 to 355 => min 25, max 95)
+          const py = 355 - ((y - 25) / 70) * 140;
+          const px = scaleX(a);
+          html += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="2.8" fill="#7c3aed" opacity="0.6" />`;
+        }
+
+        // Fitted line for placebo left side
+        const leftPStartY = 355 - (((35 + 0.45 * 20) - 25) / 70) * 140;
+        const leftPEndY = 355 - (((35 + 0.45 * 50) - 25) / 70) * 140;
+        html += `<line x1="${scaleX(20)}" y1="${leftPStartY}" x2="${cutoffX}" y2="${leftPEndY}" stroke="#2563eb" stroke-width="2.5" />`;
+        html += `<circle cx="${cutoffX}" cy="${leftPEndY}" r="3.5" fill="#2563eb" />`;
+
+        // Fitted line for placebo right side
+        const rightPStartY = 355 - (((35 + 0.45 * 50 + placeboJump) - 25) / 70) * 140;
+        const rightPEndY = 355 - (((35 + 0.45 * 80 + placeboJump) - 25) / 70) * 140;
+        html += `<line x1="${cutoffX}" y1="${rightPStartY}" x2="${scaleX(80)}" y2="${rightPEndY}" stroke="#059669" stroke-width="2.5" />`;
+        html += `<circle cx="${cutoffX}" cy="${rightPStartY}" r="3.5" fill="#059669" />`;
+
+        // Placebo jump gap indicator
+        if (Math.abs(leftPEndY - rightPStartY) > 3) {
+          html += `<line x1="${cutoffX}" y1="${leftPEndY}" x2="${cutoffX}" y2="${rightPStartY}" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="3,3" />`;
+          html += `<text x="${cutoffX + 8}" y="${(leftPEndY + rightPStartY)/2 + 4}" fill="#dc2626" font-size="10" font-weight="700">Jump &Delta; = ${(placeboJump >= 0 ? '+' : '') + placeboJump.toFixed(1)}</text>`;
+        }
+
+        svg.innerHTML = html;
+      }
+
+      // Tab handlers
+      tabSmooth.addEventListener('click', () => {
+        bunchingIntensity = 0;
+        placeboJump = 0.0;
+        isConfounded = false;
+        sliderBunching.value = 0;
+        sliderPlacebo.value = 0;
+        tabSmooth.className = 'btn btn-sm btn-primary';
+        tabManipulation.className = 'btn btn-sm btn-outline';
+        tabConfound.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+
+      tabManipulation.addEventListener('click', () => {
+        bunchingIntensity = 75;
+        placeboJump = 14.0;
+        isConfounded = false;
+        sliderBunching.value = 75;
+        sliderPlacebo.value = 14;
+        tabSmooth.className = 'btn btn-sm btn-outline';
+        tabManipulation.className = 'btn btn-sm btn-primary';
+        tabConfound.className = 'btn btn-sm btn-outline';
+        updateLab();
+      });
+
+      tabConfound.addEventListener('click', () => {
+        bunchingIntensity = 0;
+        placeboJump = 0.0;
+        isConfounded = true;
+        sliderBunching.value = 0;
+        sliderPlacebo.value = 0;
+        tabSmooth.className = 'btn btn-sm btn-outline';
+        tabManipulation.className = 'btn btn-sm btn-outline';
+        tabConfound.className = 'btn btn-sm btn-primary';
+        updateLab();
+      });
+
+      sliderBunching.addEventListener('input', (e) => {
+        bunchingIntensity = parseInt(e.target.value, 10);
+        updateLab();
+      });
+
+      sliderPlacebo.addEventListener('input', (e) => {
+        placeboJump = parseFloat(e.target.value);
+        updateLab();
+      });
+
+      // Quick check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    })();
+  </script>
+</body>
+</html>

@@ -23,7 +23,11 @@ const ProgressTracker = (function () {
     'module-11': 7,
     'module-12': 6,
     'module-13': 6,
-    'module-14': 6
+    'module-14': 6,
+    'module-15': 6,
+    'module-16': 6,
+    'module-17': 6,
+    'module-18': 5
   };
 
   function getProgressData() {
@@ -97,10 +101,27 @@ const ProgressTracker = (function () {
       if (sidebarText) sidebarText.textContent = `${stats.pct}% Complete`;
 
       // Top nav lesson progress bar & text (supports both ID conventions)
+      // Calculates curriculum lesson-position progress through the module (e.g. Lesson 6 of 6 = 100%)
       const topFill = document.getElementById('topNavProgressFill') || document.getElementById('lessonTopProgressBar');
       const topText = document.getElementById('topNavProgressText') || document.getElementById('lessonTopProgressText');
-      if (topFill) topFill.style.width = `${stats.pct}%`;
-      if (topText) topText.textContent = `${stats.pct}%`;
+      
+      let lessonPosPct = stats.pct;
+      const lessonAttr = document.body.getAttribute('data-lesson');
+      if (lessonAttr && currentModuleId) {
+        const lessonNumInt = parseInt(lessonAttr, 10);
+        const totalLessons = MODULE_LESSON_COUNTS[currentModuleId] || stats.total || 1;
+        if (!isNaN(lessonNumInt) && totalLessons > 0) {
+          lessonPosPct = Math.min(100, Math.round((lessonNumInt / totalLessons) * 100));
+        }
+      } else if (topText && topText.textContent && topText.textContent.includes('%')) {
+        const parsed = parseInt(topText.textContent, 10);
+        if (!isNaN(parsed) && parsed > 0) {
+          lessonPosPct = parsed;
+        }
+      }
+      
+      if (topFill) topFill.style.width = `${lessonPosPct}%`;
+      if (topText) topText.textContent = `${lessonPosPct}%`;
 
       // Update dropdown menu items status icons
       document.querySelectorAll('[data-lesson-dropdown-id], .lesson-dropdown-item, .dropdown-item').forEach(item => {

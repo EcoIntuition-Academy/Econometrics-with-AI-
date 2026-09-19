@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 16.2: Probit, Logit &amp; Probability Curves — EcoIntuition Academy</title>
+  <meta name="description" content="Overcome the limitations of linear probability models using cumulative distribution functions, contrast standard normal and logistic distributions, and examine tail behavior.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-16" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 16</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 16</a>
+          <span class="module-nav-title">Binary Choice Models &amp; Maximum Likelihood</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 6 &middot; Probit, Logit &amp; Probability Curves</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 16 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.1 Binary Outcomes &amp; LPM</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.2 Probit, Logit &amp; Curves</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.3 Marginal Effects in Binary Choice</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.4 Latent Variables &amp; Threshold Models</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.5 Maximum Likelihood Estimation</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.6 MLE Properties, Variance &amp; Inference</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Layout Container -->
+  <main class="lesson-content-area" id="mainContent">
+    <!-- Header Block (Module 1 Canonical Header) -->
+        <!-- Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 16.2</span>
+        <span class="badge">Nonlinear Probability Curves</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Probit, Logit &amp; Probability Curves
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Overcoming the bounding and linear limitations of the LPM through cumulative distribution functions, standard normal versus logistic curves, and extreme tail behavior.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand how cumulative distribution functions (CDFs) guarantee predicted probabilities stay strictly bounded inside \([0, 1]\).</li>
+        <li>Distinguish the mathematical structure of the Probit model (\(\Phi\)) from the Logit model (\(\Lambda\)).</li>
+        <li>Derive the relationship between probability density functions (PDFs) and cumulative distribution functions (CDFs).</li>
+        <li>Analyze the practical equivalence of Probit and Logit in empirical research and understand the \(1.6\) coefficient scaling rule.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Solution to Unbounded Probabilities -->
+    <section class="lesson-section">
+      <h2>1. The Solution to Unbounded Probabilities</h2>
+      <p>
+        In Lesson 16.1, we discovered that the Linear Probability Model inevitably predicts probabilities outside \([0, 1]\) because a linear function is unbounded. To solve this dilemma, econometrics maps the linear index \(z_i = \mathbf{x}_i'\boldsymbol{\beta}\) through a continuous, monotonically increasing <strong>cumulative distribution function (CDF)</strong>, denoted \(G(z)\):
+      </p>
+
+      <!-- Equation Box: General CDF Mapping -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Nonlinear Specification</span>
+          <span class="equation-title">Cumulative Distribution Function Mapping</span>
+        </div>
+        <div class="equation-main">
+          \[ \Pr(Y_i = 1 \mid \mathbf{x}_i) = G(\mathbf{x}_i'\boldsymbol{\beta}), \qquad \Pr(Y_i = 0 \mid \mathbf{x}_i) = 1 - G(\mathbf{x}_i'\boldsymbol{\beta}) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(G(\cdot)\)</span>
+              <span class="symbol-desc">A continuous cumulative distribution function satisfying \(0 < G(z) < 1\) for all real \(z\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{x}_i'\boldsymbol{\beta}\)</span>
+              <span class="symbol-desc">The linear index \(z_i = \beta_0 + \beta_1 x_{i1} + \dots + \beta_k x_{ik}\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(1 - G(z_i)\)</span>
+              <span class="symbol-desc">The complementary probability of non-occurrence (\(Y_i = 0\))</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Because \(G(z)\) is a valid cumulative probability distribution, it possesses two essential mathematical properties that permanently fix the LPM defect:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Asymptote at Zero</h4>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \lim_{z \to -\infty} G(z) = 0 \]
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            As the linear index becomes infinitely negative, the probability gently flattens and approaches \(0\) asymptotically. It can never drop below zero.
+          </p>
+        </div>
+
+        <div class="study-card">
+          <h4 style="color: var(--accent-success); margin-bottom: 0.5rem; font-size: 0.95rem;">Asymptote at One</h4>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \lim_{z \to +\infty} G(z) = 1 \]
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            As the linear index becomes infinitely positive, the probability gently flattens and approaches \(1\) asymptotically. It can never exceed one.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Geometric Relationship: Density Function vs. Cumulative Probability -->
+    <section class="lesson-section">
+      <h2>2. Geometric Relationship: Density Function vs. Cumulative Probability</h2>
+      <p>
+        To understand how probabilities change when regressors change, we examine the connection between the cumulative distribution function \(G(z)\) and its underlying <strong>probability density function (PDF)</strong>, denoted \(g(z)\). By the Fundamental Theorem of Calculus:
+      </p>
+
+      <!-- Equation Box: PDF vs CDF Relationship -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Calculus Foundation</span>
+          <span class="equation-title">Density Derivative &amp; Cumulative Integral</span>
+        </div>
+        <div class="equation-main">
+          \[ g(z) \equiv \frac{dG(z)}{dz} > 0 \qquad \Longleftrightarrow \qquad G(z) = \int_{-\infty}^{z} g(u)\, du \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(g(z)\)</span>
+              <span class="symbol-desc">Probability density function; represents the slope of the cumulative S-curve at point \(z\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(G(z)\)</span>
+              <span class="symbol-desc">Cumulative distribution function; equal to the area under the density curve \(g(u)\) from \(-\infty\) up to \(z\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Because densities are strictly positive (\(g(z) > 0\)), the cumulative function \(G(z)\) is <em>strictly monotonically increasing</em>. The steeper the density curve at \(z\), the faster the probability rises along the S-curve.
+      </p>
+    </section>
+
+    <!-- Section 3: The Probit Model & Scale Normalization -->
+    <section class="lesson-section">
+      <h2>3. The Probit Model &amp; Scale Normalization</h2>
+      <p>
+        The <strong>Probit model</strong> selects the standard normal distribution function as its mapping function \(G(\cdot)\). In this specification, we denote the CDF as \(\Phi(z)\) and the PDF as \(\phi(z)\).
+      </p>
+
+      <!-- Equation Box: Probit Normal PDF -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Probit PDF</span>
+          <span class="equation-title">Standard Normal Density Function</span>
+        </div>
+        <div class="equation-main">
+          \[ \phi(z) = \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2}\right) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\phi(z)\)</span>
+              <span class="symbol-desc">Standard normal bell curve with mean \(\mu = 0\) and variance \(\sigma^2 = 1\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\phi(0)\)</span>
+              <span class="symbol-desc">Maximum density height of \(\frac{1}{\sqrt{2\pi}} \approx 0.3989\) attained at the center (\(z = 0\))</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equation Box: Probit CDF -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Probit Specification</span>
+          <span class="equation-title">Standard Normal Cumulative Distribution Function</span>
+        </div>
+        <div class="equation-main">
+          \[ \Pr(Y_i = 1 \mid \mathbf{x}_i) = \Phi(\mathbf{x}_i'\boldsymbol{\beta}) = \int_{-\infty}^{\mathbf{x}_i'\boldsymbol{\beta}} \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{u^2}{2}\right) du \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\Phi(z)\)</span>
+              <span class="symbol-desc">The standard normal cumulative distribution integral (no closed-form elementary formula exists)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\Phi(0) = 0.50\)</span>
+              <span class="symbol-desc">Symmetry condition: when the linear index equals zero, the predicted probability is exactly 50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Student Mistake Card -->
+      <div class="common-mistake-card">
+        <div class="common-mistake-header">⚠️ Common Student Mistake</div>
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "We can estimate the variance of the error term \(\sigma^2\) in a binary Probit model from sample data."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> Because we only observe a discrete binary outcome \(Y \in \{0, 1\}\), the scale of the underlying continuous process is inherently unidentified. Setting \(\sigma^2 = 1\) in the Probit model is an <em>identifying normalization</em>, not an empirical discovery or restrictive assumption. Any scaling factor would simply rescale all coefficients \(\boldsymbol{\beta}\) proportionally without altering predicted probabilities.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The Logit Model -->
+    <section class="lesson-section">
+      <h2>4. The Logit Model</h2>
+      <p>
+        The <strong>Logit model</strong> specifies \(G(\cdot)\) as the standard logistic cumulative distribution function, denoted \(\Lambda(z)\). Unlike the Gaussian normal distribution, the logistic CDF has an exact, closed-form algebraic expression.
+      </p>
+
+      <!-- Equation Box: Logit CDF -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Logit Specification</span>
+          <span class="equation-title">Standard Logistic Cumulative Distribution Function</span>
+        </div>
+        <div class="equation-main">
+          \[ \Pr(Y_i = 1 \mid \mathbf{x}_i) = \Lambda(\mathbf{x}_i'\boldsymbol{\beta}) = \frac{1}{1 + e^{-\mathbf{x}_i'\boldsymbol{\beta}}} = \frac{e^{\mathbf{x}_i'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i'\boldsymbol{\beta}}} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\Lambda(z)\)</span>
+              <span class="symbol-desc">Standard logistic sigmoid function; maps \((-\infty, +\infty)\) smoothly into \((0, 1)\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(e^{-z}\)</span>
+              <span class="symbol-desc">Natural exponential function of the negative linear index</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equation Box: Logistic Complement -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Symmetry Property</span>
+          <span class="equation-title">Logistic Complementary Probability</span>
+        </div>
+        <div class="equation-main">
+          \[ 1 - \Lambda(z) = 1 - \frac{1}{1 + e^{-z}} = \frac{e^{-z}}{1 + e^{-z}} = \frac{1}{1 + e^z} = \Lambda(-z) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(1 - \Lambda(z)\)</span>
+              <span class="symbol-desc">Probability of non-event (\(Y = 0\)); equals \(\Lambda(-z)\) by rotational symmetry</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equation Box: Odds Ratio & Log-Odds -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Logit Link</span>
+          <span class="equation-title">Odds Ratio &amp; the Log-Odds Transformation</span>
+        </div>
+        <div class="equation-main">
+          \[ \text{Odds}_i = \frac{P_i}{1 - P_i} = e^{\mathbf{x}_i'\boldsymbol{\beta}} \qquad \Longleftrightarrow \qquad \ln\left(\frac{P_i}{1 - P_i}\right) = \mathbf{x}_i'\boldsymbol{\beta} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\frac{P_i}{1 - P_i}\)</span>
+              <span class="symbol-desc">Odds of the event occurring relative to not occurring</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\ln(\text{Odds}_i)\)</span>
+              <span class="symbol-desc">The "logit" or log-odds; directly linear in the parameters \(\boldsymbol{\beta}\)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Prompt / Insight Box -->
+      <div class="ai-prompt-box">
+        <div class="ai-prompt-header">🤖 AI Insight: Machine Learning Sigmoids vs. Econometric Link Functions</div>
+        <p style="font-size: var(--text-sm); line-height: 1.65; color: var(--text-secondary); margin: 0;">
+          In modern artificial intelligence and machine learning architectures, the logistic CDF \(\Lambda(z)\) is known as the <em>sigmoid activation function</em>. While computer scientists prize the sigmoid for its simple derivative in backpropagation, econometricians prize it because its log-odds transformation linearizes the relationship, permitting clear structural economic interpretation of odds ratios.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 5: Probit vs. Logit: Thick Tails & Practical Equivalence -->
+    <section class="lesson-section">
+      <h2>5. Probit vs. Logit: Thick Tails &amp; Practical Equivalence</h2>
+      <p>
+        Both the standard normal CDF \(\Phi(z)\) and standard logistic CDF \(\Lambda(z)\) are symmetric S-curves centered at \(z = 0\) with \(G(0) = 0.50\). However, their underlying error distributions have distinct variances and tail thickness:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Standard Normal Distribution</h4>
+          <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; margin: 0; color: var(--text-secondary);">
+            <li><strong>Variance:</strong> \(\sigma^2 = 1.00\)</li>
+            <li><strong>Kurtosis:</strong> \(3.00\) (standard mesokurtic benchmark)</li>
+            <li><strong>Tail Decay:</strong> Exponentially fast decay (\(e^{-z^2/2}\)), leading to thin tails.</li>
+          </ul>
+        </div>
+
+        <div class="study-card">
+          <h4 style="color: var(--accent-success); margin-bottom: 0.5rem; font-size: 0.95rem;">Standard Logistic Distribution</h4>
+          <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; margin: 0; color: var(--text-secondary);">
+            <li><strong>Variance:</strong> \(\sigma^2 = \frac{\pi^2}{3} \approx 3.29\)</li>
+            <li><strong>Kurtosis:</strong> \(4.20\) (leptokurtic, heavier tails)</li>
+            <li><strong>Tail Decay:</strong> Power-like slower decay (\(e^{-z}\)), retaining higher probability in the extremes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Because the logistic distribution has a larger variance (\(\pi^2/3 \approx 3.29\) compared to \(1.00\)), its standard deviation is \(\frac{\pi}{\sqrt{3}} \approx 1.81\). In practice, this difference produces a universal empirical rule of thumb:
+      </p>
+
+      <!-- Worked Example / Scale Rule Card -->
+      <div class="study-card" style="margin: var(--space-md) 0; border-left: 4px solid var(--accent-primary);">
+        <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em;">
+          PRACTICAL RULE OF THUMB &middot; COEFFICIENT SCALING
+        </div>
+        <div style="background: var(--surface-raised); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 1.05rem; font-weight: 600; text-align: center; margin: 0.5rem 0;">
+          \[ \hat{\boldsymbol{\beta}}_{\text{logit}} \approx 1.6 \times \hat{\boldsymbol{\beta}}_{\text{probit}} \]
+        </div>
+        <p style="font-size: var(--text-sm); line-height: 1.65; color: var(--text-secondary); margin: 0.5rem 0 0 0;">
+          Estimated Logit coefficients are consistently about \(1.6\) to \(1.7\) times larger than Probit coefficients estimated on the identical dataset. This reflects the difference in scale normalization, not economic magnitude.
+        </p>
+      </div>
+
+      <!-- Common Student Mistake Card -->
+      <div class="common-mistake-card">
+        <div class="common-mistake-header">⚠️ Common Student Mistake</div>
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "Because Logit coefficients are 1.6 times larger than Probit coefficients, the Logit model implies a substantially larger economic impact."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> Once coefficients are transformed into predicted probabilities \(G(\mathbf{x}'\boldsymbol{\beta})\) or marginal effects, Probit and Logit produce almost identical empirical results across typical ranges of data. The \(1.6\) ratio is simply an artifact of the scale identification convention.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive Lab 16.2 -->
+    <section class="lesson-section">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <span class="lab-badge">INTERACTIVE LAB 16.2</span>
+          <h3 class="lab-title">Probit vs. Logit Probability Explorer</h3>
+          <p class="lab-desc">
+            Explore how the cumulative S-curves of Probit (\(\Phi\)) and Logit (\(\Lambda\)) map index values into bounded probabilities. Switch between models or overlay both to observe tail behavior.
+          </p>
+        </div>
+
+        <!-- Controls: Segmented Buttons & Slider -->
+        <div class="lab-controls" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+          <div class="segmented-control" role="group" aria-label="Select Model">
+            <button id="btnTabProbit" class="btn btn-sm btn-primary active" type="button">Probit (\(\Phi\))</button>
+            <button id="btnTabLogit" class="btn btn-sm btn-outline" type="button">Logit (\(\Lambda\))</button>
+            <button id="btnTabCompare" class="btn btn-sm btn-outline" type="button">Compare Both</button>
+          </div>
+
+          <div class="lab-slider-group" style="display: flex; align-items: center; gap: 0.75rem; min-width: 260px;">
+            <label for="indexSlider" style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;">
+              Index Value (\(z = \mathbf{x}'\boldsymbol{\beta}\)):
+            </label>
+            <input type="range" id="indexSlider" min="-4.0" max="4.0" step="0.1" value="0.0" style="flex: 1;">
+            <span id="indexVal" class="slider-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; min-width: 48px; text-align: right;">0.0</span>
+          </div>
+        </div>
+
+        <!-- 2x2 Metric Cards Grid -->
+        <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div class="metric-card">
+            <div class="metric-label">CURRENT INDEX (\(z\))</div>
+            <div class="metric-value" id="m2Index">0.00</div>
+            <div class="metric-subtext">Linear predictor value</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">PREDICTED PROBABILITY (\(P_1\))</div>
+            <div class="metric-value" id="m2P1" style="color: var(--accent-primary);">0.5000</div>
+            <div class="metric-subtext">\(\Pr(Y = 1 \mid z)\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">COMPLEMENT PROBABILITY (\(P_0\))</div>
+            <div class="metric-value" id="m2P0">0.5000</div>
+            <div class="metric-subtext">\(\Pr(Y = 0 \mid z)\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">ACTIVE MODEL / DENSITY</div>
+            <div class="metric-value" id="m2Model" style="color: var(--accent-success);">Probit</div>
+            <div class="metric-subtext" id="m2ModelSub">\(\phi(0) = 0.3989\)</div>
+          </div>
+        </div>
+
+        <!-- Legend Bar Above Plot -->
+        <div class="external-legend-bar" style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--surface-raised); border-radius: var(--radius-sm); font-size: var(--text-xs); font-weight: 600;">
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #2563eb; border-radius: 2px;"></span>
+            Probit CDF \(\Phi(z)\)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #10b981; border-radius: 2px;"></span>
+            Logit CDF \(\Lambda(z)\)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span>
+            Active Point \((z, P)\)
+          </span>
+        </div>
+
+        <!-- Visualization Plot Container -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="probitLogitSvg" viewBox="0 0 760 380" style="width: 100%; height: 380px; display: block; overflow: visible;"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+                <!-- Scenario Insight -->
+        <div id="lab2InsightContainer" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: var(--text-sm); line-height: 1.6;">
+          <strong style="color: var(--color-primary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; display: inline-block; margin-right: 6px;">SCENARIO INSIGHT:</strong>
+          <span id="lab2InsightText"></span>
+        </div>
+          <p id="lab2InsightText" style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            At \(z = 0\), both Probit and Logit predict exactly 50% probability due to distributional symmetry.
+          </p>
+        </div>
+
+        <!-- Canonical 2x2 Explanation Grid -->
+                <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The horizontal axis shows the continuous linear index \(z = \mathbf{x}'\boldsymbol{\beta}\). The vertical axis shows the cumulative probability \(\Pr(Y = 1 \mid z)\) strictly bounded in \([0, 1]\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>In the middle (\(|z| < 1.5\)), the curves are almost indistinguishable. However, in the extreme tails (\(|z| > 2.5\)), the Logit curve remains slightly higher on the left and lower on the right due to its thicker tails.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Unlike the LPM line which shoots past \(1.0\) and below \(0.0\), these nonlinear CDF curves flatten smoothly, honoring the fundamental laws of probability.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Unless you have millions of observations focusing on rare tail events (e.g., probability \(< 0.001\)), Probit and Logit produce virtually identical conclusions in applied empirical econometrics.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> 
+          </div>
+        </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            Click <strong>"Compare Both"</strong> and slide \(z\) to \(-3.0\). Observe that Logit gives a slightly higher probability (\(0.0474\)) than Probit (\(0.0013\)). This visually demonstrates the heavier tails of the logistic distribution!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+        <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> Why do Probit and Logit models automatically avoid predicted probabilities below 0 or above 1?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint162">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol162">Show Solution</button>
+        </div>
+        <div id="hint162" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Consider the mathematical properties of cumulative distribution functions (CDFs) as the linear index \(z\) approaches \(-\infty\) and \(+\infty\).
+          </p>
+        </div>
+        <div id="sol162" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> Both \(\Phi(z)\) and \(\Lambda(z)\) are legitimate cumulative distribution functions whose mathematical codomains are strictly bounded within \((0, 1)\). As \(z \to -\infty\), probabilities approach \(0\) asymptotically; as \(z \to +\infty\), probabilities approach \(1\) asymptotically. Thus, negative probabilities and values greater than \(1\) are mathematically impossible by construction.
+          </p>
+        </div>
+      </div>
+    </section>
+
+        <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 16.2 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        Cumulative distribution functions provide an elegant mathematical solution to the boundary dilemma of the Linear Probability Model:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>CDF Mapping:</strong> By passing the linear index \(\mathbf{x}'\boldsymbol{\beta}\) through a CDF \(G(\cdot)\), probabilities are strictly bounded inside \([0, 1]\).</li>
+          <li><strong>Probit:</strong> Uses the Gaussian normal CDF \(\Phi(z)\); requires numerical integration and adopts \(\sigma^2 = 1\) as an identifying normalization.</li>
+          <li><strong>Logit:</strong> Uses the logistic CDF \(\Lambda(z) = \frac{1}{1 + e^{-z}}\); features a closed-form formula and linearizes the log-odds ratio.</li>
+          <li><strong>Empirical Equivalence:</strong> Except in extreme tails where the logistic distribution's heavier tails matter, Probit and Logit produce almost identical substantive economic findings, with \(\hat{\boldsymbol{\beta}}_{\text{logit}} \approx 1.6 \hat{\boldsymbol{\beta}}_{\text{probit}}\).</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Binary Outcomes & LPM</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-16" data-lesson="2" style="align-self: center;">
+          ✓ Mark Lesson 2 Complete
+        </button>
+        <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Marginal Effects in Binary Choice</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Lab 16.2 Interactive Script -->
+  <script>
+
+    let activeMode = 'probit';
+
+    const btnTabProbit = document.getElementById('btnTabProbit');
+    const btnTabLogit = document.getElementById('btnTabLogit');
+    const btnTabCompare = document.getElementById('btnTabCompare');
+
+    const indexSlider = document.getElementById('indexSlider');
+    const indexVal = document.getElementById('indexVal');
+
+    const m2Index = document.getElementById('m2Index');
+    const m2P1 = document.getElementById('m2P1');
+    const m2P0 = document.getElementById('m2P0');
+    const m2Model = document.getElementById('m2Model');
+    const m2ModelSub = document.getElementById('m2ModelSub');
+
+    const lab2InsightContainer = document.getElementById('lab2InsightContainer');
+    const lab2InsightText = document.getElementById('lab2InsightText');
+
+    function normalCdf(z) {
+      const a1 =  0.254829592;
+      const a2 = -0.284496736;
+      const a3 =  1.421413741;
+      const a4 = -1.453152027;
+      const a5 =  1.061405429;
+      const p  =  0.3275911;
+
+      const sign = z < 0 ? -1 : 1;
+      const x = Math.abs(z) / Math.sqrt(2.0);
+      const t = 1.0 / (1.0 + p * x);
+      const erf = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+
+      return 0.5 * (1.0 + sign * erf);
+    }
+
+    function logitCdf(z) {
+      return 1.0 / (1.0 + Math.exp(-z));
+    }
+
+    function setMode(mode) {
+      activeMode = mode;
+      btnTabProbit.className = 'btn btn-sm ' + (mode === 'probit' ? 'btn-primary active' : 'btn-outline');
+      btnTabLogit.className = 'btn btn-sm ' + (mode === 'logit' ? 'btn-primary active' : 'btn-outline');
+      btnTabCompare.className = 'btn btn-sm ' + (mode === 'compare' ? 'btn-primary active' : 'btn-outline');
+
+      updateLab2();
+    }
+
+    btnTabProbit.addEventListener('click', () => setMode('probit'));
+    btnTabLogit.addEventListener('click', () => setMode('logit'));
+    btnTabCompare.addEventListener('click', () => setMode('compare'));
+
+    indexSlider.addEventListener('input', updateLab2);
+
+    function updateLab2() {
+      const z = parseFloat(indexSlider.value);
+      indexVal.textContent = (z >= 0 ? '+' : '') + z.toFixed(2);
+      m2Index.textContent = (z >= 0 ? '+' : '') + z.toFixed(3);
+
+      const pProbit = normalCdf(z);
+      const pLogit = logitCdf(z);
+
+      if (activeMode === 'probit') {
+        m2P1.textContent = (pProbit * 100).toFixed(1) + '%';
+        m2P0.textContent = ((1 - pProbit) * 100).toFixed(1) + '%';
+        m2Model.textContent = 'Probit (Φ)';
+        m2ModelSub.textContent = 'Standard Normal CDF';
+        lab2InsightContainer.style.borderLeftColor = '#2563eb';
+        lab2InsightText.textContent = `At x'β = ${z.toFixed(2)}, standard normal Probit yields P(Y=1) = ${(pProbit * 100).toFixed(2)}%. The probability is strictly bounded in [0, 1].`;
+      } else if (activeMode === 'logit') {
+        m2P1.textContent = (pLogit * 100).toFixed(1) + '%';
+        m2P0.textContent = ((1 - pLogit) * 100).toFixed(1) + '%';
+        m2Model.textContent = 'Logit (Λ)';
+        m2ModelSub.textContent = 'Logistic CDF';
+        lab2InsightContainer.style.borderLeftColor = '#8b5cf6';
+        lab2InsightText.textContent = `At x'β = ${z.toFixed(2)}, logistic Logit yields P(Y=1) = ${(pLogit * 100).toFixed(2)}%. Logit has an explicit closed-form: exp(x'β) / [1 + exp(x'β)].`;
+      } else {
+        m2P1.textContent = `Φ: ${(pProbit * 100).toFixed(1)}% | Λ: ${(pLogit * 100).toFixed(1)}%`;
+        m2P0.textContent = `ΔP = ${Math.abs(pProbit - pLogit * 100).toFixed(1)}%`;
+        m2Model.textContent = 'Comparison Mode';
+        m2ModelSub.textContent = 'Probit vs. Logit';
+        lab2InsightContainer.style.borderLeftColor = '#f59e0b';
+        const diff = (pLogit - pProbit) * 100;
+        lab2InsightText.textContent = `At x'β = ${z.toFixed(2)}: Probit = ${(pProbit * 100).toFixed(2)}%, Logit = ${(pLogit * 100).toFixed(2)}% (difference = ${diff.toFixed(2)} pp). Notice how Logit has thicker tails when |z| > 2!`;
+      }
+
+      renderLab2Chart(z, pProbit, pLogit);
+    }
+
+    function renderLab2Chart(currentZ, pProbit, pLogit) {
+      const svg = document.getElementById('probitLogitSvg');
+      if (!svg) return;
+
+      const width = 800;
+      const height = 380;
+      const margin = { top: 30, right: 45, bottom: 55, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const zMin = -4.0;
+      const zMax = 4.0;
+
+      function scaleX(val) {
+        return margin.left + ((val - zMin) / (zMax - zMin)) * plotW;
+      }
+
+      function scaleY(val) {
+        return margin.top + plotH - val * plotH;
+      }
+
+      const fontStack = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+
+      const y0 = scaleY(0);
+      const y1 = scaleY(1);
+
+      let html = `
+        <!-- Valid background [0, 1] -->
+        <rect x="${margin.left}" y="${y1}" width="${plotW}" height="${plotH}" fill="rgba(16, 185, 129, 0.05)" />
+
+        <!-- Reference Bounds -->
+        <line x1="${margin.left}" y1="${y1}" x2="${margin.left + plotW}" y2="${y1}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3" />
+        <text x="${margin.left - 8}" y="${y1 + 4}" fill="#10b981" font-size="11" font-weight="700" font-family="${fontStack}" text-anchor="end">1.0</text>
+
+        <line x1="${margin.left}" y1="${y0}" x2="${margin.left + plotW}" y2="${y0}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3" />
+        <text x="${margin.left - 8}" y="${y0 + 4}" fill="#10b981" font-size="11" font-weight="700" font-family="${fontStack}" text-anchor="end">0.0</text>
+
+        <!-- 0.5 midpoint guide line -->
+        <line x1="${margin.left}" y1="${scaleY(0.5)}" x2="${margin.left + plotW}" y2="${scaleY(0.5)}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" stroke-dasharray="2,2" />
+        <text x="${margin.left - 8}" y="${scaleY(0.5) + 4}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="end">0.5</text>
+
+        <!-- Zero index center line -->
+        <line x1="${scaleX(0)}" y1="${margin.top}" x2="${scaleX(0)}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" stroke-dasharray="3,3" />
+        <text x="${scaleX(0)}" y="${margin.top + plotH + 18}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="middle">0</text>
+
+        <!-- Axes lines -->
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+
+        <!-- X Axis Label -->
+        <text x="${margin.left + plotW / 2}" y="${margin.top + plotH + 42}" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" text-anchor="middle">Linear Index x'β</text>
+
+        <!-- Y Axis Label -->
+        <text x="-${margin.top + plotH / 2}" y="18" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" transform="rotate(-90)" text-anchor="middle">Cumulative Probability F(x'β)</text>
+      `;
+
+      // X-axis ticks
+      [-4, -3, -2, -1, 1, 2, 3, 4].forEach(val => {
+        const xPos = scaleX(val);
+        html += `<line x1="${xPos}" y1="${margin.top + plotH}" x2="${xPos}" y2="${margin.top + plotH + 4}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" />`;
+        html += `<text x="${xPos}" y="${margin.top + plotH + 18}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="middle">${val}</text>`;
+      });
+
+      // Generate paths for curves (80 points across [-4, 4])
+      const numPts = 80;
+      let probitPath = '';
+      let logitPath = '';
+
+      for (let i = 0; i <= numPts; i++) {
+        const zVal = zMin + (i / numPts) * (zMax - zMin);
+        const pP = normalCdf(zVal);
+        const pL = logitCdf(zVal);
+
+        const xCoord = scaleX(zVal);
+        const yCoordP = scaleY(pP);
+        const yCoordL = scaleY(pL);
+
+        if (i === 0) {
+          probitPath += `M ${xCoord} ${yCoordP}`;
+          logitPath += `M ${xCoord} ${yCoordL}`;
+        } else {
+          probitPath += ` L ${xCoord} ${yCoordP}`;
+          logitPath += ` L ${xCoord} ${yCoordL}`;
+        }
+      }
+
+      if (activeMode === 'probit' || activeMode === 'compare') {
+        html += `<path d="${probitPath}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" />`;
+      }
+      if (activeMode === 'logit' || activeMode === 'compare') {
+        html += `<path d="${logitPath}" fill="none" stroke="#8b5cf6" stroke-width="${activeMode === 'compare' ? '2.5' : '3'}" ${activeMode === 'compare' ? 'stroke-dasharray="5,3"' : ''} stroke-linecap="round" />`;
+      }
+
+      // Active Points & Guides
+      const ptX = scaleX(currentZ);
+      const ptYProbit = scaleY(pProbit);
+      const ptYLogit = scaleY(pLogit);
+
+      // Vertical guide line
+      html += `<line x1="${ptX}" y1="${margin.top + plotH}" x2="${ptX}" y2="${margin.top}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" />`;
+
+      if (activeMode === 'probit') {
+        html += `
+          <line x1="${margin.left}" y1="${ptYProbit}" x2="${ptX}" y2="${ptYProbit}" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3,3" />
+          <circle cx="${ptX}" cy="${ptYProbit}" r="6.5" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+          <text x="${ptX + 10}" y="${ptYProbit - 8}" fill="#2563eb" font-weight="700" font-size="12" font-family="${fontStack}">Φ = ${(pProbit * 100).toFixed(1)}%</text>
+        `;
+      } else if (activeMode === 'logit') {
+        html += `
+          <line x1="${margin.left}" y1="${ptYLogit}" x2="${ptX}" y2="${ptYLogit}" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="3,3" />
+          <circle cx="${ptX}" cy="${ptYLogit}" r="6.5" fill="#8b5cf6" stroke="#ffffff" stroke-width="2" />
+          <text x="${ptX + 10}" y="${ptYLogit - 8}" fill="#8b5cf6" font-weight="700" font-size="12" font-family="${fontStack}">Λ = ${(pLogit * 100).toFixed(1)}%</text>
+        `;
+      } else {
+        html += `
+          <circle cx="${ptX}" cy="${ptYProbit}" r="6" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+          <circle cx="${ptX}" cy="${ptYLogit}" r="6" fill="#8b5cf6" stroke="#ffffff" stroke-width="2" />
+          <text x="${ptX + 10}" y="${ptYProbit - 8}" fill="#2563eb" font-weight="700" font-size="11" font-family="${fontStack}">Φ: ${(pProbit * 100).toFixed(1)}%</text>
+          <text x="${ptX + 10}" y="${ptYLogit + 16}" fill="#8b5cf6" font-weight="700" font-size="11" font-family="${fontStack}">Λ: ${(pLogit * 100).toFixed(1)}%</text>
+        `;
+      }
+
+      svg.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLab2();
+    });
+  
+  </script>
+</body>
+</html>

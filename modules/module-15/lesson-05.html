@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 15.5: Fuzzy RD, Instrumental Variables &amp; the Wald Estimator — EcoIntuition Academy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-15" data-lesson="5">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 15</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 15</a>
+          <span class="module-nav-title">Regression Discontinuity Designs</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 5 of 6 &middot; Fuzzy RD, Instrumental Variables &amp; the Wald Estimator</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 15 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.1 RD Intuition, Cutoffs &amp; Sharp RD</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.2 Continuity, Manipulation &amp; Placebos</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.3 RD Regression &amp; Cutoff Treatment Effects</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.4 Bandwidth Choice &amp; Kernel Weighting</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">15.5 Fuzzy RD, IV &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.6 McCrary Testing &amp; RD Diagnostics</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">83%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 83%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 15.5</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">FUZZY RD &amp; IV</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        Fuzzy RD, Instrumental Variables &amp; the Wald Estimator
+      </h1>
+      <p class="lesson-hero-lead">
+        When threshold crossing shifts treatment probability rather than guaranteeing deterministic compliance, the cutoff acts as an instrumental variable to identify the Local Average Treatment Effect (LATE) via the Wald ratio.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Distinguish Sharp RD (deterministic treatment) from Fuzzy RD (probabilistic take-up jump).</li>
+        <li>Map Fuzzy RD into the Instrumental Variables framework with threshold crossing as the instrument.</li>
+        <li>Formulate and compute the Wald estimator as the ratio of outcome jump to compliance jump at the cutoff.</li>
+        <li>Interpret the cutoff LATE estimand for threshold compliers and identify weak first-stage dangers.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Sharp vs. Fuzzy RD -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">1. Sharp vs. Fuzzy Regression Discontinuity</h2>
+      </div>
+      <div class="study-section-body">
+        <p>
+          In <strong>Sharp RD</strong>, crossing the cutoff \(a_0\) changes treatment status deterministically. However, in many health, labor, and social policy interventions, crossing a threshold alters an individual’s <em>eligibility</em>, incentives, or intensity of encouragement, while individual compliance remains voluntary.
+        </p>
+
+        <!-- Comparison Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-sm); margin: var(--space-sm) 0;">
+          <!-- Sharp Card -->
+          <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid var(--color-primary);">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">DETERMINISTIC ASSIGNMENT</div>
+            <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Sharp RD</div>
+            <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+              Crossing the cutoff deterministically decides treatment receipt with 100% compliance:
+              \[
+              T_i = \mathbf{1}(a_i \ge a_0), \quad P(D_i = 1 \mid a_i) = \begin{cases} 0 & \text{if } a_i < a_0 \\ 1 & \text{if } a_i \ge a_0 \end{cases}
+              \]
+              The treatment probability jumps from exactly 0 to 1 at the threshold.
+            </p>
+          </div>
+
+          <!-- Fuzzy Card -->
+          <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 4px solid #6d28d9;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #6d28d9; letter-spacing: 0.05em;">PROBABILISTIC ENCOURAGEMENT</div>
+            <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Fuzzy RD</div>
+            <p style="font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+              Crossing the cutoff causes an abrupt <em>jump in the probability</em> of treatment:
+              \[
+              \lim_{a \downarrow a_0} P(D_i = 1 \mid a_i) \ne \lim_{a \uparrow a_0} P(D_i = 1 \mid a_i), \quad 0 < \Delta P(D) < 1
+              \]
+              Treatment probability jumps (e.g. from 0.35 to 0.70). Non-compliance is present.
+            </p>
+          </div>
+        </div>
+
+        <!-- Visual Comparison: Probability Profiles -->
+        <div class="study-card" style="padding: var(--space-md); background: var(--surface); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">
+            Visual Comparison: Treatment Probability Profile Across Cutoff
+          </div>
+          <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 0 0 1rem 0;">
+            Notice how Sharp RD features a full unit step discontinuity (\(\Delta P = 1.0\)), whereas Fuzzy RD exhibits an imperfect step where the compliance gap \(\Delta P\) is strictly between 0 and 1.
+          </p>
+
+          <div style="text-align: center;">
+            <svg viewBox="0 0 850 280" width="100%" height="280" style="max-width: 850px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-primary);">
+              <!-- Panel 1: Sharp RD -->
+              <g transform="translate(60, 35)">
+                <text x="150" y="-12" fill="var(--color-text)" font-weight="700" font-size="13" text-anchor="middle">Sharp RD: Deterministic Step (ΔP = 1.0)</text>
+                <line x1="40" y1="180" x2="310" y2="180" stroke="var(--border-strong)" stroke-width="1.5" />
+                <line x1="40" y1="20" x2="40" y2="180" stroke="var(--border-strong)" stroke-width="1.5" />
+                <!-- Ticks -->
+                <text x="32" y="184" fill="var(--color-text-muted)" font-size="11" text-anchor="end">0.0</text>
+                <text x="32" y="44" fill="var(--color-text-muted)" font-size="11" text-anchor="end">1.0</text>
+                <!-- Cutoff -->
+                <line x1="175" y1="20" x2="175" y2="180" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+                <text x="175" y="200" fill="#f59e0b" font-weight="700" font-size="11" text-anchor="middle">Cutoff a₀</text>
+                <!-- Lines -->
+                <line x1="40" y1="180" x2="175" y2="180" stroke="var(--color-primary)" stroke-width="3" />
+                <circle cx="175" cy="180" r="4" fill="var(--surface)" stroke="var(--color-primary)" stroke-width="2" />
+                <line x1="175" y1="40" x2="310" y2="40" stroke="#059669" stroke-width="3" />
+                <circle cx="175" cy="40" r="4" fill="#059669" />
+                <!-- Discontinuity arrow -->
+                <line x1="195" y1="180" x2="195" y2="40" stroke="#6d28d9" stroke-width="1.5" />
+                <text x="205" y="115" fill="#6d28d9" font-size="11" font-weight="700">Jump = 1.0</text>
+                <!-- Labels -->
+                <text x="175" y="220" fill="var(--color-text-muted)" font-size="11" text-anchor="middle">Running Variable a</text>
+                <text x="-100" y="14" fill="var(--color-text-muted)" font-size="11" transform="rotate(-90)" text-anchor="middle">P(D = 1 | a)</text>
+              </g>
+
+              <!-- Panel 2: Fuzzy RD -->
+              <g transform="translate(480, 35)">
+                <text x="150" y="-12" fill="var(--color-text)" font-weight="700" font-size="13" text-anchor="middle">Fuzzy RD: Probabilistic Jump (ΔP = 0.35)</text>
+                <line x1="40" y1="180" x2="310" y2="180" stroke="var(--border-strong)" stroke-width="1.5" />
+                <line x1="40" y1="20" x2="40" y2="180" stroke="var(--border-strong)" stroke-width="1.5" />
+                <!-- Ticks -->
+                <text x="32" y="184" fill="var(--color-text-muted)" font-size="11" text-anchor="end">0.0</text>
+                <text x="32" y="134" fill="var(--color-text-muted)" font-size="11" text-anchor="end">0.35</text>
+                <text x="32" y="84" fill="var(--color-text-muted)" font-size="11" text-anchor="end">0.70</text>
+                <text x="32" y="44" fill="var(--color-text-muted)" font-size="11" text-anchor="end">1.0</text>
+                <!-- Cutoff -->
+                <line x1="175" y1="20" x2="175" y2="180" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+                <text x="175" y="200" fill="#f59e0b" font-weight="700" font-size="11" text-anchor="middle">Cutoff a₀</text>
+                <!-- Curves -->
+                <path d="M 40 145 Q 110 140 175 130" fill="none" stroke="var(--color-primary)" stroke-width="3" />
+                <circle cx="175" cy="130" r="4" fill="var(--surface)" stroke="var(--color-primary)" stroke-width="2" />
+                <path d="M 175 80 Q 245 70 310 60" fill="none" stroke="#059669" stroke-width="3" />
+                <circle cx="175" cy="80" r="4" fill="#059669" />
+                <!-- Discontinuity indicator -->
+                <line x1="195" y1="130" x2="195" y2="80" stroke="#6d28d9" stroke-width="1.5" />
+                <text x="205" y="110" fill="#6d28d9" font-size="11" font-weight="700">Jump = 0.35</text>
+                <!-- Labels -->
+                <text x="175" y="220" fill="var(--color-text-muted)" font-size="11" text-anchor="middle">Running Variable a</text>
+                <text x="-100" y="14" fill="var(--color-text-muted)" font-size="11" transform="rotate(-90)" text-anchor="middle">P(D = 1 | a)</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Fuzzy RD as an IV Design -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">2. Fuzzy RD as an Instrumental Variables (IV) Design</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Why can we still identify causal effects when compliance is imperfect? Because crossing the cutoff provides quasi-random exogenous variation in eligibility.
+        </p>
+
+        <!-- Nuance Callout -->
+        <div style="background: rgba(37,99,235,0.06); border-left: 3px solid var(--color-primary); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-xs); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: 2px;">CRITICAL IDENTIFICATION NUANCE</div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: var(--color-text);">
+            Do not state that crossing the threshold is automatically or unconditionally a valid instrument. Rather: <strong>Under the maintained fuzzy-RD identification assumptions</strong> (continuity of potential outcomes and no precise manipulation), crossing the threshold provides an instrument for actual treatment receipt.
+          </p>
+        </div>
+
+        <!-- IV Framework Table -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">
+            Mapping Fuzzy RD to the IV Framework
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-strong); text-align: left;">
+                  <th style="padding: 8px;">Concept</th>
+                  <th style="padding: 8px;">Variable</th>
+                  <th style="padding: 8px;">Role in Fuzzy RD</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                  <td style="padding: 8px;"><strong>Running Variable</strong></td>
+                  <td style="padding: 8px; font-family: var(--font-mono); color: var(--color-primary);">\(a_i\)</td>
+                  <td style="padding: 8px;">Continuous assignment / forcing score determining eligibility</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                  <td style="padding: 8px;"><strong>Cutoff Threshold</strong></td>
+                  <td style="padding: 8px; font-family: var(--font-mono); color: #f59e0b;">\(c\)</td>
+                  <td style="padding: 8px;">Known policy threshold (e.g., \(c = 65\)) generating the rule</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                  <td style="padding: 8px;"><strong>Instrument</strong></td>
+                  <td style="padding: 8px; font-family: var(--font-mono); color: #6d28d9;">\(Z_i = \mathbf{1}(a_i \ge c)\)</td>
+                  <td style="padding: 8px;">Binary indicator for crossing the eligibility threshold</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                  <td style="padding: 8px;"><strong>Actual Treatment</strong></td>
+                  <td style="padding: 8px; font-family: var(--font-mono); color: #059669;">\(D_i \in \{0, 1\}\)</td>
+                  <td style="padding: 8px;">Actual treatment received (e.g., received vaccine or entered program)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px;"><strong>Outcome</strong></td>
+                  <td style="padding: 8px; font-family: var(--font-mono); color: var(--color-text);">\(Y_i\)</td>
+                  <td style="padding: 8px;">Substantive metric of interest (e.g., health outcome, earnings)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- IV Path Diagram -->
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-sm) 0; text-align: center;">
+          <div style="display: flex; justify-content: center; align-items: center; gap: var(--space-sm); flex-wrap: wrap;">
+            <div style="background: rgba(109,40,217,0.08); border: 2px solid #6d28d9; padding: 0.6rem 1rem; border-radius: var(--radius-xs);">
+              <span style="display: block; font-size: 0.7rem; color: #6d28d9; font-weight: 700;">INSTRUMENT</span>
+              <strong style="font-size: 0.95rem; color: var(--color-text);">Cutoff Crossing \(Z_i\)</strong>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--color-text-muted);">&rarr;</div>
+            <div style="background: rgba(37,99,235,0.08); border: 2px solid var(--color-primary); padding: 0.6rem 1rem; border-radius: var(--radius-xs);">
+              <span style="display: block; font-size: 0.7rem; color: var(--color-primary); font-weight: 700;">FIRST STAGE</span>
+              <strong style="font-size: 0.95rem; color: var(--color-text);">Actual Treatment \(D_i\)</strong>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--color-text-muted);">&rarr;</div>
+            <div style="background: rgba(5,150,105,0.08); border: 2px solid #059669; padding: 0.6rem 1rem; border-radius: var(--radius-xs);">
+              <span style="display: block; font-size: 0.7rem; color: #059669; font-weight: 700;">OUTCOME</span>
+              <strong style="font-size: 0.95rem; color: var(--color-text);">Final Outcome \(Y_i\)</strong>
+            </div>
+          </div>
+          <p style="margin: 0.75rem 0 0 0; font-size: 0.84rem; color: var(--color-text-secondary);">
+            Crossing the threshold \(Z_i\) affects outcome \(Y_i\) <em>only</em> through its impact on actual treatment receipt \(D_i\) locally at the threshold (local exclusion restriction).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: The Wald Estimator -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">3. The Wald Estimator at the Cutoff</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          In Sharp RD, the treatment effect is simply the observed vertical jump in \(Y\) at the cutoff. In Fuzzy RD, however, only a fraction of units crossing the threshold actually take up treatment. If we only looked at the jump in \(Y\), we would underestimate the causal effect on those who complied.
+        </p>
+
+        <!-- Wald Formula Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: var(--surface); border-left: 3px solid var(--color-primary); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: 4px;">
+            RATIO OF ONE-SIDED LIMITS
+          </div>
+          <p style="font-size: 0.88rem; color: var(--color-text); margin: 0 0 0.5rem 0;">
+            The Fuzzy RD treatment effect \(\tau_{\text{FRD}}\) is estimated by scaling the jump in outcome by the jump in take-up probability:
+          </p>
+          <div style="font-size: 1.15rem; text-align: center; margin: var(--space-xs) 0;">
+            \[
+            \tau_{\text{FRD}} = \frac{\text{Discontinuity in } Y \text{ at cutoff}}{\text{Discontinuity in } D \text{ at cutoff}}
+            = \frac{\lim_{a \downarrow c} E[Y_i \mid a_i = a] - \lim_{a \uparrow c} E[Y_i \mid a_i = a]}{\lim_{a \downarrow c} E[D_i \mid a_i = a] - \lim_{a \uparrow c} E[D_i \mid a_i = a]}
+            \]
+          </div>
+
+          <!-- Explanatory grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-sm);">
+            <div style="background: rgba(37,99,235,0.04); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <strong style="font-size: 0.8rem; color: var(--color-primary); display: block;">Numerator: Reduced Form Jump</strong>
+              <p style="font-size: 0.82rem; margin: 2px 0 0 0; color: var(--color-text-secondary);">
+                <strong>Limit from above \(c\)</strong> (\(\lim_{a \downarrow c}\)) minus <strong>Limit from below \(c\)</strong> (\(\lim_{a \uparrow c}\)). Intention-to-treat jump in outcome \(Y\).
+              </p>
+            </div>
+            <div style="background: rgba(109,40,217,0.04); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <strong style="font-size: 0.8rem; color: #6d28d9; display: block;">Denominator: First Stage Jump</strong>
+              <p style="font-size: 0.82rem; margin: 2px 0 0 0; color: var(--color-text-secondary);">
+                <strong>Limit from above \(c\)</strong> (\(\lim_{a \downarrow c}\)) minus <strong>Limit from below \(c\)</strong> (\(\lim_{a \uparrow c}\)). Increase in compliance \(\Delta D\) induced by crossing \(c\).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flu-Shot Application Card -->
+        <div class="study-card" style="padding: var(--space-sm) var(--space-md); background: rgba(5,150,105,0.04); border-left: 3px solid #059669; margin: var(--space-sm) 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: #047857; letter-spacing: 0.05em;">CLASSICAL APPLICATION</div>
+          <div style="font-size: 1.02rem; font-weight: 700; color: #064e3b; margin: 4px 0;">The Age-65 Flu-Shot Encouragement Design</div>
+          <p style="font-size: 0.88rem; line-height: 1.6; margin: 0; color: #064e3b;">
+            Consider a public health guideline where individuals aged 65 and older receive free seasonal influenza vaccinations and routine clinical reminders:
+          </p>
+          <ul style="font-size: 0.84rem; margin: 0.5rem 0; padding-left: 1.25rem; color: #064e3b; line-height: 1.6;">
+            <li><strong>Running variable (\(a_i\)):</strong> Age in days or months.</li>
+            <li><strong>Cutoff (\(c\)):</strong> 65.0 years.</li>
+            <li><strong>Instrument (\(Z_i\)):</strong> \(\mathbf{1}(\text{Age}_i \ge 65)\) (subsidized eligibility &amp; doctor prompts).</li>
+            <li><strong>Actual treatment (\(D_i\)):</strong> \(\mathbf{1}(\text{Received flu shot})\).</li>
+            <li><strong>Outcome (\(Y_i\)):</strong> Winter hospitalizations for acute respiratory illness.</li>
+          </ul>
+          <p style="font-size: 0.84rem; margin: 0; color: #064e3b; line-height: 1.6;">
+            <strong>Why is this Fuzzy?</strong> Some under-65 individuals buy vaccines privately (Always-Takers), while some 65+ individuals decline them (Never-Takers). However, at exactly age 65, vaccination probability jumps sharply (e.g. from 32% to 68%, \(\Delta D = +0.36\)). Scaling the drop in hospitalizations by 0.36 yields the causal protective effect of vaccination for compliers.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Derivation Journey -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">4. Derivation Journey: The Fuzzy RD LATE Estimand</h2>
+      </div>
+      <div class="study-section-body">
+        
+        <p>
+          Connect the Fuzzy RD Wald estimator directly to the Local Average Treatment Effect (LATE) developed in Module 14:
+        </p>
+
+        <!-- Derivation Box -->
+        <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-sm) 0;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            DERIVATION JOURNEY &middot; LOCAL COMPLIER EFFECT
+          </div>
+
+          <div style="margin-bottom: var(--space-sm); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--border-subtle);">
+            <strong style="display: block; font-size: 0.88rem; color: var(--color-primary);">Step 1: Express Conditional Expectations via Potential Outcomes</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Using potential outcomes \(Y_i(1)\) and \(Y_i(0)\), the observed outcome is \(Y_i = Y_i(0) + D_i(Y_i(1) - Y_i(0))\):
+            </p>
+            <div style="font-size: 0.95rem; text-align: center;">
+              \[
+              \lim_{a \downarrow c} E[Y_i \mid a] = \lim_{a \downarrow c} E[Y_i(0) \mid a] + \lim_{a \downarrow c} E[D_i(Y_i(1) - Y_i(0)) \mid a]
+              \]
+              \[
+              \lim_{a \uparrow c} E[Y_i \mid a] = \lim_{a \uparrow c} E[Y_i(0) \mid a] + \lim_{a \uparrow c} E[D_i(Y_i(1) - Y_i(0)) \mid a]
+              \]
+            </div>
+          </div>
+
+          <div style="margin-bottom: var(--space-sm); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--border-subtle);">
+            <strong style="display: block; font-size: 0.88rem; color: var(--color-primary);">Step 2: Apply the Continuity Assumption</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Under continuity of baseline counterfactuals, \(\lim_{a \downarrow c} E[Y_i(0) \mid a] = \lim_{a \uparrow c} E[Y_i(0) \mid a]\). Subtracting cancels the baseline:
+            </p>
+            <div style="font-size: 1rem; text-align: center;">
+              \[
+              \Delta Y_{\text{cutoff}} = \lim_{a \downarrow c} E[Y_i \mid a] - \lim_{a \uparrow c} E[Y_i \mid a] = \tau_{\text{LATE}}(c) \times \left[ \lim_{a \downarrow c} E[D_i \mid a] - \lim_{a \uparrow c} E[D_i \mid a] \right]
+              \]
+            </div>
+          </div>
+
+          <div>
+            <strong style="display: block; font-size: 0.88rem; color: #047857;">Step 3: Solve for the Cutoff LATE</strong>
+            <p style="font-size: 0.84rem; color: var(--color-text-secondary); margin: 4px 0;">
+              Dividing through by the first-stage compliance jump isolates the causal complier effect:
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; color: #047857; font-weight: 700;">
+              \[
+              \tau_{\text{FRD}} = \frac{\Delta Y_{\text{cutoff}}}{\Delta D_{\text{cutoff}}} = E[Y_i(1) - Y_i(0) \mid \text{Complier at } a_i = c]
+              \]
+            </div>
+            <div style="background: rgba(5,150,105,0.08); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs); font-size: 0.84rem; color: #064e3b; margin-top: 6px;">
+              <strong>Substantive Result:</strong> Fuzzy RD identifies the <em>Local Average Treatment Effect for Compliers right at the cutoff</em>. It does not identify the effect for Always-Takers, Never-Takers, or units located far from the threshold.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab 15.5 -->
+    <section class="study-section">
+      <div class="study-section-header">
+        <h2 class="study-section-title">5. Interactive Lab 15.5: Sharp vs. Fuzzy RD Explorer</h2>
+      </div>
+      <div class="study-section-body">
+
+        <div class="interactive-lab-card">
+          <div class="lab-header">
+            <span class="lab-badge">INTERACTIVE LAB 15.5</span>
+            <h3 class="lab-title">Two-Stage Discontinuity &amp; Wald Scaling</h3>
+            <p class="lab-subtitle">Observe simultaneous jumps in outcome \(Y\) and treatment probability \(D\) across the threshold (\(c = 50\)).</p>
+          </div>
+
+          <!-- Controls -->
+          <div style="margin-bottom: var(--space-sm);">
+            <div style="margin-bottom: var(--space-xs);">
+              <label style="font-size: 0.84rem; font-weight: 600; color: var(--color-text);">Design Presets:</label>
+              <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap; margin-top: 4px;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnModeSharp" onclick="setPreset('sharp')">Sharp RD (ΔD = 1.0)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeFuzzy" onclick="setPreset('fuzzy')">Fuzzy RD (ΔD = 0.45)</button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnModeWeak" onclick="setPreset('weak')">Weak Instrument (ΔD = 0.05)</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-sm); margin-top: var(--space-sm);">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.84rem; margin-bottom: 4px;">
+                  <label for="sliderOutcomeJump" style="font-weight: 600;">Outcome Jump (\(\Delta Y\)):</label>
+                  <span id="valOutcomeJump" style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">+4.50</span>
+                </div>
+                <input type="range" id="sliderOutcomeJump" min="-10" max="10" step="0.5" value="4.5" style="width: 100%;" oninput="updateLab()">
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.84rem; margin-bottom: 4px;">
+                  <label for="sliderProbJump" style="font-weight: 600;">Treatment Prob Jump (\(\Delta D\)):</label>
+                  <span id="valProbJump" style="font-family: var(--font-mono); font-weight: 700; color: #6d28d9;">0.45</span>
+                </div>
+                <input type="range" id="sliderProbJump" min="0.02" max="1.0" step="0.01" value="0.45" style="width: 100%;" oninput="updateLab()">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2x2 Metric Grid -->
+          <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-xs); margin: var(--space-sm) 0;">
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; display: block;">JUMP IN Y (REDUCED FORM)</span>
+              <span id="metricJumpY" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary);">+4.50</span>
+              <span style="font-size: 0.72rem; color: var(--color-text-muted); display: block;">Outcome discontinuity</span>
+            </div>
+
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; display: block;">JUMP IN D (FIRST STAGE)</span>
+              <span id="metricJumpD" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: #6d28d9;">+0.45</span>
+              <span style="font-size: 0.72rem; color: var(--color-text-muted); display: block;">Compliance discontinuity</span>
+            </div>
+
+            <div style="background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.3); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; color: #047857; font-weight: 700; display: block;">WALD ESTIMATOR (LATE)</span>
+              <span id="metricWald" style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: #047857;">+10.00</span>
+              <span style="font-size: 0.72rem; color: #047857; display: block;">Ratio \(\Delta Y / \Delta D\)</span>
+            </div>
+
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; display: block;">DESIGN STATUS</span>
+              <span id="metricStatus" style="font-size: 1rem; font-weight: 700; color: #059669;">Valid Fuzzy RD</span>
+              <span id="metricStatusSub" style="font-size: 0.72rem; color: var(--color-text-muted); display: block;">Robust IV power</span>
+            </div>
+          </div>
+
+          <!-- Weak Stage Warning Banner -->
+          <div id="weakStageAlert" style="display: none; padding: var(--space-xs) var(--space-sm); background: rgba(239,68,68,0.1); border: 1px solid #ef4444; border-radius: var(--radius-xs); color: #dc2626; font-size: 0.84rem; font-weight: 600; margin-bottom: var(--space-xs);">
+            ⚠️ WEAK FIRST-STAGE WARNING: Take-up jump \(\Delta D < 0.10\). Dividing by a near-zero denominator produces mathematical instability and severe finite-sample bias.
+          </div>
+
+          <!-- External Legend -->
+          <div class="external-legend-bar" style="margin-bottom: 0.5rem; font-size: 0.78rem;">
+            <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%;"></span> Below Cutoff (Control)</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #059669; border-radius: 50%;"></span> Above Cutoff (Eligible)</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 2px; border-top: 2px dashed #f59e0b;"></span> Cutoff (\(c = 50\))</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #6d28d9; border-radius: 50%;"></span> Estimated Discontinuity</div>
+          </div>
+
+          <!-- Two-Panel Graph -->
+          <div style="background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-xs); margin-bottom: var(--space-xs);">
+            <svg id="fuzzyRdSvg" viewBox="0 0 800 400" width="100%" height="380" style="font-family: var(--font-primary);">
+              <g id="panelY"></g>
+              <g id="panelD" transform="translate(0, 200)"></g>
+            </svg>
+          </div>
+
+          <!-- Insight Box -->
+          <div id="labInsight" style="padding: var(--space-xs) var(--space-sm); background: var(--color-primary-light); border-radius: var(--radius-xs); font-size: 0.84rem; line-height: 1.5; color: var(--color-primary-dark); margin-bottom: var(--space-sm);">
+            <strong>Key Insight:</strong> When \(\Delta D = 0.45\), only 45% of units take up treatment due to crossing the cutoff. The observed outcome jump of \(+4.50\) represents a diluted effect; the Wald estimator rescales it by \(1 / 0.45 \approx 2.22\) to reveal the true causal effect of \(+10.00\) for threshold compliers.
+          </div>
+
+          <!-- 5-Box Explanation Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-xs);">
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary); display: block;">WHAT YOU ARE SEEING</span>
+              <p style="font-size: 0.78rem; margin: 2px 0 0 0; color: var(--color-text-secondary); line-height: 1.5;">Top panel: outcome \(Y\); Bottom panel: treatment probability \(D\), aligned at cutoff \(c = 50\).</p>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary); display: block;">WHAT TO NOTICE</span>
+              <p style="font-size: 0.78rem; margin: 2px 0 0 0; color: var(--color-text-secondary); line-height: 1.5;">As compliance jump \(\Delta D\) shrinks, the Wald ratio escalates rapidly even with moderate outcome jumps.</p>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary); display: block;">WHY IT MATTERS</span>
+              <p style="font-size: 0.78rem; margin: 2px 0 0 0; color: var(--color-text-secondary); line-height: 1.5;">Failing to divide by compliance jump confuses Intention-to-Treat (ITT) with the Treatment-on-Treated effect.</p>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary); display: block;">ECONOMETRIC LOGIC</span>
+              <p style="font-size: 0.78rem; margin: 2px 0 0 0; color: var(--color-text-secondary); line-height: 1.5;">Fuzzy RD is two-stage least squares (2SLS) in a local window with cutoff indicator \(Z_i\) as instrument.</p>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border-subtle); padding: var(--space-xs); border-radius: var(--radius-xs);">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-primary); display: block;">TRY THIS</span>
+              <p style="font-size: 0.78rem; margin: 2px 0 0 0; color: var(--color-text-secondary); line-height: 1.5;">Click "Weak Instrument". Observe the warning banner and how near-zero \(\Delta D\) makes the ratio explode.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> Why does Fuzzy RD divide the outcome jump at the cutoff by the treatment-probability jump?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint155">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol155">Show Solution</button>
+        </div>
+        <div id="hint155" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Think about what fraction of units crossing the cutoff actually received the treatment, and what would happen to the estimated effect if only half of them took it up.
+          </p>
+        </div>
+        <div id="sol155" class="practice-accordion-panel">
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            Because crossing the cutoff changes treatment receipt imperfectly; the ratio scales the reduced-form outcome discontinuity by the first-stage discontinuity in treatment.
+          </p>
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            Non-compliers (Always-Takers and Never-Takers) do not change their treatment status at the cutoff. Dividing by the first-stage jump \(\Delta D\) scales the outcome jump up to recover the genuine treatment effect for compliers at the threshold.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 15.5 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        When treatment take-up is imperfect at the threshold, Fuzzy RD treats cutoff crossing as an instrumental variable for actual treatment receipt. The resulting Wald estimator rescales the reduced-form outcome discontinuity by the first-stage jump in treatment probability, identifying the Local Average Treatment Effect (LATE) for compliers at the cutoff. When compliance jumps are small, estimators risk weak-instrument bias and instability. Next, in our final lesson, we examine the complete diagnostic battery, McCrary density testing, and overall RD design credibility.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 15</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-15" data-lesson="5" style="align-self: center;">
+          &check; Mark Lesson Complete
+        </button>
+        <a href="lesson-06.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">Diagnostics &amp; Review</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <!-- Lab 15.5 Script -->
+  <script>
+    function setPreset(mode) {
+      document.getElementById('btnModeSharp').className = 'btn btn-sm btn-outline';
+      document.getElementById('btnModeFuzzy').className = 'btn btn-sm btn-outline';
+      document.getElementById('btnModeWeak').className = 'btn btn-sm btn-outline';
+
+      if (mode === 'sharp') {
+        document.getElementById('btnModeSharp').className = 'btn btn-sm btn-primary';
+        document.getElementById('sliderOutcomeJump').value = 5.0;
+        document.getElementById('sliderProbJump').value = 1.0;
+      } else if (mode === 'fuzzy') {
+        document.getElementById('btnModeFuzzy').className = 'btn btn-sm btn-primary';
+        document.getElementById('sliderOutcomeJump').value = 4.5;
+        document.getElementById('sliderProbJump').value = 0.45;
+      } else if (mode === 'weak') {
+        document.getElementById('btnModeWeak').className = 'btn btn-sm btn-primary';
+        document.getElementById('sliderOutcomeJump').value = 1.2;
+        document.getElementById('sliderProbJump').value = 0.05;
+      }
+      updateLab();
+    }
+
+    function updateLab() {
+      const deltaY = parseFloat(document.getElementById('sliderOutcomeJump').value);
+      const deltaD = parseFloat(document.getElementById('sliderProbJump').value);
+
+      document.getElementById('valOutcomeJump').textContent = (deltaY >= 0 ? '+' : '') + deltaY.toFixed(2);
+      document.getElementById('valProbJump').textContent = deltaD.toFixed(2);
+
+      document.getElementById('metricJumpY').textContent = (deltaY >= 0 ? '+' : '') + deltaY.toFixed(2);
+      document.getElementById('metricJumpD').textContent = '+' + deltaD.toFixed(2);
+
+      const wald = deltaY / deltaD;
+      document.getElementById('metricWald').textContent = (wald >= 0 ? '+' : '') + wald.toFixed(2);
+
+      const weakAlert = document.getElementById('weakStageAlert');
+      const statusEl = document.getElementById('metricStatus');
+      const statusSubEl = document.getElementById('metricStatusSub');
+      const insightEl = document.getElementById('labInsight');
+
+      if (deltaD >= 0.99) {
+        statusEl.textContent = 'Sharp RD';
+        statusEl.style.color = 'var(--color-primary)';
+        statusSubEl.textContent = 'Full deterministic compliance';
+        weakAlert.style.display = 'none';
+        insightEl.innerHTML = `<strong>Key Insight:</strong> Because \(\\Delta D = 1.0\), this is a Sharp RD design. The Wald ratio equals the outcome jump exactly (\(${deltaY.toFixed(2)}\)). ITT and TOT are identical.`;
+      } else if (deltaD < 0.10) {
+        statusEl.textContent = 'Weak First Stage!';
+        statusEl.style.color = '#dc2626';
+        statusSubEl.textContent = 'Severe finite-sample bias';
+        weakAlert.style.display = 'block';
+        insightEl.innerHTML = `<strong>Key Insight:</strong> ⚠️ <strong>First stage is critically weak (\(\\Delta D = ${deltaD.toFixed(2)}\))</strong>. When compliance is barely affected by the cutoff, dividing by a near-zero number amplifies estimation error wildly, rendering the Wald estimate (\(${wald.toFixed(2)}\)) uninformative.`;
+      } else {
+        statusEl.textContent = 'Valid Fuzzy RD';
+        statusEl.style.color = '#059669';
+        statusSubEl.textContent = 'Robust IV identification';
+        weakAlert.style.display = 'none';
+        insightEl.innerHTML = `<strong>Key Insight:</strong> With take-up jump \(\\Delta D = ${deltaD.toFixed(2)}\), the reduced-form outcome jump of \(${deltaY.toFixed(2)}\) is magnified by \(${(1/deltaD).toFixed(2)}\\times\) to obtain the Wald LATE estimate of \(${wald.toFixed(2)}\) for threshold compliers.`;
+      }
+
+      renderTwoPanels(deltaY, deltaD);
+    }
+
+    function renderTwoPanels(deltaY, deltaD) {
+      const panelY = document.getElementById('panelY');
+      const panelD = document.getElementById('panelD');
+
+      const width = 800;
+      const panelH = 160;
+      const margin = { top: 25, right: 40, bottom: 25, left: 60 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = panelH - margin.top - margin.bottom;
+
+      const cutoffX = margin.left + plotW / 2;
+
+      // 1. Top Panel: Outcome Y
+      const baselineY = 40;
+      const yLeft = baselineY;
+      const yRight = yLeft + deltaY;
+
+      const minY = 20, maxY = 80;
+      function scaleY(val) {
+        return margin.top + plotH - ((val - minY) / (maxY - minY)) * plotH;
+      }
+
+      let htmlY = `
+        <text x="${margin.left}" y="18" fill="var(--color-text)" font-size="12" font-weight="700">Panel A: Outcome Y vs. Running Variable</text>
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-strong)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-strong)" stroke-width="1.5" />
+        <line x1="${cutoffX}" y1="${margin.top}" x2="${cutoffX}" y2="${margin.top + plotH}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" />
+      `;
+
+      const y1_start = scaleY(baselineY - 0.25 * 30);
+      const y1_end = scaleY(yLeft);
+      const y2_start = scaleY(yRight);
+      const y2_end = scaleY(yRight + 0.35 * 30);
+
+      htmlY += `<line x1="${margin.left}" y1="${y1_start}" x2="${cutoffX}" y2="${y1_end}" stroke="var(--color-primary)" stroke-width="2.5" />`;
+      htmlY += `<circle cx="${cutoffX}" cy="${y1_end}" r="4" fill="var(--surface)" stroke="var(--color-primary)" stroke-width="2" />`;
+      htmlY += `<line x1="${cutoffX}" y1="${y2_start}" x2="${margin.left + plotW}" y2="${y2_end}" stroke="#059669" stroke-width="2.5" />`;
+      htmlY += `<circle cx="${cutoffX}" cy="${y2_start}" r="4" fill="#059669" />`;
+
+      htmlY += `<line x1="${cutoffX + 15}" y1="${y1_end}" x2="${cutoffX + 15}" y2="${y2_start}" stroke="#6d28d9" stroke-width="2" />`;
+      htmlY += `<text x="${cutoffX + 22}" y="${(y1_end + y2_start) / 2 + 4}" fill="#6d28d9" font-size="11" font-weight="700">ΔY = ${deltaY.toFixed(2)}</text>`;
+
+      htmlY += `<text x="${margin.left - 8}" y="${scaleY(30) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">30</text>`;
+      htmlY += `<text x="${margin.left - 8}" y="${scaleY(50) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">50</text>`;
+      htmlY += `<text x="${margin.left - 8}" y="${scaleY(70) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">70</text>`;
+      panelY.innerHTML = htmlY;
+
+      // 2. Bottom Panel: Treatment Probability D
+      const baseProb = 0.25;
+      const probLeft = baseProb;
+      const probRight = Math.min(1.0, probLeft + deltaD);
+
+      function scaleProb(p) {
+        return margin.top + plotH - p * plotH;
+      }
+
+      let htmlD = `
+        <text x="${margin.left}" y="18" fill="var(--color-text)" font-size="12" font-weight="700">Panel B: Treatment Probability P(D = 1) vs. Running Variable</text>
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-strong)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-strong)" stroke-width="1.5" />
+        <line x1="${cutoffX}" y1="${margin.top}" x2="${cutoffX}" y2="${margin.top + plotH}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" />
+        <text x="${cutoffX}" y="${margin.top + plotH + 20}" fill="#f59e0b" font-weight="700" font-size="11" text-anchor="middle">Cutoff c = 50</text>
+      `;
+
+      const p1_start = scaleProb(baseProb - 0.1);
+      const p1_end = scaleProb(probLeft);
+      const p2_start = scaleProb(probRight);
+      const p2_end = scaleProb(Math.min(1.0, probRight + 0.08));
+
+      htmlD += `<line x1="${margin.left}" y1="${p1_start}" x2="${cutoffX}" y2="${p1_end}" stroke="var(--color-primary)" stroke-width="2.5" />`;
+      htmlD += `<circle cx="${cutoffX}" cy="${p1_end}" r="4" fill="var(--surface)" stroke="var(--color-primary)" stroke-width="2" />`;
+      htmlD += `<line x1="${cutoffX}" y1="${p2_start}" x2="${margin.left + plotW}" y2="${p2_end}" stroke="#059669" stroke-width="2.5" />`;
+      htmlD += `<circle cx="${cutoffX}" cy="${p2_start}" r="4" fill="#059669" />`;
+
+      htmlD += `<line x1="${cutoffX + 15}" y1="${p1_end}" x2="${cutoffX + 15}" y2="${p2_start}" stroke="#6d28d9" stroke-width="2" />`;
+      htmlD += `<text x="${cutoffX + 22}" y="${(p1_end + p2_start) / 2 + 4}" fill="#6d28d9" font-size="11" font-weight="700">ΔD = ${deltaD.toFixed(2)}</text>`;
+
+      htmlD += `<text x="${margin.left - 8}" y="${scaleProb(0.0) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">0.0</text>`;
+      htmlD += `<text x="${margin.left - 8}" y="${scaleProb(0.5) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">0.5</text>`;
+      htmlD += `<text x="${margin.left - 8}" y="${scaleProb(1.0) + 4}" fill="var(--color-text-muted)" font-size="10" text-anchor="end">1.0</text>`;
+
+      panelD.innerHTML = htmlD;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Quick Check toggles
+      const hintBtn = document.querySelector('.toggle-hint-btn');
+      const solBtn = document.querySelector('.toggle-sol-btn');
+      const hintBox = document.querySelector('.quick-check-hint');
+      const solBox = document.querySelector('.quick-check-solution');
+
+      if (hintBtn && hintBox) {
+        hintBtn.addEventListener('click', () => {
+          hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+      if (solBtn && solBox) {
+        solBtn.addEventListener('click', () => {
+          solBox.style.display = solBox.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      updateLab();
+    });
+  </script>
+</body>
+</html>

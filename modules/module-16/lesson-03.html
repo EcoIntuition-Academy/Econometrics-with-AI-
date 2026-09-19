@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 16.3: Marginal Effects in Binary Choice Models — EcoIntuition Academy</title>
+  <meta name="description" content="Calculate and interpret partial derivatives in nonlinear probability models, contrast Marginal Effects at the Means (MEM) with Average Marginal Effects (AME), and analyze interaction terms.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-16" data-lesson="3">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 16</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 16</a>
+          <span class="module-nav-title">Binary Choice Models &amp; Maximum Likelihood</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 3 of 6 &middot; Marginal Effects in Binary Choice Models</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 16 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.1 Binary Outcomes &amp; LPM</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.2 Probit, Logit &amp; Curves</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">16.3 Marginal Effects in Binary Choice</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.4 Latent Variables &amp; Threshold Models</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.5 Maximum Likelihood Estimation</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">16.6 MLE Properties, Variance &amp; Inference</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">50%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 50%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Layout Container -->
+  <main class="lesson-content-area" id="mainContent">
+    <!-- Header Block (Module 1 Canonical Header) -->
+        <!-- Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 16.3</span>
+        <span class="badge">Nonlinear Economic Interpretation</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Marginal Effects in Binary Choice Models
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Mastering partial derivatives along the S-curve, deriving the quotient-rule logistic slope, computing discrete differences for dummy variables, and contrasting MEM versus AME.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand why raw coefficients \(\boldsymbol{\beta}\) in Probit and Logit do not represent changes in probability.</li>
+        <li>Apply the chain rule to derive the general marginal effect formula \(\frac{\partial P}{\partial x_j} = g(\mathbf{x}'\boldsymbol{\beta})\beta_j\).</li>
+        <li>Derive the elegant Logit marginal effect \(P(1 - P)\beta_j\) using the calculus quotient rule.</li>
+        <li>Differentiate continuous partial derivatives from discrete differences required for dummy variables.</li>
+        <li>Compare Marginal Effects at the Means (MEM) with Average Marginal Effects (AME) in modern empirical practice.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Core Nonlinear Dilemma -->
+    <section class="lesson-section">
+      <h2>1. The Core Nonlinear Dilemma</h2>
+      <p>
+        In linear regression, the marginal effect of any regressor \(x_j\) is constant: \(\frac{\partial Y}{\partial x_j} = \beta_j\). In nonlinear binary choice models, however, probability is bounded by a nonlinear S-curve \(G(\mathbf{x}'\boldsymbol{\beta})\). By the calculus chain rule:
+      </p>
+
+      <!-- Equation Box: General Marginal Effect -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Chain Rule Formula</span>
+          <span class="equation-title">General Marginal Effect in Binary Response</span>
+        </div>
+        <div class="equation-main">
+          \[ \frac{\partial \Pr(Y_i = 1 \mid \mathbf{x}_i)}{\partial x_{ij}} = \frac{dG(z_i)}{dz_i} \cdot \frac{\partial z_i}{\partial x_{ij}} = g(\mathbf{x}_i'\boldsymbol{\beta}) \cdot \beta_j \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(g(z) = \frac{dG(z)}{dz}\)</span>
+              <span class="symbol-desc">Probability density function evaluated at the specific linear index \(z_i = \mathbf{x}_i'\boldsymbol{\beta}\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta_j\)</span>
+              <span class="symbol-desc">Parameter weight; determines the direction (sign) and relative magnitude across regressors</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{x}_i\)</span>
+              <span class="symbol-desc">The baseline characteristics of the observation; the marginal effect varies across individuals!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Student Mistake Card (Replaces custom red box) -->
+      <div class="common-mistake-card">
+        <div class="common-mistake-header">⚠️ Common Student Mistake</div>
+        <div class="mistake-wrong">
+          <strong>MISCONCEPTION:</strong> "The estimated coefficient \(\hat{\beta}_j\) in a Probit or Logit model represents the percentage-point change in probability from a 1-unit increase in \(x_j\)."
+        </div>
+        <div class="mistake-correct">
+          <strong>CORRECTION:</strong> A coefficient \(\beta_j\) represents the change in the unobserved continuous index \(z\) (or log-odds in Logit), <em>not</em> the change in probability. To obtain the marginal effect on probability, you must multiply \(\beta_j\) by the probability density \(g(\mathbf{x}'\boldsymbol{\beta})\) at that specific point. The sign of \(\beta_j\) matches the sign of the marginal effect because \(g(z) > 0\), but the magnitude varies across individuals.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Geometric Intuition: Center vs. Tails on the S-Curve -->
+    <section class="lesson-section">
+      <h2>2. Geometric Intuition: Center vs. Tails on the S-Curve</h2>
+      <p>
+        The magnitude of the marginal effect is governed entirely by where an individual sits along the S-curve:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Center of the Distribution (\(z = 0, P = 0.50\))</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            The density \(g(z)\) reaches its absolute maximum. Here, individuals are on the knife-edge of indecision, so an increase in \(x_j\) produces the <strong>largest possible shift</strong> in probability.
+          </p>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.85rem; text-align: center;">
+            Logit: \(\lambda(0) = 0.25 \implies \text{Max Slope} = 0.25\beta_j\)
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h4 style="color: var(--accent-warning); margin-bottom: 0.5rem; font-size: 0.95rem;">Extreme Tails (\(|z| > 2.5, P \approx 0\) or \(P \approx 1\))</h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            The density \(g(z)\) rapidly decays to zero. For individuals whose outcome is almost certain, the S-curve is nearly horizontal, so an increase in \(x_j\) produces <strong>almost zero change</strong> in probability.
+          </p>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.85rem; text-align: center;">
+            \(g(z) \to 0 \implies \text{Marginal Effect} \to 0\)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Deriving the Logit Marginal Effect via the Quotient Rule -->
+    <section class="lesson-section">
+      <h2>3. Deriving the Logit Marginal Effect via the Quotient Rule</h2>
+      <p>
+        A celebrated mathematical result in nonlinear econometrics is that the logistic density function can be written directly in terms of predicted probabilities: \(\lambda(z) = P(1 - P)\). We formally derive this using the calculus quotient rule.
+      </p>
+
+      <!-- Derivation Journey -->
+      <div class="derivation-journey" style="margin: var(--space-md) 0;">
+        <div class="study-card" style="border-left: 4px solid var(--accent-primary); margin-bottom: var(--space-md);">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">
+            FORMAL DERIVATION &middot; THE LOGISTIC DENSITY IDENTITY
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0.5rem 0 0 0; color: var(--text-secondary);">
+            <strong>Goal:</strong> Prove that the partial derivative of \(\Lambda(z) = \frac{1}{1 + e^{-z}}\) satisfies \(\frac{d\Lambda(z)}{dz} = \Lambda(z)\big(1 - \Lambda(z)\big)\).
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+          <!-- Step 1 -->
+          <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 1</span>
+              <strong style="font-size: 0.95rem;">Recall the Function and Complement</strong>
+            </div>
+            <div style="background: var(--surface-raised); padding: 0.6rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.95rem; margin: 6px 0; text-align: center;">
+              \[ \Lambda(z) = \frac{1}{1 + e^{-z}}, \qquad 1 - \Lambda(z) = \frac{e^{-z}}{1 + e^{-z}} \]
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+              <strong>Why:</strong> Writing both \(\Lambda(z)\) and its complement with the common denominator \(1 + e^{-z}\) sets up factoring in Step 3.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 2</span>
+              <strong style="font-size: 0.95rem;">Apply the Quotient Rule of Differentiation</strong>
+            </div>
+            <div style="background: var(--surface-raised); padding: 0.6rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.95rem; margin: 6px 0; text-align: center;">
+              \[ \frac{d}{dz}\left[\frac{u}{v}\right] = \frac{u'v - uv'}{v^2} \implies \frac{d\Lambda(z)}{dz} = \frac{0 \cdot (1 + e^{-z}) - 1 \cdot (-e^{-z})}{(1 + e^{-z})^2} = \frac{e^{-z}}{(1 + e^{-z})^2} \]
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+              <strong>Why:</strong> The numerator is constant \(u = 1\) (\(u' = 0\)), and \(\frac{d}{dz}(1 + e^{-z}) = -e^{-z}\), yielding a clean positive numerator.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="study-card" style="border-left: 4px solid var(--accent-primary);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span class="badge" style="background: var(--accent-primary-light); color: var(--accent-primary); font-weight: 700;">STEP 3</span>
+              <strong style="font-size: 0.95rem;">Factor into the Product of Probabilities</strong>
+            </div>
+            <div style="background: var(--surface-raised); padding: 0.6rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.95rem; margin: 6px 0; text-align: center;">
+              \[ \frac{d\Lambda(z)}{dz} = \left(\frac{1}{1 + e^{-z}}\right) \cdot \left(\frac{e^{-z}}{1 + e^{-z}}\right) = \Lambda(z)\big(1 - \Lambda(z)\big) \]
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary);">
+              <strong>Why:</strong> The denominator squared \((1 + e^{-z})^2\) factors neatly into the two terms defining \(P\) and \(1 - P\).
+            </p>
+          </div>
+
+          <!-- Key Result Callout -->
+          <div class="study-card" style="border-left: 4px solid var(--accent-success); background: #f0fdf4;">
+            <div style="font-weight: 700; color: #065f46; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">
+              KEY RESULT &middot; LOGIT MARGINAL EFFECT
+            </div>
+            <div style="background: #ffffff; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 1.05rem; font-weight: 600; text-align: center; margin: 6px 0; color: #065f46;">
+              \[ \frac{\partial \Pr(Y_i = 1 \mid \mathbf{x}_i)}{\partial x_{ij}} = P_i(1 - P_i)\beta_j \]
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: #047857;">
+              In Logit models, you never need numerical integration to compute marginal effects! You simply multiply the predicted probability \(P_i\) by its complement \((1 - P_i)\) and the estimated coefficient \(\beta_j\).
+            </p>
+          </div>
+
+          <!-- Big Picture Card -->
+          <div class="study-card">
+            <h4 style="color: var(--text-primary); margin-bottom: 0.4rem; font-size: 0.9rem;">BIG PICTURE &middot; THE DIVIDE-BY-FOUR RULE</h4>
+            <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+              Because \(P(1 - P)\) attains its maximum value of \(0.25\) at \(P = 0.50\), the <strong>maximum possible marginal effect</strong> for regressor \(j\) under a Logit model is always \(\frac{\beta_j}{4}\). If an empirical paper reports a Logit coefficient of \(\hat{\beta}_1 = 0.60\), you immediately know that the regressor can shift probability by at most \(15\) percentage points.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Nonlinear Marginal Effects with Interaction Terms -->
+    <section class="lesson-section">
+      <h2>4. Nonlinear Marginal Effects with Interaction Terms</h2>
+      <p>
+        In linear regression, including an interaction term \(x_1 x_2\) with coefficient \(\beta_{12}\) implies that the interaction effect is simply \(\frac{\partial^2 Y}{\partial x_1 \partial x_2} = \beta_{12}\). In a landmark econometric paper, <strong>Ai and Norton (2003)</strong> demonstrated that this intuition fails completely in nonlinear models.
+      </p>
+
+      <!-- Equation Box: Interaction Term Cross-Partial -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Ai &amp; Norton (2003)</span>
+          <span class="equation-title">Cross-Partial Derivative in Nonlinear Models</span>
+        </div>
+        <div class="equation-main">
+          \[ \frac{\partial^2 \Pr(Y_i = 1 \mid \mathbf{x}_i)}{\partial x_{i1} \partial x_{i2}} = g'(\mathbf{x}_i'\boldsymbol{\beta})\beta_1 \beta_2 + g(\mathbf{x}_i'\boldsymbol{\beta})\beta_{12} \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(g'(z) = \frac{dg(z)}{dz}\)</span>
+              <span class="symbol-desc">Derivative of the density function; changes sign across the midpoint (\(g'(z) > 0\) for \(z < 0\), \(g'(z) < 0\) for \(z > 0\))</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\beta_{12}\)</span>
+              <span class="symbol-desc">Coefficient on the interaction term \(x_1 x_2\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(g'(\mathbf{x}'\boldsymbol{\beta})\beta_1 \beta_2\)</span>
+              <span class="symbol-desc">Nonlinear interaction component; can be non-zero even if \(\beta_{12} = 0\)!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-card" style="margin: var(--space-md) 0;">
+        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Key Takeaways for Applied Researchers</h4>
+        <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; margin: 0; color: var(--text-secondary);">
+          <li>The interaction effect can be non-zero even if the interaction coefficient is exactly zero (\(\beta_{12} = 0\)).</li>
+          <li>The true interaction effect can have a <em>different sign</em> from \(\beta_{12}\) for some individuals in the sample.</li>
+          <li>Testing the statistical significance of \(\beta_{12}\) via a standard t-test is invalid for testing whether the economic interaction effect is significant.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 5: Aggregating Marginal Effects: MEM vs. AME -->
+    <section class="lesson-section">
+      <h2>5. Aggregating Marginal Effects: MEM vs. AME</h2>
+      <p>
+        Because the marginal effect \(g(\mathbf{x}_i'\boldsymbol{\beta})\beta_j\) varies for every individual \(i\) in the sample, researchers need a summary measure to report in empirical tables. Econometrics provides two competing aggregation methodologies:
+      </p>
+
+      <div class="two-col-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+        <div class="study-card">
+          <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 0.95rem;">Marginal Effect at the Means (MEM)</h4>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \text{MEM}_j = g(\bar{\mathbf{x}}'\hat{\boldsymbol{\beta}}) \cdot \hat{\beta}_j \]
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            Evaluates the marginal effect at the average regressor vector \(\bar{\mathbf{x}}\). Computationally fast, but creates an artificial "average person" that might not exist in reality (e.g., female = 0.52, married = 0.68).
+          </p>
+        </div>
+
+        <div class="study-card" style="border-left: 4px solid var(--accent-success);">
+          <h4 style="color: var(--accent-success); margin-bottom: 0.5rem; font-size: 0.95rem;">Average Marginal Effect (AME) &middot; PREFERRED</h4>
+          <div style="background: var(--surface-raised); padding: 0.5rem; border-radius: var(--radius-sm); text-align: center; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.9rem;">
+            \[ \text{AME}_j = \frac{1}{N}\sum_{i=1}^N g(\mathbf{x}_i'\hat{\boldsymbol{\beta}}) \cdot \hat{\beta}_j \]
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); margin: 0;">
+            Calculates the individual marginal effect for every person in the sample and then computes the sample average. Highly recommended in modern empirical economics.
+          </p>
+        </div>
+      </div>
+
+      <!-- Equation Box: Dummy Variable Discrete Difference -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">Discrete Treatment</span>
+          <span class="equation-title">Discrete Difference for Binary / Indicator Variables</span>
+        </div>
+        <div class="equation-main">
+          \[ \Delta P_i = G(\mathbf{x}_{i(-d)}'\boldsymbol{\beta}_{(-d)} + \beta_d) - G(\mathbf{x}_{i(-d)}'\boldsymbol{\beta}_{(-d)}) \]
+        </div>
+        <div class="equation-explainer">
+          <div class="equation-where">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\Delta P_i\)</span>
+              <span class="symbol-desc">Finite probability shift from turning dummy variable \(d_i\) from \(0\) to \(1\)</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{x}_{i(-d)}'\boldsymbol{\beta}_{(-d)}\)</span>
+              <span class="symbol-desc">Linear index evaluated with all regressors other than the indicator held fixed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive Lab 16.3 -->
+    <section class="lesson-section">
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <span class="lab-badge">INTERACTIVE LAB 16.3</span>
+          <h3 class="lab-title">Marginal Effects Explorer</h3>
+          <p class="lab-desc">
+            Visualize how the slope (tangent line) of the probability S-curve changes as you move along the regressor distribution. Switch between continuous partial derivatives and dummy variable discrete differences.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="segmented-control" role="group" aria-label="Select Model">
+              <button id="btnModelLogit" class="btn btn-sm btn-primary active" type="button">Logit</button>
+              <button id="btnModelProbit" class="btn btn-sm btn-outline" type="button">Probit</button>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Select Variable Type">
+              <button id="btnModeCont" class="btn btn-sm btn-primary active" type="button">Continuous</button>
+              <button id="btnModeDummy" class="btn btn-sm btn-outline" type="button">Binary Dummy</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div class="lab-slider-group" style="display: flex; align-items: center; gap: 0.5rem;">
+              <label for="b1LabSlider" style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;">\(\beta_1\):</label>
+              <input type="range" id="b1LabSlider" min="0.2" max="2.0" step="0.1" value="0.8" style="width: 100px;">
+              <span id="b1LabVal" class="slider-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; min-width: 36px;">0.8</span>
+            </div>
+
+            <div class="lab-slider-group" style="display: flex; align-items: center; gap: 0.5rem;">
+              <label id="labelX" for="xLabSlider" style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase;">\(x\):</label>
+              <input type="range" id="xLabSlider" min="-3.0" max="3.0" step="0.1" value="0.0" style="width: 100px;">
+              <span id="xLabVal" class="slider-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; min-width: 36px;">0.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2x2 Metric Cards Grid -->
+        <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div class="metric-card">
+            <div class="metric-label">CURRENT INDEX (\(z\))</div>
+            <div class="metric-value" id="m3Index">0.00</div>
+            <div class="metric-subtext">Linear predictor \(\beta_1 x\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">PREDICTED PROBABILITY (\(P\))</div>
+            <div class="metric-value" id="m3Prob" style="color: var(--accent-primary);">0.5000</div>
+            <div class="metric-subtext">\(\Pr(Y = 1 \mid x)\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label" id="labelMarginal">MARGINAL EFFECT (\(\partial P/\partial x\))</div>
+            <div class="metric-value" id="m3Marginal" style="color: var(--accent-success);">+0.2000</div>
+            <div class="metric-subtext" id="m3MarginalSub">Slope of tangent line</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">DENSITY HEIGHT (\(g(z)\))</div>
+            <div class="metric-value" id="m3Density">0.2500</div>
+            <div class="metric-subtext">Weight scaling \(\beta_1\)</div>
+          </div>
+        </div>
+
+        <!-- Legend Bar Above Plot -->
+        <div class="external-legend-bar" style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--surface-raised); border-radius: var(--radius-sm); font-size: var(--text-xs); font-weight: 600;">
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #2563eb; border-radius: 2px;"></span>
+            Probability S-Curve \(G(\beta_1 x)\)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 14px; height: 3px; background: #dc2626; border-radius: 2px;"></span>
+            Tangent Line (Slope = Marginal Effect)
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span>
+            Active Point
+          </span>
+        </div>
+
+        <!-- Visualization Plot Container -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center;">
+          <svg id="marginalSvg" viewBox="0 0 760 380" style="width: 100%; height: 380px; display: block; overflow: visible;"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+                <!-- Scenario Insight -->
+        <div id="lab3InsightContainer" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: var(--text-sm); line-height: 1.6;">
+          <strong style="color: var(--color-primary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; display: inline-block; margin-right: 6px;">SCENARIO INSIGHT:</strong>
+          <span id="lab3InsightText"></span>
+        </div>
+          <p id="lab3InsightText" style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            At \(x = 0\) (\(P = 0.50\)), the slope is maximized at \(\beta_1 / 4 = 0.2000\).
+          </p>
+        </div>
+
+        <!-- Canonical 2x2 Explanation Grid -->
+                <!-- 2x2 Structured Study Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>The red tangent line illustrates the instantaneous rate of change \(\frac{\partial P}{\partial x}\). Its slope equals \(g(z)\beta_1\).</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>As \(x\) moves toward \(\pm 3\), the tangent line rotates until it is nearly flat. Even though \(\beta_1\) remains unchanged, the marginal impact on probability shrinks toward zero.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>A policy change (e.g., job training subsidy) will have a huge impact on individuals near the margin of employment (\(P \approx 0.50\)), but almost zero impact on those already highly likely or highly unlikely to work.</p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>Because each individual in your dataset experiences a different marginal effect, reporting the sample Average Marginal Effect (AME) is far more realistic than assuming everyone is at the mean.</p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> 
+          </div>
+        </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; margin: 0; color: var(--text-secondary);">
+            Click <strong>"Binary Dummy"</strong>. Notice that calculus derivatives disappear! The lab now shows a discrete step jump between \(d = 0\) and \(d = 1\), demonstrating why dummy regressors require discrete difference formulas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+        <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> Under the Logit model with estimated slope coefficient \(\hat{\beta}_1 = 0.80\), what is the maximum possible marginal effect on the probability of a one-unit change in \(x_1\)?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint163">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol163">Show Solution</button>
+        </div>
+        <div id="hint163" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Recall that the logistic density \(\lambda(z) = P(1-P)\) attains its maximum possible value when \(P = 0.50\).
+          </p>
+        </div>
+        <div id="sol163" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> The maximum marginal effect occurs at \(P = 0.5\), where \(P(1 - P) = (0.5)(0.5) = 0.25\). Multiplying by \(\hat{\beta}_1 = 0.80\) yields:
+          \[ \text{Max Marginal Effect} = 0.25 \times 0.80 = 0.20 \quad (20\text{ percentage points}) \]
+          This is known as the practical "divide by four" rule of thumb for Logit coefficients.
+          </p>
+        </div>
+      </div>
+    </section>
+
+        <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 16.3 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        Marginal effects bridge the gap between abstract nonlinear coefficients and actionable economic probabilities:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Chain Rule Identity:</strong> \(\frac{\partial P}{\partial x_j} = g(\mathbf{x}'\boldsymbol{\beta})\beta_j\). The coefficient gives the sign, but the density dictates the magnitude.</li>
+          <li><strong>Logit Formula:</strong> By the quotient rule, the logistic density factors cleanly into \(P(1 - P)\), making the marginal effect \(P(1 - P)\beta_j\).</li>
+          <li><strong>Divide-by-Four Rule:</strong> The maximum marginal effect in a Logit model is strictly bounded by \(\frac{\beta_j}{4}\).</li>
+          <li><strong>Interaction Pitfall:</strong> In nonlinear models, cross-partial derivatives depend on density slopes. Testing \(\beta_{12} = 0\) is invalid for testing the economic interaction effect (Ai &amp; Norton 2003).</li>
+          <li><strong>MEM vs. AME:</strong> Average Marginal Effects (AME) average individual effects across the true sample distribution, avoiding the artificial "average person" problem of MEM.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-02.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">← Previous Lesson</span>
+          <span class="nav-btn-title">Probit, Logit & Curves</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-16" data-lesson="3" style="align-self: center;">
+          ✓ Mark Lesson 3 Complete
+        </button>
+        <a href="lesson-04.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson →</span>
+          <span class="nav-btn-title">Latent Variables & Threshold Models</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Lab 16.3 Interactive Script -->
+  <script>
+
+    let isDummyMode = false;
+    let lab3Model = 'probit';
+
+    const btnModeCont = document.getElementById('btnModeCont');
+    const btnModeDummy = document.getElementById('btnModeDummy');
+    const btnModelProbit = document.getElementById('btnModelProbit');
+    const btnModelLogit = document.getElementById('btnModelLogit');
+
+    const xLabSlider = document.getElementById('xLabSlider');
+    const b1LabSlider = document.getElementById('b1LabSlider');
+    const xLabVal = document.getElementById('xLabVal');
+    const b1LabVal = document.getElementById('b1LabVal');
+
+    const m3Index = document.getElementById('m3Index');
+    const m3Prob = document.getElementById('m3Prob');
+    const m3Marginal = document.getElementById('m3Marginal');
+    const m3MarginalSub = document.getElementById('m3MarginalSub');
+    const m3Density = document.getElementById('m3Density');
+    const labelMarginal = document.getElementById('labelMarginal');
+
+    const lab3InsightContainer = document.getElementById('lab3InsightContainer');
+    const lab3InsightText = document.getElementById('lab3InsightText');
+
+    function normalCdf(z) {
+      const a1 =  0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+      const sign = z < 0 ? -1 : 1;
+      const x = Math.abs(z) / Math.sqrt(2.0);
+      const t = 1.0 / (1.0 + p * x);
+      const erf = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+      return 0.5 * (1.0 + sign * erf);
+    }
+
+    function normalPdf(z) {
+      return (1.0 / Math.sqrt(2.0 * Math.PI)) * Math.exp(-0.5 * z * z);
+    }
+
+    function logitCdf(z) {
+      return 1.0 / (1.0 + Math.exp(-z));
+    }
+
+    function logitPdf(z) {
+      const p = logitCdf(z);
+      return p * (1.0 - p);
+    }
+
+    btnModeCont.addEventListener('click', () => {
+      isDummyMode = false;
+      btnModeCont.className = 'btn btn-sm btn-primary active';
+      btnModeDummy.className = 'btn btn-sm btn-outline';
+      document.getElementById('labelX').textContent = 'Regressor Value (x)';
+      labelMarginal.textContent = 'MARGINAL EFFECT ∂P/∂x';
+      m3MarginalSub.textContent = 'f(x\'β)β₁ local slope';
+      updateLab3();
+    });
+
+    btnModeDummy.addEventListener('click', () => {
+      isDummyMode = true;
+      btnModeDummy.className = 'btn btn-sm btn-primary active';
+      btnModeCont.className = 'btn btn-sm btn-outline';
+      document.getElementById('labelX').textContent = 'Baseline Controls Index (x\'β)';
+      labelMarginal.textContent = 'DISCRETE DIFFERENCE ΔP';
+      m3MarginalSub.textContent = 'F(x\'β + β₁) - F(x\'β)';
+      updateLab3();
+    });
+
+    btnModelProbit.addEventListener('click', () => {
+      lab3Model = 'probit';
+      btnModelProbit.className = 'btn btn-sm btn-primary active';
+      btnModelLogit.className = 'btn btn-sm btn-outline';
+      updateLab3();
+    });
+
+    btnModelLogit.addEventListener('click', () => {
+      lab3Model = 'logit';
+      btnModelLogit.className = 'btn btn-sm btn-primary active';
+      btnModelProbit.className = 'btn btn-sm btn-outline';
+      updateLab3();
+    });
+
+    xLabSlider.addEventListener('input', updateLab3);
+    b1LabSlider.addEventListener('input', updateLab3);
+
+    function updateLab3() {
+      const xVal = parseFloat(xLabSlider.value);
+      const b1 = parseFloat(b1LabSlider.value);
+
+      xLabVal.textContent = (xVal >= 0 ? '+' : '') + xVal.toFixed(2);
+      b1LabVal.textContent = b1.toFixed(2);
+
+      const cdfFunc = lab3Model === 'probit' ? normalCdf : logitCdf;
+      const pdfFunc = lab3Model === 'probit' ? normalPdf : logitPdf;
+
+      let indexVal, probVal, marginalVal, densityVal;
+
+      if (!isDummyMode) {
+        indexVal = b1 * xVal;
+        probVal = cdfFunc(indexVal);
+        densityVal = pdfFunc(indexVal);
+        marginalVal = densityVal * b1;
+
+        m3Index.textContent = (indexVal >= 0 ? '+' : '') + indexVal.toFixed(3);
+        m3Prob.textContent = (probVal * 100).toFixed(1) + '%';
+        m3Marginal.textContent = (marginalVal >= 0 ? '+' : '') + marginalVal.toFixed(3);
+        m3Density.textContent = densityVal.toFixed(3);
+
+        lab3InsightText.textContent = `At x = ${xVal.toFixed(2)}, the index is ${indexVal.toFixed(2)}. The density weight f(x'β) = ${densityVal.toFixed(3)}, producing a local marginal slope of ${marginalVal.toFixed(3)}. Notice how the slope vanishes when x moves into the tails!`;
+      } else {
+        const index0 = xVal;
+        const index1 = xVal + b1;
+        const p0 = cdfFunc(index0);
+        const p1 = cdfFunc(index1);
+        const deltaP = p1 - p0;
+
+        indexVal = index0;
+        probVal = p0;
+        marginalVal = deltaP;
+        densityVal = pdfFunc(index0);
+
+        m3Index.textContent = `δ=0: ${index0.toFixed(2)} | δ=1: ${index1.toFixed(2)}`;
+        m3Prob.textContent = `P(0): ${(p0 * 100).toFixed(1)}% → P(1): ${(p1 * 100).toFixed(1)}%`;
+        m3Marginal.textContent = (deltaP >= 0 ? '+' : '') + (deltaP * 100).toFixed(1) + ' pp';
+        m3Density.textContent = densityVal.toFixed(3);
+
+        lab3InsightText.textContent = `Switching the dummy variable from δ=0 to δ=1 increases predicted probability from ${(p0 * 100).toFixed(1)}% to ${(p1 * 100).toFixed(1)}%, a discrete jump of ${(deltaP * 100).toFixed(1)} percentage points.`;
+      }
+
+      renderLab3Chart(xVal, b1, cdfFunc, pdfFunc);
+    }
+
+    function renderLab3Chart(currentX, b1, cdfFunc, pdfFunc) {
+      const svg = document.getElementById('marginalSvg');
+      if (!svg) return;
+
+      const width = 800;
+      const height = 380;
+      const margin = { top: 30, right: 45, bottom: 55, left: 65 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const zMin = -3.5;
+      const zMax = 3.5;
+
+      function scaleX(val) {
+        return margin.left + ((val - zMin) / (zMax - zMin)) * plotW;
+      }
+
+      function scaleY(val) {
+        return margin.top + plotH - val * plotH;
+      }
+
+      const fontStack = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+
+      let html = `
+        <!-- Reference lines -->
+        <line x1="${margin.left}" y1="${scaleY(1)}" x2="${margin.left + plotW}" y2="${scaleY(1)}" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="${margin.left}" y1="${scaleY(0)}" x2="${margin.left + plotW}" y2="${scaleY(0)}" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="${scaleX(0)}" y1="${margin.top}" x2="${scaleX(0)}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" stroke-dasharray="2,2" />
+
+        <!-- Axes lines -->
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+
+        <!-- X Axis Label -->
+        <text x="${margin.left + plotW / 2}" y="${margin.top + plotH + 42}" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" text-anchor="middle">Index / Regressor Space</text>
+
+        <!-- Y Axis Label -->
+        <text x="-${margin.top + plotH / 2}" y="18" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" transform="rotate(-90)" text-anchor="middle">Probability P(Y = 1)</text>
+      `;
+
+      // Draw main S-Curve
+      const numPts = 70;
+      let curvePath = '';
+      for (let i = 0; i <= numPts; i++) {
+        const z = zMin + (i / numPts) * (zMax - zMin);
+        const p = cdfFunc(z);
+        const xCoord = scaleX(z);
+        const yCoord = scaleY(p);
+        curvePath += (i === 0 ? 'M ' : ' L ') + `${xCoord} ${yCoord}`;
+      }
+      html += `<path d="${curvePath}" fill="none" stroke="#2563eb" stroke-width="3" />`;
+
+      if (!isDummyMode) {
+        // Continuous mode: tangent line
+        const z = b1 * currentX;
+        const p = cdfFunc(z);
+        const slope = pdfFunc(z) * b1;
+
+        const ptX = scaleX(z);
+        const ptY = scaleY(p);
+
+        // Tangent line segment
+        const deltaZ = 1.0;
+        const z1 = z - deltaZ;
+        const z2 = z + deltaZ;
+        const p1 = p - slope * deltaZ;
+        const p2 = p + slope * deltaZ;
+
+        html += `
+          <!-- Tangent Line -->
+          <line x1="${scaleX(z1)}" y1="${scaleY(p1)}" x2="${scaleX(z2)}" y2="${scaleY(p2)}" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" />
+          <!-- Point -->
+          <circle cx="${ptX}" cy="${ptY}" r="6.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2" />
+          <text x="${ptX + 12}" y="${ptY - 8}" fill="#10b981" font-weight="700" font-size="12" font-family="${fontStack}">Slope = ${slope.toFixed(3)}</text>
+        `;
+      } else {
+        // Dummy variable discrete comparison
+        const z0 = currentX;
+        const z1 = currentX + b1;
+        const p0 = cdfFunc(z0);
+        const p1 = cdfFunc(z1);
+
+        const x0 = scaleX(z0);
+        const y0 = scaleY(p0);
+        const x1 = scaleX(z1);
+        const y1 = scaleY(p1);
+
+        html += `
+          <!-- Point delta = 0 -->
+          <circle cx="${x0}" cy="${y0}" r="6" fill="#64748b" stroke="#ffffff" stroke-width="2" />
+          <text x="${x0}" y="${y0 + 20}" fill="#64748b" font-weight="700" font-size="11" font-family="${fontStack}" text-anchor="middle">δ = 0</text>
+
+          <!-- Point delta = 1 -->
+          <circle cx="${x1}" cy="${y1}" r="6" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+          <text x="${x1}" y="${y1 - 10}" fill="#10b981" font-weight="700" font-size="11" font-family="${fontStack}" text-anchor="middle">δ = 1</text>
+
+          <!-- Discrete rise bracket -->
+          <line x1="${x1 + 15}" y1="${y0}" x2="${x1 + 15}" y2="${y1}" stroke="#f59e0b" stroke-width="2.5" />
+          <line x1="${x1 + 10}" y1="${y0}" x2="${x1 + 15}" y2="${y0}" stroke="#f59e0b" stroke-width="2" />
+          <line x1="${x1 + 10}" y1="${y1}" x2="${x1 + 15}" y2="${y1}" stroke="#f59e0b" stroke-width="2" />
+          <text x="${x1 + 22}" y="${(y0 + y1) / 2 + 4}" fill="#f59e0b" font-weight="700" font-size="12" font-family="${fontStack}">
+            ΔP = ${((p1 - p0) * 100).toFixed(1)} pp
+          </text>
+        `;
+      }
+
+      svg.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLab3();
+    });
+  
+  </script>
+</body>
+</html>

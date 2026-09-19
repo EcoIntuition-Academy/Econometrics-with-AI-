@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17.2: The Wald Test &amp; Delta-Method Variance — EcoIntuition Academy</title>
+  <meta name="description" content="Understand the Wald test: formulate general nonlinear restrictions, compute asymptotic variance via the Delta Method, and construct the quadratic Wald statistic using solely unrestricted estimates.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-17" data-lesson="2">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 17: Hypothesis Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 17</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator (Strictly NO Sidebar) -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 17</a>
+          <span class="module-nav-title">Hypothesis Tests &amp; GMM</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 2 of 6 &middot; The Wald Test &amp; Delta-Method Variance</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 17 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.1 Likelihood Ratio Tests</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">17.2 The Wald Test &amp; Delta-Method Variance</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.3 LM / Score Tests &amp; Comparing LR, Wald, LM</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.4 GMM Foundations: Moments, Plims &amp; OLS</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.5 GMM with Instruments: IV &amp; Weighting</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">17.6 Efficient GMM, Hansen J &amp; Module Review</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">33%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 33%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Lesson Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+
+    <!-- Header & Learning Objectives -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 17.2</span>
+        <span class="badge">Wald &amp; Delta Method</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        The Wald Test &amp; Delta-Method Variance
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Learn how the Wald test evaluates parameter hypotheses using solely the unrestricted model, derive the asymptotic covariance matrix via the Delta Method, and construct the quadratic Wald test statistic.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        🎯 Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Understand why the Wald test avoids computing the restricted model and relies solely on unconstrained estimates \(\hat{\boldsymbol{\theta}}_U\).</li>
+        <li>Express general linear and nonlinear parameter restrictions in the vector form \(H_0: \mathbf{c}(\boldsymbol{\theta}) = \mathbf{q}\).</li>
+        <li>Derive the asymptotic covariance matrix of the restriction discrepancy using the Delta Method.</li>
+        <li>Formulate the quadratic Wald statistic \(W\) and verify its asymptotic \(\chi^2_q\) distribution under \(H_0\).</li>
+        <li>Examine the finite-sample parameterization invariance caveat of nonlinear Wald tests.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Definition and Intuition -->
+    <section class="lesson-section">
+      <h2 class="section-title">1. Testing Restrictions via Unrestricted Estimates</h2>
+      <p>
+        The Wald test only requires computation of the unrestricted parameters. It tests whether a set of restrictions is approximately true by checking if the estimated unrestricted parameters satisfy the restriction.
+      </p>
+      <p>
+        Suppose our null hypothesis specifies \(q\) independent parametric restrictions:
+      </p>
+
+      <!-- Equation Card: General Restriction -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">NULL HYPOTHESIS</span>
+          <h3 class="equation-title">General Vector Restriction Formulation</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          H_0 : \mathbf{c}(\boldsymbol{\theta}) = \mathbf{q} \quad \Longleftrightarrow \quad \mathbf{c}(\boldsymbol{\theta}) - \mathbf{q} = \mathbf{0}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{c}(\boldsymbol{\theta})\)</span>
+              <span class="symbol-desc">A \(q \times 1\) vector of continuous, differentiable functions of parameters \(\boldsymbol{\theta}\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{q}\)</span>
+              <span class="symbol-desc">A \(q \times 1\) vector of hypothesized constants (such as \(\mathbf{0}\) or \(\mathbf{q}_0\)).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\)</span>
+              <span class="symbol-desc">The raw restriction error vector evaluated at unrestricted estimates.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Intuition Card -->
+      <div class="study-card" style="background: rgba(37, 99, 235, 0.04); border-left: 4px solid var(--color-primary); margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); color: var(--color-primary); font-weight: 700;">
+          💡 Core Pedagogical Intuition
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; margin: 0;">
+          <strong>"If the restrictions are valid, then \(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\) should be approximately \(\mathbf{0}\)."</strong><br>
+          This test avoids recalculating the restricted likelihood — it just checks if the unrestricted estimator lies "close enough" to satisfying the restriction, adjusted for sampling variance.
+        </p>
+      </div>
+
+      <p>
+        Because \(\hat{\boldsymbol{\theta}}\) is estimated from random sample data, \(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\) will almost never equal zero exactly in finite samples. We must evaluate whether the observed discrepancy is statistically distinguishable from zero given the sampling uncertainty.
+      </p>
+    </section>
+
+    <!-- Section 2: Wald Statistic and Delta Method -->
+    <section class="lesson-section">
+      <h2 class="section-title">2. The Wald Statistic &amp; Delta-Method Covariance</h2>
+      <p>
+        To standardize the discrepancy vector, the Wald statistic forms a quadratic distance weighted by the inverse of its asymptotic covariance matrix:
+      </p>
+
+      <!-- Equation Card: Wald Statistic -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">TEST STATISTIC &middot; WALD TEST</span>
+          <h3 class="equation-title">The Quadratic Wald Test Statistic</h3>
+        </div>
+        <div class="equation-main">
+          \[
+          W = \left[ \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q} \right]' \left[ \widehat{\text{Avar}}\left( \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q} \right) \right]^{-1} \left[ \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q} \right]
+          \]
+          \[
+          W \xrightarrow{d} \chi^2_q \quad \text{under } H_0
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-heading">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(W\)</span>
+              <span class="symbol-desc">The scalar Wald test statistic.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\)</span>
+              <span class="symbol-desc">Discrepancy vector between unrestricted estimates and hypothesized values.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\widehat{\text{Avar}}\left(\mathbf{c}(\hat{\boldsymbol{\theta}})\right)\)</span>
+              <span class="symbol-desc">Estimated asymptotic covariance matrix of the restriction vector.</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(q\)</span>
+              <span class="symbol-desc">Degrees of freedom, equal to the number of restrictions.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derivation Journey: Delta Method -->
+      <div class="derivation-journey" style="margin: var(--space-xl) 0;">
+        <div class="derivation-journey-header">
+          <span class="badge badge-secondary">STEP-BY-STEP DERIVATION</span>
+          <h3 style="margin: 0.5rem 0 0 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text);">
+            Asymptotic Variance of \(\mathbf{c}(\hat{\boldsymbol{\theta}})\) via the Delta Method
+          </h3>
+          <p style="margin: 0.25rem 0 0 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            <strong>GOAL:</strong> Understand how sampling uncertainty in \(\hat{\boldsymbol{\theta}}\) translates into uncertainty in the transformed restriction \(\mathbf{c}(\hat{\boldsymbol{\theta}})\).
+          </p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="journey-step">
+          <div class="journey-step-rail">
+            <div class="journey-step-badge">1</div>
+          </div>
+          <div class="journey-step-content">
+            <h4 class="journey-step-title">Measure Deviation from Restriction</h4>
+            <p class="journey-step-desc">
+              Compute the empirical discrepancy vector between the evaluated function and the hypothesized constant:
+            </p>
+            <div style="background: var(--surface-secondary, #f8fafc); border-radius: var(--radius-md); padding: var(--space-sm); margin: var(--space-xs) 0; font-family: var(--font-mono); font-size: var(--text-sm);">
+              \[
+              \mathbf{d} = \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}
+              \]
+            </div>
+            <div class="journey-step-why">
+              <strong>WHY?</strong> Because exact satisfaction of the hypothesis in the population would produce \(\mathbf{c}(\boldsymbol{\theta}) - \mathbf{q} = \mathbf{0}\). Any non-zero \(\mathbf{d}\) represents sample divergence.
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="journey-step">
+          <div class="journey-step-rail">
+            <div class="journey-step-badge">2</div>
+          </div>
+          <div class="journey-step-content">
+            <h4 class="journey-step-title">Linearize \(\mathbf{c}(\hat{\boldsymbol{\theta}})\) via First-Order Taylor Expansion</h4>
+            <p class="journey-step-desc">
+              Expand \(\mathbf{c}(\hat{\boldsymbol{\theta}})\) around the true parameter vector \(\boldsymbol{\theta}\):
+            </p>
+            <div style="background: var(--surface-secondary, #f8fafc); border-radius: var(--radius-md); padding: var(--space-sm); margin: var(--space-xs) 0; font-family: var(--font-mono); font-size: var(--text-sm);">
+              \[
+              \mathbf{c}(\hat{\boldsymbol{\theta}}) \approx \mathbf{c}(\boldsymbol{\theta}) + \frac{\partial \mathbf{c}(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}'} \left( \hat{\boldsymbol{\theta}} - \boldsymbol{\theta} \right)
+              \]
+              \[
+              \text{Avar}\left(\mathbf{c}(\hat{\boldsymbol{\theta}})\right) \approx \frac{\partial \mathbf{c}(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}'} \text{Avar}(\hat{\boldsymbol{\theta}}) \frac{\partial \mathbf{c}(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}}
+              \]
+            </div>
+            <div class="journey-step-why">
+              <strong>WHY?</strong> The function \(\mathbf{c}(\hat{\boldsymbol{\theta}})\) is a transformation of random estimates and inherits sampling error. The Jacobian matrix \(\frac{\partial \mathbf{c}(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}'}\) scales the parameter variance to the restriction space.
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="journey-step">
+          <div class="journey-step-rail">
+            <div class="journey-step-badge">3</div>
+          </div>
+          <div class="journey-step-content">
+            <h4 class="journey-step-title">Standardize the Quadratic Form</h4>
+            <p class="journey-step-desc">
+              Substitute the estimated asymptotic covariance matrix directly into the quadratic distance metric:
+            </p>
+            <div style="background: var(--surface-secondary, #f8fafc); border-radius: var(--radius-md); padding: var(--space-sm); margin: var(--space-xs) 0; font-family: var(--font-mono); font-size: var(--text-sm);">
+              \[
+              W = \left[ \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q} \right]' \left[ \frac{\partial \mathbf{c}(\hat{\boldsymbol{\theta}})}{\partial \boldsymbol{\theta}'} \widehat{\text{Avar}}(\hat{\boldsymbol{\theta}}) \frac{\partial \mathbf{c}(\hat{\boldsymbol{\theta}})}{\partial \boldsymbol{\theta}} \right]^{-1} \left[ \mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q} \right]
+              \]
+            </div>
+            <div class="journey-step-why">
+              <strong>WHY?</strong> Inverting the variance matrix standardizes the multivariate error vector, eliminating cross-correlation and scaling so that the sum of squared standardized normals converges to a chi-squared distribution.
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Result -->
+        <div class="study-card" style="background: rgba(16, 185, 129, 0.05); border-left: 4px solid #10b981; margin: var(--space-md) 0 0 0;">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-sm); font-weight: 700; color: #10b981;">
+            🔑 KEY RESULT
+          </h4>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin: 0;">
+            Under \(H_0\), the Wald statistic \(W \xrightarrow{d} \chi^2_q\), where \(q\) is the number of restrictions. We reject \(H_0\) at significance level \(\alpha\) if \(W > \chi^2_q(1 - \alpha)\).
+          </p>
+        </div>
+      </div>
+
+      <!-- Notes from the Source -->
+      <div class="study-card" style="margin: var(--space-lg) 0;">
+        <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 700; color: var(--color-text);">
+          📌 Essential Notes on the Wald Test Formulation
+        </h4>
+        <ul style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.65; padding-left: 1.25rem; margin: 0;">
+          <li><strong>Computational Convenience:</strong> The Wald test only requires the unrestricted estimates. There is no need to formulate or maximize the constrained likelihood function.</li>
+          <li><strong>Invariance Caveat:</strong> For nonlinear restrictions, different algebraically equivalent parameterizations can yield different Wald test statistics in finite samples (e.g., testing \(\theta_1 / \theta_2 = 1\) vs \(\theta_1 - \theta_2 = 0\)).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Lab 17.2 -->
+    <section class="lesson-section">
+      <h2 class="section-title">3. Interactive Lab 17.2: Wald Distance &amp; Variance Standardization</h2>
+      <p>
+        Explore how the Wald test evaluates discrepancy relative to estimation precision. Observe how changing sampling uncertainty alters the standardized test statistic even when the raw deviation remains unchanged.
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <div class="lab-badge">INTERACTIVE LAB 17.2</div>
+          <h3 class="lab-title">Raw Discrepancy vs. Standardized Wald Distance</h3>
+          <p class="lab-desc">
+            Adjust the estimated deviation \(|c(\hat{\theta}) - q|\) and the asymptotic standard error \(\text{SE}(c(\hat{\theta}))\). See how high precision (small SE) inflates \(W\), while large uncertainty deflates \(W\) for identical raw discrepancies.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div class="lab-control-group">
+            <label for="devSlider">Raw Discrepancy \(|c(\hat{\theta}) - q|\): <span id="devVal" style="font-weight: 700; color: var(--color-primary);">1.20</span></label>
+            <input type="range" id="devSlider" min="0.00" max="3.00" step="0.05" value="1.20" class="lab-slider">
+          </div>
+          <div class="lab-control-group">
+            <label for="seSlider">Standard Error \(\text{SE}(c(\hat{\theta}))\): <span id="seVal" style="font-weight: 700; color: var(--color-secondary);">0.60</span></label>
+            <input type="range" id="seSlider" min="0.20" max="2.00" step="0.05" value="0.60" class="lab-slider">
+          </div>
+        </div>
+
+        <!-- 2x2 Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Raw Deviation \(|c(\hat{\theta}) - q|\)</div>
+            <div class="metric-value" id="metricDev">1.20</div>
+            <div class="metric-subtext">Unstandardized distance from \(H_0\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Estimated SE via Delta Method</div>
+            <div class="metric-value" id="metricSE">0.60</div>
+            <div class="metric-subtext">Square root of asymptotic variance</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Standardized Wald Statistic \(W\)</div>
+            <div class="metric-value" id="metricW" style="color: #2563eb;">4.00</div>
+            <div class="metric-subtext">\(W = (\text{Dev} / \text{SE})^2 \sim \chi^2_1\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Decision at 5% Level</div>
+            <div class="metric-value" id="metricDecision" style="color: #ef4444;">REJECT H0</div>
+            <div class="metric-subtext">Critical \(\chi^2_1(0.05) = 3.84\)</div>
+          </div>
+        </div>
+
+        <!-- External Legend Bar -->
+        <div class="external-legend-bar">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #2563eb;"></span>
+            <span>Estimated Unrestricted Parameter \(c(\hat{\theta})\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span>
+            <span>Hypothesized Target \(q = 0\)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: rgba(37, 99, 235, 0.25);"></span>
+            <span>95% Confidence Interval (\(\pm 1.96 \times \text{SE}\))</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span>
+            <span>Rejection Region</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="min-height: 380px;">
+          <svg id="waldSvg" viewBox="0 0 760 360" width="100%" height="360" style="overflow: visible; font-family: var(--font-sans);"></svg>
+        </div>
+
+        <!-- Scenario Insight Box -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: #ef4444; font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            With raw deviation 1.20 and standard error 0.60, the standardized distance is \(z = 2.00\), giving \(W = 4.00 > 3.84\). The confidence interval excludes 0, leading to rejection of \(H_0\).
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>👁</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The green vertical line marks the hypothesized value \(q = 0\). The blue circle marks the estimated unrestricted quantity \(c(\hat{\theta})\), centered in its shaded 95% confidence interval \([c(\hat{\theta}) - 1.96\text{SE}, c(\hat{\theta}) + 1.96\text{SE}]\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>🔎</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                When you increase standard error \(\text{SE}\) without altering raw deviation, the confidence interval expands to cover \(0\). The Wald statistic plummets from decisive rejection to non-rejection!
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>◆</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                A raw discrepancy of 1.20 has zero statistical meaning without sampling variance. In noisy datasets (large SE), a gap of 1.20 is pure sampling noise; in massive samples (small SE), it represents incontrovertible evidence against \(H_0\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>📊</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              <p>
+                The Wald test standardizes the discrepancy vector via the Delta Method covariance \([\mathbf{G}\hat{V}\mathbf{G}']^{-1}\). For \(q = 1\), \(W = t^2\), where \(t = (c(\hat{\theta}) - q) / \text{SE}\).
+              </p>
+            </div>
+          </div>
+
+          <div class="visual-try-this">
+            <strong>🎮 TRY THIS:</strong> Set raw deviation to 1.50 and drag SE from 0.40 to 1.50. Notice how the Wald statistic falls from 14.06 (p &lt; 0.001) to 1.00 (p = 0.317), completely reversing the hypothesis testing conclusion!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2 class="section-title">4. Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-meta">
+          <span class="badge badge-outline">CONCEPT CHECK</span>
+          <span class="badge badge-secondary">Wald Mechanics</span>
+        </div>
+        <h3 class="practice-question">
+          Why does the Wald statistic scale the restriction discrepancy vector \(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\) by the inverse of its covariance matrix?
+        </h3>
+        <div class="practice-actions">
+          <button class="btn btn-secondary btn-sm hint-toggle" data-toggle-target="hint172">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol172">
+            Show Solution
+          </button>
+        </div>
+        <div id="hint172" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Hint:</strong> Think about units of measurement, sampling variation, and cross-parameter correlation. What distribution does a sum of squared standardized normals follow?
+          </p>
+        </div>
+        <div id="sol172" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong> Because parameter estimates inherit sampling uncertainty, raw distances \(\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}\) depend on arbitrary scaling units and random variance. Weighting by \([\widehat{\text{Avar}}(\mathbf{c}(\hat{\boldsymbol{\theta}}))]^{-1}\) standardizes each linear combination into unit variance and orthogonalizes correlated restrictions, ensuring that under \(H_0\) the resulting quadratic form follows an exact asymptotic \(\chi^2_q\) distribution.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 17.2 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        The Wald test provides the unrestricted branch of the classical hypothesis testing framework:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Unrestricted Estimation:</strong> Tests \(H_0: \mathbf{c}(\boldsymbol{\theta}) = \mathbf{q}\) using only \(\hat{\boldsymbol{\theta}}_U\), entirely avoiding computation of restricted estimates.</li>
+        <li><strong>Delta Method Covariance:</strong> Approximates the asymptotic variance of nonlinear functions as \(\text{Avar}(\mathbf{c}(\hat{\boldsymbol{\theta}})) \approx \frac{\partial \mathbf{c}}{\partial \boldsymbol{\theta}'} \text{Avar}(\hat{\boldsymbol{\theta}}) \frac{\partial \mathbf{c}}{\partial \boldsymbol{\theta}}\).</li>
+        <li><strong>Quadratic Form:</strong> \(W = [\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}]' [\widehat{\text{Avar}}(\mathbf{c}(\hat{\boldsymbol{\theta}}))]^{-1} [\mathbf{c}(\hat{\boldsymbol{\theta}}) - \mathbf{q}] \xrightarrow{d} \chi^2_q\).</li>
+        <li><strong>Invariance Consideration:</strong> For nonlinear restrictions, alternative algebraic formulations of \(\mathbf{c}(\boldsymbol{\theta})\) can lead to different Wald statistics in finite samples.</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="lesson-01.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Previous Lesson</span>
+          <span class="nav-btn-title">Likelihood Ratio Tests</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-17" data-lesson="2" style="align-self: center;">
+          ✓ Mark Lesson 2 Complete
+        </button>
+        <a href="lesson-03.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">LM / Score Tests &amp; Trinity Comparison</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/theme.js"></script>
+
+  <!-- Interactive Lab 17.2 Script -->
+  <script>
+    const devSlider = document.getElementById('devSlider');
+    const seSlider = document.getElementById('seSlider');
+    const devVal = document.getElementById('devVal');
+    const seVal = document.getElementById('seVal');
+    const metricDev = document.getElementById('metricDev');
+    const metricSE = document.getElementById('metricSE');
+    const metricW = document.getElementById('metricW');
+    const metricDecision = document.getElementById('metricDecision');
+    const labInsightText = document.getElementById('labInsightText');
+    const labInsightContainer = document.getElementById('labInsightContainer');
+    const waldSvg = document.getElementById('waldSvg');
+
+    function updateWaldPlot() {
+      const dev = parseFloat(devSlider.value);
+      const se = parseFloat(seSlider.value);
+      devVal.textContent = dev.toFixed(2);
+      seVal.textContent = se.toFixed(2);
+
+      const W = Math.pow(dev / se, 2);
+      metricDev.textContent = dev.toFixed(2);
+      metricSE.textContent = se.toFixed(2);
+      metricW.textContent = W.toFixed(2);
+
+      const ciLower = dev - 1.96 * se;
+      const ciUpper = dev + 1.96 * se;
+
+      if (W > 3.841) {
+        metricDecision.textContent = 'REJECT H0';
+        metricDecision.style.color = '#ef4444';
+        metricW.style.color = '#ef4444';
+        labInsightContainer.style.borderLeftColor = '#ef4444';
+        labInsightContainer.style.background = 'rgba(239, 68, 68, 0.05)';
+        labInsightText.innerHTML = 'With raw deviation <strong>' + dev.toFixed(2) + '</strong> and SE <strong>' + se.toFixed(2) + '</strong>, \(W = ' + W.toFixed(2) + ' > 3.84\). The 95% CI [' + ciLower.toFixed(2) + ', ' + ciUpper.toFixed(2) + '] excludes 0, leading to <strong>decisive rejection of \(H_0\)</strong>.';
+      } else {
+        metricDecision.textContent = 'FAIL TO REJECT';
+        metricDecision.style.color = '#10b981';
+        metricW.style.color = '#10b981';
+        labInsightContainer.style.borderLeftColor = '#10b981';
+        labInsightContainer.style.background = 'rgba(16, 185, 129, 0.05)';
+        labInsightText.innerHTML = 'With raw deviation <strong>' + dev.toFixed(2) + '</strong> and SE <strong>' + se.toFixed(2) + '</strong>, \(W = ' + W.toFixed(2) + ' \le 3.84\). The 95% CI [' + ciLower.toFixed(2) + ', ' + ciUpper.toFixed(2) + '] covers 0, so we <strong>fail to reject \(H_0\)</strong>.';
+      }
+
+      // Draw SVG
+      const width = 760;
+      const height = 360;
+      const margin = { top: 40, right: 50, bottom: 60, left: 60 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      // X range: -2.0 to 4.5
+      function xToPix(val) {
+        return margin.left + ((val - (-2.0)) / 6.5) * plotW;
+      }
+      const yMid = margin.top + plotH / 2;
+
+      const x0_pix = xToPix(0.0);
+      const xEst_pix = xToPix(dev);
+      const xCiLow_pix = xToPix(Math.max(-2.0, ciLower));
+      const xCiUp_pix = xToPix(Math.min(4.5, ciUpper));
+
+      // Draw normal curve centered at dev with sd = se
+      let bellPts = [];
+      const peakHeight = 110;
+      for (let v = -2.0; v <= 4.5; v += 0.05) {
+        let z = (v - dev) / se;
+        let dens = Math.exp(-0.5 * z * z);
+        let yPix = yMid - dens * peakHeight;
+        bellPts.push(xToPix(v).toFixed(1) + ',' + yPix.toFixed(1));
+      }
+
+      let svgHtml = `
+        <!-- Shaded Rejection Zone outside [-1.96, 1.96] * SE -->
+        <rect x="${margin.left}" y="${margin.top}" width="${xToPix(-1.96*se) - margin.left}" height="${plotH}" fill="rgba(239, 68, 68, 0.06)"/>
+        <rect x="${xToPix(1.96*se)}" y="${margin.top}" width="${width - margin.right - xToPix(1.96*se)}" height="${plotH}" fill="rgba(239, 68, 68, 0.06)"/>
+
+        <!-- Baseline Axis -->
+        <line x1="${margin.left}" y1="${yMid}" x2="${width - margin.right}" y2="${yMid}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5"/>
+
+        <!-- X Ticks -->
+        ${[-2, -1, 0, 1, 2, 3, 4].map(t => `
+          <line x1="${xToPix(t)}" y1="${yMid - 5}" x2="${xToPix(t)}" y2="${yMid + 5}" stroke="var(--color-text-secondary, #64748b)"/>
+          <text x="${xToPix(t)}" y="${yMid + 22}" text-anchor="middle" font-size="11" fill="var(--color-text-secondary, #64748b)">${t}</text>
+        `).join('')}
+
+        <!-- Axis Label -->
+        <text x="${width / 2}" y="${height - 15}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-text, #1e293b)">Parameter Value c(\u03B8)</text>
+
+        <!-- Sampling Distribution Bell Curve -->
+        <polyline points="${bellPts.join(' ')}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Hypothesized Value q = 0 Line -->
+        <line x1="${x0_pix}" y1="${margin.top}" x2="${x0_pix}" y2="${yMid + 35}" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4 4"/>
+        <text x="${x0_pix}" y="${margin.top - 12}" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981">H_0 Target: q = 0</text>
+
+        <!-- Confidence Interval Band -->
+        <line x1="${xCiLow_pix}" y1="${yMid}" x2="${xCiUp_pix}" y2="${yMid}" stroke="#2563eb" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+        <line x1="${xCiLow_pix}" y1="${yMid - 10}" x2="${xCiLow_pix}" y2="${yMid + 10}" stroke="#2563eb" stroke-width="2"/>
+        <line x1="${xCiUp_pix}" y1="${yMid - 10}" x2="${xCiUp_pix}" y2="${yMid + 10}" stroke="#2563eb" stroke-width="2"/>
+
+        <!-- Estimate Marker -->
+        <circle cx="${xEst_pix}" cy="${yMid}" r="7" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+        <text x="${xEst_pix}" y="${yMid - 16}" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb">c(\u03B8̂) = ${dev.toFixed(2)}</text>
+
+        <!-- CI Annotation -->
+        <text x="${(xCiLow_pix + xCiUp_pix)/2}" y="${yMid + 42}" text-anchor="middle" font-size="11" font-weight="600" fill="#2563eb">
+          95% CI: [${ciLower.toFixed(2)}, ${ciUpper.toFixed(2)}]
+        </text>
+      `;
+
+      waldSvg.innerHTML = svgHtml;
+    }
+
+    devSlider.addEventListener('input', updateWaldPlot);
+    seSlider.addEventListener('input', updateWaldPlot);
+    updateWaldPlot();
+  </script>
+</body>
+</html>

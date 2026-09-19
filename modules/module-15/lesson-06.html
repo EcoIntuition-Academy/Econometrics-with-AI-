@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 15.6: McCrary Density Testing, RD Diagnostics &amp; Module Review — EcoIntuition Academy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Centralized MathJax Configuration & Fallback -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.MathJax || !window.MathJax.typesetPromise) {
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = '../../assets/vendor/mathjax/tex-mml-chtml.js';
+        document.head.appendChild(fallbackScript);
+      }
+    });
+  </script>
+</head>
+<body data-module="module-15" data-lesson="6">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 15</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 15</a>
+          <span class="module-nav-title">Regression Discontinuity Designs</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 6 of 6 &middot; McCrary Density Testing, RD Diagnostics &amp; Module Review</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 15 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.1 RD Intuition, Cutoffs &amp; Sharp RD</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.2 Continuity, Manipulation &amp; Placebos</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.3 RD Regression &amp; Cutoff Treatment Effects</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.4 Bandwidth Choice &amp; Kernel Weighting</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item " role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">15.5 Fuzzy RD, IV &amp; the Wald Estimator</span>
+            </a>
+            <a href="lesson-06.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">15.6 McCrary Testing &amp; RD Diagnostics</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">100%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="lesson-content-area" id="mainContent">
+    
+    <!-- Lesson Header Block -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">LESSON 15.6</span>
+        <span class="badge" style="background: #ede9fe; color: #6d28d9; font-weight: 600;">DIAGNOSTICS &amp; SYNTHESIS</span>
+      </div>
+      <h1 class="lesson-hero-title">
+        McCrary Density Testing, RD Diagnostics &amp; Module Review
+      </h1>
+      <p class="lesson-hero-lead">
+        Master empirical diagnostics for Regression Discontinuity designs: McCrary density testing, covariate balance checks, placebo outcome tests, and the limits of testability.
+      </p>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="objectives-card">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+        <span class="academic-badge badge-objectives">LEARNING OBJECTIVES</span>
+      </div>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li>Formulate and interpret the McCrary (2008) running-variable density test for strategic sorting.</li><li>Deploy the full battery of falsification checks: placebo outcomes, baseline balance, and bandwidth stability.</li><li>Articulate what RD assumptions can be tested versus what remains untestable.</li><li>Synthesize the complete Sharp vs. Fuzzy RD decision framework.</li>
+      </ul>
+    </div>
+
+    <section class="study-section">
+      <h2 class="section-title">1. The McCrary Density Test</h2>
+      <p>
+        The core identifying assumption of RD is that units cannot precisely manipulate their position along the running variable. If individuals have the knowledge and ability to sort across the threshold to secure treatment, we expect an abnormal accumulation of observations on the favorable side of the cutoff.
+      </p>
+
+      <div class="study-card">
+        <div class="card-badge primary">FORMAL DIAGNOSTIC</div>
+        <h3 class="card-heading">What is the McCrary Test?</h3>
+        <p>
+          The <strong>McCrary (2008) density test</strong> is a formal diagnostic that evaluates whether the marginal density \(f(a)\) of the running variable changes discontinuously at the cutoff \(a_0\).
+        </p>
+        <div class="equation-block">
+          \[
+          \theta = \ln \lim_{a \downarrow a_0} f(a) - \ln \lim_{a \uparrow a_0} f(a)
+          \]
+        </div>
+        <p class="card-caption">
+          Under the null hypothesis of no precise manipulation, the running variable density is continuous through the cutoff (\(\theta = 0\)). A statistically significant discontinuity (\(\theta \ne 0\)) is strong empirical evidence consistent with strategic sorting or manipulation.
+        </p>
+      </div>
+
+      <!-- How it Works: 3 Steps -->
+      <div class="concept-cards-grid" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+        <div class="study-card" style="background: var(--surface-bg);">
+          <div class="card-badge info">STEP 1</div>
+          <h4 class="card-subheading">Fine-Grained Histogram</h4>
+          <p style="font-size: 0.95rem;">
+            Partition the running variable into finely spaced, equally sized bins to construct an empirical frequency distribution around the cutoff.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface-bg);">
+          <div class="card-badge info">STEP 2</div>
+          <h4 class="card-subheading">Local Kernel Smoothing</h4>
+          <p style="font-size: 0.95rem;">
+            Fit separate local polynomial smoothers to the bin counts on the left (\(a < a_0\)) and right (\(a \ge a_0\)) sides of the cutoff.
+          </p>
+        </div>
+
+        <div class="study-card" style="background: var(--surface-bg);">
+          <div class="card-badge info">STEP 3</div>
+          <h4 class="card-subheading">Log-Height Discontinuity</h4>
+          <p style="font-size: 0.95rem;">
+            Test whether the estimated density heights at the threshold differ significantly. A visible jump indicates heaping/sorting.
+          </p>
+        </div>
+      </div>
+
+      <!-- Visual Re-creation of Page 10/11 Density Comparison -->
+      <div class="study-card" style="margin-top: 1.5rem;">
+        <h3 class="card-heading">Visualizing Density Continuity vs. Discontinuity</h3>
+        <p class="card-subtext">
+          Reconstructed from econometric diagnostics: compare a smoothly distributed running variable against one showing severe strategic sorting just above the cutoff.
+        </p>
+
+        <div class="chart-canvas-container" style="text-align: center; margin: 1.5rem 0;">
+          <svg viewBox="0 0 850 300" width="100%" height="300" style="background: var(--surface-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+            <!-- Panel 1: Smooth Density -->
+            <g transform="translate(60, 40)">
+              <text x="150" y="-12" fill="var(--text-primary)" font-weight="700" font-size="13" text-anchor="middle">Scenario A: Smooth Density (Credible RD)</text>
+              <line x1="30" y1="190" x2="310" y2="190" stroke="var(--border-color)" stroke-width="1.5" />
+              <line x1="30" y1="20" x2="30" y2="190" stroke="var(--border-color)" stroke-width="1.5" />
+              <!-- Cutoff -->
+              <line x1="170" y1="20" x2="170" y2="190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+              <text x="170" y="210" fill="#f59e0b" font-weight="700" font-size="11" text-anchor="middle">Cutoff a₀</text>
+              <!-- Smooth density curve -->
+              <path d="M 40 160 C 100 130, 140 95, 170 80 C 200 95, 240 130, 300 160" fill="none" stroke="#10b981" stroke-width="3" />
+              <!-- Left and right density height circles meeting -->
+              <circle cx="170" cy="80" r="4.5" fill="#10b981" />
+              <text x="170" y="65" fill="#10b981" font-size="11" font-weight="600" text-anchor="middle">Continuous at a₀</text>
+              <text x="170" y="230" fill="var(--text-muted)" font-size="11" text-anchor="middle">Running Variable a</text>
+              <text x="-105" y="14" fill="var(--text-muted)" font-size="11" transform="rotate(-90)" text-anchor="middle">Density f(a)</text>
+            </g>
+
+            <!-- Panel 2: Manipulated Density -->
+            <g transform="translate(480, 40)">
+              <text x="150" y="-12" fill="var(--text-primary)" font-weight="700" font-size="13" text-anchor="middle">Scenario B: Density Jump / Bunching (Sorting Concern)</text>
+              <line x1="30" y1="190" x2="310" y2="190" stroke="var(--border-color)" stroke-width="1.5" />
+              <line x1="30" y1="20" x2="30" y2="190" stroke="var(--border-color)" stroke-width="1.5" />
+              <!-- Cutoff -->
+              <line x1="170" y1="20" x2="170" y2="190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+              <text x="170" y="210" fill="#f59e0b" font-weight="700" font-size="11" text-anchor="middle">Cutoff a₀</text>
+              <!-- Discontinuous density curve -->
+              <!-- Left curve (depleted) -->
+              <path d="M 40 165 C 80 155, 120 145, 170 140" fill="none" stroke="#ef4444" stroke-width="3" />
+              <circle cx="170" cy="140" r="4" fill="var(--surface-bg)" stroke="#ef4444" stroke-width="2" />
+              <!-- Right curve (bunched/heaped) -->
+              <path d="M 170 50 C 205 65, 250 115, 300 165" fill="none" stroke="#ef4444" stroke-width="3" />
+              <circle cx="170" cy="50" r="4.5" fill="#ef4444" />
+              <!-- Discontinuity arrow -->
+              <line x1="190" y1="140" x2="190" y2="50" stroke="#8b5cf6" stroke-width="2" />
+              <text x="200" y="100" fill="#8b5cf6" font-size="11" font-weight="700">Jump in Density</text>
+              <text x="170" y="230" fill="var(--text-muted)" font-size="11" text-anchor="middle">Running Variable a</text>
+              <text x="-105" y="14" fill="var(--text-muted)" font-size="11" transform="rotate(-90)" text-anchor="middle">Density f(a)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Lab 15.6 -->
+    <section class="study-section">
+      <div class="interactive-lab-card" style="padding: var(--space-md); border-radius: var(--radius-md);">
+        
+        <!-- Lab Header -->
+        <div class="lab-header" style="margin-bottom: var(--space-md);">
+          <div>
+            <span class="lab-badge">INTERACTIVE LAB 15.6</span>
+            <h3 class="lab-title" style="margin: var(--space-2xs) 0;">Manipulation &amp; Density Explorer</h3>
+            <p class="lab-desc">
+              Explore how sorting around the cutoff changes the running-variable density.
+            </p>
+          </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="lab-controls-panel" style="margin-bottom: var(--space-md); background: var(--surface-secondary, rgba(0,0,0,0.02)); padding: var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div class="control-group">
+            <span class="control-label" style="text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">
+              Diagnostic Scenario:
+            </span>
+            <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+              <button type="button" class="btn btn-sm btn-primary active" id="btnSmooth" onclick="setScenario('smooth')">Smooth Density</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnBunchRight" onclick="setScenario('bunch_right')">Bunching Above</button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnBunchLeft" onclick="setScenario('bunch_left')">Bunching Below</button>
+            </div>
+          </div>
+
+          <div class="lab-slider-group" style="margin-top: var(--space-md);">
+            <div class="lab-slider-label">
+              <span>SORTING / MANIPULATION INTENSITY</span>
+              <span class="lab-slider-val" id="valIntensity">0%</span>
+            </div>
+            <input type="range" id="sliderIntensity" min="0" max="100" step="5" value="0" style="width: 100%;" oninput="updateLab()">
+          </div>
+        </div>
+
+        <!-- 2 x 2 Metric Grid -->
+        <div class="lab-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div class="metric-card" id="cardLeftDensity">
+            <div class="metric-label">LEFT DENSITY AT CUTOFF</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 3px;">\(\lim_{a \to a_0^-} f(a)\)</div>
+            <div class="metric-value" id="metricLeftDensity">0.024</div>
+            <div class="metric-sub">approaching from left</div>
+          </div>
+
+          <div class="metric-card" id="cardRightDensity">
+            <div class="metric-label">RIGHT DENSITY AT CUTOFF</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 3px;">\(\lim_{a \to a_0^+} f(a)\)</div>
+            <div class="metric-value" id="metricRightDensity">0.024</div>
+            <div class="metric-sub">approaching from right</div>
+          </div>
+
+          <div class="metric-card" id="cardDensityJump">
+            <div class="metric-label">ESTIMATED DENSITY JUMP</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 3px;">\(\Delta f = f(a_0^+) - f(a_0^-)\)</div>
+            <div class="metric-value" id="metricDensityJump" style="color: var(--color-primary);">+0.000</div>
+            <div class="metric-sub">right minus left</div>
+          </div>
+
+          <div class="metric-card" id="cardStatus" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.04);">
+            <div class="metric-label">DIAGNOSTIC STATUS</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 3px;">Sorting Assessment</div>
+            <div class="metric-value" id="metricStatus" style="color: #10b981; font-size: 1.05rem;">NO OBVIOUS WARNING</div>
+            <div class="metric-sub" id="metricStatusSub" style="color: #10b981;">density appears smooth</div>
+          </div>
+        </div>
+
+        <!-- External Legend -->
+        <div class="external-legend-bar" style="margin-bottom: var(--space-sm);">
+          <div class="legend-item">
+            <span class="legend-swatch" style="background: #94a3b8;"></span>
+            <span>Histogram bins</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line" style="background: #3b82f6; height: 3px;"></span>
+            <span>Left density fit</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line" style="background: #10b981; height: 3px;"></span>
+            <span>Right density fit</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line" style="border-top: 2px dashed #f59e0b; height: 0;"></span>
+            <span>Cutoff \(a_0 = 50\)</span>
+          </div>
+        </div>
+
+        <!-- Visualization Shell -->
+        <div class="visualization-card" style="padding: var(--space-md); margin-bottom: var(--space-md); background: var(--surface);">
+          <div class="visualization-header" style="margin-bottom: var(--space-xs);">
+            <div>
+              <h4 class="visualization-title" style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+                Running-Variable Density Around the Cutoff
+              </h4>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin: 2px 0 0 0;">
+                Local density fits on either side of \(a_0 = 50\)
+              </p>
+            </div>
+          </div>
+          <div class="chart-canvas-container" style="position: relative; width: 100%;">
+            <svg id="densitySvg" viewBox="0 0 800 370" width="100%" height="370" style="background: var(--surface-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: block;">
+              <!-- Rendered by JS -->
+            </svg>
+          </div>
+        </div>
+
+        <!-- Scenario Insight Strip -->
+        <div class="study-card" id="labInsightContainer" style="padding: var(--space-sm) var(--space-md); margin-bottom: var(--space-lg); border-left: 4px solid #10b981; background: var(--surface);">
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px;">
+            SCENARIO INSIGHT
+          </div>
+          <div id="labInsight" style="font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);">
+            The running-variable density is approximately continuous through the cutoff. There is no obvious visual evidence of sorting in this simulated scenario.
+          </div>
+        </div>
+
+        <!-- 2 x 2 Explanation Grid -->
+        <div class="chart-explanations-grid" style="margin-bottom: var(--space-sm);">
+          <div class="chart-explanation-block">
+            <h5>WHAT YOU ARE SEEING</h5>
+            <p>A histogram/density of the running variable around the treatment threshold.</p>
+          </div>
+          <div class="chart-explanation-block">
+            <h5>WHAT TO NOTICE</h5>
+            <p>Compare the fitted density height immediately to the left and right of the cutoff.</p>
+          </div>
+          <div class="chart-explanation-block">
+            <h5>WHY IT MATTERS</h5>
+            <p>Precise sorting around the cutoff weakens the local-comparability argument underlying RD.</p>
+          </div>
+          <div class="chart-explanation-block">
+            <h5>ECONOMETRIC INTERPRETATION</h5>
+            <p>A density discontinuity is evidence consistent with manipulation or sorting concerns, but it does not by itself identify the exact mechanism.</p>
+          </div>
+        </div>
+
+        <!-- Try This Full Width -->
+        <div class="chart-explanation-block" style="border-left: 3px solid var(--color-primary);">
+          <h5>TRY THIS</h5>
+          <p style="margin: 0;">Increase manipulation intensity and compare how the density jump changes.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: The Full Suite of RD Empirical Diagnostics -->
+    <section class="study-section">
+      <h2 class="section-title">3. The Complete Suite of RD Empirical Diagnostics</h2>
+      <p>
+        A rigorous empirical RD paper never relies solely on the primary outcome discontinuity. It builds credibility through a battery of falsification and robustness checks:
+      </p>
+
+      <div class="concept-cards-grid two-cols">
+        <!-- Diagnostic 1: Placebo Outcomes -->
+        <div class="study-card">
+          <div class="card-badge primary">FALSIFICATION</div>
+          <h3 class="card-heading">Placebo Outcome Tests</h3>
+          <p>
+            Estimate the RD specification replacing the true outcome \(Y_i\) with alternative outcomes that <strong>could not plausibly be affected</strong> by the treatment (e.g., outcomes measured prior to treatment, or outcomes in an unrelated domain).
+          </p>
+          <div class="callout-box info" style="margin-top: 0.75rem; font-size: 0.9rem;">
+            <em>Expected result:</em> Discontinuity estimate \(\hat{\beta}_{\text{placebo}} \approx 0\). Any significant jump indicates a misspecified functional form or confounded discontinuity.
+          </div>
+        </div>
+
+        <!-- Diagnostic 2: Covariate Balance -->
+        <div class="study-card">
+          <div class="card-badge accent">LOCAL RANDOMIZATION</div>
+          <h3 class="card-heading">Covariate Balance Checks</h3>
+          <p>
+            Test whether predetermined baseline characteristics (e.g., parental income, age, gender, prior test scores) are smooth through the threshold.
+          </p>
+          <div class="callout-box info" style="margin-top: 0.75rem; font-size: 0.9rem;">
+            <em>Expected result:</em> Baseline covariates should show no statistically significant jumps at \(a_0\). Units just above and below should look observably identical on average.
+          </div>
+        </div>
+
+        <!-- Diagnostic 3: Graphical Checks -->
+        <div class="study-card">
+          <div class="card-badge success">TRANSPARENCY</div>
+          <h3 class="card-heading">Graphical Diagnostics</h3>
+          <p>
+            Always visually present binned scatter plots overlaid with fitted polynomial curves. A genuine RD effect should be readily apparent to the naked eye.
+          </p>
+          <div class="callout-box info" style="margin-top: 0.75rem; font-size: 0.9rem;">
+            <em>Visual integrity:</em> Look out for false discontinuities driven by outliers near the boundaries or severe polynomial swing artifacts.
+          </div>
+        </div>
+
+        <!-- Diagnostic 4: Bandwidth Sensitivity -->
+        <div class="study-card">
+          <div class="card-badge warning">ROBUSTNESS</div>
+          <h3 class="card-heading">Bandwidth Sensitivity Analysis</h3>
+          <p>
+            Re-estimate the treatment effect across a wide grid of bandwidths (\(0.5 \times h^*\) to \(2.0 \times h^*\)) to confirm that substantive conclusions do not hinge on an arbitrary window.
+          </p>
+          <div class="callout-box info" style="margin-top: 0.75rem; font-size: 0.9rem;">
+            <em>Stability check:</em> Point estimates should remain stable in magnitude and sign across reasonable bandwidth variations.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: What RD Assumptions Can and Cannot Be Tested -->
+    <section class="study-section">
+      <h2 class="section-title">4. What RD Assumptions Can and Cannot Be Directly Tested</h2>
+      <p>
+        As an applied econometrics practitioner, you must maintain epistemological honesty about what empirical diagnostics can establish versus what remains untestable:
+      </p>
+
+      <div class="concept-cards-grid two-cols">
+        <div class="study-card" style="border-left: 4px solid #10b981;">
+          <div class="card-badge success">EMPIRICALLY TESTABLE</div>
+          <h3 class="card-heading">What We Can Directly Examine</h3>
+          <ul class="key-points-list">
+            <li><strong>Discontinuities in observed covariates:</strong> Whether predetermined characteristics jump at the threshold.</li>
+            <li><strong>Discontinuities in placebo outcomes:</strong> Whether unaffected metrics remain continuous.</li>
+            <li><strong>Running variable density heaping:</strong> Whether frequency histograms exhibit sorting or bunching at the threshold.</li>
+            <li><strong>Bandwidth & functional form stability:</strong> Whether estimates persist under varied bandwidths and polynomial choices.</li>
+            <li><strong>First-stage compliance jump:</strong> In Fuzzy RD, whether \(\Delta P(D \mid a)\) is large enough to avoid weak IV issues.</li>
+          </ul>
+        </div>
+
+        <div class="study-card" style="border-left: 4px solid #ef4444;">
+          <div class="card-badge danger">FUNDAMENTALLY UNTESTABLE</div>
+          <h3 class="card-heading">What We Cannot Directly Test</h3>
+          <ul class="key-points-list">
+            <li><strong>Continuity of unobserved potential outcomes:</strong> We cannot directly verify that unobserved omitted variables \(E[Y_i(0) \mid a_i]\) evolve smoothly through \(a_0\).</li>
+            <li><strong>Absolute absence of manipulation:</strong> If sorting occurs symmetrically on both sides of the threshold, the McCrary test will not detect a discontinuity in overall density.</li>
+            <li><strong>Exact local random assignment:</strong> Local "as-if random" comparability is an identifying assumption maintained by economic reasoning and institutional knowledge.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Final RD Credibility Checklist -->
+        <!-- Section 5: Assessing RD Design Credibility -->
+    <section class="study-section">
+      <h2 class="section-title">5. Assessing RD Design Credibility</h2>
+      <p>
+        In empirical practice, Regression Discontinuity is considered one of the most transparent quasi-experimental methods because the assignment mechanism is institutional and observable. However, researchers must interpret diagnostic evidence with appropriate precision:
+      </p>
+
+      <div class="concept-cards-grid two-cols">
+        <div class="study-card">
+          <h3 class="card-heading">What Diagnostics Can Do</h3>
+          <p style="font-size: 0.92rem; line-height: 1.6;">
+            Diagnostics can reveal evidence inconsistent with key RD assumptions or weaken the credibility of the design when red flags emerge—such as suspicious clustering at the cutoff, discontinuous predetermined characteristics, or erratic instability across bandwidths.
+          </p>
+        </div>
+
+        <div class="study-card">
+          <h3 class="card-heading">What Diagnostics Cannot Do</h3>
+          <p style="font-size: 0.92rem; line-height: 1.6;">
+            Diagnostics cannot directly verify all unobserved continuity conditions. Passing falsification checks confirms that observable implications hold, but the counterfactual potential outcomes \(E[Y_i(0) \mid X_i]\) through the threshold remain inherently unobservable.
+          </p>
+        </div>
+      </div>
+
+      <div class="study-card" style="margin-top: var(--space-md); border-left: 4px solid var(--color-primary);">
+        <h4 class="card-subheading">Standards for Credible Practice</h4>
+        <ul class="key-points-list" style="margin-top: var(--space-xs); font-size: 0.92rem;">
+          <li><strong>Predetermined Covariates &amp; Placebos:</strong> Predetermined covariates and placebo outcomes should not show systematic or substantively meaningful discontinuities at the treatment cutoff.</li>
+          <li><strong>Density Smoothness:</strong> The running variable distribution should show no pronounced, asymmetric bunching or strategic threshold sorting under McCrary-style tests.</li>
+          <li><strong>Robustness:</strong> Results should be reasonably stable across defensible bandwidth choices and specifications.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 6: Sharp vs. Fuzzy RD: Final Comparison -->
+    <section class="study-section">
+      <h2 class="section-title">6. Sharp vs. Fuzzy RD: Final Comparison</h2>
+      <p>
+        The following comparison synthesizes the foundational distinctions between Sharp and Fuzzy Regression Discontinuity designs across theoretical, empirical, and estimand dimensions:
+      </p>
+
+      <div class="table-responsive-wrapper" style="margin: var(--space-md) 0;">
+        <table class="academic-table" aria-label="Sharp vs Fuzzy RD Final Comparison">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Dimension</th>
+              <th style="width: 39%;">Sharp RD</th>
+              <th style="width: 39%;">Fuzzy RD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Treatment Rule</strong></td>
+              <td>Treatment status is deterministically determined by the cutoff under the Sharp RD design: \(D_i = \mathbf{1}(X_i \ge c)\).</td>
+              <td>Treatment probability changes discontinuously but imperfectly at the cutoff \(c\): \(0 &lt; P(D_i = 1 \mid X_i) &lt; 1\).</td>
+            </tr>
+            <tr>
+              <td><strong>Treatment at Cutoff</strong></td>
+              <td>Probability of treatment jumps deterministically from 0 to 1 at the threshold.</td>
+              <td>Probability of treatment exhibits a sharp, nonzero jump at the cutoff, but the jump is strictly less than 1.</td>
+            </tr>
+            <tr>
+              <td><strong>Main Estimand</strong></td>
+              <td>Local treatment effect at the cutoff under the maintained Sharp RD identification assumptions.</td>
+              <td>Local Average Treatment Effect near the cutoff for compliers whose treatment status is changed by crossing the threshold, under the maintained IV/RD assumptions.</td>
+            </tr>
+            <tr>
+              <td><strong>Basic Estimator</strong></td>
+              <td>Outcome discontinuity at the cutoff:<br>
+                \(\tau_{\text{SRD}} = \lim_{x \downarrow c} E[Y_i \mid X_i=x] - \lim_{x \uparrow c} E[Y_i \mid X_i=x]\)
+              </td>
+              <td>Outcome discontinuity divided by treatment-probability discontinuity:<br>
+                \(\tau_{\text{FRD}} = \frac{\lim_{x \downarrow c} E[Y_i \mid X_i=x] - \lim_{x \uparrow c} E[Y_i \mid X_i=x]}{\lim_{x \downarrow c} E[D_i \mid X_i=x] - \lim_{x \uparrow c} E[D_i \mid X_i=x]}\)
+              </td>
+            </tr>
+            <tr>
+              <td><strong>IV Interpretation</strong></td>
+              <td>No IV rescaling is required in the canonical Sharp design.</td>
+              <td>Threshold crossing acts as an instrument for actual treatment receipt under the maintained assumptions.</td>
+            </tr>
+            <tr>
+              <td><strong>Compliance / First Stage</strong></td>
+              <td>Treatment probability changes deterministically according to the cutoff rule.</td>
+              <td>Treatment probability has a nonzero discontinuity at the cutoff but does not jump fully from 0 to 1.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 7: Module 15 Review & RD Credibility Workflow -->
+    <section class="study-section">
+      <h2 class="section-title">7. Module 15 Review</h2>
+      <p>
+        The core principles of Regression Discontinuity can be synthesized into four foundational conceptual pillars:
+      </p>
+
+      <div class="concept-cards-grid two-cols" style="margin: var(--space-md) 0;">
+        <!-- Card 1: RD Foundations -->
+        <div class="study-card">
+          <div class="card-badge" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-weight: 700;">CARD 1</div>
+          <h3 class="card-heading" style="margin: var(--space-xs) 0 var(--space-sm) 0;">RD FOUNDATIONS</h3>
+          <ul class="key-points-list" style="font-size: 0.9rem; line-height: 1.55;">
+            <li><strong>Running Variable:</strong> The continuous assignment or forcing variable \(X_i\) that governs eligibility.</li>
+            <li><strong>Cutoff:</strong> The known administrative threshold \(c\) where treatment rules change abruptly.</li>
+            <li><strong>Sharp RD:</strong> Design where crossing the cutoff deterministically determines treatment take-up.</li>
+            <li><strong>Local Comparison:</strong> Identification relies on comparing units in an immediate neighborhood around \(c\).</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Identification -->
+        <div class="study-card">
+          <div class="card-badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; font-weight: 700;">CARD 2</div>
+          <h3 class="card-heading" style="margin: var(--space-xs) 0 var(--space-sm) 0;">IDENTIFICATION</h3>
+          <ul class="key-points-list" style="font-size: 0.9rem; line-height: 1.55;">
+            <li><strong>Continuity:</strong> Potential outcome conditional expectations evolve smoothly through the cutoff in the absence of treatment.</li>
+            <li><strong>No Precise Manipulation:</strong> Units cannot selectively fine-tune their running variable to position themselves on the preferred side.</li>
+            <li><strong>Placebo Checks:</strong> Falsification tests ensuring outcomes unaffected by treatment exhibit no jump at \(c\).</li>
+            <li><strong>Covariate Smoothness:</strong> Predetermined baseline covariates should not jump discontinuously at the cutoff.</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Estimation -->
+        <div class="study-card">
+          <div class="card-badge" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; font-weight: 700;">CARD 3</div>
+          <h3 class="card-heading" style="margin: var(--space-xs) 0 var(--space-sm) 0;">ESTIMATION</h3>
+          <ul class="key-points-list" style="font-size: 0.9rem; line-height: 1.55;">
+            <li><strong>Centered Running Variable:</strong> Regressing on \(\tilde{X}_i = (X_i - c)\) gives the treatment indicator coefficient direct cutoff interpretability.</li>
+            <li><strong>Bandwidth:</strong> Symmetric window \([c - h, c + h]\) balancing local bias against sample variance.</li>
+            <li><strong>Kernel Weighting:</strong> Triangular kernel weighting giving maximal influence to observations nearest the threshold.</li>
+            <li><strong>Local Regression:</strong> Estimating separate linear or polynomial regressions on either side of \(c\) within bandwidth \(h\).</li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Fuzzy RD & Diagnostics -->
+        <div class="study-card">
+          <div class="card-badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 700;">CARD 4</div>
+          <h3 class="card-heading" style="margin: var(--space-xs) 0 var(--space-sm) 0;">FUZZY RD &amp; DIAGNOSTICS</h3>
+          <ul class="key-points-list" style="font-size: 0.9rem; line-height: 1.55;">
+            <li><strong>Fuzzy RD:</strong> Cutoff induces a discontinuous jump in treatment probability rather than deterministic take-up.</li>
+            <li><strong>Wald / LATE:</strong> Instrumental variable ratio identifying the treatment effect for threshold compliers.</li>
+            <li><strong>McCrary Density:</strong> Formal test checking for suspicious jumps in the marginal density of the running variable.</li>
+            <li><strong>Sensitivity Checks:</strong> Verifying that treatment estimates remain robust across alternative bandwidths and specifications.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RD Credibility Workflow Component -->
+      <div class="study-card" style="padding: 1.5rem; text-align: center; max-width: 680px; margin: var(--space-lg) auto var(--space-xs) auto; background: var(--surface-bg);">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem;">RD Credibility Check</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.55rem; font-family: var(--font-body);">
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            Treatment changes at cutoff
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            Outcome discontinuity examined locally
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            Predetermined covariates reasonably smooth
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            No strong evidence of precise sorting
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            Placebo outcomes behave appropriately
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border-subtle); padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.9rem; font-weight: 600;">
+            Results reasonably stable across bandwidths/specifications
+          </div>
+          <div style="font-size: 1.1rem; color: var(--text-muted);">&darr;</div>
+          <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid #10b981; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); width: 100%; font-size: 0.95rem; font-weight: 700; color: #10b981;">
+            Local RD interpretation becomes more credible
+          </div>
+        </div>
+        <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.82rem; color: var(--text-muted); font-style: italic;">
+          These diagnostics support credibility; they do not constitute a mathematical proof of the identifying assumptions.
+        </p>
+      </div>
+    </section>
+
+    <!-- Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>Quick Knowledge Check</h2>
+      <div class="practice-item">
+        <div class="practice-question">
+          <strong>Question:</strong> Can a researcher ever empirically <em>prove</em> that the core identifying continuity assumption of Regression Discontinuity holds?
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-outline btn-sm hint-toggle" data-toggle-target="hint156">Show Hint</button>
+          <button class="btn btn-primary btn-sm solution-toggle" data-toggle-target="sol156">Show Solution</button>
+        </div>
+        <div id="hint156" class="practice-accordion-panel">
+          <p style="margin: 0; font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Think about the difference between checking observable implications of an assumption and directly observing the counterfactual outcomes needed to prove it.
+          </p>
+        </div>
+        <div id="sol156" class="practice-accordion-panel">
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <strong>Solution:</strong><br>
+            <strong>No.</strong>
+          </p>
+          <p style="margin: 0 0 0.4rem 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            Researchers can examine implications consistent with the RD identifying assumptions—such as smooth predetermined covariates, absence of suspicious density discontinuities, placebo outcomes, and specification stability—but they cannot directly observe and prove that all unobserved potential-outcome relationships are continuous at the cutoff.
+          </p>
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            In causal inference, potential counterfactual outcomes in the untreated state for treated units at the cutoff (\(Y_i(0)\) when \(X_i \ge c\)) are inherently unobserved. Statistical tests assess observable refutable predictions, but unconfoundedness/continuity remains fundamentally an identifying assumption that can be supported, but never deductively verified from data alone.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson Summary & Navigation -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700;">Lesson 15.6 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md);">
+        Regression Discontinuity identifies local treatment effects at a known cutoff when units immediately above and below the threshold are credibly comparable. Sharp RD uses a deterministic treatment rule, while Fuzzy RD uses the discontinuity in treatment probability and a Wald/IV interpretation. Density, placebo, covariate and bandwidth diagnostics can strengthen or weaken the credibility of the design, but they cannot directly prove the continuity of all unobserved potential outcomes.
+      </p>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 15</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-15" data-lesson="6" style="align-self: center;">
+          &check; Mark Lesson Complete
+        </button>
+        <a href="index.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Return to Module &rarr;</span>
+          <span class="nav-btn-title">Module 15 Overview</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+
+  <script>
+
+    // Interactive Lab 15.6 Logic
+    let currentScenario = 'smooth';
+
+    function setScenario(scenario) {
+      currentScenario = scenario;
+      ['btnSmooth', 'btnBunchRight', 'btnBunchLeft'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.classList.remove('btn-primary', 'active');
+          btn.classList.add('btn-outline');
+        }
+      });
+
+      const activeBtnId = scenario === 'smooth' ? 'btnSmooth' : (scenario === 'bunch_right' ? 'btnBunchRight' : 'btnBunchLeft');
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) {
+        activeBtn.classList.remove('btn-outline');
+        activeBtn.classList.add('btn-primary', 'active');
+      }
+
+      if (scenario === 'smooth') {
+        document.getElementById('sliderIntensity').value = 0;
+      } else {
+        document.getElementById('sliderIntensity').value = 60;
+      }
+      updateLab();
+    }
+
+    function updateLab() {
+      const slider = document.getElementById('sliderIntensity');
+      const intensity = slider ? parseInt(slider.value, 10) : 0;
+      const valIntensity = document.getElementById('valIntensity');
+      if (valIntensity) valIntensity.textContent = intensity + '%';
+
+      // Base density at cutoff = 0.024
+      const baseD = 0.024;
+      let leftD = baseD;
+      let rightD = baseD;
+
+      if (currentScenario === 'bunch_right') {
+        // units shifted from left to right of cutoff
+        const shift = (intensity / 100) * 0.018;
+        leftD = Math.max(0.005, baseD - shift * 0.6);
+        rightD = baseD + shift;
+      } else if (currentScenario === 'bunch_left') {
+        // units shifted to left of cutoff
+        const shift = (intensity / 100) * 0.018;
+        leftD = baseD + shift;
+        rightD = Math.max(0.005, baseD - shift * 0.6);
+      }
+
+      const diff = rightD - leftD;
+
+      const metricLeft = document.getElementById('metricLeftDensity');
+      const metricRight = document.getElementById('metricRightDensity');
+      const metricJump = document.getElementById('metricDensityJump');
+      if (metricLeft) metricLeft.textContent = leftD.toFixed(3);
+      if (metricRight) metricRight.textContent = rightD.toFixed(3);
+      if (metricJump) metricJump.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(3);
+
+      const statusEl = document.getElementById('metricStatus');
+      const statusSubEl = document.getElementById('metricStatusSub');
+      const insightEl = document.getElementById('labInsight');
+      const cardStatus = document.getElementById('cardStatus');
+      const insightContainer = document.getElementById('labInsightContainer');
+
+      if (Math.abs(diff) < 0.003) {
+        if (statusEl) {
+          statusEl.textContent = 'NO OBVIOUS WARNING';
+          statusEl.style.color = '#10b981';
+        }
+        if (statusSubEl) {
+          statusSubEl.textContent = 'density appears smooth';
+          statusSubEl.style.color = '#10b981';
+        }
+        if (cardStatus) {
+          cardStatus.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          cardStatus.style.background = 'rgba(16, 185, 129, 0.04)';
+        }
+        if (insightContainer) insightContainer.style.borderLeftColor = '#10b981';
+        if (insightEl) {
+          insightEl.textContent = 'The running-variable density is approximately continuous through the cutoff. There is no obvious visual evidence of sorting in this simulated scenario.';
+        }
+      } else if (Math.abs(diff) < 0.009) {
+        if (statusEl) {
+          statusEl.textContent = 'MILD SORTING CONCERN';
+          statusEl.style.color = '#f59e0b';
+        }
+        if (statusSubEl) {
+          statusSubEl.textContent = 'moderate density asymmetry';
+          statusSubEl.style.color = '#f59e0b';
+        }
+        if (cardStatus) {
+          cardStatus.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+          cardStatus.style.background = 'rgba(245, 158, 11, 0.04)';
+        }
+        if (insightContainer) insightContainer.style.borderLeftColor = '#f59e0b';
+        if (insightEl) {
+          insightEl.textContent = 'A suspicious density discontinuity provides evidence consistent with sorting or manipulation concerns. Check institutional context to see if units had threshold awareness.';
+        }
+      } else {
+        if (statusEl) {
+          statusEl.textContent = 'SEVERE SORTING CONCERN';
+          statusEl.style.color = '#ef4444';
+        }
+        if (statusSubEl) {
+          statusSubEl.textContent = 'discontinuous density jump';
+          statusSubEl.style.color = '#ef4444';
+        }
+        if (cardStatus) {
+          cardStatus.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+          cardStatus.style.background = 'rgba(239, 68, 68, 0.04)';
+        }
+        if (insightContainer) insightContainer.style.borderLeftColor = '#ef4444';
+        if (insightEl) {
+          if (currentScenario === 'bunch_right') {
+            insightEl.textContent = 'Observations accumulate immediately above the threshold, producing a visible density discontinuity that raises a manipulation concern.';
+          } else {
+            insightEl.textContent = 'Observations accumulate immediately below the threshold, again creating a sorting diagnostic concern.';
+          }
+        }
+      }
+
+      renderDensityChart(leftD, rightD, intensity);
+    }
+
+    function renderDensityChart(leftD, rightD, intensity) {
+      const svg = document.getElementById('densitySvg');
+      if (!svg) return;
+
+      const width = 800;
+      const height = 370;
+      const margin = { top: 30, right: 45, bottom: 55, left: 70 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      const cutoffX = margin.left + plotW / 2;
+
+      // 24 bins across running variable range [20, 80]
+      const numBins = 24;
+      const binWidth = plotW / numBins;
+      const maxDensity = 0.045;
+
+      function scaleY(val) {
+        return margin.top + plotH - (val / maxDensity) * plotH;
+      }
+
+      const fontStack = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+
+      let html = `
+        <!-- Axes lines -->
+        <line x1="${margin.left}" y1="${margin.top + plotH}" x2="${margin.left + plotW}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1.5" />
+        
+        <!-- Vertical Cutoff Line -->
+        <line x1="${cutoffX}" y1="${margin.top}" x2="${cutoffX}" y2="${margin.top + plotH}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" />
+        <text x="${cutoffX}" y="${margin.top + plotH + 20}" fill="#f59e0b" font-weight="700" font-size="12" font-family="${fontStack}" text-anchor="middle">Cutoff a₀ = 50</text>
+        
+        <!-- X Axis Label -->
+        <text x="${margin.left + plotW / 2}" y="${margin.top + plotH + 42}" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" text-anchor="middle">Running Variable a</text>
+        
+        <!-- Y Axis Label -->
+        <text x="-${margin.top + plotH / 2}" y="20" fill="var(--text-secondary, #475569)" font-size="12" font-weight="600" font-family="${fontStack}" transform="rotate(-90)" text-anchor="middle">Estimated Density / Frequency</text>
+      `;
+
+      // Generate synthetic histogram bins with bunching
+      for (let i = 0; i < numBins; i++) {
+        const binCenter = 20 + (i + 0.5) * (60 / numBins);
+        let d = 0.024 * Math.exp(-0.5 * Math.pow((binCenter - 50) / 25, 2));
+
+        if (currentScenario === 'bunch_right' && intensity > 0) {
+          if (binCenter >= 50 && binCenter < 58) {
+            d += (intensity / 100) * 0.016 * (1 - (binCenter - 50) / 8);
+          } else if (binCenter < 50 && binCenter >= 44) {
+            d -= (intensity / 100) * 0.009 * (1 - (50 - binCenter) / 6);
+          }
+        } else if (currentScenario === 'bunch_left' && intensity > 0) {
+          if (binCenter < 50 && binCenter >= 42) {
+            d += (intensity / 100) * 0.016 * (1 - (50 - binCenter) / 8);
+          } else if (binCenter >= 50 && binCenter < 56) {
+            d -= (intensity / 100) * 0.009 * (1 - (binCenter - 50) / 6);
+          }
+        }
+
+        const barX = margin.left + i * binWidth + 1.5;
+        const barY = scaleY(d);
+        const barH = margin.top + plotH - barY;
+
+        html += `<rect x="${barX}" y="${barY}" width="${binWidth - 3}" height="${barH}" fill="rgba(148, 163, 184, 0.4)" rx="2" />`;
+      }
+
+      // Left fitted density curve
+      const yLeftStart = scaleY(0.014);
+      const yLeftEnd = scaleY(leftD);
+      html += `<path d="M ${margin.left} ${yLeftStart} Q ${(margin.left + cutoffX)/2} ${(yLeftStart + yLeftEnd)/2 - 5} ${cutoffX} ${yLeftEnd}" fill="none" stroke="#3b82f6" stroke-width="3" />`;
+      html += `<circle cx="${cutoffX}" cy="${yLeftEnd}" r="4.5" fill="var(--surface-bg, #ffffff)" stroke="#3b82f6" stroke-width="2.5" />`;
+
+      // Right fitted density curve
+      const yRightStart = scaleY(rightD);
+      const yRightEnd = scaleY(0.014);
+      html += `<path d="M ${cutoffX} ${yRightStart} Q ${(cutoffX + margin.left + plotW)/2} ${(yRightStart + yRightEnd)/2 - 5} ${margin.left + plotW} ${yRightEnd}" fill="none" stroke="#10b981" stroke-width="3" />`;
+      html += `<circle cx="${cutoffX}" cy="${yRightStart}" r="4.5" fill="#10b981" />`;
+
+      // Density Discontinuity Indicator & Bracket
+      if (Math.abs(leftD - rightD) > 0.0025) {
+        const topY = Math.min(yLeftEnd, yRightStart);
+        const bottomY = Math.max(yLeftEnd, yRightStart);
+        html += `<line x1="${cutoffX + 18}" y1="${topY}" x2="${cutoffX + 18}" y2="${bottomY}" stroke="#8b5cf6" stroke-width="2.5" />`;
+        html += `<line x1="${cutoffX + 12}" y1="${topY}" x2="${cutoffX + 18}" y2="${topY}" stroke="#8b5cf6" stroke-width="2" />`;
+        html += `<line x1="${cutoffX + 12}" y1="${bottomY}" x2="${cutoffX + 18}" y2="${bottomY}" stroke="#8b5cf6" stroke-width="2" />`;
+        html += `<text x="${cutoffX + 26}" y="${(topY + bottomY) / 2 + 4}" fill="#8b5cf6" font-size="11" font-weight="700" font-family="${fontStack}">Δf = ${(rightD - leftD >= 0 ? '+' : '') + (rightD - leftD).toFixed(3)}</text>`;
+      }
+
+      // Y-axis tick values
+      [0.010, 0.020, 0.030, 0.040].forEach(val => {
+        const yPos = scaleY(val);
+        html += `<line x1="${margin.left - 4}" y1="${yPos}" x2="${margin.left}" y2="${yPos}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" />`;
+        html += `<text x="${margin.left - 8}" y="${yPos + 4}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="end">${val.toFixed(3)}</text>`;
+      });
+
+      // X-axis tick values
+      [20, 30, 40, 50, 60, 70, 80].forEach(val => {
+        const xPos = margin.left + ((val - 20) / 60) * plotW;
+        html += `<line x1="${xPos}" y1="${margin.top + plotH}" x2="${xPos}" y2="${margin.top + plotH + 4}" stroke="var(--border-subtle, #cbd5e1)" stroke-width="1" />`;
+        if (val !== 50) {
+          html += `<text x="${xPos}" y="${margin.top + plotH + 18}" fill="var(--text-muted, #64748b)" font-size="10" font-family="${fontStack}" text-anchor="middle">${val}</text>`;
+        }
+      });
+
+      svg.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLab();
+    });
+</script>
+</body>
+</html>

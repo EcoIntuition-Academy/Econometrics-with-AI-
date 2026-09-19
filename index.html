@@ -37,6 +37,31 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links" id="navLinks">
           <li><a href="index.html" class="nav-item-link active" aria-current="page">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="modules/module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="modules/module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="modules/module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="modules/module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="modules/module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="modules/module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="modules/module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="modules/module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="modules/module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="modules/module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="modules/module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="modules/module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="modules/module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="modules/module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="modules/module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="modules/module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="modules/module-17/index.html" class="nav-dropdown-item">Module 17 — Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="modules/module-18/index.html" class="nav-dropdown-item">Module 18 — Multinomial &amp; Conditional Logit Models</a>
+            </div>
+          </li>
           <li><a href="#what-is-econometrics" class="nav-item-link">Overview</a></li>
           <li><a href="#thinking" class="nav-item-link">Thinking Flow</a></li>
           <li><a href="#journey" class="nav-item-link">Journey</a></li>
@@ -81,7 +106,7 @@
       <div class="container hero-grid">
         <div class="hero-text-content">
           <div class="hero-meta-badges">
-            <span class="badge badge-amber">14 Modules • Beginner → Advanced</span>
+            <span class="badge badge-amber">18 Modules • Beginner → Advanced</span>
             <span class="hero-pillars">Theory • Mathematics • Data • Causal Reasoning</span>
           </div>
 
@@ -986,13 +1011,13 @@
           </div>
 
           <!-- =================================================================
-               TIER 4: ADVANCED METHODS & EXPERIMENTAL DESIGN (Modules 10 - 13)
+               TIER 4: ADVANCED METHODS & EXPERIMENTAL DESIGN (Modules 10 - 18)
                ================================================================= -->
           <div class="curriculum-tier">
             <div class="tier-header">
               <span class="tier-pill">Tier 4</span>
               <span class="tier-title">Advanced Panel, IV, Diagnostics &amp; Experiments</span>
-              <span class="tier-count">Modules 10 – 14</span>
+              <span class="tier-count">Modules 10 – 18</span>
             </div>
 
             <div class="modules-grid">
@@ -1283,6 +1308,244 @@
                   <a href="modules/module-14/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 14</a>
                 </div>
               </article>
+
+              <!-- Module 15 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">15</span>
+                  <span class="module-group-tag">Quasi-Experiments</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Regression Discontinuity Threshold -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Cutoff vertical dashed line -->
+                    <line x1="60" y1="4" x2="60" y2="40" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="2,2" />
+                    <!-- Left line (control) -->
+                    <line x1="16" y1="30" x2="60" y2="24" stroke="var(--accent-primary)" stroke-width="1.5" />
+                    <circle cx="60" cy="24" r="2.5" fill="var(--surface-bg)" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <!-- Right line (treatment) -->
+                    <line x1="60" y1="14" x2="104" y2="10" stroke="#059669" stroke-width="1.5" />
+                    <circle cx="60" cy="14" r="2.5" fill="#059669" />
+                    <!-- Discontinuity vertical arrow -->
+                    <line x1="65" y1="24" x2="65" y2="14" stroke="#8b5cf6" stroke-width="1" />
+                    <text x="60" y="42" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Cutoff a₀</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">15 Regression Discontinuity Designs</h3>
+                <p class="module-desc">Learn how treatment cutoffs create quasi-experimental variation, identify the assumptions behind Sharp and Fuzzy Regression Discontinuity, estimate local treatment effects near a threshold, choose bandwidths and functional forms, and diagnose manipulation or specification problems.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Running Variable &amp; Cutoff</li>
+                    <li class="module-topic-tag">Local As-If Random</li>
+                    <li class="module-topic-tag">Sharp vs. Fuzzy RD</li>
+                    <li class="module-topic-tag">Continuity &amp; No Manipulation</li>
+                    <li class="module-topic-tag">Centered RD Regression</li>
+                    <li class="module-topic-tag">Bandwidth &amp; Triangular Kernel</li>
+                    <li class="module-topic-tag">RD as IV &amp; Wald Estimator</li>
+                    <li class="module-topic-tag">McCrary Density Diagnostic</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-15">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-15" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-15/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 15</a>
+                </div>
+              </article>
+
+              <!-- Module 16 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">16</span>
+                  <span class="module-group-tag">Binary Choice &amp; MLE</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Logistic / Normal CDF S-Curve -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Probability bounds 0 and 1 -->
+                    <line x1="12" y1="36" x2="108" y2="36" stroke="var(--border-strong)" stroke-width="0.8" />
+                    <line x1="12" y1="8" x2="108" y2="8" stroke="var(--border-strong)" stroke-dasharray="2 2" stroke-width="0.8" />
+                    <!-- Threshold / Center line -->
+                    <line x1="60" y1="6" x2="60" y2="38" stroke="var(--border-subtle)" stroke-width="0.8" />
+                    <!-- S-Curve: Sigmoid / CDF -->
+                    <path d="M 16 35 C 40 35, 45 32, 60 22 C 75 12, 80 9, 104 9" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" />
+                    <!-- Active evaluation point and tangent -->
+                    <circle cx="60" cy="22" r="2.5" fill="var(--accent-primary)" />
+                    <line x1="48" y1="31" x2="72" y2="13" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round" />
+                    <!-- Labels -->
+                    <text x="8" y="10" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">1.0</text>
+                    <text x="8" y="37" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="end">0.0</text>
+                    <text x="108" y="24" font-size="5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="start">Pr(Y=1)</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">16 Binary Choice Models &amp; Maximum Likelihood</h3>
+                <p class="module-desc">Learn how econometric models handle binary outcomes such as employment, bankruptcy, smoking status, or health conditions. Compare the Linear Probability Model with Probit and Logit, interpret nonlinear marginal effects, understand the latent-variable framework, and build Maximum Likelihood Estimation from the probability of the observed data.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Binary Outcomes &amp; LPM</li>
+                    <li class="module-topic-tag">Heteroskedasticity &amp; Bounds</li>
+                    <li class="module-topic-tag">Probit &amp; Normal CDF</li>
+                    <li class="module-topic-tag">Logit &amp; Logistic CDF</li>
+                    <li class="module-topic-tag">Nonlinear Marginal Effects</li>
+                    <li class="module-topic-tag">Latent Variables &amp; Thresholds</li>
+                    <li class="module-topic-tag">Maximum Likelihood (MLE)</li>
+                    <li class="module-topic-tag">Score &amp; Fisher Information</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-16">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-16" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-16/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 16</a>
+                </div>
+              </article>
+
+              <!-- Module 17 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">17</span>
+                  <span class="module-group-tag">Specification Tests &amp; GMM</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Likelihood Ratio & Moment Conditions -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Log-Likelihood Parabola: ln L(θ) -->
+                    <path d="M 16 38 C 36 12, 52 8, 60 8 C 68 8, 84 12, 104 38" fill="none" stroke="var(--accent-primary)" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Unrestricted peak θ̂ (MLE, slope = 0) -->
+                    <circle cx="60" cy="8" r="2.5" fill="var(--accent-primary)" />
+                    <line x1="46" y1="8" x2="74" y2="8" stroke="var(--border-strong)" stroke-width="0.8" stroke-dasharray="2 2" />
+                    <!-- Restricted point θ̃ (H₀) -->
+                    <circle cx="38" cy="18" r="2.5" fill="#f59e0b" />
+                    <!-- LM / Score tangent line at restricted point θ̃ -->
+                    <line x1="26" y1="26" x2="50" y2="10" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round" />
+                    <!-- Vertical drop: LR test distance -->
+                    <line x1="60" y1="8" x2="60" y2="18" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="1.5 1.5" />
+                    <line x1="38" y1="18" x2="60" y2="18" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="1.5 1.5" />
+                    <!-- Distance label -->
+                    <text x="63" y="15" font-size="5" font-family="var(--font-mono)" fill="#8b5cf6" font-weight="600">LR</text>
+                    <!-- Wald distance along axis -->
+                    <line x1="16" y1="40" x2="104" y2="40" stroke="var(--border-strong)" stroke-width="0.8" />
+                    <text x="38" y="43" font-size="4.5" font-family="var(--font-mono)" fill="#f59e0b" text-anchor="middle">θ̃</text>
+                    <text x="60" y="43" font-size="4.5" font-family="var(--font-mono)" fill="var(--accent-primary)" text-anchor="middle">θ̂</text>
+                    <text x="105" y="14" font-size="5" font-family="var(--font-mono)" fill="var(--text-muted)">ln L(θ)</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">17 Hypothesis, Specification Tests &amp; Generalized Method of Moments</h3>
+                <p class="module-desc">Learn how econometricians test parameter restrictions using Likelihood Ratio, Wald, and Lagrange Multiplier tests, understand their asymptotic relationship, and develop Generalized Method of Moments from population moment conditions through IV, efficient GMM, optimal weighting, and Hansen’s J-test.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Likelihood Ratio Test</li>
+                    <li class="module-topic-tag">Wald Test</li>
+                    <li class="module-topic-tag">LM / Score Test</li>
+                    <li class="module-topic-tag">LR–Wald–LM Comparison</li>
+                    <li class="module-topic-tag">Moment Conditions</li>
+                    <li class="module-topic-tag">GMM</li>
+                    <li class="module-topic-tag">OLS as GMM</li>
+                    <li class="module-topic-tag">IV &amp; Overidentification</li>
+                    <li class="module-topic-tag">Optimal Weighting</li>
+                    <li class="module-topic-tag">Efficient GMM</li>
+                    <li class="module-topic-tag">Hansen J-Test</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-17">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-17" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-17/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 17</a>
+                </div>
+              </article>
+
+              <!-- Module 18 -->
+              <article class="module-card">
+                <div class="module-card-header">
+                  <span class="module-number">18</span>
+                  <span class="module-group-tag">Multinomial &amp; Conditional Logit</span>
+                </div>
+
+                <!-- Topic-Specific Micro Visual: Choice Probabilities & Utility Distribution -->
+                <div class="module-micro-viz" aria-hidden="true">
+                  <svg viewBox="0 0 120 44">
+                    <!-- Stacked Choice Probabilities Bar -->
+                    <rect x="15" y="8" width="90" height="12" rx="3" fill="var(--color-surface)" stroke="var(--border-strong)" stroke-width="0.8" />
+                    <rect x="15" y="8" width="28" height="12" rx="2" fill="#64748b" opacity="0.85" />
+                    <rect x="43" y="8" width="40" height="12" fill="var(--accent-primary)" opacity="0.85" />
+                    <rect x="83" y="8" width="22" height="12" rx="2" fill="#8b5cf6" opacity="0.85" />
+                    <!-- Labels -->
+                    <text x="29" y="17" font-size="4" font-family="var(--font-mono)" fill="#ffffff" text-anchor="middle">P₀</text>
+                    <text x="63" y="17" font-size="4" font-family="var(--font-mono)" fill="#ffffff" text-anchor="middle">P₁</text>
+                    <text x="94" y="17" font-size="4" font-family="var(--font-mono)" fill="#ffffff" text-anchor="middle">P₂</text>
+                    <!-- Logistic Choice Curves below -->
+                    <path d="M 15 36 C 45 36, 50 24, 75 24 C 95 24, 105 24, 105 24" fill="none" stroke="var(--accent-primary)" stroke-width="1.2" />
+                    <path d="M 15 28 C 35 28, 55 36, 105 36" fill="none" stroke="#64748b" stroke-width="1" stroke-dasharray="2 1.5" />
+                    <text x="60" y="42" font-size="4" font-family="var(--font-mono)" fill="var(--text-muted)" text-anchor="middle">Discrete Choice II</text>
+                  </svg>
+                </div>
+
+                <h3 class="module-title">18 Multinomial &amp; Conditional Logit Models</h3>
+                <p class="module-desc">Model choices among multiple unordered alternatives using random-utility Multinomial Logit, interpret relative odds and probability effects, evaluate fit and coefficient restrictions, and extend the framework to alternative-specific attributes with Conditional Logit.</p>
+
+                <div class="module-topics-preview">
+                  <div class="module-topics-title">Key Themes</div>
+                  <ul class="module-topics-list">
+                    <li class="module-topic-tag">Multinomial Choice</li>
+                    <li class="module-topic-tag">Random Utility</li>
+                    <li class="module-topic-tag">Gumbel Errors</li>
+                    <li class="module-topic-tag">Base Category</li>
+                    <li class="module-topic-tag">Relative Log-Odds</li>
+                    <li class="module-topic-tag">Marginal Effects</li>
+                    <li class="module-topic-tag">Predicted Choice</li>
+                    <li class="module-topic-tag">McFadden Pseudo-R²</li>
+                    <li class="module-topic-tag">Wald Tests</li>
+                    <li class="module-topic-tag">Conditional Logit</li>
+                  </ul>
+                </div>
+
+                <div class="module-card-footer">
+                  <div class="module-progress-wrap">
+                    <div class="module-progress-meta">
+                      <span>Curriculum Core</span>
+                      <span id="progress-text-module-18">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progress-fill-module-18" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                  <a href="modules/module-18/index.html" class="btn btn-primary btn-sm" style="width: 100%;">View Module 18</a>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -1444,7 +1707,7 @@
               <li><a href="#modules">Foundations (01–03)</a></li>
               <li><a href="#modules">Regression Challenges (04–06)</a></li>
               <li><a href="#modules">Causal Identification (07–09)</a></li>
-              <li><a href="#modules">Discrete Outcomes (10–12)</a></li>
+              <li><a href="#modules">Advanced Methods &amp; Experiments (10–18)</a></li>
             </ul>
           </div>
 

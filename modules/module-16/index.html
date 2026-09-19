@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 16: Binary Choice Models &amp; Maximum Likelihood — EcoIntuition Academy</title>
+  <meta name="description" content="Learn how econometric models handle binary outcomes such as employment, bankruptcy, smoking status, or health conditions. Compare the Linear Probability Model with Probit and Logit, interpret nonlinear marginal effects, understand the latent-variable framework, and build Maximum Likelihood Estimation from the probability of the observed data.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-16">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">β</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Asymptotic Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="../module-18/index.html" class="nav-dropdown-item">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 16</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Centered Landing Content -->
+  <main class="module-overview-area">
+    
+    <!-- Hero Header -->
+    <div class="module-hero">
+      <div class="module-hero-badges">
+        <span class="badge badge-primary">MODULE 16</span>
+        <span class="badge badge-secondary">Nonlinear Econometrics</span>
+        <span class="badge badge-outline">6 Lessons</span>
+        <span class="badge badge-outline">Maximum Likelihood</span>
+      </div>
+
+      <h1 class="module-hero-title">
+        Binary Choice Models &amp; Maximum Likelihood
+      </h1>
+      
+      <p class="module-hero-desc">
+        Learn how econometric models handle binary outcomes such as employment, bankruptcy, smoking status, or health conditions. Compare the Linear Probability Model with Probit and Logit, interpret nonlinear marginal effects, understand the latent-variable framework, and build Maximum Likelihood Estimation from the probability of the observed data.
+      </p>
+
+      <!-- Action Buttons & Progress -->
+      <div class="module-actions">
+        <a href="lesson-01.html" class="btn btn-primary btn-lg">
+          Start Module 16 &rarr;
+        </a>
+        <a href="../../index.html#modules" class="btn btn-outline btn-lg">
+          Explore All Modules
+        </a>
+      </div>
+
+      <!-- Module Progress Card -->
+      <div class="module-progress-card">
+        <div class="module-progress-labels">
+          <span>Module 16 Completion</span>
+          <span id="progress-text-module-16" class="module-progress-percent">0% Complete</span>
+        </div>
+        <div class="module-progress-track">
+          <div class="module-progress-fill" id="progress-fill-module-16"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Structured Learning Path -->
+    <div class="module-learning-path-card">
+      <h3 class="module-learning-path-title">
+        MODULE LEARNING PATH
+      </h3>
+      <div class="module-learning-path-flow">
+        <span class="learning-path-step"><span class="learning-path-pill">Binary Outcome</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Probability</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">LPM</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Heteroskedasticity</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Probability Bounds</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">CDF</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Probit</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Logit</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Marginal Effects</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">AME</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Latent Variable</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Likelihood</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Log-Likelihood</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">MLE</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Score</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Fisher Information</span><span class="learning-path-arrow">&rarr;</span></span>
+        <span class="learning-path-step"><span class="learning-path-pill">Inference</span></span>
+      </div>
+    </div>
+
+    <!-- Lesson Cards Single-Column Format -->
+    <div class="module-lessons-section">
+      <h2 class="module-lessons-title">
+        Module Lessons
+      </h2>
+
+      <div class="module-lessons-list">
+        
+        <!-- Lesson 16.1 Card -->
+        <a href="lesson-01.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.1</span>
+                <span class="badge badge-cat">Binary Response Foundations</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Binary Outcomes &amp; the Linear Probability Model
+              </h2>
+              <p class="lesson-card-desc">
+                Model binary economic outcomes, formulate the Linear Probability Model, derive its inherent heteroskedasticity, and examine out-of-bounds probability failures.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 16.2 Card -->
+        <a href="lesson-02.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.2</span>
+                <span class="badge badge-cat">Nonlinear Probability</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Probit, Logit &amp; Probability Curves
+              </h2>
+              <p class="lesson-card-desc">
+                Resolve unbounded probability issues using cumulative distribution functions, compare standard normal Probit with logistic Logit, and evaluate tail thickness.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 16.3 Card -->
+        <a href="lesson-03.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.3</span>
+                <span class="badge badge-cat">Interpretation</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Marginal Effects in Binary Choice Models
+              </h2>
+              <p class="lesson-card-desc">
+                Understand why coefficients differ from probability changes in nonlinear models, compute continuous marginal effects and interactions, and contrast MEM with AME.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 16.4 Card -->
+        <a href="lesson-04.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.4</span>
+                <span class="badge badge-cat">Threshold Framework</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Latent Variables &amp; Threshold Models
+              </h2>
+              <p class="lesson-card-desc">
+                Interpret binary choices as continuous unobserved propensities crossing zero thresholds, and visualize how latent error distributions generate Probit and Logit probabilities.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 16.5 Card -->
+        <a href="lesson-05.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.5</span>
+                <span class="badge badge-cat">Estimation</span>
+              </div>
+              <h2 class="lesson-card-title">
+                Maximum Likelihood for Binary Outcomes
+              </h2>
+              <p class="lesson-card-desc">
+                Construct the Bernoulli likelihood and log-likelihood from observed outcomes, and trace a complete numerical worked example with candidate optimization.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 16.6 Card -->
+        <a href="lesson-06.html" class="module-lesson-card">
+          <div class="lesson-card-inner">
+            <div class="lesson-card-main">
+              <div class="lesson-card-badges">
+                <span class="badge badge-num">LESSON 16.6</span>
+                <span class="badge badge-cat">Inference &amp; Review</span>
+              </div>
+              <h2 class="lesson-card-title">
+                MLE Properties, Variance, Inference &amp; Module Review
+              </h2>
+              <p class="lesson-card-desc">
+                Master asymptotic consistency, normality, efficiency, the Score, Fisher information, inverted Hessian standard errors, and complete the end-of-module synthesis.
+              </p>
+            </div>
+            <div class="lesson-card-action">
+              <span class="btn btn-outline btn-sm">Enter Lesson →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+</body>
+</html>

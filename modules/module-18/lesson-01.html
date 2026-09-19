@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 18.1: Unordered Choice &amp; Multinomial Logit Foundations — EcoIntuition Academy</title>
+  <meta name="description" content="Formulate discrete choice across J alternatives from random utility, analyze Gumbel disturbances, establish closed-form multinomial logit probabilities, and understand base-category normalization.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/logo.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Centralized MathJax 3 Configuration & Library -->
+  <script src="../../assets/js/math-config.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/course.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-module="module-18" data-lesson="1">
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="brand">
+        <div class="brand-icon">&beta;</div>
+        <div class="brand-text">
+          <span class="brand-org">EcoIntuition Academy</span>
+          <span class="brand-title">Econometrics with AI</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="../../index.html" class="nav-item-link">Home</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle nav-item-link" type="button" aria-expanded="false" aria-haspopup="true">
+              Modules <svg class="dropdown-chevron" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+            <div class="nav-dropdown-menu">
+              <a href="../module-01/index.html" class="nav-dropdown-item">Module 1: Foundations &amp; Regression</a>
+              <a href="../module-02/index.html" class="nav-dropdown-item">Module 2: Matrix Algebra &amp; Geometry</a>
+              <a href="../module-03/index.html" class="nav-dropdown-item">Module 3: Finite-Sample Properties &amp; Fit</a>
+              <a href="../module-04/index.html" class="nav-dropdown-item">Module 4: Large-Sample Theory &amp; Inference</a>
+              <a href="../module-05/index.html" class="nav-dropdown-item">Module 5: Hypothesis Testing &amp; Dummies</a>
+              <a href="../module-06/index.html" class="nav-dropdown-item">Module 6: OVB, Experiments &amp; DD</a>
+              <a href="../module-07/index.html" class="nav-dropdown-item">Module 7: Advanced DD &amp; Triple Differences</a>
+              <a href="../module-08/index.html" class="nav-dropdown-item">Module 8: Non-Spherical Errors &amp; Robust Inference</a>
+              <a href="../module-09/index.html" class="nav-dropdown-item">Module 9: Autocorrelation &amp; HAC Inference</a>
+              <a href="../module-10/index.html" class="nav-dropdown-item">Module 10: Panel Data II &amp; Hausman Test</a>
+              <a href="../module-11/index.html" class="nav-dropdown-item">Module 11: Instrumental Variables &amp; 2SLS</a>
+              <a href="../module-12/index.html" class="nav-dropdown-item">Module 12: IV Diagnostics &amp; Measurement Error</a>
+              <a href="../module-13/index.html" class="nav-dropdown-item">Module 13: Field Experiments &amp; Randomization</a>
+              <a href="../module-14/index.html" class="nav-dropdown-item">Module 14: Estimation, Compliance &amp; LATE</a>
+              <a href="../module-15/index.html" class="nav-dropdown-item">Module 15: Regression Discontinuity Designs</a>
+              <a href="../module-16/index.html" class="nav-dropdown-item">Module 16: Binary Choice &amp; Maximum Likelihood</a>
+              <a href="../module-17/index.html" class="nav-dropdown-item">Module 17: Hypothesis, Specification Tests &amp; GMM</a>
+              <a href="index.html" class="nav-dropdown-item active">Module 18: Multinomial &amp; Conditional Logit</a>
+            </div>
+          </li>
+          <li><a href="index.html" class="nav-item-link active">Module 18</a></li>
+          <li><a href="../../index.html#resources" class="nav-item-link">Resources</a></li>
+          <li>
+            <a href="https://github.com/EcoIntuition-Academy/Econometrics-with-AI-" target="_blank" rel="noopener noreferrer" class="nav-item-link">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Color Theme">
+          <svg class="light-icon" viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.89-5.4 1 1 0 0 0-1.2-1.39 8 8 0 1 1-7.7-13.1 1 1 0 0 0 .2-2.11z"/></svg>
+          <svg class="dark-icon" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm9-8a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM7 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1z"/></svg>
+        </button>
+        <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Lesson Navigator -->
+  <nav class="top-lesson-nav" aria-label="Lesson Navigator">
+    <div class="top-lesson-nav-inner">
+      <div class="top-nav-left">
+        <div class="top-nav-module-hierarchy">
+          <a href="index.html" class="module-kicker">MODULE 18</a>
+          <span class="module-nav-title">Multinomial &amp; Conditional Logit Models</span>
+        </div>
+        <div class="lesson-nav-current">Lesson 1 of 5 &middot; Unordered Choice &amp; Multinomial Logit Foundations</div>
+      </div>
+
+      <div class="top-nav-right">
+        <div class="lesson-dropdown-wrapper">
+          <button class="lesson-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>View Lessons</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="lesson-dropdown-menu" role="menu">
+            <div class="dropdown-header">Module 18 Lessons</div>
+            <a href="lesson-01.html" class="dropdown-item current" role="menuitem">
+              <span class="status-indicator">●</span>
+              <span class="item-title">18.1 Unordered Choice &amp; Multinomial Logit</span>
+            </a>
+            <a href="lesson-02.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.2 Likelihood, Base Categories &amp; Relative Odds</span>
+            </a>
+            <a href="lesson-03.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.3 Marginal Effects &amp; Choice Probabilities</span>
+            </a>
+            <a href="lesson-04.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.4 Prediction, Model Fit &amp; Wald Testing</span>
+            </a>
+            <a href="lesson-05.html" class="dropdown-item" role="menuitem">
+              <span class="status-indicator">○</span>
+              <span class="item-title">18.5 Conditional Logit &amp; Alternative Attributes</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="top-nav-progress">
+          <div class="progress-info-text">
+            <span>Progress</span>
+            <span class="progress-percent" id="lessonTopProgressText">20%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="lessonTopProgressBar" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Centered Lesson Content -->
+  <main class="lesson-content-area">
+
+    <!-- Header & Eyebrows -->
+    <div class="lesson-header-block">
+      <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap;">
+        <span class="badge badge-primary">LESSON 18.1</span>
+        <span class="badge badge-outline">Discrete Choice Foundations</span>
+      </div>
+      <h1 style="font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.25; margin-bottom: var(--space-sm);">
+        Unordered Choice &amp; Multinomial Logit Foundations
+      </h1>
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        Formulate discrete choice across multiple unordered alternatives from random utility theory, explore the role of Gumbel disturbances, derive closed-form choice probabilities, and understand why location normalization (&beta;&#8320; = 0) is mathematically essential.
+      </p>
+    </div>
+
+    <!-- Objectives Card -->
+    <div class="objectives-card">
+      <h3 style="font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-primary);">
+        &#127919; Learning Objectives
+      </h3>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.7; color: var(--color-text);">
+        <li>Distinguish unordered discrete choice from binary response and ordered selection models.</li>
+        <li>Specify the Random Utility Model \(U_{ij} = \mathbf{x}_i'\boldsymbol{\beta}_j + \varepsilon_{ij}\) using observed individual characteristics and alternative-specific parameters.</li>
+        <li>Characterize the i.i.d. Gumbel (Type I Extreme Value) error assumption and how it yields logistic differences.</li>
+        <li>Derive the closed-form Multinomial Logit (MNL) probabilities and explain why setting \(\boldsymbol{\beta}_0 = \mathbf{0}\) is mathematically required for parameter identification.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: The Unordered Discrete Choice Problem -->
+    <section class="lesson-section">
+      <h2>1. The Unordered Choice Problem</h2>
+      <p>
+        In Module 16, we analyzed binary choice settings where an agent decides between two outcomes: \(y_i \in \{0, 1\}\) (e.g., labor force participation, loan approval, or home ownership). In empirical economics, however, agents frequently face choices among <strong>three or more mutually exclusive, unordered alternatives</strong>.
+      </p>
+      <p>
+        The canonical application introduced in the lecture source is <strong>occupational choice</strong>: an individual chooses one occupation from \(J + 1\) available alternatives (e.g., waiter, teacher, engineer, doctor, artist). Other classic settings include travel mode choice (walk, bus, train, car) and voting behavior among multiple political candidates.
+      </p>
+
+      <!-- Visual Flow Card: Discrete Choice Hierarchy -->
+      <div class="study-card" style="margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 700;">
+          DECISION ARCHITECTURE &middot; RANDOM UTILITY IN UNORDERED CHOICE
+        </h4>
+        <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+          Every decision maker observes their personal characteristics \(\mathbf{x}_i\) and selects the single option that yields the maximal total utility:
+        </p>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0.5rem 1.5rem; font-weight: 600; font-size: var(--text-sm);">
+            Individual \(i\) with Characteristics \(\mathbf{x}_i\) (Age, Gender, Education)
+          </div>
+          <div style="color: var(--color-primary); font-size: 1.25rem;">&darr;</div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; width: 100%;">
+            <div style="flex: 1; min-width: 130px; max-width: 200px; background: rgba(37, 99, 235, 0.05); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+              <strong style="color: var(--color-text); font-size: var(--text-xs); display: block;">Option 0 (Base)</strong>
+              <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary);">\(U_{i0} = \mathbf{x}_i'\boldsymbol{\beta}_0 + \varepsilon_{i0}\)</span>
+            </div>
+            <div style="flex: 1; min-width: 130px; max-width: 200px; background: rgba(37, 99, 235, 0.05); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+              <strong style="color: var(--color-text); font-size: var(--text-xs); display: block;">Option 1 (e.g. Teacher)</strong>
+              <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary);">\(U_{i1} = \mathbf{x}_i'\boldsymbol{\beta}_1 + \varepsilon_{i1}\)</span>
+            </div>
+            <div style="flex: 1; min-width: 130px; max-width: 200px; background: rgba(37, 99, 235, 0.05); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+              <strong style="color: var(--color-text); font-size: var(--text-xs); display: block;">Option 2 (e.g. Engineer)</strong>
+              <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary);">\(U_{i2} = \mathbf{x}_i'\boldsymbol{\beta}_2 + \varepsilon_{i2}\)</span>
+            </div>
+          </div>
+          <div style="color: var(--color-primary); font-size: 1.25rem;">&darr;</div>
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 0.5rem 1.5rem; font-weight: 600; font-size: var(--text-sm); color: var(--color-text);">
+            Selected Choice \(y_i = j \iff U_{ij} > U_{ik}\) for all \(k \ne j\)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Random Utility Framework -->
+    <section class="lesson-section">
+      <h2>2. The Random Utility Framework</h2>
+      <p>
+        The econometrician does not observe utility directly; utility is a latent construct. We observe the individual's socio-demographic characteristics \(\mathbf{x}_i\) and their realized categorical choice \(y_i \in \{0, 1, \dots, J\}\).
+      </p>
+      <p>
+        The latent utility that individual \(i\) derives from alternative \(j\) decomposes into a deterministic systematic component and an unobserved stochastic shock:
+      </p>
+
+      <!-- Equation Card: Latent Utility -->
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">SPECIFICATION</span>
+          <span class="equation-title">Random Utility Model (RUM)</span>
+        </div>
+        <div class="equation-main">
+          \[
+          U_{ij} = \mathbf{x}_i'\boldsymbol{\beta}_j + \varepsilon_{ij}
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-label">WHERE:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">\(U_{ij}\)</span>
+              <span class="symbol-desc">Latent total utility derived by individual \(i\) from choosing alternative \(j\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\mathbf{x}_i\)</span>
+              <span class="symbol-desc">Vector of observed individual characteristics (e.g., age, gender, education).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\boldsymbol{\beta}_j\)</span>
+              <span class="symbol-desc">Alternative-specific parameter vector reflecting how covariates affect utility from option \(j\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">\(\varepsilon_{ij}\)</span>
+              <span class="symbol-desc">Unobserved random utility disturbance idiosyncratic to person \(i\) and option \(j\).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Under utility maximization, individual \(i\) chooses alternative \(j\) if and only if alternative \(j\) delivers higher utility than every other available option \(k \ne j\). Therefore, the probability of selecting option \(j\) is:
+      </p>
+
+      <div class="equation-box">
+        <div class="equation-header">
+          <span class="equation-badge">PROBABILITY</span>
+          <span class="equation-title">Utility Difference Choice Condition</span>
+        </div>
+        <div class="equation-main">
+          \[
+          P(y_i = j \mid \mathbf{x}_i) = \Pr\left( \mathbf{x}_i'\boldsymbol{\beta}_j + \varepsilon_{ij} > \mathbf{x}_i'\boldsymbol{\beta}_k + \varepsilon_{ik}, \; \forall k \ne j \right)
+          = \Pr\left( \varepsilon_{ij} - \varepsilon_{ik} > \mathbf{x}_i'(\boldsymbol{\beta}_k - \boldsymbol{\beta}_j), \; \forall k \ne j \right)
+          \]
+        </div>
+      </div>
+
+      <!-- Pedagogy Callout: Intuition of Random Shocks -->
+      <div class="study-card" style="border-left: 4px solid var(--color-primary); margin: var(--space-md) 0;">
+        <h4 style="margin: 0 0 var(--space-xs) 0; font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 700;">
+          PEDAGOGICAL INTUITION &middot; OFFSETTING SYSTEMATIC DEFICITS
+        </h4>
+        <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin: 0;">
+          As emphasized in the lecture notes: if an individual's characteristics predict that option \(j\) has very low systematic utility relative to option \(k\) (\(\mathbf{x}_i'\boldsymbol{\beta}_j \ll \mathbf{x}_i'\boldsymbol{\beta}_k\)), but the individual nonetheless chooses option \(j\), then their idiosyncratic random shock \(\varepsilon_{ij}\) must be exceptionally large relative to \(\varepsilon_{ik}\). The random shock must completely offset the systematic utility deficit. In a well-specified model, such extreme shocks are statistically rare, producing a small predicted choice probability.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Distributional Assumptions: Gumbel Errors -->
+    <section class="lesson-section">
+      <h2>3. Distributional Assumptions: Gumbel Errors</h2>
+      <p>
+        To transform the joint probability of utility differences into a computable choice probability, we must specify a joint distribution for the unobserved disturbance vector \(\boldsymbol{\varepsilon}_i = (\varepsilon_{i0}, \varepsilon_{i1}, \dots, \varepsilon_{iJ})'\).
+      </p>
+      <p>
+        The <strong>Multinomial Logit (MNL)</strong> model assumes that the disturbances \(\varepsilon_{ij}\) are independent and identically distributed (i.i.d.) following the <strong>Gumbel distribution</strong> (Type I Extreme Value), with cumulative distribution function:
+      </p>
+      <div style="text-align: center; margin: 1rem 0; font-size: var(--text-base);">
+        \(F(\varepsilon) = \exp\left(-\exp(-\varepsilon)\right)\)
+      </div>
+      <p>
+        The decisive mathematical convenience of the Gumbel distribution is that <strong>the difference between two independent Gumbel random variables follows a logistic distribution</strong>. This property yields an elegant closed-form analytical expression for the choice probabilities, completely bypassing the multidimensional numerical integration required when disturbances are assumed normal (as in the Multinomial Probit model).
+      </p>
+    </section>
+
+    <!-- Section 4: Choice Probabilities & Base-Category Normalization -->
+    <section class="lesson-section">
+      <h2>4. Choice Probabilities &amp; Base-Category Normalization</h2>
+      <p>
+        Under i.i.d. Gumbel errors, integrating over the disturbances produces the general Multinomial Logit choice probability:
+      </p>
+
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">PROBABILITY</span>
+          <span class="equation-title">General Multinomial Logit Choice Probability</span>
+        </div>
+        <div class="equation-main">
+          \[
+          P(y_i = j \mid \mathbf{x}_i) = \frac{\exp(\mathbf{x}_i'\boldsymbol{\beta}_j)}{\sum_{k=0}^J \exp(\mathbf{x}_i'\boldsymbol{\beta}_k)}
+          \]
+        </div>
+      </div>
+
+      <h3>Why Is Location Normalization Essential?</h3>
+      <p>
+        Examine the general probability expression above. What happens if we add any arbitrary vector \(\boldsymbol{\gamma}\) to every single parameter vector \(\boldsymbol{\beta}_j\)?
+      </p>
+      <p>
+        Let \(\boldsymbol{\beta}_j^* = \boldsymbol{\beta}_j + \boldsymbol{\gamma}\) for all \(j = 0, \dots, J\). The resulting choice probability is:
+      </p>
+      <div style="text-align: center; margin: 1rem 0; font-size: var(--text-sm);">
+        \[
+        P^*(y_i = j \mid \mathbf{x}_i) = \frac{\exp(\mathbf{x}_i'(\boldsymbol{\beta}_j + \boldsymbol{\gamma}))}{\sum_{k=0}^J \exp(\mathbf{x}_i'(\boldsymbol{\beta}_k + \boldsymbol{\gamma}))}
+        = \frac{\exp(\mathbf{x}_i'\boldsymbol{\beta}_j)\cdot\exp(\mathbf{x}_i'\boldsymbol{\gamma})}{\exp(\mathbf{x}_i'\boldsymbol{\gamma})\sum_{k=0}^J \exp(\mathbf{x}_i'\boldsymbol{\beta}_k)}
+        = \frac{\exp(\mathbf{x}_i'\boldsymbol{\beta}_j)}{\sum_{k=0}^J \exp(\mathbf{x}_i'\boldsymbol{\beta}_k)}
+        = P(y_i = j \mid \mathbf{x}_i)
+        \]
+      </div>
+      <p>
+        The common factor \(\exp(\mathbf{x}_i'\boldsymbol{\gamma})\) factors out of both numerator and denominator and cancels completely. This proves that <strong>the raw parameter vectors \(\boldsymbol{\beta}_0, \boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_J\) are not uniquely identified</strong>; infinitely many parameter sets produce identical choice probabilities!
+      </p>
+      <p>
+        To achieve identification, we must impose a location normalization. Without loss of generality, we designate alternative \(0\) as the <strong>base category</strong> (reference alternative) and normalize its coefficient vector to zero:
+      </p>
+
+      <div class="equation-box equation-box--key">
+        <div class="equation-header">
+          <span class="equation-badge">NORMALIZATION</span>
+          <span class="equation-title">Normalized Multinomial Logit Probabilities</span>
+        </div>
+        <div class="equation-main">
+          \[
+          \boldsymbol{\beta}_0 = \mathbf{0}
+          \]
+          \[
+          P(y_i = j \mid \mathbf{x}_i) = \frac{\exp(\mathbf{x}_i'\boldsymbol{\beta}_j)}{1 + \sum_{k=1}^J \exp(\mathbf{x}_i'\boldsymbol{\beta}_k)}, \quad \text{for } j = 1, \dots, J
+          \]
+          \[
+          P(y_i = 0 \mid \mathbf{x}_i) = \frac{1}{1 + \sum_{k=1}^J \exp(\mathbf{x}_i'\boldsymbol{\beta}_k)}, \quad \text{for Base Category } j = 0
+          \]
+        </div>
+        <div class="equation-explainer">
+          <div class="explainer-label">PROPERTIES:</div>
+          <div class="symbol-grid">
+            <div class="symbol-row">
+              <span class="symbol-name">Bounded Support</span>
+              <span class="symbol-desc">Since \(\exp(\cdot) > 0\), every choice probability strictly satisfies \(0 < P(y_i = j \mid \mathbf{x}_i) < 1\).</span>
+            </div>
+            <div class="symbol-row">
+              <span class="symbol-name">Unit Probability Sum</span>
+              <span class="symbol-desc">The probabilities across all \(J + 1\) alternatives automatically sum to exactly \(1\): \(\sum_{j=0}^J P(y_i = j \mid \mathbf{x}_i) = 1\).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Lab: Utility Choice Explorer -->
+    <section class="lesson-section">
+      <h2>5. Interactive Lab: Utility Choice Explorer</h2>
+      <p>
+        Experiment with the interactive simulator below to observe how shifts in systematic utilities \(V_1 = \mathbf{x}_i'\boldsymbol{\beta}_1\) and \(V_2 = \mathbf{x}_i'\boldsymbol{\beta}_2\) alter the choice probabilities across three alternatives, where Option 0 is normalized to \(V_0 = \mathbf{x}_i'\boldsymbol{\beta}_0 = 0\).
+      </p>
+
+      <div class="interactive-lab-card">
+        <div class="lab-header">
+          <span class="lab-badge">SIMULATOR &middot; 3-CHOICE MULTINOMIAL LOGIT</span>
+          <h3 class="lab-title">Utility Choice Explorer</h3>
+          <p class="lab-desc">
+            Adjust the systematic utilities of Option 1 and Option 2 relative to the base category (\(V_0 = 0\)). Observe how the non-linear softmax logistic transformation reallocates choice probability mass.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div class="lab-slider-group">
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); font-weight: 600; margin-bottom: 0.25rem;">
+              <label for="sliderV1">Systematic Utility \(V_1 = \mathbf{x}'\boldsymbol{\beta}_1\)</label>
+              <span id="sliderV1Val" style="font-family: var(--font-mono); color: var(--color-primary);">+0.50</span>
+            </div>
+            <input type="range" id="sliderV1" min="-3.0" max="3.0" step="0.1" value="0.5" style="width: 100%;">
+          </div>
+
+          <div class="lab-slider-group">
+            <div style="display: flex; justify-content: space-between; font-size: var(--text-xs); font-weight: 600; margin-bottom: 0.25rem;">
+              <label for="sliderV2">Systematic Utility \(V_2 = \mathbf{x}'\boldsymbol{\beta}_2\)</label>
+              <span id="sliderV2Val" style="font-family: var(--font-mono); color: #8b5cf6;">-0.20</span>
+            </div>
+            <input type="range" id="sliderV2" min="-3.0" max="3.0" step="0.1" value="-0.2" style="width: 100%;">
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="lab-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Base Option 0 \(P_0\)</div>
+            <div class="metric-value" id="metricP0" style="color: var(--color-text);">29.4%</div>
+            <div class="metric-subtext">\(1 / [1 + e^{V_1} + e^{V_2}]\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Option 1 \(P_1\)</div>
+            <div class="metric-value" id="metricP1" style="color: var(--color-primary);">48.5%</div>
+            <div class="metric-subtext">\(e^{V_1} / [1 + e^{V_1} + e^{V_2}]\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Option 2 \(P_2\)</div>
+            <div class="metric-value" id="metricP2" style="color: #8b5cf6;">22.1%</div>
+            <div class="metric-subtext">\(e^{V_2} / [1 + e^{V_1} + e^{V_2}]\)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Sum \(\sum P_j\)</div>
+            <div class="metric-value" id="metricSum" style="color: #10b981;">100.0%</div>
+            <div class="metric-subtext">Unit probability check</div>
+          </div>
+        </div>
+
+        <!-- Legend Bar -->
+        <div class="external-legend-bar" style="display: flex; gap: 1rem; justify-content: center; margin: var(--space-md) 0 var(--space-xs) 0; font-size: var(--text-xs); font-family: var(--font-mono);">
+          <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span style="width: 12px; height: 12px; border-radius: 2px; background: #64748b;"></span>
+            Option 0 (Base: \(V_0 = 0\))
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span style="width: 12px; height: 12px; border-radius: 2px; background: var(--color-primary);"></span>
+            Option 1 (\(V_1\))
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span style="width: 12px; height: 12px; border-radius: 2px; background: #8b5cf6;"></span>
+            Option 2 (\(V_2\))
+          </span>
+        </div>
+
+        <!-- Canvas -->
+        <div class="interactive-plot-canvas" style="display: flex; justify-content: center; align-items: center; padding: 1rem 0;">
+          <svg id="mnlChoiceSvg" viewBox="0 0 600 220" style="width: 100%; max-width: 600px; height: auto;">
+            <!-- Horizontal stacked bar background -->
+            <rect x="50" y="40" width="500" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1.5" />
+            
+            <!-- Three segments of horizontal stacked bar -->
+            <rect id="barSeg0" x="50" y="40" width="147" height="48" rx="0" fill="#64748b" opacity="0.9" />
+            <rect id="barSeg1" x="197" y="40" width="242" height="48" rx="0" fill="var(--color-primary)" opacity="0.9" />
+            <rect id="barSeg2" x="439" y="40" width="111" height="48" rx="0" fill="#8b5cf6" opacity="0.9" />
+
+            <!-- Labels inside bar -->
+            <text id="barLabel0" x="123" y="70" fill="#ffffff" font-size="12" font-family="var(--font-mono)" font-weight="600" text-anchor="middle">P₀: 29.4%</text>
+            <text id="barLabel1" x="318" y="70" fill="#ffffff" font-size="12" font-family="var(--font-mono)" font-weight="600" text-anchor="middle">P₁: 48.5%</text>
+            <text id="barLabel2" x="494" y="70" fill="#ffffff" font-size="12" font-family="var(--font-mono)" font-weight="600" text-anchor="middle">P₂: 22.1%</text>
+
+            <!-- Axis labels below bar -->
+            <text x="50" y="110" fill="var(--color-text-secondary)" font-size="10" font-family="var(--font-mono)">0%</text>
+            <text x="300" y="110" fill="var(--color-text-secondary)" font-size="10" font-family="var(--font-mono)" text-anchor="middle">Cumulative Probability Distribution (50%)</text>
+            <text x="550" y="110" fill="var(--color-text-secondary)" font-size="10" font-family="var(--font-mono)" text-anchor="end">100%</text>
+
+            <!-- Visual comparison bars below -->
+            <g transform="translate(50, 130)">
+              <!-- Option 0 bar -->
+              <rect x="0" y="15" width="130" height="24" rx="4" fill="#64748b" opacity="0.15" stroke="#64748b" />
+              <rect id="miniBar0" x="0" y="15" width="38" height="24" rx="4" fill="#64748b" />
+              <text x="0" y="8" fill="var(--color-text)" font-size="11" font-weight="600">Base (V₀ = 0)</text>
+
+              <!-- Option 1 bar -->
+              <rect x="180" y="15" width="130" height="24" rx="4" fill="var(--color-primary)" opacity="0.15" stroke="var(--color-primary)" />
+              <rect id="miniBar1" x="180" y="15" width="63" height="24" rx="4" fill="var(--color-primary)" />
+              <text x="180" y="8" fill="var(--color-text)" font-size="11" font-weight="600">Option 1</text>
+
+              <!-- Option 2 bar -->
+              <rect x="360" y="15" width="130" height="24" rx="4" fill="#8b5cf6" opacity="0.15" stroke="#8b5cf6" />
+              <rect id="miniBar2" x="360" y="15" width="29" height="24" rx="4" fill="#8b5cf6" />
+              <text x="360" y="8" fill="var(--color-text)" font-size="11" font-weight="600">Option 2</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Dynamic Insight -->
+        <div class="study-card" id="labInsightContainer" style="margin-top: var(--space-md); border-left: 4px solid var(--color-primary); background: rgba(37, 99, 235, 0.05);">
+          <h4 style="margin: 0 0 0.25rem 0; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 700;">
+            SCENARIO INSIGHT
+          </h4>
+          <span id="labInsightText" style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            With \(V_1 = +0.50\) and \(V_2 = -0.20\), Option 1 commands the largest probability share (48.5%) because its systematic utility exceeds both the base option (\(V_0 = 0\)) and Option 2.
+          </span>
+        </div>
+
+        <!-- 2x2 Explanation Grid -->
+        <div class="visual-explanation-grid chart-explanations-grid">
+          <div class="visual-explanation-card visual-card--seeing grid-card">
+            <h4 class="visual-explanation-title">
+              <span>&#128065;</span> WHAT YOU ARE SEEING
+            </h4>
+            <div class="visual-explanation-body">
+              The top stacked bar visualizes how total choice probability (100%) is sliced among the three alternatives. The three mini-bars below show the absolute probability magnitudes for Base 0, Option 1, and Option 2.
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--notice grid-card">
+            <h4 class="visual-explanation-title">
+              <span>&#9888;</span> WHAT TO NOTICE
+            </h4>
+            <div class="visual-explanation-body">
+              When you increase \(V_1\), Option 1's share grows, but it draws probability mass from <em>both</em> Option 0 and Option 2 simultaneously. The base category share shrinks even though its systematic utility \(V_0 = 0\) did not change!
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--matters grid-card">
+            <h4 class="visual-explanation-title">
+              <span>&#9878;</span> WHY IT MATTERS
+            </h4>
+            <div class="visual-explanation-body">
+              Probabilities are interdependent: changing an attribute that raises the attractiveness of one career necessarily depresses the choice probabilities of all other careers, preserving the unit sum \(\sum_j P_j = 1\).
+            </div>
+          </div>
+
+          <div class="visual-explanation-card visual-card--interp grid-card">
+            <h4 class="visual-explanation-title">
+              <span>&#128218;</span> ECONOMETRIC INTERPRETATION
+            </h4>
+            <div class="visual-explanation-body">
+              Because the choice probabilities reflect a competitive zero-sum allocation across options, an option's probability depends on its systematic utility relative to all alternatives in the choice set.
+            </div>
+          </div>
+        </div>
+
+        <!-- Try This -->
+        <div class="visual-try-this" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-md); background: var(--color-surface); border: 1px dashed var(--color-border); font-size: var(--text-xs); line-height: 1.6;">
+          <strong>TRY THIS:</strong> Set \(V_1 = 0\) and \(V_2 = 0\). Notice that all three alternatives receive equal probabilities: \(P_0 = P_1 = P_2 = 33.3\%\). Next, set \(V_1 = 3.0\). Notice that Option 1 captures over \(90\%\) of the market, compressing the remaining options into tiny slivers.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Quick Knowledge Check -->
+    <section class="lesson-section">
+      <h2>6. Quick Knowledge Check</h2>
+      <div class="practice-item" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg);">
+        <h4 style="margin-top: 0; font-size: var(--text-base); font-weight: 600;">
+          Question: Why Can't We Estimate \(\boldsymbol{\beta}_0\) Freely?
+        </h4>
+        <p style="font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+          A student attempts to estimate an unconstrained Multinomial Logit model with \(3\) alternatives (options \(0, 1, 2\)) by estimating three separate intercept parameters \(\beta_{00}, \beta_{10}, \beta_{20}\). The numerical optimization routine crashes with a singular Hessian matrix. Explain why this happens.
+        </p>
+
+        <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <button class="btn btn-secondary btn-sm" type="button" data-toggle-target="hint1">
+            Show Hint
+          </button>
+          <button class="btn btn-primary btn-sm" type="button" data-toggle-target="sol1">
+            Show Solution
+          </button>
+        </div>
+
+        <div id="hint1" class="practice-accordion-panel" style="display: none; margin-bottom: var(--space-sm); padding: var(--space-sm); background: var(--color-background); border-radius: var(--radius-sm); border-left: 3px solid var(--color-secondary);">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6;">
+            <strong>Hint:</strong> What happens to the choice probabilities if you add a constant \(c\) to all three intercepts? Can the data distinguish between \((0, 1, 2)\) and \((10, 11, 12)\)?
+          </p>
+        </div>
+
+        <div id="sol1" class="practice-accordion-panel" style="display: none; padding: var(--space-sm); background: var(--color-background); border-radius: var(--radius-sm); border-left: 3px solid #10b981;">
+          <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6;">
+            <strong>Solution:</strong><br>
+            The multinomial logit probability depends strictly on differences between systematic utilities: \(U_{ij} - U_{ik} = \mathbf{x}_i'(\boldsymbol{\beta}_j - \boldsymbol{\beta}_k) + (\varepsilon_{ij} - \varepsilon_{ik})\). Adding an arbitrary constant \(c\) to all intercepts shifts all utilities equally, leaving all utility differences and choice probabilities unchanged. The parameter space has a direction of infinite flatness (perfect collinearity in utility levels), creating a singular information matrix. Setting \(\boldsymbol{\beta}_0 = \mathbf{0}\) pins down the baseline location and restores full identification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Lesson Summary & Navigation -->
+    <div class="summary-card" style="margin-top: var(--space-2xl);">
+      <h3 style="margin-top: 0; font-size: var(--text-lg); font-weight: 700; color: var(--color-text); margin-bottom: 0.5rem;">Lesson 18.1 Summary</h3>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm);">
+        In this lesson, we established the random-utility foundations for multiple unordered alternatives:
+      </p>
+      <ul style="font-size: var(--text-sm); line-height: 1.65; padding-left: 1.25rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+        <li><strong>Unordered Choice:</strong> Models choices over \(J + 1\) discrete options based on observed individual characteristics \(\mathbf{x}_i\).</li>
+        <li><strong>Random Utility:</strong> Latent utility \(U_{ij} = \mathbf{x}_i'\boldsymbol{\beta}_j + \varepsilon_{ij}\) leads to choice when \(U_{ij} > U_{ik}\) for all \(k \ne j\).</li>
+        <li><strong>Gumbel Disturbances:</strong> i.i.d. extreme value errors ensure that utility differences follow a logistic distribution, yielding closed-form choice probabilities.</li>
+        <li><strong>Identification &amp; Normalization:</strong> Setting \(\boldsymbol{\beta}_0 = \mathbf{0}\) resolves location indeterminacy, ensuring all probabilities strictly lie in \((0, 1)\) and sum to \(1\).</li>
+      </ul>
+
+      <div class="lesson-pagination">
+        <a href="index.html" class="lesson-nav-btn btn-prev">
+          <span class="nav-btn-sub">&larr; Module 18</span>
+          <span class="nav-btn-title">Module Overview</span>
+        </a>
+        <button class="btn btn-outline mark-lesson-complete-btn" id="markLessonCompleteBtn" data-module="module-18" data-lesson="1" style="align-self: center;">
+          &#10003; Mark Lesson 1 Complete
+        </button>
+        <a href="lesson-02.html" class="lesson-nav-btn btn-next">
+          <span class="nav-btn-sub">Next Lesson &rarr;</span>
+          <span class="nav-btn-title">Likelihood, Base Categories &amp; Relative Odds</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoIntuition Academy. Econometrics with AI.</p>
+        <p>Built for modern learners with mathematical rigor &amp; intuitive clarity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/progress.js"></script>
+  <script src="../../assets/js/interactions.js"></script>
+
+  <!-- Interactive Lab Script -->
+  <script>
+    (function() {
+      const sliderV1 = document.getElementById('sliderV1');
+      const sliderV2 = document.getElementById('sliderV2');
+      const sliderV1Val = document.getElementById('sliderV1Val');
+      const sliderV2Val = document.getElementById('sliderV2Val');
+      const metricP0 = document.getElementById('metricP0');
+      const metricP1 = document.getElementById('metricP1');
+      const metricP2 = document.getElementById('metricP2');
+      const metricSum = document.getElementById('metricSum');
+      const barSeg0 = document.getElementById('barSeg0');
+      const barSeg1 = document.getElementById('barSeg1');
+      const barSeg2 = document.getElementById('barSeg2');
+      const barLabel0 = document.getElementById('barLabel0');
+      const barLabel1 = document.getElementById('barLabel1');
+      const barLabel2 = document.getElementById('barLabel2');
+      const miniBar0 = document.getElementById('miniBar0');
+      const miniBar1 = document.getElementById('miniBar1');
+      const miniBar2 = document.getElementById('miniBar2');
+      const labInsightText = document.getElementById('labInsightText');
+
+      function updateLab() {
+        const v1 = parseFloat(sliderV1.value);
+        const v2 = parseFloat(sliderV2.value);
+        sliderV1Val.textContent = (v1 >= 0 ? '+' : '') + v1.toFixed(2);
+        sliderV2Val.textContent = (v2 >= 0 ? '+' : '') + v2.toFixed(2);
+
+        const exp0 = 1.0;
+        const exp1 = Math.exp(v1);
+        const exp2 = Math.exp(v2);
+        const denom = exp0 + exp1 + exp2;
+
+        const p0 = exp0 / denom;
+        const p1 = exp1 / denom;
+        const p2 = exp2 / denom;
+
+        metricP0.textContent = (p0 * 100).toFixed(1) + '%';
+        metricP1.textContent = (p1 * 100).toFixed(1) + '%';
+        metricP2.textContent = (p2 * 100).toFixed(1) + '%';
+        metricSum.textContent = ((p0 + p1 + p2) * 100).toFixed(1) + '%';
+
+        const totalWidth = 500;
+        const startX = 50;
+        const w0 = Math.max(0, p0 * totalWidth);
+        const w1 = Math.max(0, p1 * totalWidth);
+        const w2 = Math.max(0, p2 * totalWidth);
+
+        barSeg0.setAttribute('x', startX);
+        barSeg0.setAttribute('width', w0);
+        barSeg1.setAttribute('x', startX + w0);
+        barSeg1.setAttribute('width', w1);
+        barSeg2.setAttribute('x', startX + w0 + w1);
+        barSeg2.setAttribute('width', w2);
+
+        barLabel0.setAttribute('x', startX + w0 / 2);
+        barLabel0.textContent = w0 > 40 ? 'P₀: ' + (p0 * 100).toFixed(1) + '%' : '';
+
+        barLabel1.setAttribute('x', startX + w0 + w1 / 2);
+        barLabel1.textContent = w1 > 40 ? 'P₁: ' + (p1 * 100).toFixed(1) + '%' : '';
+
+        barLabel2.setAttribute('x', startX + w0 + w1 + w2 / 2);
+        barLabel2.textContent = w2 > 40 ? 'P₂: ' + (p2 * 100).toFixed(1) + '%' : '';
+
+        const maxMiniWidth = 130;
+        miniBar0.setAttribute('width', Math.max(4, p0 * maxMiniWidth));
+        miniBar1.setAttribute('width', Math.max(4, p1 * maxMiniWidth));
+        miniBar2.setAttribute('width', Math.max(4, p2 * maxMiniWidth));
+
+        // Insight narrative
+        let maxOption = 'Option 0 (Base)';
+        let maxPct = (p0 * 100).toFixed(1);
+        if (p1 > p0 && p1 >= p2) {
+          maxOption = 'Option 1';
+          maxPct = (p1 * 100).toFixed(1);
+        } else if (p2 > p0 && p2 > p1) {
+          maxOption = 'Option 2';
+          maxPct = (p2 * 100).toFixed(1);
+        }
+
+        labInsightText.textContent = `With systematic utilities V₁ = ${(v1 >= 0 ? '+' : '') + v1.toFixed(2)} and V₂ = ${(v2 >= 0 ? '+' : '') + v2.toFixed(2)}, ${maxOption} commands the highest probability (${maxPct}%) because its utility exceeds competing options. Notice how changing one utility simultaneously alters the choice shares of all other options.`;
+      }
+
+      sliderV1.addEventListener('input', updateLab);
+      sliderV2.addEventListener('input', updateLab);
+      updateLab();
+    })();
+  </script>
+</body>
+</html>
